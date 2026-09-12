@@ -1,0 +1,4095 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3763888,
+      "Name": "CardHighlight$$Awake",
+      "Signature": "void CardHighlight__Awake (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3764032,
+      "Name": "CardHighlight$$DisableHighlight",
+      "Signature": "void CardHighlight__DisableHighlight (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3764256,
+      "Name": "CardHighlight$$HighlightCoroutine",
+      "Signature": "System_Collections_IEnumerator_o* CardHighlight__HighlightCoroutine (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3764368,
+      "Name": "CardHighlight$$ShowHighlight",
+      "Signature": "void CardHighlight__ShowHighlight (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3764560,
+      "Name": "CardHighlight$$.ctor",
+      "Signature": "void CardHighlight___ctor (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3841872,
+      "Name": "CardHighlight.<HighlightCoroutine>d__4$$MoveNext",
+      "Signature": "bool CardHighlight__HighlightCoroutine_d__4__MoveNext (CardHighlight__HighlightCoroutine_d__4_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3842192,
+      "Name": "CardHighlight.<HighlightCoroutine>d__4$$System.Collections.IEnumerator.Reset",
+      "Signature": "void CardHighlight__HighlightCoroutine_d__4__System_Collections_IEnumerator_Reset (CardHighlight__HighlightCoroutine_d__4_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 76,
+  "distinct_native_instructions": 268,
+  "metadata_bindings": [
+    "CardHighlight.<HighlightCoroutine>d__4_TypeInfo",
+    "DG.Tweening.DOTween_TypeInfo",
+    "Method$CardHighlight.<HighlightCoroutine>d__4.System.Collections.IEnumerator.Reset()",
+    "Method$DG.Tweening.TweenSettingsExtensions.SetId<TweenerCore<float, float, FloatOptions>>()",
+    "System.NotSupportedException_TypeInfo",
+    "UnityEngine.WaitForSeconds_TypeInfo",
+    "int_TypeInfo",
+    "literal:",
+    "literal:{0}_highlight"
+  ],
+  "verified_gateways": [
+    {
+      "Address": 29859792,
+      "Name": "UnityEngine.Component$$get_gameObject",
+      "Signature": "UnityEngine_GameObject_o* UnityEngine_Component__get_gameObject (UnityEngine_Component_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 29888608,
+      "Name": "UnityEngine.Object$$GetInstanceID",
+      "Signature": "int32_t UnityEngine_Object__GetInstanceID (UnityEngine_Object_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 16207344,
+      "Name": "System.String$$Format",
+      "Signature": "System_String_o* System_String__Format (System_String_o* format, Il2CppObject* arg0, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 29881504,
+      "Name": "UnityEngine.MonoBehaviour$$StopAllCoroutines",
+      "Signature": "void UnityEngine_MonoBehaviour__StopAllCoroutines (UnityEngine_MonoBehaviour_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 29880672,
+      "Name": "UnityEngine.MonoBehaviour$$StartCoroutine",
+      "Signature": "UnityEngine_Coroutine_o* UnityEngine_MonoBehaviour__StartCoroutine (UnityEngine_MonoBehaviour_o* __this, System_Collections_IEnumerator_o* routine, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 5260496,
+      "Name": "DG.Tweening.DOTween$$Kill",
+      "Signature": "int32_t DG_Tweening_DOTween__Kill (Il2CppObject* targetOrId, bool complete, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3448448,
+      "Name": "DG.Tweening.DOTweenModuleUI$$DOFade",
+      "Signature": "DG_Tweening_Core_TweenerCore_float__float__FloatOptions__o* DG_Tweening_DOTweenModuleUI__DOFade (UnityEngine_CanvasGroup_o* target, float endValue, float duration, const MethodInfo* method);",
+      "TypeSignature": "iiffi"
+    },
+    {
+      "Address": 7064016,
+      "Name": "DG.Tweening.TweenSettingsExtensions$$SetId<object>",
+      "Signature": "Il2CppObject* DG_Tweening_TweenSettingsExtensions__SetId_object_ (Il2CppObject* t, System_String_o* stringId, const MethodInfo_6BC9D0* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 29975024,
+      "Name": "UnityEngine.WaitForSeconds$$.ctor",
+      "Signature": "void UnityEngine_WaitForSeconds___ctor (UnityEngine_WaitForSeconds_o* __this, float seconds, const MethodInfo* method);",
+      "TypeSignature": "vifi"
+    }
+  ],
+  "cases": [
+    {
+      "method": "awake",
+      "options": {},
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "box",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "format",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "id1",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id1",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "fail": [
+          "game_object",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "game_object",
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "fail": [
+          "instance_id",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "instance_id",
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "fail": [
+          "box",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "box",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "box",
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "fail": [
+          "format",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "box",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "format",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "format",
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "fail": [
+          "barrier",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "box",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "format",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "id1",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id1",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "barrier",
+      "move_result": null
+    },
+    {
+      "method": "ctor",
+      "options": {},
+      "events": [
+        {
+          "event": "barrier",
+          "value": "empty",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "base_constructor",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "empty",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "ctor",
+      "options": {
+        "fail": [
+          "barrier",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "barrier",
+          "value": "empty",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "empty",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "barrier",
+      "move_result": null
+    },
+    {
+      "method": "ctor",
+      "options": {
+        "fail": [
+          "base_constructor",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "barrier",
+          "value": "empty",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "base_constructor",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "empty",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "base_constructor",
+      "move_result": null
+    },
+    {
+      "method": "factory",
+      "options": {},
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "factory",
+      "options": {
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "allocate",
+      "move_result": null
+    },
+    {
+      "method": "factory",
+      "options": {
+        "fail": [
+          "barrier",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": "barrier",
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {},
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": true,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "start_coroutine",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "fail": [
+          "stop_all",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "stop_all",
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "fail": [
+          "kill",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": true,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "kill",
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": true,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "allocate",
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "fail": [
+          "barrier",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": true,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": "barrier",
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "fail": [
+          "start_coroutine",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": true,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "start_coroutine",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": "start_coroutine",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {},
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "fail": [
+          "stop_all",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "stop_all",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "fail": [
+          "kill",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "kill",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "fail": [
+          "fade",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "fade",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "fail": [
+          "set_id",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "set_id",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "fail": [
+          "fade",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "fade",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "fail": [
+          "set_id",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "set_id",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "fail": [
+          "fade",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "fade",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "fail": [
+          "set_id",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "set_id",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "fail": [
+          "fade",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "fade",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "fail": [
+          "set_id",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "set_id",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {},
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "exception_constructor",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "throw",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "not_supported",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "fail": [
+          "metadata",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "metadata",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "allocate",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "fail": [
+          "exception_constructor",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "exception_constructor",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "exception_constructor",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "fail": [
+          "metadata",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "exception_constructor",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "metadata",
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "cold_metadata": true,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "box",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "format",
+          "value": 4294967289,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "id1",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id1",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "ctor",
+      "options": {
+        "cold_metadata": true,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "empty",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "base_constructor",
+          "fields": {
+            "animation": "empty",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "empty",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "factory",
+      "options": {
+        "cold_metadata": true,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "cold_metadata": true,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "class_init",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": true,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "start_coroutine",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "cold_metadata": true,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "class_init",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "cold_metadata": true,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "wait_constructor",
+          "bits": 1054280253,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "wait",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "wait",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": true
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": -1
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 0
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "wait_constructor",
+          "bits": 1054280253,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "wait",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "wait",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": true
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 2
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 2,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 2147483647
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 2147483647,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": -2147483648
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 2147483648,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 0
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "wait_constructor",
+          "bits": 1054280253,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "wait",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "wait",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": true
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 0,
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "allocate",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 0,
+        "fail": [
+          "wait_constructor",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "wait_constructor",
+          "bits": 1054280253,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "wait_constructor",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 0,
+        "fail": [
+          "barrier",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "wait_constructor",
+          "bits": 1054280253,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "wait",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "wait",
+        "capture": "owner"
+      },
+      "error": "barrier",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "canvases": []
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "canvases": [
+          2,
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas2",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween2",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas2",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween2",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "canvases": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": null,
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "canvases": [
+          0,
+          null,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": null,
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas2",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween2",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "canvases": null
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "null",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "null_tween": true,
+        "null_id": true
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": null,
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": null,
+          "complete": false,
+          "fields": {
+            "animation": null,
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": null,
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": null,
+          "animation": null,
+          "fields": {
+            "animation": null,
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": null,
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": null,
+          "animation": null,
+          "fields": {
+            "animation": null,
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": null,
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "state": 1,
+        "mutations": {
+          "fade1": {
+            "animation": 1,
+            "swap_array": true
+          },
+          "set_id1": {
+            "animation": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id0",
+          "complete": false,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id1",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id2",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id2",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "canvases": []
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "canvases": [
+          2,
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas2",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween2",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas2",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween2",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "canvases": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": null,
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "canvases": [
+          0,
+          null,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": null,
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas2",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween2",
+          "animation": "id0",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "canvases": null
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "null",
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "null_tween": true,
+        "null_id": true
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": null,
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": null,
+          "animation": null,
+          "fields": {
+            "animation": null,
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": null,
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": null,
+          "animation": null,
+          "fields": {
+            "animation": null,
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": null,
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "mutations": {
+          "fade1": {
+            "animation": 1,
+            "swap_array": true
+          },
+          "set_id1": {
+            "animation": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id1",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 1065353216,
+          "duration_bits": 1056964608,
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id2",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id2",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": false
+    },
+    {
+      "method": "show",
+      "options": {
+        "cold": true,
+        "mutations": {
+          "stop_all1": {
+            "animation": 1
+          },
+          "class_init1": {
+            "animation": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "class_init",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id1",
+          "complete": true,
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "owner",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "start_coroutine",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": null,
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id2",
+        "iterator_state": 0,
+        "current": null,
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "show",
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "class_init",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "class_init",
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "cold": true,
+        "mutations": {
+          "stop_all1": {
+            "animation": 1
+          },
+          "class_init1": {
+            "animation": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "class_init",
+          "fields": {
+            "animation": "id1",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "kill",
+          "animation": "id1",
+          "complete": false,
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas0",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween0",
+          "animation": "id2",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "fade",
+          "canvas": "canvas1",
+          "alpha_bits": 0,
+          "duration_bits": 1036831949,
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "set_id",
+          "tween": "tween1",
+          "animation": "id2",
+          "fields": {
+            "animation": "id2",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id2",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "disable",
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "class_init",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "class_init",
+      "move_result": null
+    },
+    {
+      "method": "awake",
+      "options": {
+        "null_game": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "null",
+      "move_result": null
+    },
+    {
+      "method": "factory",
+      "options": {
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "iterator",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "barrier",
+          "value": null,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": null,
+            "capture": null
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": null,
+        "capture": null
+      },
+      "error": null,
+      "move_result": null
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 0,
+        "null_capture": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "kind": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": null
+          }
+        },
+        {
+          "event": "wait_constructor",
+          "bits": 1054280253,
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": null
+          }
+        },
+        {
+          "event": "barrier",
+          "value": "wait",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "wait",
+            "capture": null
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "wait",
+        "capture": null
+      },
+      "error": null,
+      "move_result": true
+    },
+    {
+      "method": "move",
+      "options": {
+        "state": 1,
+        "null_capture": true
+      },
+      "events": [],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": null
+      },
+      "error": "null",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "state": -1
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "exception_constructor",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "throw",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 4294967295,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 4294967295,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "not_supported",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "state": 0
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "exception_constructor",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "throw",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 0,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 0,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "not_supported",
+      "move_result": null
+    },
+    {
+      "method": "reset",
+      "options": {
+        "state": 1
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "allocate",
+          "kind": "exception",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "exception_constructor",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        },
+        {
+          "event": "throw",
+          "fields": {
+            "animation": "id0",
+            "iterator_state": 1,
+            "current": "id2",
+            "capture": "owner"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "id0",
+        "iterator_state": 1,
+        "current": "id2",
+        "capture": "owner"
+      },
+      "error": "not_supported",
+      "move_result": null
+    }
+  ],
+  "scope": "Seven native CardHighlight declarations; timer descriptor only, explicit external MoveNext entry, no scheduler. Engine stop/start, DOTween Kill/DOFade/SetId, object ID/format, allocation and constructors are explicit services. Failure stops preserve exact native write prefixes; no managed unwind or tween effect implementation claimed."
+}

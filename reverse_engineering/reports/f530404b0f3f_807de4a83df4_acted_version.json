@@ -1,0 +1,1491 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3528800,
+      "Name": "ActedVersion$$Awake",
+      "Signature": "void ActedVersion__Awake (ActedVersion_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3528944,
+      "Name": "ActedVersion$$GetActed",
+      "Signature": "System_String_o* ActedVersion__GetActed (ActedVersion_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3529712,
+      "Name": "ActedVersion$$Start",
+      "Signature": "void ActedVersion__Start (ActedVersion_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3529792,
+      "Name": "ActedVersion$$UpdateActed",
+      "Signature": "void ActedVersion__UpdateActed (ActedVersion_o* __this, System_String_o* description, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 3401760,
+      "Name": "ActedVersion$$.ctor",
+      "Signature": "void ActedVersion___ctor (ActedVersion_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 30,
+  "distinct_native_instructions": 72,
+  "metadata_bindings": [
+    "UnityEngine.Vector3_TypeInfo",
+    "int_TypeInfo",
+    "literal:{0}_actedAnim"
+  ],
+  "cases": [
+    {
+      "method": "Awake",
+      "options": {},
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": "formatted",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "formatted",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "fail": [
+          "game_object",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "game_object",
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "fail": [
+          "instance_id",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "instance_id",
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "fail": [
+          "box",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "box",
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "fail": [
+          "format",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "format",
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "fail": [
+          "barrier",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": "formatted",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "formatted",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "barrier",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {},
+      "events": [
+        {
+          "event": "get_text",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": "blank value"
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "fail": [
+          "get_text",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "get_text",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "get_text",
+      "return_text": null
+    },
+    {
+      "method": "Start",
+      "options": {},
+      "events": [],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          0,
+          0,
+          0
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {},
+      "events": [
+        {
+          "event": "set_text",
+          "value": "description",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "description",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "set_text",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "set_text",
+          "value": "description",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "set_text",
+      "return_text": null
+    },
+    {
+      "method": ".ctor",
+      "options": {},
+      "events": [
+        {
+          "event": "base_constructor",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": ".ctor",
+      "options": {
+        "fail": [
+          "base_constructor",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "base_constructor",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "base_constructor",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "null_blank": true
+      },
+      "events": [],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "null_blank": true
+      },
+      "events": [],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "null_result": true
+      },
+      "events": [
+        {
+          "event": "get_text",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "null_description": true
+      },
+      "events": [
+        {
+          "event": "set_text",
+          "value": null,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": null,
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "null_game": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "null_format": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": null,
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": null,
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "instance_id": -2147483648
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 2147483648,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 2147483648,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": "formatted",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "formatted",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "instance_id": 0
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 0,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 0,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": "formatted",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "formatted",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "instance_id": 2147483647
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 2147483647,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 2147483647,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": "formatted",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "formatted",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Start",
+      "options": {
+        "zero_bits": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          0,
+          0,
+          0
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Start",
+      "options": {
+        "zero_bits": [
+          2147483648,
+          2143363909,
+          1
+        ]
+      },
+      "events": [],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          2147483648,
+          2143363909,
+          1
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Start",
+      "options": {
+        "zero_bits": [
+          1065353216,
+          1073741824,
+          1077936128
+        ]
+      },
+      "events": [],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1065353216,
+          1073741824,
+          1077936128
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "cold_metadata": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "game_object",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "instance_id",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "box",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "format",
+          "bits": 4294967287,
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "barrier",
+          "fields": {
+            "animation": "formatted",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "formatted",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "cold_metadata": true,
+        "fail": [
+          "metadata",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "metadata",
+      "return_text": null
+    },
+    {
+      "method": "Awake",
+      "options": {
+        "cold_metadata": true,
+        "fail": [
+          "metadata",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        },
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "metadata",
+      "return_text": null
+    },
+    {
+      "method": "Start",
+      "options": {
+        "cold_metadata": true
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          0,
+          0,
+          0
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Start",
+      "options": {
+        "cold_metadata": true,
+        "fail": [
+          "metadata",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata",
+          "fields": {
+            "animation": "old",
+            "saved_scale": [
+              1,
+              2,
+              3
+            ],
+            "blank": "blank value",
+            "visible": "visible value"
+          }
+        }
+      ],
+      "fields": {
+        "animation": "old",
+        "saved_scale": [
+          1,
+          2,
+          3
+        ],
+        "blank": "blank value",
+        "visible": "visible value"
+      },
+      "error": "metadata",
+      "return_text": null
+    }
+  ],
+  "scope": "Five exact ActedVersion helper declarations including shared ctor alias. Native blankText forwarding, instance-ID format store/barrier and raw Vector3.zeroVector copy. Text/engine/boxing/format/metadata/base constructor remain explicit; Show and Animate deferred."
+}

@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,408 classifications backed by
-320 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,434 classifications backed by
+326 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -935,7 +935,7 @@ The [base GameMode audit](notes/systems/game_mode_base_surface.md) covers all
 and [progression](notes/systems/standard_mode_progression.md) complete its
 24-method caller surface, including native save/score failure ordering.
 The offline Rust progression replay matches all 304 applicable native fixtures;
-all 735 Rust library tests passed.
+all 747 Rust library tests passed.
 [Roguelike lifecycle](notes/systems/roguelike_standard_lifecycle.md) identifies
 the kill-handler Combine during teardown. The
 [delegate-to-score follow-up](notes/systems/roguelike_delegate_score.md)
@@ -1033,7 +1033,7 @@ selection with roster removal across 2,122 native fixtures and 46 weighted paths
 The [startup composition](notes/systems/gameplay_startup_composition.md) joins
 Init with saved-roster reset, preserving distinct saved/current allocations and
 contrasting RestartGame across 117 native fixtures. Both have bounded Rust
-replays; the complete release library suite passes 735 tests.
+replays; the complete release library suite passes 747 tests.
 
 All 45 top-level Characters declarations now have scoped native evidence.
 [Duplicate selection](notes/systems/round_duplicates.md) adds 52 cases and a
@@ -1045,3 +1045,21 @@ have a Rust replay matched against 96 cases, while the
 [Reveal wrappers](notes/systems/characters_reveal_entries.md) add 386 cases for
 diagnostic selection/format arguments, post-callback state swaps and delegate
 rereads. Scoped caller coverage still leaves engine and callback bodies open.
+
+The [candidate Rust composition](notes/systems/round_candidate_replay.md) now
+compares all 124 native event/snapshot traces and the 18 weighted paths, retaining
+pre-draw failures and failed-path mass. The [unique-pool follow-up](notes/systems/round_bluffs.md)
+adds 108 native cases and corrects clear-before-predicate/removal failure ordering.
+[CardHighlight](notes/systems/card_highlight.md) adds 76 cases for animation IDs,
+Kill flags, coroutine state/Current writes and exact timing arguments, with engine
+scheduling and tween effects still explicit service boundaries.
+
+The [unique-pool Rust replay](notes/systems/round_bluffs_replay.md) compares all
+108 native traces plus 18 initial and nine fallback paths. The complete release
+library suite passes 747 tests. [Immediate Acted](notes/systems/acted_surface.md)
+and [delayed Acted](notes/systems/acted_delayed.md) complete scoped evidence for
+all nine declarations with 68 and 124 cases. [ActedVersion helpers](notes/systems/acted_version.md)
+and [animation callers](notes/systems/acted_version_animation.md) add 30 and 72
+cases, completing all seven declarations while retaining explicit tween and
+framework services. The [pool-to-acquisition frontier](notes/systems/round_pool_acquisition_frontier.md)
+records the remaining setup, identity, RNG and continuation-state joins.

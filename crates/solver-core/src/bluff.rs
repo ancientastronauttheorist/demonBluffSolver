@@ -12,6 +12,8 @@ pub mod ascension_starting;
 pub mod roster;
 pub mod roster_starting_bridge;
 pub mod round_duplicates;
+pub mod round_candidate_composition;
+pub mod round_bluffs;
 pub mod mutant_selector;
 pub mod character_start;
 pub mod reveal;

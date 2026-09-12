@@ -75,7 +75,8 @@ stop, diagnose, fix, verify, then resume.
     Resolve export filenames from the target manifest or directory listing;
     public-role filenames can differ from managed class names. Inspect shared
     method bodies without printing their potentially enormous alias-header line.
-    Strip the complete comment header; fixed line-count skipping is unreliable.
+    When present, strip the complete comment header; some export formats have
+    no header. Fixed line-count skipping is unreliable.
     Unity type trees can omit custom MonoBehaviour fields; check consumed size
     and treat partial reads as headers, not complete serialized objects.
     Serialized Boolean fields may align individually; do not apply contiguous

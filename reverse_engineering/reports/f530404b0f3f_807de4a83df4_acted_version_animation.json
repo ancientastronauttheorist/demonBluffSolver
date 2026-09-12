@@ -1,0 +1,8859 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "cases_passed": 72,
+  "native_instructions_executed": 228,
+  "metadata_verified": [
+    {
+      "Address": 3528336,
+      "Name": "ActedVersion$$Animate",
+      "Signature": "void ActedVersion__Animate (ActedVersion_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3528992,
+      "Name": "ActedVersion$$Show",
+      "Signature": "void ActedVersion__Show (ActedVersion_o* __this, System_String_o* description, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 5323760,
+      "Name": "DG.Tweening.ShortcutExtensions$$DOScale",
+      "Signature": "DG_Tweening_Core_TweenerCore_Vector3__Vector3__VectorOptions__o* DG_Tweening_ShortcutExtensions__DOScale (UnityEngine_Transform_o* target, UnityEngine_Vector3_o endValue, float duration, const MethodInfo* method);",
+      "TypeSignature": "iiifi"
+    },
+    {
+      "Address": 3498720,
+      "Name": "DG.Tweening.ShortcutExtensionsTMPText$$DOText",
+      "Signature": "DG_Tweening_Core_TweenerCore_string__string__StringOptions__o* DG_Tweening_ShortcutExtensionsTMPText__DOText (TMPro_TMP_Text_o* target, System_String_o* endValue, float duration, bool richTextEnabled, int32_t scrambleMode, System_String_o* scrambleChars, const MethodInfo* method);",
+      "TypeSignature": "iiifiiii"
+    },
+    {
+      "Address": 7063456,
+      "Name": "DG.Tweening.TweenSettingsExtensions$$SetEase<object>",
+      "Signature": "Il2CppObject* DG_Tweening_TweenSettingsExtensions__SetEase_object_ (Il2CppObject* t, int32_t ease, const MethodInfo_6BC7A0* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 7064016,
+      "Name": "DG.Tweening.TweenSettingsExtensions$$SetId<object>",
+      "Signature": "Il2CppObject* DG_Tweening_TweenSettingsExtensions__SetId_object_ (Il2CppObject* t, System_String_o* stringId, const MethodInfo_6BC9D0* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 5260496,
+      "Name": "DG.Tweening.DOTween$$Kill",
+      "Signature": "int32_t DG_Tweening_DOTween__Kill (Il2CppObject* targetOrId, bool complete, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 29956496,
+      "Name": "UnityEngine.Transform$$get_localScale",
+      "Signature": "UnityEngine_Vector3_o UnityEngine_Transform__get_localScale (UnityEngine_Transform_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 29958768,
+      "Name": "UnityEngine.Transform$$set_localScale",
+      "Signature": "void UnityEngine_Transform__set_localScale (UnityEngine_Transform_o* __this, UnityEngine_Vector3_o value, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 29859792,
+      "Name": "UnityEngine.Component$$get_gameObject",
+      "Signature": "UnityEngine_GameObject_o* UnityEngine_Component__get_gameObject (UnityEngine_Component_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 29874192,
+      "Name": "UnityEngine.GameObject$$SetActive",
+      "Signature": "void UnityEngine_GameObject__SetActive (UnityEngine_GameObject_o* __this, bool value, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 29259296,
+      "Name": "TMPro.TMP_Text$$set_text",
+      "Signature": "void TMPro_TMP_Text__set_text (TMPro_TMP_Text_o* __this, System_String_o* value, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    }
+  ],
+  "generic_method_bindings": {
+    "41008256": "Method$DG.Tweening.TweenSettingsExtensions.SetEase<TweenerCore<Vector3, Vector3, VectorOptions>>()",
+    "41009344": "Method$DG.Tweening.TweenSettingsExtensions.SetId<TweenerCore<string, string, StringOptions>>()",
+    "41009616": "Method$DG.Tweening.TweenSettingsExtensions.SetId<TweenerCore<Vector3, Vector3, VectorOptions>>()"
+  },
+  "cases": [
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          2147483648,
+          2147483648,
+          2147483648
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          2143363909,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            2143363909,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        2143363909,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          2139095040,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            2139095040,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        2139095040,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          1,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          924253877,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          926452900,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            926452900,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        926452900,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          925353387,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          925353388,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            925353388,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        925353388,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          925353389,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            925353389,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        925353389,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "current": [
+          2147483648,
+          2143363909,
+          2139095040
+        ],
+        "zero": [
+          1065353216,
+          1065353216,
+          1065353216
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            2147483648,
+            2143363909,
+            2139095040
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        2147483648,
+        2143363909,
+        2139095040
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "alternate_return": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "transform",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "get_scale",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "get_scale",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "transform",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_scale",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "set_scale",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "transform",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "do_scale",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "do_scale",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "ease",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "ease",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_id",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "set_id",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_transform": 1
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_transform": 2
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_transform": 3
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": true,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_game": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_blank": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_text": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_description": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_id": true
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_tween": "text"
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Animate",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_tween": "scale"
+      },
+      "events": [
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": true,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": true,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          2147483648,
+          2147483648,
+          2147483648
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            2147483648,
+            2147483648,
+            2147483648
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          2143363909,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            2143363909,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2143363909,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        2143363909,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          2139095040,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            2139095040,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2139095040,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        2139095040,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          1,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          924253877,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            924253877,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          926452900,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            926452900,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            926452900,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        926452900,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          925353387,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            925353387,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          925353388,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            925353388,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353388,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        925353388,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          925353389,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            925353389,
+            0,
+            0
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            925353389,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        925353389,
+        0,
+        0
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "current": [
+          2147483648,
+          2143363909,
+          2139095040
+        ],
+        "zero": [
+          1065353216,
+          1065353216,
+          1065353216
+        ]
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            2147483648,
+            2143363909,
+            2139095040
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            2147483648,
+            2143363909,
+            2139095040
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        2147483648,
+        2143363909,
+        2139095040
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "alternate_return": true
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "class_init",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "kill",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "kill",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "game_object",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "game_object",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "activate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "activate",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_text",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "set_text",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_text",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "set_text",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "do_text",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "do_text",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_id",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "set_id",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "transform",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "get_scale",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "get_scale",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "transform",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_scale",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "set_scale",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "transform",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "do_scale",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "do_scale",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "ease",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "ease",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "set_id",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "class_init",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "set_id",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_transform": 1
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_transform": 2
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_transform": 3
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": true,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_game": true
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_blank": true
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "old_blank",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_text": true
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "null",
+      "saved": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "blank": "description",
+      "text": "old_text"
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_description": true
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": null,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": null,
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": null,
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_id": true
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_tween": "text"
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": false,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    },
+    {
+      "method": "Show",
+      "input": {
+        "saved": [
+          0,
+          0,
+          0
+        ],
+        "current": [
+          1065353216,
+          1065353216,
+          1065353216
+        ],
+        "zero": [
+          0,
+          0,
+          0
+        ],
+        "null_tween": "scale"
+      },
+      "events": [
+        {
+          "kind": "kill",
+          "complete": true,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "game_object",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "activate",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "blank",
+          "value": "description",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_text",
+          "target": "text",
+          "value": "",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "do_text",
+          "description": "description",
+          "duration_bits": 1045220557,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": false,
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "get_scale",
+          "saved": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_scale",
+          "bits": [
+            0,
+            0,
+            0
+          ],
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "transform",
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "do_scale",
+          "null_target": false,
+          "bits": [
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "duration_bits": 1045220557,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "ease",
+          "null_tween": true,
+          "value": 27,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        },
+        {
+          "kind": "set_id",
+          "null_tween": true,
+          "saved": [
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      ],
+      "error": null,
+      "saved": [
+        1065353216,
+        1065353216,
+        1065353216
+      ],
+      "scale": [
+        0,
+        0,
+        0
+      ],
+      "blank": "description",
+      "text": ""
+    }
+  ],
+  "scope": "Actual Show and Animate complete native bodies; initialized metadata, explicit TMP setter, object/transform, DOTween and type initialization gateways. Raw float bits and MXCSR0x1F80; no tween engine, elapsed time, callback execution or managed unwind claim."
+}

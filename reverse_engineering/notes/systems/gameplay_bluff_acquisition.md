@@ -173,12 +173,15 @@ script      = current Townsfolk ++ Outcasts ++ Minions ++ Demons
 ```
 
 The first list comes from `Gameplay.GetAscensionAllStartingCharacters`; the
-second comes from `Gameplay.GetScriptCharacters`. The captured predicate at
-`0x377170` is exactly `script.Contains(cd)`. `RemoveAll` therefore removes
-every starting occurrence whose data object is already contained in the
-script. The method then clears `UniquePool`, filters the remaining occurrences
-by `CharacterData.bluffable`, and forms exact-real-type Villager and Outcast
-lists.
+second comes from `Gameplay.GetScriptCharacters`. After capturing the script,
+the method clears `UniquePool` before allocating the predicate and calling
+`RemoveAll`. The captured predicate at `0x377170` is exactly
+`script.Contains(cd)`, so removal excludes every matching starting occurrence.
+Predicate construction or removal failure therefore leaves the pool cleared.
+The remaining occurrences are filtered by `CharacterData.bluffable` into
+exact-real-type Villager and Outcast lists. The
+[108-case native follow-up](round_bluffs.md) verifies this ordering and its
+partial failures.
 
 It uniformly samples at most four Villager occurrences without replacement
 from the local list, appending them to `UniquePool` in draw order. It then

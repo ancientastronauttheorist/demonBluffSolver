@@ -1,0 +1,5942 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3530352,
+      "Name": "Acted$$GetActed",
+      "Signature": "System_String_o* Acted__GetActed (Acted_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3530768,
+      "Name": "Acted$$UpdateActed",
+      "Signature": "void Acted__UpdateActed (Acted_o* __this, System_String_o* description, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 3530000,
+      "Name": "Acted$$Act",
+      "Signature": "void Acted__Act (Acted_o* __this, System_String_o* description, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 3530496,
+      "Name": "Acted$$Hide",
+      "Signature": "void Acted__Hide (Acted_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3530560,
+      "Name": "Acted$$Highlight",
+      "Signature": "void Acted__Highlight (Acted_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3530688,
+      "Name": "Acted$$UnHighlight",
+      "Signature": "void Acted__UnHighlight (Acted_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3401760,
+      "Name": "Acted$$.ctor",
+      "Signature": "void Acted___ctor (Acted_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 68,
+  "distinct_native_instructions": 200,
+  "highlight_color_bits": [
+    0,
+    1065353216,
+    1065353216,
+    1065353216
+  ],
+  "log_prefix": "Character: ",
+  "metadata_bindings": [
+    "UnityEngine.Debug_TypeInfo",
+    "UnityEngine.UI.LayoutRebuilder_TypeInfo",
+    "literal:",
+    "literal:Character: "
+  ],
+  "verified_gateways": [
+    {
+      "Address": 29859792,
+      "Name": "UnityEngine.Component$$get_gameObject",
+      "Signature": "UnityEngine_GameObject_o* UnityEngine_Component__get_gameObject (UnityEngine_Component_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 29875280,
+      "Name": "UnityEngine.GameObject$$get_activeSelf",
+      "Signature": "bool UnityEngine_GameObject__get_activeSelf (UnityEngine_GameObject_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 29893200,
+      "Name": "UnityEngine.Object$$get_name",
+      "Signature": "System_String_o* UnityEngine_Object__get_name (UnityEngine_Object_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 16194656,
+      "Name": "System.String$$Concat",
+      "Signature": "System_String_o* System_String__Concat (System_String_o* str0, System_String_o* str1, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 29668224,
+      "Name": "UnityEngine.Debug$$Log",
+      "Signature": "void UnityEngine_Debug__Log (Il2CppObject* message, UnityEngine_Object_o* context, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 3528992,
+      "Name": "ActedVersion$$Show",
+      "Signature": "void ActedVersion__Show (ActedVersion_o* __this, System_String_o* description, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 32247824,
+      "Name": "UnityEngine.UI.LayoutRebuilder$$ForceRebuildLayoutImmediate",
+      "Signature": "void UnityEngine_UI_LayoutRebuilder__ForceRebuildLayoutImmediate (UnityEngine_RectTransform_o* layoutRoot, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 29881504,
+      "Name": "UnityEngine.MonoBehaviour$$StopAllCoroutines",
+      "Signature": "void UnityEngine_MonoBehaviour__StopAllCoroutines (UnityEngine_MonoBehaviour_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 29874192,
+      "Name": "UnityEngine.GameObject$$SetActive",
+      "Signature": "void UnityEngine_GameObject__SetActive (UnityEngine_GameObject_o* __this, bool value, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 29857648,
+      "Name": "UnityEngine.MonoBehaviour$$.ctor",
+      "Signature": "void UnityEngine_MonoBehaviour___ctor (UnityEngine_MonoBehaviour_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases": [
+    {
+      "method": "GetActed",
+      "options": {},
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_text",
+          "target": "blank0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": "first"
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "fail": [
+          "game_object",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "game_object",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "fail": [
+          "active_self",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "active_self",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "fail": [
+          "get_text",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_text",
+          "target": "blank0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "get_text",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {},
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_text",
+          "target": "blank0",
+          "value": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "description",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "game_object",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "game_object",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "name",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "name",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "concat",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "concat",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "game_object",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "game_object",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "log",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "log",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "fail": [
+          "set_text",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_text",
+          "target": "blank0",
+          "value": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "set_text",
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {},
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "fail": [
+          "show",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "show",
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "fail": [
+          "rebuild",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "rebuild",
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "fail": [
+          "rebuild",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "rebuild",
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {},
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_active",
+          "target": "game0",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "game0": false
+        },
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "fail": [
+          "stop_all",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "stop_all",
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "fail": [
+          "game_object",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "game_object",
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "fail": [
+          "set_active",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_active",
+          "target": "game0",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "set_active",
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {},
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow0",
+          "bits": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              1048576000,
+              1056964608,
+              1061158912,
+              1065353216
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          1048576000,
+          1056964608,
+          1061158912,
+          1065353216
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {
+          "arrow0": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "fail": [
+          "set_active",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "set_active",
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "fail": [
+          "get_color",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {}
+      },
+      "error": "get_color",
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "fail": [
+          "set_color",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow0",
+          "bits": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              1048576000,
+              1056964608,
+              1061158912,
+              1065353216
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          1048576000,
+          1056964608,
+          1061158912,
+          1065353216
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {}
+      },
+      "error": "set_color",
+      "return_text": null
+    },
+    {
+      "method": "UnHighlight",
+      "options": {},
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow0",
+          "bits": [
+            2147483648,
+            2143363909,
+            1065353216,
+            1
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": false
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": false
+        },
+        "colors": {
+          "arrow0": [
+            2147483648,
+            2143363909,
+            1065353216,
+            1
+          ]
+        }
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UnHighlight",
+      "options": {
+        "fail": [
+          "set_active",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "set_active",
+      "return_text": null
+    },
+    {
+      "method": "UnHighlight",
+      "options": {
+        "fail": [
+          "set_color",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow0",
+          "bits": [
+            2147483648,
+            2143363909,
+            1065353216,
+            1
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": false
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": false
+        },
+        "colors": {}
+      },
+      "error": "set_color",
+      "return_text": null
+    },
+    {
+      "method": ".ctor",
+      "options": {},
+      "events": [
+        {
+          "event": "base_constructor",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": ".ctor",
+      "options": {
+        "fail": [
+          "base_constructor",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "base_constructor",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "base_constructor",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "active": false,
+        "null_blank": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": ""
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "null_text_return": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_text",
+          "target": "blank0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "null_acted": true
+      },
+      "events": [],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "null_acted": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": null,
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": null,
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": null,
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": null,
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": null,
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "null_acted": true
+      },
+      "events": [],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "null_acted": true
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": null,
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "null_blank": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "null_game_call": 1
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "null_blank": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "null_game_call": 1
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "null_game_call": 2,
+        "null_description": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_text",
+          "target": "blank0",
+          "value": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          null,
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "null_highlight": true
+      },
+      "events": [],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "null_arrow": true
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": null,
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": null,
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UnHighlight",
+      "options": {
+        "null_highlight": true
+      },
+      "events": [],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UnHighlight",
+      "options": {
+        "null_arrow": true
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": null,
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": null,
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": false
+        },
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "external_color_buffer": true
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow0",
+          "bits": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              1048576000,
+              1056964608,
+              1061158912,
+              1065353216
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          1048576000,
+          1056964608,
+          1061158912,
+          1065353216
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {
+          "arrow0": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "mutations": {
+          "get_color1": {
+            "arrow": 0
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": null,
+        "saved_color": [
+          1048576000,
+          1056964608,
+          1061158912,
+          1065353216
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "mutations": {
+          "get_color1": {
+            "arrow": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow1",
+          "bits": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow1",
+            "saved_color": [
+              1048576000,
+              1056964608,
+              1061158912,
+              1065353216
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow1",
+        "saved_color": [
+          1048576000,
+          1056964608,
+          1061158912,
+          1065353216
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {
+          "arrow1": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "mutations": {
+          "active_self1": {
+            "acted": 0
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "mutations": {
+          "active_self1": {
+            "acted": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_text",
+          "target": "blank1",
+          "fields": {
+            "acted": "acted1",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted1",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": "second"
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "mutations": {
+          "log1": {
+            "acted": 0
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "mutations": {
+          "log1": {
+            "acted": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_text",
+          "target": "blank1",
+          "value": "description",
+          "fields": {
+            "acted": "acted1",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted1",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "description"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "mutations": {
+          "stop_all1": {
+            "acted": 0
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "mutations": {
+          "stop_all1": {
+            "acted": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "acted1",
+          "fields": {
+            "acted": "acted1",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_active",
+          "target": "game0",
+          "value": false,
+          "fields": {
+            "acted": "acted1",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted1",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "game0": false
+        },
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "rects": [],
+        "null_description": true
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "rects": [
+          0,
+          0,
+          1
+        ],
+        "null_description": true
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "rects": [
+          null
+        ],
+        "null_description": true
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "rects": [
+          0,
+          null,
+          1
+        ],
+        "null_description": true
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": null,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "null_layouts": true
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": null,
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": null,
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "mutations": {
+          "show1": {
+            "layouts": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "alternate",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "alternate",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "mutations": {
+          "rebuild1": {
+            "layouts": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "alternate",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "alternate",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "class_init",
+          "type": "UnityEngine.UI.LayoutRebuilder_TypeInfo",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "class_init",
+          "type": "UnityEngine.UI.LayoutRebuilder_TypeInfo",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "class_init",
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "class_init",
+          "type": "UnityEngine.Debug_TypeInfo",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "log",
+          "text": "Character: Game",
+          "context": "game1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_text",
+          "target": "blank0",
+          "value": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "description",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UpdateActed",
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "name",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "concat",
+          "parts": [
+            "Character: ",
+            "Game"
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "owner",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "class_init",
+          "type": "UnityEngine.Debug_TypeInfo",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "class_init",
+      "return_text": null
+    },
+    {
+      "method": "GetActed",
+      "options": {
+        "active": false,
+        "mutations": {
+          "active_self1": {
+            "acted": 0
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "active_self",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": null,
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": ""
+    },
+    {
+      "method": "Highlight",
+      "options": {
+        "mutations": {
+          "set_active1": {
+            "arrow": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": true,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "get_color",
+          "target": "arrow1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow1",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow1",
+          "bits": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow1",
+            "saved_color": [
+              1048576000,
+              1056964608,
+              1061158912,
+              1065353216
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": true
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow1",
+        "saved_color": [
+          1048576000,
+          1056964608,
+          1061158912,
+          1065353216
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": true
+        },
+        "colors": {
+          "arrow1": [
+            0,
+            1065353216,
+            1065353216,
+            1065353216
+          ]
+        }
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "UnHighlight",
+      "options": {
+        "mutations": {
+          "set_active1": {
+            "arrow": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "set_active",
+          "target": "highlight",
+          "value": false,
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "set_color",
+          "target": "arrow1",
+          "bits": [
+            2147483648,
+            2143363909,
+            1065353216,
+            1
+          ],
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow1",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {
+              "highlight": false
+            },
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow1",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {
+          "highlight": false
+        },
+        "colors": {
+          "arrow1": [
+            2147483648,
+            2143363909,
+            1065353216,
+            1
+          ]
+        }
+      },
+      "error": null,
+      "return_text": null
+    },
+    {
+      "method": "Hide",
+      "options": {
+        "null_game_call": 1
+      },
+      "events": [
+        {
+          "event": "stop_all",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "game_object",
+          "target": "acted0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "layouts",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": "null",
+      "return_text": null
+    },
+    {
+      "method": "Act",
+      "options": {
+        "cold": true,
+        "mutations": {
+          "class_init1": {
+            "layouts": 2
+          }
+        }
+      },
+      "events": [
+        {
+          "event": "show",
+          "target": "acted0",
+          "description": "description",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "class_init",
+          "type": "UnityEngine.UI.LayoutRebuilder_TypeInfo",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "layouts",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect0",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "alternate",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        },
+        {
+          "event": "rebuild",
+          "target": "rect1",
+          "fields": {
+            "acted": "acted0",
+            "layouts": "alternate",
+            "arrow": "arrow0",
+            "saved_color": [
+              2147483648,
+              2143363909,
+              1065353216,
+              1
+            ],
+            "text": [
+              "first",
+              "second"
+            ],
+            "active": {},
+            "colors": {}
+          }
+        }
+      ],
+      "fields": {
+        "acted": "acted0",
+        "layouts": "alternate",
+        "arrow": "arrow0",
+        "saved_color": [
+          2147483648,
+          2143363909,
+          1065353216,
+          1
+        ],
+        "text": [
+          "first",
+          "second"
+        ],
+        "active": {},
+        "colors": {}
+      },
+      "error": null,
+      "return_text": null
+    }
+  ],
+  "scope": "Seven immediate Acted callers, exact blankText virtual slots and hidden color return-buffer ABI, saved-before-overwrite order and controlled field rereads. Engine/text/layout/ActedVersion.Show/format and virtual-color services explicit; no tween, delayed-coroutine or managed unwind reconstruction."
+}

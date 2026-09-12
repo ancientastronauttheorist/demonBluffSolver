@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-09-12 overnight
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,408 classifications and 320 evidence records
+additional native timing audits. The overlay contains 1,434 classifications and 326 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 735 Rust library tests; full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 747 Rust library tests; full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -51,9 +51,16 @@ Resume with these boundaries in view:
    caller's faction-read order and explicit service contracts. All 45 Characters
    declarations now have scoped native evidence. Duplicate selection has a
    weighted replay, and its actual candidate filter composition has 124 native
-   cases; the composed Rust bridge and unique-pool failure ordering are next.
+   cases plus an exact bounded Rust trace/weighted bridge. Unique-pool ordering
+   is audited in 108 cases; clear precedes predicate construction and removal.
+   Its weighted Rust replay now matches all 108 native traces, 18 initial and
+   nine fallback paths. All Acted and ActedVersion declarations now have scoped
+   native caller evidence, including delayed speech and text/scale animation.
    Rotation/highlight replay and full diagnostic Reveal-wrapper callers are
    audited, with transform, formatting and UI callback internals still explicit.
+   Continue from [the pool-to-acquisition handoff](notes/systems/round_pool_acquisition_frontier.md):
+   join ManageCharacters to both builders, then produce the exact actor/pool/
+   continuation state required by the existing acquisition and scheduled replays.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.
