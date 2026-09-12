@@ -44,7 +44,8 @@ stop, diagnose, fix, verify, then resume.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
     glob). For a filename family use `rg <pattern> <directory> -g 'prefix*.md'`.
     Do not pass wildcard paths that the shell leaves unexpanded, including
-    a trailing `/*` or partial-name wildcard on a directory argument.
+    a trailing `/*` or partial-name wildcard on a directory argument; this also
+    applies to documentation filename prefixes in multi-command batches.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents and Rust module roots, with `rg --files` before reading. Do not
     infer an audit filename from a role name or assume a module uses `mod.rs`.
@@ -57,6 +58,8 @@ stop, diagnose, fix, verify, then resume.
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order and omit empty placeholder hunks.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
+    Coordinate shared Rust builds after agents confirm all declared module and
+    test files are complete; an in-progress module can break unrelated tests.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
@@ -82,6 +85,8 @@ stop, diagnose, fix, verify, then resume.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.
     Read numeric constants before assigning units or expected magnitudes.
+    Derive RIP-relative literal slots from decoded operands and resolve their
+    exact strings; property names do not establish serialized preference keys.
     Give overloaded target signatures distinct `prototype_name` values while
     preserving their original metadata signatures and exact RVAs.
     For a shared RVA, reuse its established canonical `applied_prototype_name`
@@ -90,12 +95,16 @@ stop, diagnose, fix, verify, then resume.
     evidence, not a false prototype or a target that fails union validation.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
+    Resolve exact class declarations before extracting dump blocks; prefix matches
+    can select another class and modifiers can differ from an assumed declaration.
     Preserve exact floating-point values when loading native timing fixtures;
     check parser rounding before weakening a failed exact comparison.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
     An export batch may abort at its first missing target; require a per-target
     completion record before reading any subsequent requested output.
+    Pass explicit `0x`-prefixed RVAs to `DumpContaining`; bare numeric strings
+    can select decimal addresses and bare hexadecimal letters fail parsing.
     For omitted initializer or virtual functions, resolve entries from their native pointer
     table before defining them in a read-only export session.
     Internal-call requests can include parameter signatures that registrations

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Remaining StandardMode progression, scoring and save callers; folded simple accessors receive supplemental exact evidence",
+  "functions": [
+    {
+      "name": "SavesGame.get_SavedMaxStandardAscension",
+      "metadata_name": "SavesGame$$get_SavedMaxStandardAscension",
+      "signature": "int32_t SavesGame__get_SavedMaxStandardAscension (const MethodInfo* method);",
+      "rva": "0x387ac0"
+    },
+    {
+      "name": "SavesGame.set_SavedMaxStandardAscension",
+      "metadata_name": "SavesGame$$set_SavedMaxStandardAscension",
+      "signature": "void SavesGame__set_SavedMaxStandardAscension (int32_t value, const MethodInfo* method);",
+      "rva": "0x387f00"
+    },
+    {
+      "name": "SavesGame.set_StandardMode",
+      "metadata_name": "SavesGame$$set_StandardMode",
+      "signature": "void SavesGame__set_StandardMode (StandardMode_o* value, const MethodInfo* method);",
+      "rva": "0x387f60"
+    },
+    {
+      "name": "StandardMode.GetMaxLevel",
+      "metadata_name": "StandardMode$$GetMaxLevel",
+      "signature": "int32_t StandardMode__GetMaxLevel (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3edd40"
+    },
+    {
+      "name": "StandardMode.OnStageCompleted",
+      "metadata_name": "StandardMode$$OnStageCompleted",
+      "signature": "void StandardMode__OnStageCompleted (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ee4e0"
+    },
+    {
+      "name": "StandardMode.OnFailed",
+      "metadata_name": "StandardMode$$OnFailed",
+      "signature": "void StandardMode__OnFailed (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ee4b0"
+    },
+    {
+      "name": "StandardMode.GetResetLevel",
+      "metadata_name": "StandardMode$$GetResetLevel",
+      "signature": "int32_t StandardMode__GetResetLevel (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ede00"
+    },
+    {
+      "name": "StandardMode.CanResetLevel",
+      "metadata_name": "StandardMode$$CanResetLevel",
+      "signature": "bool StandardMode__CanResetLevel (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ed880"
+    },
+    {
+      "name": "StandardMode.GetStartingLevel",
+      "metadata_name": "StandardMode$$GetStartingLevel",
+      "signature": "int32_t StandardMode__GetStartingLevel (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3edf90"
+    },
+    {
+      "name": "StandardMode.UpdateScore",
+      "metadata_name": "StandardMode$$UpdateScore",
+      "signature": "void StandardMode__UpdateScore (StandardMode_o* __this, int32_t score, int32_t level, const MethodInfo* method);",
+      "rva": "0x3ee5e0"
+    },
+    {
+      "name": "StandardMode.CheckIfLastLevel",
+      "metadata_name": "StandardMode$$CheckIfLastLevel",
+      "signature": "bool StandardMode__CheckIfLastLevel (StandardMode_o* __this, int32_t mod, const MethodInfo* method);",
+      "rva": "0x3ed8b0"
+    },
+    {
+      "name": "StandardMode.MaxLevel",
+      "metadata_name": "StandardMode$$MaxLevel",
+      "signature": "int32_t StandardMode__MaxLevel (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ee3b0"
+    },
+    {
+      "name": "StandardMode.OnCharacterKilled",
+      "metadata_name": "StandardMode$$OnCharacterKilled",
+      "signature": "void StandardMode__OnCharacterKilled (StandardMode_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x3ee410"
+    },
+    {
+      "name": "StandardMode.CheckIfCompleted",
+      "metadata_name": "StandardMode$$CheckIfCompleted",
+      "signature": "bool StandardMode__CheckIfCompleted (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ed8a0"
+    },
+    {
+      "name": "StandardMode.AbandonRun",
+      "metadata_name": "StandardMode$$AbandonRun",
+      "signature": "void StandardMode__AbandonRun (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ed800"
+    },
+    {
+      "name": "StandardMode.Save",
+      "metadata_name": "StandardMode$$Save",
+      "signature": "void StandardMode__Save (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ee5d0"
+    },
+    {
+      "name": "StandardMode.GetScores",
+      "metadata_name": "StandardMode$$GetScores",
+      "signature": "System_String_o* StandardMode__GetScores (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3ede90"
+    }
+  ]
+}

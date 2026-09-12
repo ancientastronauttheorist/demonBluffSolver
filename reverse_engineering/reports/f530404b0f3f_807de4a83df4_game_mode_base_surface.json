@@ -1,0 +1,853 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "base_declaration_count": 21,
+  "abstract_declarations_without_native_bodies": {
+    "GetGameMode": 4,
+    "Init": 5,
+    "LoadGame": 6,
+    "GetStartingLevel": 9,
+    "GetResetLevel": 10,
+    "GetCurrentAscension": 11,
+    "GetPreviousAscension": 12,
+    "CanResetLevel": 13,
+    "OnStageCompleted": 16,
+    "UpdateScore": 17,
+    "GetScore": 18,
+    "GetMaxLevel": 19,
+    "GetCurrentLevel": 20,
+    "IsLocked": 21,
+    "GetScores": 22
+  },
+  "shared_noop_slots": {
+    "OnLoadGame": 7,
+    "DeInit": 8,
+    "AscensionComplete": 14,
+    "AbandonRun": 15
+  },
+  "supplemental_native_declarations": {
+    "OnLoadGame": {
+      "Address": 3403088,
+      "Name": "GameMode$$OnLoadGame",
+      "Signature": "void GameMode__OnLoadGame (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    "DeInit": {
+      "Address": 3403088,
+      "Name": "GameMode$$DeInit",
+      "Signature": "void GameMode__DeInit (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    "AscensionComplete": {
+      "Address": 3403088,
+      "Name": "GameMode$$AscensionComplete",
+      "Signature": "void GameMode__AscensionComplete (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    "AbandonRun": {
+      "Address": 3403088,
+      "Name": "GameMode$$AbandonRun",
+      "Signature": "void GameMode__AbandonRun (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    "GetSummaryScores": {
+      "Address": 4051296,
+      "Name": "GameMode$$GetSummaryScores",
+      "Signature": "System_String_o* GameMode__GetSummaryScores (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    ".ctor": {
+      "Address": 3504416,
+      "Name": "GameMode$$.ctor",
+      "Signature": "void GameMode___ctor (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  },
+  "summary_virtual_slot": 23,
+  "summary_literal": {
+    "cell_rva": "0x26df1b8",
+    "value": "",
+    "metadata_flag_rva": "0x288c64a"
+  },
+  "native_ranges": [
+    [
+      "0x3dd160",
+      "0x3dd18c"
+    ],
+    [
+      "0x33ed50",
+      "0x33ed53"
+    ],
+    [
+      "0x357920",
+      "0x357927"
+    ]
+  ],
+  "instruction_assertions": 12,
+  "native_case_count": 76,
+  "visited_instruction_count": 12,
+  "unvisited_instruction_count": 0,
+  "cases": [
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 1,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": true,
+      "init_calls": 1,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 1,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": true,
+      "init_calls": 1,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 1,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": true,
+      "init_calls": 1,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 1,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": true,
+      "init_calls": 1,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "GetSummaryScores",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "OnLoadGame",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "DeInit",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AscensionComplete",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": "AbandonRun",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": false,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": false,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": false,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": true,
+      "initial_flag": 0,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 0,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": true,
+      "initial_flag": 1,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 1,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": true,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    },
+    {
+      "operation": ".ctor",
+      "null_receiver": true,
+      "initial_flag": 255,
+      "null_literal_pointer": false,
+      "init_failure": false,
+      "init_calls": 0,
+      "result_flag": 255,
+      "object_bytes_preserved": 512
+    }
+  ],
+  "scope": "All 21 base GameMode declarations classified; 15 abstract slots have no native ScriptMethod body. Native summary getter, four shared no-op declarations, and base constructor execute with an explicit metadata-literal initialization gateway. Shared no-op ret 0 preserves receiver bytes and return register; void methods have no return-value contract. Abstract/overridden derived-mode behavior and managed exception unwinding remain outside scope."
+}

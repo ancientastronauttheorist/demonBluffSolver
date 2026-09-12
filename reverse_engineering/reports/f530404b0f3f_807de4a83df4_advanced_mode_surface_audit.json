@@ -1,0 +1,4944 @@
+{
+  "build": "f530404b0f3f_807de4a83df4",
+  "status": "passed",
+  "exact_methods": [
+    {
+      "Address": 3609264,
+      "Name": "AdvancedMode$$GetGameMode",
+      "Signature": "int32_t AdvancedMode__GetGameMode (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4004192,
+      "Name": "AdvancedMode$$Init",
+      "Signature": "void AdvancedMode__Init (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4005232,
+      "Name": "AdvancedMode$$LoadGame",
+      "Signature": "GameMode_o* AdvancedMode__LoadGame (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4005440,
+      "Name": "AdvancedMode$$OnLoadGame",
+      "Signature": "void AdvancedMode__OnLoadGame (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4002848,
+      "Name": "AdvancedMode$$DeInit",
+      "Signature": "void AdvancedMode__DeInit (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3609264,
+      "Name": "AdvancedMode$$GetMaxLevel",
+      "Signature": "int32_t AdvancedMode__GetMaxLevel (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3609264,
+      "Name": "AdvancedMode$$GetCurrentLevel",
+      "Signature": "int32_t AdvancedMode__GetCurrentLevel (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3609264,
+      "Name": "AdvancedMode$$GetScore",
+      "Signature": "int32_t AdvancedMode__GetScore (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4005472,
+      "Name": "AdvancedMode$$OnStageCompleted",
+      "Signature": "void AdvancedMode__OnStageCompleted (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4002768,
+      "Name": "AdvancedMode$$CheckAchievements",
+      "Signature": "void AdvancedMode__CheckAchievements (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4005248,
+      "Name": "AdvancedMode$$OnCharacterKilled",
+      "Signature": "void AdvancedMode__OnCharacterKilled (AdvancedMode_o* __this, Character_o* ch, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 4004080,
+      "Name": "AdvancedMode$$GetSummaryScores",
+      "Signature": "System_String_o* AdvancedMode__GetSummaryScores (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4005408,
+      "Name": "AdvancedMode$$OnFailed",
+      "Signature": "void AdvancedMode__OnFailed (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3642880,
+      "Name": "AdvancedMode$$GetResetLevel",
+      "Signature": "int32_t AdvancedMode__GetResetLevel (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3918992,
+      "Name": "AdvancedMode$$CanResetLevel",
+      "Signature": "bool AdvancedMode__CanResetLevel (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3642880,
+      "Name": "AdvancedMode$$GetStartingLevel",
+      "Signature": "int32_t AdvancedMode__GetStartingLevel (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3403088,
+      "Name": "AdvancedMode$$UpdateScore",
+      "Signature": "void AdvancedMode__UpdateScore (AdvancedMode_o* __this, int32_t score, int32_t level, const MethodInfo* method);",
+      "TypeSignature": "viiii"
+    },
+    {
+      "Address": 4005104,
+      "Name": "AdvancedMode$$IsLocked",
+      "Signature": "bool AdvancedMode__IsLocked (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4005600,
+      "Name": "AdvancedMode$$Save",
+      "Signature": "void AdvancedMode__Save (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4003808,
+      "Name": "AdvancedMode$$GetScores",
+      "Signature": "System_String_o* AdvancedMode__GetScores (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3504416,
+      "Name": "AdvancedMode$$.ctor",
+      "Signature": "void AdvancedMode___ctor (AdvancedMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "native_cases": 295,
+  "instruction_assertions": 9,
+  "visited_instructions": 515,
+  "findings": {
+    "deinit_delegate_operations": [
+      "combine character killed",
+      "remove stage completed",
+      "remove failed"
+    ],
+    "init_current_village_source": "currentScore",
+    "achievement_key": "Lilis_ACHIV_5030",
+    "scoring_types": [
+      30,
+      100
+    ],
+    "score_formula": "i32(10*i32(unrevealed+5))",
+    "get_score": "constant zero",
+    "unlock_condition": "GameData.DebugMode or RoguelikeStandard.bestAscension >= 3"
+  },
+  "services": [
+    "delegate allocation/construction/combine/remove and cast runtime",
+    "GameData class initialization",
+    "SavesGame Advanced getter/setter and RoguelikeStandard getter",
+    "ProjectContext achievement unlock",
+    "unrevealed character count",
+    "UIEvents.OnUIUpdate delegate",
+    "boxing and String.Format/Concat; exact input strings/values checked"
+  ],
+  "cases": [
+    {
+      "method": "Init",
+      "input": [
+        -1,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        -1,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        0,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        0,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        7,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        7,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        2147483647,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        2147483647,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "bad_op": 1
+      },
+      "error": "cast"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "bad_op": 2
+      },
+      "error": "cast"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "bad_op": 3
+      },
+      "error": "cast"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "fail_op": 1
+      },
+      "error": "delegate"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "fail_op": 2
+      },
+      "error": "delegate"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "fail_op": 3
+      },
+      "error": "delegate"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_this": true
+      },
+      "error": "null"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        -1,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        -1,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        0,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        0,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        7,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        7,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        2147483647,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": false
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        2147483647,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_results": true
+      },
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "bad_op": 1
+      },
+      "error": "cast"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "bad_op": 2
+      },
+      "error": "cast"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "bad_op": 3
+      },
+      "error": "cast"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "fail_op": 1
+      },
+      "error": "delegate"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "fail_op": 2
+      },
+      "error": "delegate"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "fail_op": 3
+      },
+      "error": "delegate"
+    },
+    {
+      "method": "DeInit",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_this": true
+      },
+      "error": "null"
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "cold": true,
+        "class_fail": false
+      },
+      "error": null
+    },
+    {
+      "method": "Init",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "cold": true,
+        "class_fail": true
+      },
+      "error": "cctor"
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        -2,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        5,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        -1,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        0,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        5,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 0
+      },
+      "error": null
+    },
+    {
+      "method": "OnLoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        2147483647,
+        5
+      ],
+      "options": {
+        "reset": 1
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        -2147483648,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        -1,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        8,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        9,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        10,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        2,
+        40,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        45,
+        40,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnStageCompleted",
+      "input": [
+        -1,
+        -2,
+        7,
+        2147483647,
+        2147483647,
+        -8,
+        -5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": false
+      },
+      "error": null
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": false
+      },
+      "error": null
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": null
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        10,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": false
+      },
+      "error": null
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        10,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": false
+      },
+      "error": null
+    },
+    {
+      "method": "CheckAchievements",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "achievement_fail": true
+      },
+      "error": "achievement"
+    },
+    {
+      "method": "OnFailed",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "save_fail": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnFailed",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 0,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 29,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 30,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 31,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 99,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 100,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": -6,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": -6,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": -5,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": -5,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": 0,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": 0,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": 3,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": 3,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": 2147483647,
+        "notify": false
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        2147483640,
+        40,
+        -8,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "kind": 101,
+        "unrevealed": 2147483647,
+        "notify": true
+      },
+      "error": null
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_ch": true
+      },
+      "error": "null"
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "null_data": true
+      },
+      "error": "null"
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "count_fail": true
+      },
+      "error": "count"
+    },
+    {
+      "method": "OnCharacterKilled",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "notify": true,
+        "notify_fail": true
+      },
+      "error": "notify"
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": -2147483648,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": -2147483648,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": -1,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": -1,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 0,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 0,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 2,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 2,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 3,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 3,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 4,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 4,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 2147483647,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 0,
+        "rogue_level": 2147483647,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": -2147483648,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": -2147483648,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": -1,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": -1,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 0,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 0,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 2,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 2,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 3,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 3,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 4,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 4,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 2147483647,
+        "cold": false
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "debug": 1,
+        "rogue_level": 2147483647,
+        "cold": true
+      },
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "rogue_null": true
+      },
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "rogue_fail": true
+      },
+      "error": "rogue"
+    },
+    {
+      "method": "IsLocked",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "cold": true,
+        "class_fail": true
+      },
+      "error": "cctor"
+    },
+    {
+      "method": "GetGameMode",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetGameMode",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetGameMode",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetGameMode",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetGameMode",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetMaxLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetMaxLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetMaxLevel",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetMaxLevel",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetMaxLevel",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetCurrentLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetCurrentLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetCurrentLevel",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetCurrentLevel",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetCurrentLevel",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScore",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScore",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScore",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScore",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScore",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetStartingLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetStartingLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetStartingLevel",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetStartingLevel",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetStartingLevel",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "CanResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "CanResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "CanResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "CanResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "CanResetLevel",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "UpdateScore",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "UpdateScore",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "UpdateScore",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "UpdateScore",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "UpdateScore",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "input": [
+        23,
+        40,
+        7,
+        -2147483648,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "input": [
+        23,
+        40,
+        7,
+        -1,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "input": [
+        23,
+        40,
+        7,
+        0,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "input": [
+        23,
+        40,
+        7,
+        2147483647,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "LoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "LoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "loaded": 0
+      },
+      "error": null
+    },
+    {
+      "method": "LoadGame",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "load_fail": true
+      },
+      "error": "load"
+    },
+    {
+      "method": "Save",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "Save",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "save_fail": true
+      },
+      "error": "save"
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "format_fail": 1
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "format_fail": 2
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "format_fail": 3
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetSummaryScores",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetSummaryScores",
+      "input": [
+        23,
+        40,
+        7,
+        9,
+        2,
+        4,
+        5
+      ],
+      "options": {
+        "format_fail": 1
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        -2147483648,
+        2147483647,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        -2147483648,
+        2147483647,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5
+      ],
+      "options": {
+        "format_fail": 1
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        -2147483648,
+        2147483647,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5
+      ],
+      "options": {
+        "format_fail": 2
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetScores",
+      "input": [
+        -2147483648,
+        2147483647,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5
+      ],
+      "options": {
+        "format_fail": 3
+      },
+      "error": "format"
+    },
+    {
+      "method": "GetSummaryScores",
+      "input": [
+        -2147483648,
+        2147483647,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5
+      ],
+      "options": {},
+      "error": null
+    },
+    {
+      "method": "GetSummaryScores",
+      "input": [
+        -2147483648,
+        2147483647,
+        -9,
+        -8,
+        -7,
+        -6,
+        -5
+      ],
+      "options": {
+        "format_fail": 1
+      },
+      "error": "format"
+    }
+  ]
+}

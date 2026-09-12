@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "RoguelikeStandard lifecycle, shared constructor and save getter",
+  "functions": [
+    {
+      "name": "RoguelikeStandard.Init",
+      "metadata_name": "RoguelikeStandard$$Init",
+      "signature": "void RoguelikeStandard__Init (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "rva": "0x3e9e90"
+    },
+    {
+      "name": "RoguelikeStandard.LoadGame",
+      "metadata_name": "RoguelikeStandard$$LoadGame",
+      "signature": "GameMode_o* RoguelikeStandard__LoadGame (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "rva": "0x3ea1b0"
+    },
+    {
+      "name": "RoguelikeStandard.DeInit",
+      "metadata_name": "RoguelikeStandard$$DeInit",
+      "signature": "void RoguelikeStandard__DeInit (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "rva": "0x3e98c0"
+    },
+    {
+      "name": "RoguelikeStandard.ctor",
+      "metadata_name": "RoguelikeStandard$$.ctor",
+      "signature": "void RoguelikeStandard___ctor (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "rva": "0x357920",
+      "applied_prototype_name": "Dreamer___ctor"
+    },
+    {
+      "name": "SavesGame.get_RoguelikeStandard",
+      "metadata_name": "SavesGame$$get_RoguelikeStandard",
+      "signature": "RoguelikeStandard_o* SavesGame__get_RoguelikeStandard (const MethodInfo* method);",
+      "rva": "0x387a20"
+    }
+  ]
+}

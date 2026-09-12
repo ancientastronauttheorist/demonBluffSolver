@@ -1,0 +1,728 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 4102336,
+      "Name": "RoguelikeStandard$$DeInit",
+      "Signature": "void RoguelikeStandard__DeInit (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 5069664,
+      "Name": "System.Action<object>$$.ctor",
+      "Signature": "void System_Action_object____ctor (System_Action_object__o* __this, Il2CppObject* object, intptr_t method, const MethodInfo_4D5B60* method);",
+      "TypeSignature": "viiii"
+    },
+    {
+      "Address": 4884208,
+      "Name": "System.Action<object>$$Invoke",
+      "Signature": "void System_Action_object___Invoke (System_Action_object__o* __this, Il2CppObject* obj, const MethodInfo_4A86F0* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 18267328,
+      "Name": "System.Delegate$$Combine",
+      "Signature": "System_Delegate_o* System_Delegate__Combine (System_Delegate_o* a, System_Delegate_o* b, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 18276464,
+      "Name": "System.Delegate$$Remove",
+      "Signature": "System_Delegate_o* System_Delegate__Remove (System_Delegate_o* source, System_Delegate_o* value, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 18303056,
+      "Name": "System.MulticastDelegate$$CombineImpl",
+      "Signature": "System_Delegate_o* System_MulticastDelegate__CombineImpl (System_MulticastDelegate_o* __this, System_Delegate_o* follow, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 18305360,
+      "Name": "System.MulticastDelegate$$RemoveImpl",
+      "Signature": "System_Delegate_o* System_MulticastDelegate__RemoveImpl (System_MulticastDelegate_o* __this, System_Delegate_o* value, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 18304128,
+      "Name": "System.MulticastDelegate$$Equals",
+      "Signature": "bool System_MulticastDelegate__Equals (System_MulticastDelegate_o* __this, Il2CppObject* obj, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 18273296,
+      "Name": "System.Delegate$$Equals",
+      "Signature": "bool System_Delegate__Equals (System_Delegate_o* __this, Il2CppObject* obj, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 4104784,
+      "Name": "RoguelikeStandard$$OnCharacterKilled",
+      "Signature": "void RoguelikeStandard__OnCharacterKilled (RoguelikeStandard_o* __this, Character_o* ch, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    }
+  ],
+  "native_instructions_executed": 680,
+  "native_relationships_verified": 11,
+  "decoded_ranges": [
+    [
+      "0x116bcc0",
+      "0x116be3e"
+    ],
+    [
+      "0x116e070",
+      "0x116e1ed"
+    ],
+    [
+      "0x1174850",
+      "0x1174bd0"
+    ],
+    [
+      "0x1175150",
+      "0x1175597"
+    ],
+    [
+      "0x1174c80",
+      "0x1174dd2"
+    ],
+    [
+      "0x116d410",
+      "0x116d5bf"
+    ],
+    [
+      "0x3ea250",
+      "0x3ea2df"
+    ],
+    [
+      "0x4a0210",
+      "0x4a0217"
+    ],
+    [
+      "0x4a0220",
+      "0x4a0227"
+    ],
+    [
+      "0x1026e90",
+      "0x1026eb9"
+    ],
+    [
+      "0x4d5b60",
+      "0x4d5c76"
+    ],
+    [
+      "0x4a86f0",
+      "0x4a86ff"
+    ],
+    [
+      "0x3e98c0",
+      "0x3e9bd3"
+    ],
+    [
+      "0x25e600",
+      "0x25e657"
+    ],
+    [
+      "0x5c70",
+      "0x5cd0"
+    ]
+  ],
+  "distinct_mode_callback_scores": {
+    "old": 240,
+    "new": 120
+  },
+  "equal_list_removal_empty_nonnull": true,
+  "accumulation": [
+    {
+      "phase": "init",
+      "kill_handler_count": 1
+    },
+    {
+      "phase": "deinit",
+      "kill_handler_count": 2
+    },
+    {
+      "phase": "init",
+      "kill_handler_count": 3
+    },
+    {
+      "phase": "deinit",
+      "kill_handler_count": 4
+    },
+    {
+      "phase": "init",
+      "kill_handler_count": 5
+    }
+  ],
+  "score_cases_passed": 80,
+  "score_cases": [
+    {
+      "type": 0,
+      "count": -1,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": -1,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": 0,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": 0,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": 1,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": 1,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": 7,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": 7,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 0,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 0,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": -1,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": -1,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": 0,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": 0,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": 1,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": 1,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": 7,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": 7,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 10,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 10,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": -1,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": -1,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": 0,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": 0,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": 1,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": 1,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": 7,
+      "initial": 0,
+      "ui": false,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": 7,
+      "initial": 0,
+      "ui": true,
+      "final": 0
+    },
+    {
+      "type": 20,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483647
+    },
+    {
+      "type": 20,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483647
+    },
+    {
+      "type": 30,
+      "count": -1,
+      "initial": 0,
+      "ui": false,
+      "final": 40
+    },
+    {
+      "type": 30,
+      "count": -1,
+      "initial": 0,
+      "ui": true,
+      "final": 40
+    },
+    {
+      "type": 30,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483687
+    },
+    {
+      "type": 30,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483687
+    },
+    {
+      "type": 30,
+      "count": 0,
+      "initial": 0,
+      "ui": false,
+      "final": 50
+    },
+    {
+      "type": 30,
+      "count": 0,
+      "initial": 0,
+      "ui": true,
+      "final": 50
+    },
+    {
+      "type": 30,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483697
+    },
+    {
+      "type": 30,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483697
+    },
+    {
+      "type": 30,
+      "count": 1,
+      "initial": 0,
+      "ui": false,
+      "final": 60
+    },
+    {
+      "type": 30,
+      "count": 1,
+      "initial": 0,
+      "ui": true,
+      "final": 60
+    },
+    {
+      "type": 30,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483707
+    },
+    {
+      "type": 30,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483707
+    },
+    {
+      "type": 30,
+      "count": 7,
+      "initial": 0,
+      "ui": false,
+      "final": 120
+    },
+    {
+      "type": 30,
+      "count": 7,
+      "initial": 0,
+      "ui": true,
+      "final": 120
+    },
+    {
+      "type": 30,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483767
+    },
+    {
+      "type": 30,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483767
+    },
+    {
+      "type": 100,
+      "count": -1,
+      "initial": 0,
+      "ui": false,
+      "final": 40
+    },
+    {
+      "type": 100,
+      "count": -1,
+      "initial": 0,
+      "ui": true,
+      "final": 40
+    },
+    {
+      "type": 100,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483687
+    },
+    {
+      "type": 100,
+      "count": -1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483687
+    },
+    {
+      "type": 100,
+      "count": 0,
+      "initial": 0,
+      "ui": false,
+      "final": 50
+    },
+    {
+      "type": 100,
+      "count": 0,
+      "initial": 0,
+      "ui": true,
+      "final": 50
+    },
+    {
+      "type": 100,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483697
+    },
+    {
+      "type": 100,
+      "count": 0,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483697
+    },
+    {
+      "type": 100,
+      "count": 1,
+      "initial": 0,
+      "ui": false,
+      "final": 60
+    },
+    {
+      "type": 100,
+      "count": 1,
+      "initial": 0,
+      "ui": true,
+      "final": 60
+    },
+    {
+      "type": 100,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483707
+    },
+    {
+      "type": 100,
+      "count": 1,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483707
+    },
+    {
+      "type": 100,
+      "count": 7,
+      "initial": 0,
+      "ui": false,
+      "final": 120
+    },
+    {
+      "type": 100,
+      "count": 7,
+      "initial": 0,
+      "ui": true,
+      "final": 120
+    },
+    {
+      "type": 100,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": false,
+      "final": 2147483767
+    },
+    {
+      "type": 100,
+      "count": 7,
+      "initial": 2147483647,
+      "ui": true,
+      "final": 2147483767
+    }
+  ],
+  "replayed_accumulated_callbacks": 5,
+  "replay_score": 600,
+  "ui_failure_score_preserved": 120,
+  "service_counts": {
+    "method_info": 16,
+    "array_copy": 12
+  },
+  "scope": "Native Combine/Remove wrappers, multicast implementations, delegate equality, delegate constructor, specialized clone helper, Action Invoke and multicast trampoline execute with fixture classes. Method-info resolution, runtime allocation/type/array-copy/GC stores and instance-method classification remain gateways. Native score callback uses count-provider and UI gateways. Full lifecycle runtime instances and live initialization counts remain open."
+}

@@ -20,7 +20,7 @@ build manifest.
 
 ## Current build
 
-- Steam app: `3749680` (`Demon Bluff Playtest`)
+- Steam app: `3749960` (`Demon Bluff Playtest`)
 - Steam build: `23084916`
 - Unity: `2022.3.10f1`
 - Architecture: Windows x86-64
@@ -38,7 +38,7 @@ From PowerShell at the repository root:
 ```powershell
 python reverse_engineering/scripts/build_manifest.py `
   --game-root 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
-  --steam-manifest 'B:\SteamLibrary\steamapps\appmanifest_3749680.acf'
+  --steam-manifest 'B:\SteamLibrary\steamapps\appmanifest_3749960.acf'
 
 powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_il2cppdumper.ps1 `
@@ -587,9 +587,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,760
-datatypes. Its forty-seven-set inventory contains 968 target memberships, 615
-distinct selected FunctionDefinitions, and 509 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,788
+datatypes. Its fifty-set inventory contains 996 target memberships, 643
+distinct selected FunctionDefinitions, and 535 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -603,13 +603,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current forty-seven-set run used six batches for each phase. Ghidra
+sets; the current fifty-set run used seven batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all forty-seven target
+The preserved fully analyzed typed project now covers all fifty target
 sets after a no-analysis refresh. Three hundred fifty-three memberships are
 exact FunctionDefinition overlaps between boundaries. Folded/shared bodies make
-the 615 selected definitions exceed the 509 unique native RVAs by 106;
+the 643 selected definitions exceed the 535 unique native RVAs by 108;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -640,9 +640,13 @@ FunctionDefinitions to the rebuilt GDT and required no additional reachable
 datatype imports during application. The Spy boundary adds five FunctionDefinitions
 without additional reachable datatype imports. Managed Mutant adds five more
 FunctionDefinitions without additional reachable datatype imports. The refresh
-reapplied and validated all 968 memberships without rerunning auto-analysis. The final
-read-only pass validated all 968 memberships (615 exact definitions) and 2,804
+reapplied and validated all 996 memberships without rerunning auto-analysis. The final
+read-only pass validated all 996 memberships (643 exact definitions) and 2,861
 membership-level parameter-storage locations with zero program mutations.
+
+The three new mode target sets completed baseline and typed exports at 6/6,
+17/17 and 5/5. Their quality reports remove all 120 placeholder parameter tokens;
+raw field-offset accesses fall from 141 to 82 with no added decompiler warnings.
 
 The signature-application ABI check now derives each of the first four Win64
 register families from the parameter datatype: integer and pointer parameters
@@ -855,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,216 classifications backed by
-288 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,341 classifications backed by
+302 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -925,6 +929,35 @@ The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
 native cases for mode publication, initialization, state changes, catalogue
 lookups and achievement callers. Service internals remain explicit boundaries.
+
+The [base GameMode audit](notes/systems/game_mode_base_surface.md) covers all
+21 declarations. [Standard lifecycle](notes/systems/game_mode_lifecycle.md)
+and [progression](notes/systems/standard_mode_progression.md) complete its
+24-method caller surface, including native save/score failure ordering.
+The offline Rust progression replay matches all 304 applicable native fixtures;
+all 699 Rust library tests passed.
+[Roguelike lifecycle](notes/systems/roguelike_standard_lifecycle.md) identifies
+the kill-handler Combine during teardown. The
+[delegate-to-score follow-up](notes/systems/roguelike_delegate_score.md)
+executes accumulated handlers through the actual multicast invocation path;
+live subscription counts remain unobserved. The [progression audit](notes/systems/roguelike_standard_progression.md)
+adds 1,498 native cases and a Rust replay checked against 1,138 applicable fixtures.
+[Presentation helpers](notes/systems/roguelike_presentation.md),
+[AdvancedMode](notes/systems/advanced_mode_surface.md),
+[RoguelikeMode](notes/systems/roguelike_mode.md), and
+[SavesGame](notes/systems/saves_game_surface.md) complete their declared caller
+surfaces. The [mode-transition composition](notes/systems/mode_transition_composition.md)
+executes concrete teardown/load/init ordering in 161 native cases; the
+[village bridge](notes/systems/roguelike_village_bridge.md) checks 660 cases with
+separate caller and globally selected mode identities. UI and persistence bodies
+remain explicitly scoped services. [Mode-selection UI callers](notes/systems/mode_selection_ui.md)
+add 70 cases, including the completed-Standard reset triggered during card refresh.
+The opt-in Rust village bridge matches all 660 native fixtures.
+
+The [starting-character sequence](notes/systems/ascension_starting_sequence.md)
+executes both lazy concatenators and the stored-array helper in 965 native cases.
+Its weighted Rust replay matches 964 existing-profile cases and all 46 native
+choice paths, preserving repeated draws after null payloads and partial outputs.
 
 The [Unity clock audit](notes/systems/unity_clock.md) checks 1,437 native frame
 updates and 180 fixed selections. Its offline Rust projection preserves exact

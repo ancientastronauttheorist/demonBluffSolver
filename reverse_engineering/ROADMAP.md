@@ -1,18 +1,18 @@
 # Full Reconstruction Roadmap
 
-## Continuation checkpoint: 2026-09-11 evening
+## Continuation checkpoint: 2026-09-12 overnight
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,216 classifications and 288 evidence records
+additional native timing audits. The overlay contains 1,341 classifications and 302 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
-47 sets, 968 memberships, 615 exact definitions and 509 native RVAs, with
-2,804 parameter locations validated read-only and zero program mutations.
+50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
+2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 676 Rust library tests; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 699 Rust library tests; full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
-The latest full simulation took 992.37 seconds. Subsequent clock-source, phase
-and setter work consists of offline audit artifacts and bounded harness changes.
+The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
+New mode reconstructions are offline, with explicit service contracts.
 
 Resume with these boundaries in view:
 
@@ -36,8 +36,16 @@ Resume with these boundaries in view:
    fully-shared generic copy alternatives now have native caller/boxing evidence;
    their actual invoker and engine-serialization services remain open.
    Engine JSON registration/fallback and ToJson/FromJson gateways are now
-   audited; core parsing, field application and constructor-error reporting
-   remain distinct next boundaries.
+   audited, including conditional constructor-error reporting and allocation
+   retention; core parsing and field application remain next boundaries.
+   All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
+   RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
+   progression have versioned Rust replays. Native delegate composition confirms
+   the teardown Combine discrepancy. Composed mode transitions, village
+   advancement and the weighted starting-character sequence now have native
+   fixtures and bounded Rust replays. UI selection callers are audited; completed
+   Standard reset during refresh and roster filtering/composition are the next
+   native composition frontiers. Preserve each caller's faction-read order.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.

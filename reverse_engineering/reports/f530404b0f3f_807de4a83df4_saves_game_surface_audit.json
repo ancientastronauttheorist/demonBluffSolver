@@ -1,0 +1,1523 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "exact_methods": [
+    {
+      "Address": 3700688,
+      "Name": "SavesGame$$get_AdvancedMode",
+      "Signature": "AdvancedMode_o* SavesGame__get_AdvancedMode (const MethodInfo* method);",
+      "TypeSignature": "ii"
+    },
+    {
+      "Address": 3702208,
+      "Name": "SavesGame$$set_AdvancedMode",
+      "Signature": "void SavesGame__set_AdvancedMode (AdvancedMode_o* value, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3701120,
+      "Name": "SavesGame$$get_RoguelikeMode",
+      "Signature": "RoguelikeMode_o* SavesGame__get_RoguelikeMode (const MethodInfo* method);",
+      "TypeSignature": "ii"
+    },
+    {
+      "Address": 3702368,
+      "Name": "SavesGame$$set_RoguelikeMode",
+      "Signature": "void SavesGame__set_RoguelikeMode (RoguelikeMode_o* value, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3700848,
+      "Name": "SavesGame$$get_CharacterPreferences",
+      "Signature": "SavedCharacters_o* SavesGame__get_CharacterPreferences (const MethodInfo* method);",
+      "TypeSignature": "ii"
+    },
+    {
+      "Address": 3702288,
+      "Name": "SavesGame$$set_CharacterPreferences",
+      "Signature": "void SavesGame__set_CharacterPreferences (SavedCharacters_o* value, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3701664,
+      "Name": "SavesGame$$get_UnlockedAchievements",
+      "Signature": "SavedAchievements_o* SavesGame__get_UnlockedAchievements (const MethodInfo* method);",
+      "TypeSignature": "ii"
+    },
+    {
+      "Address": 3702704,
+      "Name": "SavesGame$$set_UnlockedAchievements",
+      "Signature": "void SavesGame__set_UnlockedAchievements (SavedAchievements_o* value, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3701936,
+      "Name": "SavesGame$$get_UnlockedSkins",
+      "Signature": "SavedSkins_o* SavesGame__get_UnlockedSkins (const MethodInfo* method);",
+      "TypeSignature": "ii"
+    },
+    {
+      "Address": 3702784,
+      "Name": "SavesGame$$set_UnlockedSkins",
+      "Signature": "void SavesGame__set_UnlockedSkins (SavedSkins_o* value, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3699888,
+      "Name": "SavesGame$$UpdateCharacterPreference",
+      "Signature": "void SavesGame__UpdateCharacterPreference (CharacterData_o* cd, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3403088,
+      "Name": "SavesGame$$GetCharacterPreference",
+      "Signature": "void SavesGame__GetCharacterPreference (CharacterData_o* cd, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3748896,
+      "Name": "SavesGame.<>c__DisplayClass15_0$$<UpdateCharacterPreference>b__0",
+      "Signature": "bool SavesGame___c__DisplayClass15_0___UpdateCharacterPreference_b__0 (SavesGame___c__DisplayClass15_0_o* __this, CharacterPreference_o* cp, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3699632,
+      "Name": "SavedCharacters$$.ctor",
+      "Signature": "void SavedCharacters___ctor (SavedCharacters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3699760,
+      "Name": "SavedSkins$$.ctor",
+      "Signature": "void SavedSkins___ctor (SavedSkins_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3699504,
+      "Name": "SavedAchievements$$.ctor",
+      "Signature": "void SavedAchievements___ctor (SavedAchievements_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "native_checks": 14,
+  "property_cases": [
+    {
+      "property": "AdvancedMode",
+      "get_case": "missing",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "get_case": "empty",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "get_case": "present",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "get_case": "changed read",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "get_case": "null parse",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "get_case": "parse failure",
+      "reads": 2,
+      "error": "fromjson"
+    },
+    {
+      "property": "AdvancedMode",
+      "setter_null": true,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "setter_null": true,
+      "error": "tojson"
+    },
+    {
+      "property": "AdvancedMode",
+      "setter_null": true,
+      "error": "setstring"
+    },
+    {
+      "property": "AdvancedMode",
+      "setter_null": false,
+      "error": null
+    },
+    {
+      "property": "AdvancedMode",
+      "setter_null": false,
+      "error": "tojson"
+    },
+    {
+      "property": "AdvancedMode",
+      "setter_null": false,
+      "error": "setstring"
+    },
+    {
+      "property": "RoguelikeMode",
+      "get_case": "missing",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "get_case": "empty",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "get_case": "present",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "get_case": "changed read",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "get_case": "null parse",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "get_case": "parse failure",
+      "reads": 2,
+      "error": "fromjson"
+    },
+    {
+      "property": "RoguelikeMode",
+      "setter_null": true,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "setter_null": true,
+      "error": "tojson"
+    },
+    {
+      "property": "RoguelikeMode",
+      "setter_null": true,
+      "error": "setstring"
+    },
+    {
+      "property": "RoguelikeMode",
+      "setter_null": false,
+      "error": null
+    },
+    {
+      "property": "RoguelikeMode",
+      "setter_null": false,
+      "error": "tojson"
+    },
+    {
+      "property": "RoguelikeMode",
+      "setter_null": false,
+      "error": "setstring"
+    },
+    {
+      "property": "CharacterPreferences",
+      "get_case": "missing",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "get_case": "empty",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "get_case": "present",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "get_case": "changed read",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "get_case": "null parse",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "get_case": "parse failure",
+      "reads": 2,
+      "error": "fromjson"
+    },
+    {
+      "property": "CharacterPreferences",
+      "setter_null": true,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "setter_null": true,
+      "error": "tojson"
+    },
+    {
+      "property": "CharacterPreferences",
+      "setter_null": true,
+      "error": "setstring"
+    },
+    {
+      "property": "CharacterPreferences",
+      "setter_null": false,
+      "error": null
+    },
+    {
+      "property": "CharacterPreferences",
+      "setter_null": false,
+      "error": "tojson"
+    },
+    {
+      "property": "CharacterPreferences",
+      "setter_null": false,
+      "error": "setstring"
+    },
+    {
+      "property": "UnlockedAchievements",
+      "get_case": "missing",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "get_case": "empty",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "get_case": "present",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "get_case": "changed read",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "get_case": "null parse",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "get_case": "parse failure",
+      "reads": 2,
+      "error": "fromjson"
+    },
+    {
+      "property": "UnlockedAchievements",
+      "setter_null": true,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "setter_null": true,
+      "error": "tojson"
+    },
+    {
+      "property": "UnlockedAchievements",
+      "setter_null": true,
+      "error": "setstring"
+    },
+    {
+      "property": "UnlockedAchievements",
+      "setter_null": false,
+      "error": null
+    },
+    {
+      "property": "UnlockedAchievements",
+      "setter_null": false,
+      "error": "tojson"
+    },
+    {
+      "property": "UnlockedAchievements",
+      "setter_null": false,
+      "error": "setstring"
+    },
+    {
+      "property": "UnlockedSkins",
+      "get_case": "missing",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "get_case": "empty",
+      "reads": 1,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "get_case": "present",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "get_case": "changed read",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "get_case": "null parse",
+      "reads": 2,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "get_case": "parse failure",
+      "reads": 2,
+      "error": "fromjson"
+    },
+    {
+      "property": "UnlockedSkins",
+      "setter_null": true,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "setter_null": true,
+      "error": "tojson"
+    },
+    {
+      "property": "UnlockedSkins",
+      "setter_null": true,
+      "error": "setstring"
+    },
+    {
+      "property": "UnlockedSkins",
+      "setter_null": false,
+      "error": null
+    },
+    {
+      "property": "UnlockedSkins",
+      "setter_null": false,
+      "error": "tojson"
+    },
+    {
+      "property": "UnlockedSkins",
+      "setter_null": false,
+      "error": "setstring"
+    }
+  ],
+  "update_cases": [
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 1,
+      "writes": 1,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 1,
+      "writes": 1,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 1,
+      "writes": 1,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 0,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 1
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 1,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 1,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 1,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 1,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 1,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 1,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match"
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 1,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 3,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 3,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 3,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 4,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 3,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 3,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": null,
+      "result_count": 3,
+      "version": 2,
+      "writes": 1,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "tojson",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "other",
+        "match",
+        "match",
+        "other"
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "setstring",
+      "result_count": 3,
+      "version": 2,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 3,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": null,
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "tojson",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "selected",
+      "requested_failure": "setstring",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": null,
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "tojson",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "no skin",
+      "requested_failure": "setstring",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": null,
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "tojson",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "input_labels": [
+        "match",
+        "other",
+        null
+      ],
+      "capacity": 8,
+      "skin": "null skin id",
+      "requested_failure": "setstring",
+      "error": "null",
+      "result_count": 3,
+      "version": 0,
+      "writes": 0,
+      "growth": 0
+    },
+    {
+      "null_character": true,
+      "error": "null",
+      "writes": 0
+    },
+    {
+      "broken_input": "null parsed",
+      "error": "null",
+      "writes": 0
+    },
+    {
+      "broken_input": "null prefs",
+      "error": "null",
+      "writes": 0
+    },
+    {
+      "broken_input": "null backing array",
+      "error": "null",
+      "writes": 0
+    },
+    {
+      "missing_store": true,
+      "writes": 1,
+      "fresh_preference_count": 1
+    }
+  ],
+  "constructor_cases": [
+    {
+      "type": "SavedAchievements",
+      "empty_fresh_list": true
+    },
+    {
+      "type": "SavedCharacters",
+      "empty_fresh_list": true
+    },
+    {
+      "type": "SavedSkins",
+      "empty_fresh_list": true
+    }
+  ],
+  "predicate_cases": [
+    {
+      "stored_id": null,
+      "character_id": null,
+      "matches": true
+    },
+    {
+      "stored_id": null,
+      "character_id": "id",
+      "matches": false
+    },
+    {
+      "stored_id": null,
+      "character_id": "other",
+      "matches": false
+    },
+    {
+      "stored_id": "id",
+      "character_id": null,
+      "matches": false
+    },
+    {
+      "stored_id": "id",
+      "character_id": "id",
+      "matches": true
+    },
+    {
+      "stored_id": "id",
+      "character_id": "other",
+      "matches": false
+    },
+    {
+      "stored_id": "other",
+      "character_id": null,
+      "matches": false
+    },
+    {
+      "stored_id": "other",
+      "character_id": "id",
+      "matches": false
+    },
+    {
+      "stored_id": "other",
+      "character_id": "other",
+      "matches": true
+    }
+  ],
+  "native_case_count": 151,
+  "keys": {
+    "AdvancedMode": "SavedAdvanced",
+    "RoguelikeMode": "SavedRoguelike",
+    "CharacterPreferences": "SAVED_CHARACTERS",
+    "UnlockedAchievements": "SAVED_ACHIEVEMENTS",
+    "UnlockedSkins": "SAVED_SKINS"
+  },
+  "scope": "Native SavesGame properties/update, nested predicate, List.RemoveAll, inline append and default constructors. JSON, PlayerPrefs, string equality, allocation, delegate setup, array clearing and list capacity growth are explicit gateways. No persistence flush, live saves, JSON internals or exception unwinding is executed."
+}

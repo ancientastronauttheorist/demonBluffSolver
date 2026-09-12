@@ -10,3 +10,7 @@ pub mod strategy;
 pub mod twin;
 pub mod puppeteer;
 pub mod shaman;
+pub mod standard_progression;
+pub mod roguelike_progression;
+pub mod roguelike_village_bridge;
+pub mod mode_transition;

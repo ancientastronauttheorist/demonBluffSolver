@@ -1,0 +1,2874 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3765312,
+      "Name": "ChangeGameModeButton$$OnClick",
+      "Signature": "void ChangeGameModeButton__OnClick (ChangeGameModeButton_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3401760,
+      "Name": "ChangeGameModeButton$$.ctor",
+      "Signature": "void ChangeGameModeButton___ctor (ChangeGameModeButton_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3805648,
+      "Name": "GameModeCard$$OnEnable",
+      "Signature": "void GameModeCard__OnEnable (GameModeCard_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3805360,
+      "Name": "GameModeCard$$OnDisable",
+      "Signature": "void GameModeCard__OnDisable (GameModeCard_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3805952,
+      "Name": "GameModeCard$$UpdateView",
+      "Signature": "void GameModeCard__UpdateView (GameModeCard_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3805280,
+      "Name": "GameModeCard$$Lock",
+      "Signature": "void GameModeCard__Lock (GameModeCard_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3401760,
+      "Name": "GameModeCard$$.ctor",
+      "Signature": "void GameModeCard___ctor (GameModeCard_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 70,
+  "native_relationships": 6,
+  "distinct_native_instructions": 261,
+  "cases": [
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": false,
+        "completed": 0,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": false,
+        "completed": 0,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": false,
+        "completed": 0,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": false,
+        "completed": 0,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": false,
+        "completed": 1,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": false,
+        "completed": 1,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": false,
+        "completed": 1,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": false,
+        "completed": 1,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": false,
+        "completed": 7,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": false,
+        "completed": 7,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": false,
+        "completed": 7,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": false,
+        "completed": 7,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 0,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": true,
+        "completed": 0,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 0,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": true,
+        "completed": 0,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": true,
+        "completed": 1,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": true,
+        "completed": 1,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 7,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": true,
+        "completed": 7,
+        "locked": false
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 7,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "original",
+        "standard": true,
+        "completed": 7,
+        "locked": true
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "original"
+        },
+        {
+          "event": "on_load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "scores",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "text",
+          "mode": "original",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "is_locked",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "null",
+        "result": "loaded"
+      },
+      "trace": [
+        {
+          "event": "active",
+          "mode": "null",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "null",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "null",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "null"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "null"
+        }
+      ],
+      "error": "null",
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "text"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        }
+      ],
+      "error": "null",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "locked"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        }
+      ],
+      "error": "null",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "button"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": "null",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "trigger"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": "null",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "load"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": "load",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "on_load"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        }
+      ],
+      "error": "on_load",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "scores"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        }
+      ],
+      "error": "scores",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "text"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        }
+      ],
+      "error": "text",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "abandon"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        }
+      ],
+      "error": "abandon",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "is_locked"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        }
+      ],
+      "error": "is_locked",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "active"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        }
+      ],
+      "error": "active",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "button_enabled"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": "button_enabled",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$UpdateView",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "standard": true,
+        "completed": 1,
+        "fail": "trigger_enabled"
+      },
+      "trace": [
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": "trigger_enabled",
+      "final_mode": "loaded",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnEnable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "existing": 0
+      },
+      "trace": [
+        {
+          "event": "combine",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        },
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 2
+    },
+    {
+      "method": "GameModeCard$$OnEnable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "existing": 1
+      },
+      "trace": [
+        {
+          "event": "combine",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        },
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 3
+    },
+    {
+      "method": "GameModeCard$$OnEnable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "existing": 2
+      },
+      "trace": [
+        {
+          "event": "combine",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        },
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded"
+        },
+        {
+          "event": "on_load",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "target": "text"
+        },
+        {
+          "event": "is_locked",
+          "mode": "loaded",
+          "target": "loaded"
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "final_mode": "loaded",
+      "subscribers": 4
+    },
+    {
+      "method": "GameModeCard$$OnEnable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "fail": "combine"
+      },
+      "trace": [
+        {
+          "event": "combine",
+          "mode": "original"
+        }
+      ],
+      "error": "combine",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnEnable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "bad_cast": true
+      },
+      "trace": [
+        {
+          "event": "combine",
+          "mode": "original"
+        }
+      ],
+      "error": "cast",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "existing": 0
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "existing": 1
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "existing": 2
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 2
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "fail": "remove"
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        }
+      ],
+      "error": "remove",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "bad_cast": true
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        }
+      ],
+      "error": "cast",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "no_other": true,
+        "existing": 0
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 0
+    },
+    {
+      "method": "GameModeCard$$OnDisable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "no_other": true,
+        "existing": 1
+      },
+      "trace": [
+        {
+          "event": "remove",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 0
+    },
+    {
+      "method": "GameModeCard$$OnEnable",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "fail": "load"
+      },
+      "trace": [
+        {
+          "event": "combine",
+          "mode": "original"
+        },
+        {
+          "event": "subscription_store",
+          "mode": "original"
+        },
+        {
+          "event": "load",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": "load",
+      "final_mode": "original",
+      "subscribers": 2
+    },
+    {
+      "method": "GameModeCard$$Lock",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": null
+      },
+      "trace": [
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$Lock",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "locked"
+      },
+      "trace": [],
+      "error": "null",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$Lock",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "button"
+      },
+      "trace": [
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        }
+      ],
+      "error": "null",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$Lock",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "missing": "trigger"
+      },
+      "trace": [
+        {
+          "event": "active",
+          "mode": "original",
+          "value": 1
+        },
+        {
+          "event": "button_enabled",
+          "mode": "original",
+          "value": 0
+        }
+      ],
+      "error": "null",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "null",
+        "result": "loaded",
+        "cold": false,
+        "fail": null
+      },
+      "trace": [
+        {
+          "event": "change",
+          "mode": "null",
+          "target": "null"
+        }
+      ],
+      "error": null,
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "null",
+        "result": "loaded",
+        "cold": false,
+        "fail": "class_init"
+      },
+      "trace": [
+        {
+          "event": "change",
+          "mode": "null",
+          "target": "null"
+        }
+      ],
+      "error": null,
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "null",
+        "result": "loaded",
+        "cold": false,
+        "fail": "change"
+      },
+      "trace": [
+        {
+          "event": "change",
+          "mode": "null",
+          "target": "null"
+        }
+      ],
+      "error": "change",
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "null",
+        "result": "loaded",
+        "cold": true,
+        "fail": null
+      },
+      "trace": [
+        {
+          "event": "class_init",
+          "mode": "null"
+        },
+        {
+          "event": "change",
+          "mode": "null",
+          "target": "null"
+        }
+      ],
+      "error": null,
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "null",
+        "result": "loaded",
+        "cold": true,
+        "fail": "class_init"
+      },
+      "trace": [
+        {
+          "event": "class_init",
+          "mode": "null"
+        }
+      ],
+      "error": "class_init",
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "null",
+        "result": "loaded",
+        "cold": true,
+        "fail": "change"
+      },
+      "trace": [
+        {
+          "event": "class_init",
+          "mode": "null"
+        },
+        {
+          "event": "change",
+          "mode": "null",
+          "target": "null"
+        }
+      ],
+      "error": "change",
+      "final_mode": "null",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "cold": false,
+        "fail": null
+      },
+      "trace": [
+        {
+          "event": "change",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "cold": false,
+        "fail": "class_init"
+      },
+      "trace": [
+        {
+          "event": "change",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "cold": false,
+        "fail": "change"
+      },
+      "trace": [
+        {
+          "event": "change",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": "change",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "cold": true,
+        "fail": null
+      },
+      "trace": [
+        {
+          "event": "class_init",
+          "mode": "original"
+        },
+        {
+          "event": "change",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "cold": true,
+        "fail": "class_init"
+      },
+      "trace": [
+        {
+          "event": "class_init",
+          "mode": "original"
+        }
+      ],
+      "error": "class_init",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$OnClick",
+      "options": {
+        "input": "original",
+        "result": "loaded",
+        "cold": true,
+        "fail": "change"
+      },
+      "trace": [
+        {
+          "event": "class_init",
+          "mode": "original"
+        },
+        {
+          "event": "change",
+          "mode": "original",
+          "target": "original"
+        }
+      ],
+      "error": "change",
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "GameModeCard$$.ctor",
+      "options": {
+        "input": "original",
+        "result": "loaded"
+      },
+      "trace": [
+        {
+          "event": "behaviour_ctor",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    },
+    {
+      "method": "ChangeGameModeButton$$.ctor",
+      "options": {
+        "input": "original",
+        "result": "loaded"
+      },
+      "trace": [
+        {
+          "event": "behaviour_ctor",
+          "mode": "original"
+        }
+      ],
+      "error": null,
+      "final_mode": "original",
+      "subscribers": 1
+    }
+  ],
+  "scope": "All seven declarations execute native callers. Mode virtual methods, UI setters, class init, delegate construction/list operations and base Behaviour ctor are explicit gateways. Gateways preserve card references except the native LoadGame-result store. No live UI, JSON or full notification history claimed."
+}

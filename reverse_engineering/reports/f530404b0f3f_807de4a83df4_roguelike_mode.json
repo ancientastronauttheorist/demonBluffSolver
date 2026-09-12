@@ -1,0 +1,1244 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 4099600,
+      "Name": "RoguelikeMode$$GetGameMode",
+      "Signature": "int32_t RoguelikeMode__GetGameMode (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4101008,
+      "Name": "RoguelikeMode$$Init",
+      "Signature": "void RoguelikeMode__Init (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4099904,
+      "Name": "RoguelikeMode$$DeInit",
+      "Signature": "void RoguelikeMode__DeInit (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4101904,
+      "Name": "RoguelikeMode$$OnRestartLevel",
+      "Signature": "void RoguelikeMode__OnRestartLevel (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4101792,
+      "Name": "RoguelikeMode$$OnFailed",
+      "Signature": "void RoguelikeMode__OnFailed (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 4101776,
+      "Name": "RoguelikeMode$$LoadGame",
+      "Signature": "GameMode_o* RoguelikeMode__LoadGame (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4100688,
+      "Name": "RoguelikeMode$$GetMaxLevel",
+      "Signature": "int32_t RoguelikeMode__GetMaxLevel (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4100688,
+      "Name": "RoguelikeMode$$GetCurrentLevel",
+      "Signature": "int32_t RoguelikeMode__GetCurrentLevel (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3506944,
+      "Name": "RoguelikeMode$$GetScore",
+      "Signature": "int32_t RoguelikeMode__GetScore (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3403088,
+      "Name": "RoguelikeMode$$OnStageCompleted",
+      "Signature": "void RoguelikeMode__OnStageCompleted (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3609264,
+      "Name": "RoguelikeMode$$GetResetLevel",
+      "Signature": "int32_t RoguelikeMode__GetResetLevel (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3918992,
+      "Name": "RoguelikeMode$$CanResetLevel",
+      "Signature": "bool RoguelikeMode__CanResetLevel (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3609264,
+      "Name": "RoguelikeMode$$GetStartingLevel",
+      "Signature": "int32_t RoguelikeMode__GetStartingLevel (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4100880,
+      "Name": "RoguelikeMode$$GetScores",
+      "Signature": "System_String_o* RoguelikeMode__GetScores (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 4102016,
+      "Name": "RoguelikeMode$$UpdateScore",
+      "Signature": "void RoguelikeMode__UpdateScore (RoguelikeMode_o* __this, int32_t score, int32_t level, const MethodInfo* method);",
+      "TypeSignature": "viiii"
+    },
+    {
+      "Address": 4101648,
+      "Name": "RoguelikeMode$$IsLocked",
+      "Signature": "bool RoguelikeMode__IsLocked (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3504416,
+      "Name": "RoguelikeMode$$.ctor",
+      "Signature": "void RoguelikeMode___ctor (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 155,
+  "native_relationships_verified": 15,
+  "native_instructions_executed": 322,
+  "ranges": [
+    [
+      "0x33ed50",
+      "0x33ed53"
+    ],
+    [
+      "0x357920",
+      "0x357927"
+    ],
+    [
+      "0x358300",
+      "0x358304"
+    ],
+    [
+      "0x3712b0",
+      "0x3712b3"
+    ],
+    [
+      "0x3bcc90",
+      "0x3bcc93"
+    ],
+    [
+      "0x3e8e10",
+      "0x3e8e16"
+    ],
+    [
+      "0x3e8f40",
+      "0x3e9156"
+    ],
+    [
+      "0x3e9250",
+      "0x3e9254"
+    ],
+    [
+      "0x3e9310",
+      "0x3e9384"
+    ],
+    [
+      "0x3e9390",
+      "0x3e9609"
+    ],
+    [
+      "0x3e9610",
+      "0x3e9681"
+    ],
+    [
+      "0x3e9690",
+      "0x3e9697"
+    ],
+    [
+      "0x3e96a0",
+      "0x3e9700"
+    ],
+    [
+      "0x3e9710",
+      "0x3e9779"
+    ],
+    [
+      "0x3e9780",
+      "0x3e9794"
+    ]
+  ],
+  "cases": [
+    {
+      "method": "Init",
+      "options": {},
+      "writes": [
+        176,
+        56
+      ],
+      "error": null
+    },
+    {
+      "method": "Init",
+      "options": {
+        "null_result": true
+      },
+      "writes": [
+        176,
+        56
+      ],
+      "error": null
+    },
+    {
+      "method": "Init",
+      "options": {
+        "fail_op": 1
+      },
+      "writes": [],
+      "error": "delegate"
+    },
+    {
+      "method": "Init",
+      "options": {
+        "fail_op": 2
+      },
+      "writes": [
+        176
+      ],
+      "error": "delegate"
+    },
+    {
+      "method": "Init",
+      "options": {
+        "bad_op": 1
+      },
+      "writes": [],
+      "error": "cast"
+    },
+    {
+      "method": "Init",
+      "options": {
+        "bad_op": 2
+      },
+      "writes": [
+        176
+      ],
+      "error": "cast"
+    },
+    {
+      "method": "DeInit",
+      "options": {},
+      "writes": [
+        176,
+        56
+      ],
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "options": {
+        "null_result": true
+      },
+      "writes": [
+        176,
+        56
+      ],
+      "error": null
+    },
+    {
+      "method": "DeInit",
+      "options": {
+        "fail_op": 1
+      },
+      "writes": [],
+      "error": "delegate"
+    },
+    {
+      "method": "DeInit",
+      "options": {
+        "fail_op": 2
+      },
+      "writes": [
+        176
+      ],
+      "error": "delegate"
+    },
+    {
+      "method": "DeInit",
+      "options": {
+        "bad_op": 1
+      },
+      "writes": [],
+      "error": "cast"
+    },
+    {
+      "method": "DeInit",
+      "options": {
+        "bad_op": 2
+      },
+      "writes": [
+        176
+      ],
+      "error": "cast"
+    },
+    {
+      "method": "Init",
+      "cold_class": true,
+      "failure": false
+    },
+    {
+      "method": "Init",
+      "cold_class": true,
+      "failure": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": -2147483648,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": -2147483648,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": -2147483648,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": -1,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": -1,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": -1,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 0,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 0,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 0,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 7,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 7,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 7,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 2147483647,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 2147483647,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -2147483648,
+      "new": 2147483647,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": -2147483648,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": -2147483648,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": -2147483648,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": -1,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": -1,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": -1,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 0,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 0,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 0,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 7,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 7,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 7,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 2147483647,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 2147483647,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": -1,
+      "new": 2147483647,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": -2147483648,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": -2147483648,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": -2147483648,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": -1,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": -1,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": -1,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 0,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 0,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 0,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 7,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 7,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 7,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 2147483647,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 2147483647,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 0,
+      "new": 2147483647,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": -2147483648,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": -2147483648,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": -2147483648,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": -1,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": -1,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": -1,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 0,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 0,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 0,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 7,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 7,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 7,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 2147483647,
+      "level": -1,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 2147483647,
+      "level": 0,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 7,
+      "new": 2147483647,
+      "level": 9,
+      "saved": true
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": -2147483648,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": -2147483648,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": -2147483648,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": -1,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": -1,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": -1,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 0,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 0,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 0,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 7,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 7,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 7,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 2147483647,
+      "level": -1,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 2147483647,
+      "level": 0,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "old": 2147483647,
+      "new": 2147483647,
+      "level": 9,
+      "saved": false
+    },
+    {
+      "method": "UpdateScore",
+      "failure": "save",
+      "writes_preserved": true
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -2147483648,
+      "failure_at": 0,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -2147483648,
+      "failure_at": 1,
+      "states": [
+        1
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -2147483648,
+      "failure_at": 2,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -1,
+      "failure_at": 0,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -1,
+      "failure_at": 1,
+      "states": [
+        1
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -1,
+      "failure_at": 2,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 0,
+      "failure_at": 0,
+      "states": []
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 0,
+      "failure_at": 1,
+      "states": []
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 0,
+      "failure_at": 2,
+      "states": []
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 1,
+      "failure_at": 0,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 1,
+      "failure_at": 1,
+      "states": [
+        1
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 1,
+      "failure_at": 2,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 2147483647,
+      "failure_at": 0,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 2147483647,
+      "failure_at": 1,
+      "states": [
+        1
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 2147483647,
+      "failure_at": 2,
+      "states": [
+        1,
+        70
+      ]
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": -1,
+      "failure": "class"
+    },
+    {
+      "method": "OnRestartLevel",
+      "deaths": 1,
+      "failure": "class"
+    },
+    {
+      "method": "OnFailed",
+      "missing_gameplay": false
+    },
+    {
+      "method": "OnFailed",
+      "missing_gameplay": true
+    },
+    {
+      "method": "OnFailed",
+      "failure": "class"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": -2147483648,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": -2147483648,
+      "null_save": true,
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": -1,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": -1,
+      "null_save": true,
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 0,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 0,
+      "null_save": true,
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 1,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 1,
+      "null_save": true,
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 2,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 2,
+      "null_save": true,
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 7,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 0,
+      "best_standard_ascension": 7,
+      "null_save": true,
+      "error": "null"
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": -2147483648,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": -2147483648,
+      "null_save": true,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": -1,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": -1,
+      "null_save": true,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 0,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 0,
+      "null_save": true,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 1,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 1,
+      "null_save": true,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 2,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 2,
+      "null_save": true,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 7,
+      "null_save": false,
+      "error": null
+    },
+    {
+      "method": "IsLocked",
+      "debug": 1,
+      "best_standard_ascension": 7,
+      "null_save": true,
+      "error": null
+    },
+    {
+      "method": "GetScores",
+      "override": false,
+      "formatted": 31
+    },
+    {
+      "method": "GetScores",
+      "override": true,
+      "formatted": -2147483648
+    },
+    {
+      "method": "GetScores",
+      "override": false,
+      "formatted": 31
+    },
+    {
+      "method": "GetScores",
+      "override": true,
+      "formatted": -1
+    },
+    {
+      "method": "GetScores",
+      "override": false,
+      "formatted": 31
+    },
+    {
+      "method": "GetScores",
+      "override": true,
+      "formatted": 0
+    },
+    {
+      "method": "GetScores",
+      "override": false,
+      "formatted": 31
+    },
+    {
+      "method": "GetScores",
+      "override": true,
+      "formatted": 7
+    },
+    {
+      "method": "GetScores",
+      "override": false,
+      "formatted": 31
+    },
+    {
+      "method": "GetScores",
+      "override": true,
+      "formatted": 2147483647
+    },
+    {
+      "method": "LoadGame",
+      "null_result": false
+    },
+    {
+      "method": "LoadGame",
+      "null_result": true
+    },
+    {
+      "method": "RoguelikeMode$$GetGameMode",
+      "value": 10,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$GetMaxLevel",
+      "value": -9,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$GetCurrentLevel",
+      "value": -9,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$GetScore",
+      "value": -7,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$OnStageCompleted",
+      "value": null,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$GetResetLevel",
+      "value": 0,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$CanResetLevel",
+      "value": 0,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$GetStartingLevel",
+      "value": 0,
+      "unchanged_fields": true
+    },
+    {
+      "method": "RoguelikeMode$$.ctor",
+      "value": null,
+      "unchanged_fields": true
+    }
+  ],
+  "format_template": "\n<size=24>Highest Score</size>: <color=green>{0}",
+  "scope": "Seventeen native declared methods; two previously audited ascension selectors excluded. Save getters/setter, delegate operations, allocation/boxing/formatting, class initialization and gameplay state events are explicit gateways. Exact load/save property implementations are separately audited. No inherited-surface or full runtime event lifecycle completeness claim."
+}

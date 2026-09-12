@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "targets_verified": 6,
+  "additional_exact_base_callbacks": [
+    {
+      "Address": 3403088,
+      "Name": "GameMode$$OnLoadGame",
+      "Signature": "void GameMode__OnLoadGame (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3403088,
+      "Name": "GameMode$$DeInit",
+      "Signature": "void GameMode__DeInit (GameMode_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "exact_json_method": {
+    "Address": 40989448,
+    "Name": "Method$UnityEngine.JsonUtility.FromJson<StandardMode>()",
+    "MethodAddress": 0
+  },
+  "cases_passed": 41,
+  "native_relationships_verified": 7,
+  "distinct_native_instructions": 352,
+  "cases": [
+    {
+      "method": "init",
+      "level": -1,
+      "null_delegate_results": false,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": -1,
+      "null_delegate_results": true,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": 0,
+      "null_delegate_results": false,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": 0,
+      "null_delegate_results": true,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": 7,
+      "null_delegate_results": false,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": 7,
+      "null_delegate_results": true,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": 2147483647,
+      "null_delegate_results": false,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "level": 2147483647,
+      "null_delegate_results": true,
+      "writes": [
+        32,
+        176,
+        72
+      ]
+    },
+    {
+      "method": "init",
+      "failure": "bad_op",
+      "operation": 1,
+      "writes": []
+    },
+    {
+      "method": "init",
+      "failure": "bad_op",
+      "operation": 2,
+      "writes": [
+        32
+      ]
+    },
+    {
+      "method": "init",
+      "failure": "bad_op",
+      "operation": 3,
+      "writes": [
+        32,
+        176
+      ]
+    },
+    {
+      "method": "init",
+      "failure": "fail_op",
+      "operation": 1,
+      "writes": []
+    },
+    {
+      "method": "init",
+      "failure": "fail_op",
+      "operation": 2,
+      "writes": [
+        32
+      ]
+    },
+    {
+      "method": "init",
+      "failure": "fail_op",
+      "operation": 3,
+      "writes": [
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": -1,
+      "null_delegate_results": false,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": -1,
+      "null_delegate_results": true,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": 0,
+      "null_delegate_results": false,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": 0,
+      "null_delegate_results": true,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": 7,
+      "null_delegate_results": false,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": 7,
+      "null_delegate_results": true,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": 2147483647,
+      "null_delegate_results": false,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "level": 2147483647,
+      "null_delegate_results": true,
+      "writes": [
+        72,
+        32,
+        176
+      ]
+    },
+    {
+      "method": "deinit",
+      "failure": "bad_op",
+      "operation": 1,
+      "writes": []
+    },
+    {
+      "method": "deinit",
+      "failure": "bad_op",
+      "operation": 2,
+      "writes": [
+        72
+      ]
+    },
+    {
+      "method": "deinit",
+      "failure": "bad_op",
+      "operation": 3,
+      "writes": [
+        72,
+        32
+      ]
+    },
+    {
+      "method": "deinit",
+      "failure": "fail_op",
+      "operation": 1,
+      "writes": []
+    },
+    {
+      "method": "deinit",
+      "failure": "fail_op",
+      "operation": 2,
+      "writes": [
+        72
+      ]
+    },
+    {
+      "method": "deinit",
+      "failure": "fail_op",
+      "operation": 3,
+      "writes": [
+        72,
+        32
+      ]
+    },
+    {
+      "method": "init",
+      "cold_class": true,
+      "class_failure": false,
+      "round_score_reset": true,
+      "village_published": true
+    },
+    {
+      "method": "init",
+      "cold_class": true,
+      "class_failure": true,
+      "round_score_reset": true,
+      "village_published": false
+    },
+    {
+      "method": "init",
+      "null_this": "fails after delegate allocation before constructor"
+    },
+    {
+      "method": "load",
+      "reads": 1,
+      "json_calls": 0,
+      "error": null
+    },
+    {
+      "method": "load",
+      "reads": 2,
+      "json_calls": 1,
+      "error": null
+    },
+    {
+      "method": "load",
+      "reads": 2,
+      "json_calls": 1,
+      "error": null
+    },
+    {
+      "method": "load",
+      "reads": 1,
+      "json_calls": 0,
+      "error": "preferences"
+    },
+    {
+      "method": "load",
+      "reads": 2,
+      "json_calls": 0,
+      "error": "preferences"
+    },
+    {
+      "method": "load",
+      "reads": 2,
+      "json_calls": 1,
+      "error": "json"
+    },
+    {
+      "method": "load",
+      "reads": 2,
+      "json_calls": 1,
+      "error": null
+    },
+    {
+      "method": "standard_ctor",
+      "sets_fail_score_decrease": true
+    },
+    {
+      "method": "base_ctor",
+      "sets_fail_score_decrease": false
+    },
+    {
+      "method": "base_callback",
+      "sets_fail_score_decrease": false
+    }
+  ],
+  "scope": "Standard Init/DeInit/LoadGame, constructor, shared GameMode callbacks/constructor and exact SavedStandard getter execute natively. Delegate allocation/constructor/combine/remove/casts, PlayerPrefs and generic JSON are explicit gateways. No callback invocation, live saves, profile setup, managed exception unwinding, or other-mode completeness claimed."
+}
