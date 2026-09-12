@@ -913,6 +913,14 @@ native cases and closes both generic definitions' alternate-body gap. Managed
 JSON wrappers are traced to their engine
 internal-call boundary; UnityPlayer serialization remains open.
 
+The [engine JSON gateway](notes/systems/unity_json_gateway.md) now binds those
+signature-bearing requests through the actual fallback lookup to a separate
+two-entry registration module. Its 31 native cases cover ToJson marshaling and
+inline results. The [FromJson gateway](notes/systems/unity_fromjson_gateway.md)
+adds 180 native cases for rank rejection, create/overwrite class selection,
+allocation ordering and partial failures. Core parsing and field application
+remain explicit services.
+
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
 native cases for mode publication, initialization, state changes, catalogue
@@ -954,6 +962,10 @@ The [mask-16 lifecycle audit](notes/systems/unity_wait_dispatch16.md) executes
 the complete enclosing routine in 32 cases and checks three direct caller
 sites. Its reset-like final clock writes are recovered; public lifecycle names
 and phase bit 8 remain unresolved.
+The [bounded phase-eight inventory](notes/systems/unity_wait_phase8_inventory.md)
+records 23 verified global loads and 158 verified immediate slot branches,
+including the five known dispatch instructions. No additional dispatcher is
+established; computed masks, aliases and unverified candidates remain open.
 
 The [clocked Reveal adapter](notes/systems/clocked_reveal.md) now derives wait
 consumer/producer timestamps from explicit audited clock transitions. Seven

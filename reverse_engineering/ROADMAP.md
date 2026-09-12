@@ -27,11 +27,17 @@ Resume with these boundaries in view:
    method audit and three direct caller gates. Their public lifecycle identity
    remains open. `0x59F67B` is only an unwind chunk start. Normalization at
    `0x5520E0` is distinct from reciprocal refresh and leaves its caches untouched.
+   A bounded phase-eight inventory checks 23 global loads and 158 immediate
+   slot branches without establishing another dispatcher. Continue from its
+   explicit candidate/exclusion list rather than repeating the same search.
 2. Continue the ascension-to-acquisition bridge: weighted cached script selection
    is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
    semantics and remaining mode/save callees are explicit boundaries. Both
    fully-shared generic copy alternatives now have native caller/boxing evidence;
    their actual invoker and engine-serialization services remain open.
+   Engine JSON registration/fallback and ToJson/FromJson gateways are now
+   audited; core parsing, field application and constructor-error reporting
+   remain distinct next boundaries.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.

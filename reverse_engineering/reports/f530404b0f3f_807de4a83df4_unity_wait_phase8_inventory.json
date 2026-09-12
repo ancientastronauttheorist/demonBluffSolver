@@ -1,0 +1,1054 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "executable_file_bytes_searched": 25310208,
+  "wait_manager_global_rva": "0x1c6e720",
+  "concrete_consumer_rva": "0x43bd90",
+  "global_mov_load_count": 23,
+  "global_mov_loads": [
+    {
+      "load_rva": "0xfebe4",
+      "destination_register": "r15",
+      "verified_range": [
+        "0xfeb84",
+        "0xfed42"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0xfec3a",
+        "mnemonic": "jmp",
+        "operand": "0xfec5c"
+      }
+    },
+    {
+      "load_rva": "0xff0d3",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0xff000",
+        "0xff13d"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0xff0dc",
+        "mnemonic": "call",
+        "operand": "0x43b8e0"
+      }
+    },
+    {
+      "load_rva": "0xff499",
+      "destination_register": "rdi",
+      "verified_range": [
+        "0xff479",
+        "0xff4b8"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": null
+    },
+    {
+      "load_rva": "0xff65f",
+      "destination_register": "rax",
+      "verified_range": [
+        "0xff590",
+        "0xff731"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0xff6b6",
+        "mnemonic": "jmp",
+        "operand": "0xff6d0"
+      }
+    },
+    {
+      "load_rva": "0xff952",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0xff860",
+        "0xff99a"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0xff985",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    },
+    {
+      "load_rva": "0xffdeb",
+      "destination_register": "rdi",
+      "verified_range": [
+        "0xffd61",
+        "0x10006f"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0xffe4a",
+        "mnemonic": "jmp",
+        "operand": "0xffe6c"
+      }
+    },
+    {
+      "load_rva": "0x10030e",
+      "destination_register": "rax",
+      "verified_range": [
+        "0x100271",
+        "0x100656"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x100398",
+        "mnemonic": "jmp",
+        "operand": "0x1003bc"
+      }
+    },
+    {
+      "load_rva": "0x101071",
+      "destination_register": "rsi",
+      "verified_range": [
+        "0x100f80",
+        "0x101091"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": null
+    },
+    {
+      "load_rva": "0x4405c9",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x4405a0",
+        "0x440632"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x440628",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    },
+    {
+      "load_rva": "0x59f683",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x59f67b",
+        "0x59f6c7"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x59f692",
+        "mnemonic": "call",
+        "operand": "qword ptr [rax + 0xb8]"
+      }
+    },
+    {
+      "load_rva": "0x5b7afd",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x5b7af0",
+        "0x5b7b2a"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x5b7b0c",
+        "mnemonic": "call",
+        "operand": "qword ptr [rax + 0xb8]"
+      }
+    },
+    {
+      "load_rva": "0x5b7ce0",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x5b7ce0",
+        "0x5b7cf6"
+      ],
+      "boundary_source": "previously_bound_PlayerLoop_leaf",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x5b7cef",
+        "mnemonic": "jmp",
+        "operand": "qword ptr [rax + 0xb8]"
+      }
+    },
+    {
+      "load_rva": "0x5b7d29",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x5b7d20",
+        "0x5b7d40"
+      ],
+      "boundary_source": "previously_bound_PlayerLoop_leaf",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x5b7d38",
+        "mnemonic": "jmp",
+        "operand": "qword ptr [rax + 0xb8]"
+      }
+    },
+    {
+      "load_rva": "0x5b7d50",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x5b7d50",
+        "0x5b7d66"
+      ],
+      "boundary_source": "previously_bound_PlayerLoop_leaf",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x5b7d5f",
+        "mnemonic": "jmp",
+        "operand": "qword ptr [rax + 0xb8]"
+      }
+    },
+    {
+      "load_rva": "0x7792c7",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x779070",
+        "0x779367"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x77933e",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    },
+    {
+      "load_rva": "0x779480",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x7793f3",
+        "0x7794fe"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x7794ec",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    },
+    {
+      "load_rva": "0x779876",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x7794fe",
+        "0x7798d2"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x7798b5",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    },
+    {
+      "load_rva": "0x77d196",
+      "destination_register": "rsi",
+      "verified_range": [
+        "0x77d120",
+        "0x77d33b"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x77d1ea",
+        "mnemonic": "jmp",
+        "operand": "0x77d20c"
+      }
+    },
+    {
+      "load_rva": "0x77d266",
+      "destination_register": "rsi",
+      "verified_range": [
+        "0x77d120",
+        "0x77d33b"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x77d2ba",
+        "mnemonic": "jmp",
+        "operand": "0x77d2dc"
+      }
+    },
+    {
+      "load_rva": "0x77d36a",
+      "destination_register": "r15",
+      "verified_range": [
+        "0x77d360",
+        "0x77d38f"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x77d379",
+        "mnemonic": "jmp",
+        "operand": "0x77d37f"
+      }
+    },
+    {
+      "load_rva": "0x77e5fa",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x77e5c8",
+        "0x77e757"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x77e659",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    },
+    {
+      "load_rva": "0x77e8f3",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0x77e8d0",
+        "0x77e935"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0x77e8fa",
+        "mnemonic": "call",
+        "operand": "0x43b8e0"
+      }
+    },
+    {
+      "load_rva": "0xe57176",
+      "destination_register": "rcx",
+      "verified_range": [
+        "0xe57140",
+        "0xe57205"
+      ],
+      "boundary_source": "unwind_chunk",
+      "first_following_call_or_jump_in_range": {
+        "rva": "0xe571d9",
+        "mnemonic": "call",
+        "operand": "0x440f00"
+      }
+    }
+  ],
+  "memory_slot_b8_operands_after_global_load_within_verified_range": [
+    {
+      "global_load_rva": "0x59f683",
+      "rva": "0x59f692",
+      "mnemonic": "call",
+      "operand": "qword ptr [rax + 0xb8]"
+    },
+    {
+      "global_load_rva": "0x5b7afd",
+      "rva": "0x5b7b0c",
+      "mnemonic": "call",
+      "operand": "qword ptr [rax + 0xb8]"
+    },
+    {
+      "global_load_rva": "0x5b7ce0",
+      "rva": "0x5b7cef",
+      "mnemonic": "jmp",
+      "operand": "qword ptr [rax + 0xb8]"
+    },
+    {
+      "global_load_rva": "0x5b7d29",
+      "rva": "0x5b7d38",
+      "mnemonic": "jmp",
+      "operand": "qword ptr [rax + 0xb8]"
+    },
+    {
+      "global_load_rva": "0x5b7d50",
+      "rva": "0x5b7d5f",
+      "mnemonic": "jmp",
+      "operand": "qword ptr [rax + 0xb8]"
+    }
+  ],
+  "local_register_loaded_slot_target_count": 0,
+  "raw_direct_relative_consumer_branch_count": 0,
+  "raw_memory_slot_b8_candidate_count": 162,
+  "verified_memory_slot_b8_branch_count": 158,
+  "verified_unwind_slot_branch_count": 155,
+  "verified_leaf_slot_branch_count": 3,
+  "unverified_no_boundary_candidates": [
+    "0x304a63",
+    "0x6d0bcb",
+    "0xefaa40",
+    "0x1467e7f"
+  ],
+  "rejected_nonboundary_candidates": [],
+  "incomplete_unrelated_unwind_decodes": [
+    {
+      "range": [
+        "0x107aa50",
+        "0x10874cc"
+      ],
+      "decoded_end_exclusive": "0x108711a"
+    }
+  ],
+  "same_range_preceding_mov_edx8_candidates": [],
+  "known_verified_wait_dispatches": [
+    {
+      "global_load_rva": "0x59f683",
+      "mask_site_rva": "0x59f68a",
+      "dispatch_rva": "0x59f692",
+      "mask": 16
+    },
+    {
+      "global_load_rva": "0x5b7afd",
+      "mask_site_rva": "0x5b7b04",
+      "dispatch_rva": "0x5b7b0c",
+      "mask": 32
+    },
+    {
+      "global_load_rva": "0x5b7ce0",
+      "mask_site_rva": "0x5b7ce7",
+      "dispatch_rva": "0x5b7cef",
+      "mask": 4
+    },
+    {
+      "global_load_rva": "0x5b7d29",
+      "mask_site_rva": "0x5b7d30",
+      "dispatch_rva": "0x5b7d38",
+      "mask": 1
+    },
+    {
+      "global_load_rva": "0x5b7d50",
+      "mask_site_rva": "0x5b7d57",
+      "dispatch_rva": "0x5b7d5f",
+      "mask": 2
+    }
+  ],
+  "verified_slot_branches": [
+    {
+      "rva": "0x809ef",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1031fe",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x11cee4",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1abb39",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1b4a6a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1be6be",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1e3718",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x2b700b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x30ea3d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x310d7f",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x36c810",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x39df21",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x3c6848",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x3c7dfe",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x41001a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x410960",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x486957",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4871ae",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x491603",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x49192e",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x49289a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x492b11",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4931a0",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x493231",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4939b2",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x49e431",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x49e4c5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x49e579",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x49e5e7",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4b5f06",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d2f4b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d30a7",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d31b0",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d3262",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d3310",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d3465",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x4d446c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x59482b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x59721a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x59f692",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x5b73f3",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x5b7b0c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x5b7cef",
+      "boundary_source": "previously_bound_PlayerLoop_leaf"
+    },
+    {
+      "rva": "0x5b7d38",
+      "boundary_source": "previously_bound_PlayerLoop_leaf"
+    },
+    {
+      "rva": "0x5b7d5f",
+      "boundary_source": "previously_bound_PlayerLoop_leaf"
+    },
+    {
+      "rva": "0x5d460e",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x651040",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a44c8",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a48ef",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a491c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a4930",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a4946",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a4cb5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a54ce",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a54fd",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6a848c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6b3bb3",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6b9d10",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6bc567",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6bca15",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6c6ce5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6c90b9",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6c9404",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6d58d8",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6d79cb",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6d8e8c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6da464",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6db1c7",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x6de0dd",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x73fe1c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x77126b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x775fdc",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x77687d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x77713f",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x7c2571",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x7c2d71",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x7e8d57",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x7e9f84",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x7ebd9a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x8e5f59",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x8e69e5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x8ebaec",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x8fa726",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x964510",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x964659",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x964efa",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x9a3070",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x9a4884",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x9a6aa5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x9a6b13",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x9ad30b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x9ee8ba",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xa8bc27",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xad3058",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xad683a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xae6cfd",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xaeb4d3",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xaedbe8",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xb1c353",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xb1c62d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xb1cb7b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xb87964",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xb87e4a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xbbbc05",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xbc4cff",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xbc504b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xbc5bd3",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xbce5f1",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xc1519f",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xcc84a5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xddc976",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xdef00d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xe4d59b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xe4d6d3",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf2a3c0",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf4b458",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf4b47b",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf4b4d1",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf4b4fa",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf516c1",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf577f9",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0xf6b9c3",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x107b35c",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1207859",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x129d357",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x129d3c6",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13aa2e1",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13ba444",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13bdbf5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13c0743",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13c21e5",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13c2231",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13c2b16",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13cbc9a",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13cbe91",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13cc443",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13cd532",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13ce102",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13ce382",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x13d5dfb",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1408f4d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x140ca79",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x140caeb",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x140d081",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x140d0ed",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x142b5e2",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x142d36d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1485a74",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x149880d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x14a5eba",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x14a5ecb",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x16af9ce",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x16afa65",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x170405d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x171a3d2",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x171b72d",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x171d7e2",
+      "boundary_source": "unwind_chunk"
+    },
+    {
+      "rva": "0x1763219",
+      "boundary_source": "unwind_chunk"
+    }
+  ],
+  "conclusion": "No phase-eight dispatcher established by this bounded inventory.",
+  "exclusions": [
+    "Only RIP-relative REX.W MOV loads of the known global are inventoried; alternate addressing and global aliases are not exhaustive.",
+    "Only E8/E9 relative direct branches to the concrete consumer and immediate memory-indirect +0xB8 branches are searched.",
+    "Register-loaded virtual targets, indirect aliases, computed masks, caller-supplied masks, inter-chunk control flow and whole-program dataflow remain unproven.",
+    "Four leaf/no-unwind raw slot candidates are deliberately unverified; a raw byte match is not an instruction-boundary claim.",
+    "The absence of same-range mov edx,8 is a syntactic filter, not a proof that any slot call cannot receive phase bit8.",
+    "Verified +0xB8 calls on unrelated objects are not identified as wait-manager dispatches. No live PlayerLoop or startup-order claim."
+  ]
+}

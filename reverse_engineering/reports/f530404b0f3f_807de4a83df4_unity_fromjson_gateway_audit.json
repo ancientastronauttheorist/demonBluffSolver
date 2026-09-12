@@ -1,0 +1,3030 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_checks": 19,
+  "export_identity_checks": 5,
+  "native_case_count": 180,
+  "cases": [
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "type",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "rank",
+        "parse"
+      ],
+      "stop_boundary": null,
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "rank",
+        "parse",
+        "make error",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize"
+      ],
+      "stop_boundary": "constructor error handling",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": true
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize",
+        "apply"
+      ],
+      "stop_boundary": "field application",
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse"
+      ],
+      "stop_boundary": null,
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "make error",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize"
+      ],
+      "stop_boundary": "constructor error handling",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": true
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize",
+        "apply"
+      ],
+      "stop_boundary": "field application",
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse"
+      ],
+      "stop_boundary": null,
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "make error",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize"
+      ],
+      "stop_boundary": "constructor error handling",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": true
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "parse",
+        "allocate",
+        "initialize",
+        "apply"
+      ],
+      "stop_boundary": "field application",
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": false,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "type",
+        "rank",
+        "actual class",
+        "parse",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "rank",
+        "actual class",
+        "parse"
+      ],
+      "stop_boundary": null,
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "rank",
+        "actual class",
+        "parse",
+        "make error",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "rank",
+        "actual class",
+        "parse",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "rank",
+        "actual class",
+        "parse",
+        "apply"
+      ],
+      "stop_boundary": "field application",
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": false,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": false,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse"
+      ],
+      "stop_boundary": null,
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "make error",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "apply"
+      ],
+      "stop_boundary": "field application",
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 0,
+      "type_present": true,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": false,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "convert",
+        "rank"
+      ],
+      "stop_boundary": "null class passed to runtime",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse"
+      ],
+      "stop_boundary": null,
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "make error",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "apply",
+        "destroy parse tree",
+        "free parse tree"
+      ],
+      "stop_boundary": null,
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 0,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "actual class",
+        "parse",
+        "apply"
+      ],
+      "stop_boundary": "field application",
+      "object_mutated": true,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 1,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "normal",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "no tree",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "parse error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "constructor error",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    },
+    {
+      "overwrite": true,
+      "json_present": true,
+      "json_length": 7,
+      "type_present": true,
+      "rank": 2,
+      "mode": "apply failure",
+      "events": [
+        "type",
+        "convert",
+        "rank",
+        "make error",
+        "free native string",
+        "cleanup wrapper"
+      ],
+      "stop_boundary": "raise",
+      "object_mutated": false,
+      "allocation_published_before_constructor_error": false
+    }
+  ],
+  "registration_evidence": "unity_json_gateway audit; no additional registration cases counted",
+  "scope": "Native FromJson wrapper, create/overwrite dispatcher and allocation/init helper. Conversion/string ownership, class/runtime exports, parsing, field application, GC, exception machinery and allocator services are gateways. Constructor error path stops before reporting policy; null class stops at runtime rank service. No JSON field semantics or exception unwinding is claimed."
+}
