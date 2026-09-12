@@ -1,0 +1,3392 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3581648,
+      "Name": "Characters$$FilterCharacterContainsStatus",
+      "Signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterContainsStatus (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "TypeSignature": "iiiii"
+    },
+    {
+      "Address": 3587280,
+      "Name": "Characters$$FilterRevealedCharacters",
+      "Signature": "System_Collections_Generic_List_Character__o* Characters__FilterRevealedCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inputCharacters, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3585008,
+      "Name": "Characters$$FilterNotInPlayCharactersUnique",
+      "Signature": "System_Collections_Generic_List_CharacterData__o* Characters__FilterNotInPlayCharactersUnique (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* inpuCharacters, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3634448,
+      "Name": "Characters.<>c__DisplayClass50_0$$<FilterNotInPlayCharactersUnique>b__0",
+      "Signature": "bool Characters___c__DisplayClass50_0___FilterNotInPlayCharactersUnique_b__0 (Characters___c__DisplayClass50_0_o* __this, CharacterData_o* cd, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    }
+  ],
+  "cases_passed": 83,
+  "distinct_native_instructions": 242,
+  "metadata_bindings": [
+    "Characters.<>c__DisplayClass50_0_TypeInfo",
+    "Gameplay_TypeInfo",
+    "Method$Characters.<>c__DisplayClass50_0.<FilterNotInPlayCharactersUnique>b__0()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.Dispose()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.MoveNext()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.get_Current()",
+    "Method$System.Collections.Generic.List<Character>..ctor()",
+    "Method$System.Collections.Generic.List<Character>.Add()",
+    "Method$System.Collections.Generic.List<Character>.GetEnumerator()",
+    "Method$System.Collections.Generic.List<CharacterData>..ctor()",
+    "Method$System.Collections.Generic.List<CharacterData>.Contains()",
+    "Method$System.Collections.Generic.List<CharacterData>.RemoveAll()",
+    "Method$System.Collections.Generic.List<ECharacterStatus>.Contains()",
+    "System.Collections.Generic.List<Character>_TypeInfo",
+    "System.Collections.Generic.List<CharacterData>_TypeInfo",
+    "System.Predicate<CharacterData>_TypeInfo",
+    "UnityEngine.Object_TypeInfo"
+  ],
+  "cases": [
+    {
+      "method": "revealed",
+      "input": [],
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [],
+      "options": {
+        "status": -1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [],
+      "options": {
+        "status": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [],
+      "options": {
+        "status": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [],
+      "options": {
+        "status": 10
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [],
+      "options": {
+        "status": 2147483647
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 3
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        2,
+        3
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "status": -1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "status": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "status": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "status": 10
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 3
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "status": 2147483647
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "status": -1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "status": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "status": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "status": 10
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "status": 2147483647
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        null
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        null
+      ],
+      "options": {
+        "status": -1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        null
+      ],
+      "options": {
+        "status": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        null
+      ],
+      "options": {
+        "status": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        null
+      ],
+      "options": {
+        "status": 10
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        null
+      ],
+      "options": {
+        "status": 2147483647
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "revealed",
+      "input": [
+        1,
+        null,
+        2
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        null,
+        2
+      ],
+      "options": {
+        "status": -1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 4294967295
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        null,
+        2
+      ],
+      "options": {
+        "status": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        null,
+        2
+      ],
+      "options": {
+        "status": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 1
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        null,
+        2
+      ],
+      "options": {
+        "status": 10
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        null,
+        2
+      ],
+      "options": {
+        "status": 2147483647
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 2147483647
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          -2147483648,
+          -2147483648,
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          -1,
+          -1,
+          -1,
+          -1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          10,
+          10,
+          10,
+          10
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          20,
+          20,
+          20,
+          20
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "states": [
+          2147483647,
+          2147483647,
+          2147483647,
+          2147483647
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": null
+    },
+    {
+      "method": "revealed",
+      "input": null,
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "revealed",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "mutate_source": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "version"
+    },
+    {
+      "method": "revealed",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        }
+      ],
+      "output_prefix": [],
+      "error": "allocate"
+    },
+    {
+      "method": "revealed",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "move_next"
+    },
+    {
+      "method": "revealed",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "fail": [
+          "add",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "add",
+          "value": 2
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "add"
+    },
+    {
+      "method": "status",
+      "input": null,
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "mutate_source": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "version"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        }
+      ],
+      "output_prefix": [],
+      "error": "allocate"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "move_next"
+    },
+    {
+      "method": "status",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "fail": [
+          "add",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "status_contains",
+          "status": 10
+        },
+        {
+          "event": "add",
+          "value": 2
+        }
+      ],
+      "output_prefix": [
+        1
+      ],
+      "error": "add"
+    },
+    {
+      "method": "status",
+      "input": [
+        0
+      ],
+      "options": {
+        "missing": "wrapper"
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "status",
+      "input": [
+        0
+      ],
+      "options": {
+        "missing": "status_list"
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [],
+      "options": {
+        "board": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [],
+      "options": {
+        "board": [
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [],
+      "options": {
+        "board": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [],
+      "options": {
+        "board": [
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [],
+      "options": {
+        "board": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [],
+      "options": {
+        "board": [
+          0,
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "board": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "board": [
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "board": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        0,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "board": [
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "board": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "options": {
+        "board": [
+          0,
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        2
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "board": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        null,
+        1,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "board": [
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        null,
+        1,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "board": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": null,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        null,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "board": [
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": null,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        null,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "board": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        null,
+        1,
+        2
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "board": [
+          0,
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        null,
+        1,
+        2
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        1
+      ],
+      "options": {
+        "board": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        1
+      ],
+      "options": {
+        "board": [
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        1
+      ],
+      "options": {
+        "board": [
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        1
+      ],
+      "options": {
+        "board": [
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 1
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        1
+      ],
+      "options": {
+        "board": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        1
+      ],
+      "options": {
+        "board": [
+          0,
+          null
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        1
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": null,
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        }
+      ],
+      "output_prefix": [],
+      "error": "collection_null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0
+      ],
+      "options": {
+        "null_board": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "error": "null"
+    },
+    {
+      "method": "unique",
+      "input": [
+        null,
+        1,
+        2
+      ],
+      "options": {
+        "null_data": true,
+        "unity_null_alias": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": null
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "unity_equal",
+          "left": null,
+          "right": null
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": null
+        },
+        {
+          "event": "unity_equal",
+          "left": 2,
+          "right": null
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        1,
+        2
+      ],
+      "options": {
+        "null_data": true,
+        "unity_null_alias": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        1,
+        2
+      ],
+      "error": null
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "cold": true,
+        "fail": [
+          "copy",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        }
+      ],
+      "output_prefix": [],
+      "error": "copy"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "cold": true,
+        "fail": [
+          "managed_contains",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": "managed_contains"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "cold": true,
+        "fail": [
+          "remove_all",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": "remove_all"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "cold": true,
+        "fail": [
+          "unity_equal",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "managed_contains",
+          "value": 0
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "remove_all"
+        },
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "unity_equal",
+          "left": 0,
+          "right": 0
+        },
+        {
+          "event": "unity_equal",
+          "left": 1,
+          "right": 0
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": "unity_equal"
+    },
+    {
+      "method": "unique",
+      "input": [
+        0,
+        1,
+        0
+      ],
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "copy"
+        },
+        {
+          "event": "class_init"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        0
+      ],
+      "error": "class_init"
+    }
+  ],
+  "scope": "All3 native callers plus captured predicate execute. Enumerators enforce supplied version, output Add versions increment; inputs otherwise stable. Contains and Unity-object equality are distinct gateways. RemoveAll invokes actual native predicate for every occurrence, committing authored removal only after all predicates succeed; native collection-internal partial writes/unwinding are not claimed."
+}

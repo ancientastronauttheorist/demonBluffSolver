@@ -1,0 +1,5976 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "cases_passed": 19,
+  "distinct_native_instructions": 221,
+  "cases": [
+    {
+      "options": {
+        "completed": 0,
+        "notify": false
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": null
+    },
+    {
+      "options": {
+        "completed": 0,
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": null
+    },
+    {
+      "options": {
+        "completed": 1,
+        "notify": false
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": null
+    },
+    {
+      "options": {
+        "completed": 1,
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 2,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 2
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": null
+    },
+    {
+      "options": {
+        "completed": 7,
+        "notify": false
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 7,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": null
+    },
+    {
+      "options": {
+        "completed": 7,
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 7,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 2,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 7,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 2
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": null
+    },
+    {
+      "options": {
+        "fail": "get_string",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "get_string"
+    },
+    {
+      "options": {
+        "fail": "from_json",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "from_json"
+    },
+    {
+      "options": {
+        "fail": "get_int",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "get_int"
+    },
+    {
+      "options": {
+        "fail": "scores",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        }
+      ],
+      "error": "scores"
+    },
+    {
+      "options": {
+        "fail": "text",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        }
+      ],
+      "error": "text"
+    },
+    {
+      "options": {
+        "fail": "deinit",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "deinit"
+    },
+    {
+      "options": {
+        "fail": "to_json",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "to_json"
+    },
+    {
+      "options": {
+        "fail": "set_string",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "set_string"
+    },
+    {
+      "options": {
+        "fail": "active",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 2,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 2
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        }
+      ],
+      "error": "active"
+    },
+    {
+      "options": {
+        "fail": "button_enabled",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 2,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 2
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": "button_enabled"
+    },
+    {
+      "options": {
+        "fail": "trigger_enabled",
+        "notify": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 2,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 2
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "active",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 0
+        },
+        {
+          "event": "button_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        },
+        {
+          "event": "trigger_enabled",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "value": 1
+        }
+      ],
+      "error": "trigger_enabled"
+    },
+    {
+      "options": {
+        "null_json": true
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 1,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "null",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        }
+      ],
+      "error": "null"
+    },
+    {
+      "options": {
+        "notify": true,
+        "stale_completed": true,
+        "max_refreshes": 3
+      },
+      "initial": {
+        "score": 100,
+        "currentLevel": 6,
+        "savedVillages": 8,
+        "currentDiedTimes": 3,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 60,
+        "currentScore": 400,
+        "bestScore": 800,
+        "currentCompleted": 1,
+        "failScoreDecrease": 20
+      },
+      "final": {
+        "score": 0,
+        "currentLevel": 0,
+        "savedVillages": 8,
+        "currentDiedTimes": 0,
+        "bestDiedTimes": 7,
+        "completed": 1,
+        "roundScore": 0,
+        "currentScore": 0,
+        "bestScore": 800,
+        "currentCompleted": 0,
+        "failScoreDecrease": 20
+      },
+      "refreshes": 4,
+      "trace": [
+        {
+          "event": "refresh",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 1
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "original",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 100,
+            "currentLevel": 6,
+            "savedVillages": 8,
+            "currentDiedTimes": 3,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 60,
+            "currentScore": 400,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 2
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 3
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "from_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "mode_store",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "get_int",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "scores",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "values": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "text",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          },
+          "value": [
+            [
+              "<size=24>Highest Score: <color=green>{0} </size></color><size=20>\n",
+              800
+            ],
+            [
+              "<size=24>Lowest Deaths: <color=red>{0}\n</color>",
+              7
+            ],
+            [
+              "<size=18>Village: {0}</color></size>\n",
+              7
+            ]
+          ]
+        },
+        {
+          "event": "abandon",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "deinit",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 1,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "to_json",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "set_string",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          }
+        },
+        {
+          "event": "refresh",
+          "mode": "loaded",
+          "state": {
+            "score": 0,
+            "currentLevel": 0,
+            "savedVillages": 8,
+            "currentDiedTimes": 0,
+            "bestDiedTimes": 7,
+            "completed": 1,
+            "roundScore": 0,
+            "currentScore": 0,
+            "bestScore": 800,
+            "currentCompleted": 0,
+            "failScoreDecrease": 20
+          },
+          "ordinal": 4
+        }
+      ],
+      "error": "reentry_bound"
+    }
+  ],
+  "scope": "Actual Card.UpdateView, Standard.LoadGame/saved getter, inherited OnLoadGame, GetScores/saved-max getter, AbandonRun/save setter, IsLocked and direct OnUIUpdate delegate call reentry execute natively. JSON/PlayerPrefs, format/boxing, UI setters and virtual DeInit are explicit gateways. Controlled current/stale JSON state is not actual persistence fidelity; recursion is bounded diagnostically."
+}

@@ -58,8 +58,13 @@ stop, diagnose, fix, verify, then resume.
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order and omit empty placeholder hunks.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
+    Build report input snapshots from explicit serializable fields; `locals()`
+    can also capture closure functions and fail only at final JSON serialization.
     Coordinate shared Rust builds after agents confirm all declared module and
     test files are complete; an in-progress module can break unrelated tests.
+    Resolve each completed module's actual path before adding its declaration;
+    a module name alone does not identify whether its parent is `lib.rs` or a
+    nested module such as `bluff.rs`.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
@@ -85,6 +90,8 @@ stop, diagnose, fix, verify, then resume.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.
     Read numeric constants before assigning units or expected magnitudes.
+    Bind offsets to the pinned class's exact field declarations before naming
+    them; adjacent saved and current roster fields are distinct state.
     Derive RIP-relative literal slots from decoded operands and resolve their
     exact strings; property names do not establish serialized preference keys.
     Give overloaded target signatures distinct `prototype_name` values while

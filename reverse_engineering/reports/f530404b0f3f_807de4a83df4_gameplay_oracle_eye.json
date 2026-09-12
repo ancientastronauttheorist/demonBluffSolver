@@ -1,0 +1,1964 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3661280,
+      "Name": "Gameplay$$HoverOverOracleEye",
+      "Signature": "void Gameplay__HoverOverOracleEye (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3661200,
+      "Name": "Gameplay$$HideOracleEyeInfo",
+      "Signature": "void Gameplay__HideOracleEyeInfo (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "metadata_binding": {
+    "Address": 40862272,
+    "Name": "GameplayEvents_TypeInfo",
+    "Signature": "GameplayEvents_c*"
+  },
+  "cases_passed": 144,
+  "native_instructions_executed": 34,
+  "native_relationships": 8,
+  "cases": [
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HoverOverOracleEye",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "metadata"
+      ],
+      "error": "metadata",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 0,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "metadata",
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 1,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": false,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": false,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": false,
+      "method_argument": 11256099,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": null,
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "metadata",
+      "events": [
+        "callback"
+      ],
+      "error": null,
+      "modeled_state_unchanged": true
+    },
+    {
+      "method": "HideOracleEyeInfo",
+      "metadata_flag": 255,
+      "subscribed": true,
+      "receiver_null": true,
+      "forwarded_arg0_null": true,
+      "method_argument": 0,
+      "failure": "callback",
+      "events": [
+        "callback"
+      ],
+      "error": "callback",
+      "modeled_state_unchanged": true
+    }
+  ],
+  "scope": "Exact native event forwarding with warmed/cold metadata and explicit preserving callback service. Subscriber topology, callback bodies, actual UI appearance and managed unwinding remain outside scope."
+}

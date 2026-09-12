@@ -1,0 +1,19 @@
+# Gameplay score and resource callers
+
+Build `f530404b0f3f_807de4a83df4`. The supplemental `scripts/audit_gameplay_score_resources.py` pins GameAssembly, Dumper script and dump hashes, asserts five exact metadata signatures, complete entry boundaries, relevant decoded operations and field declarations. Its report `reports/f530404b0f3f_807de4a83df4_gameplay_score_resources.json` contains 335 passing synthetic native cases and 195 executed instruction addresses. No target manifest or native bytes are added.
+
+| Caller | RVA | Native behavior |
+|---|---|---|
+| Gameplay.GetScore | 37D8C0 | Returns static Gameplay.Score at +8, including null. Initializes the Gameplay runtime class if needed. |
+| Gameplay.UpdateScore | 381910 | Requires a nonnull static Score and forwards instance currentDay (+7C), unchanged as int32, to Score virtual slot 7, UpdateFullScore. |
+| Gameplay.GetMaxDay | 37C870 | Resolves ProjectContext.Instance -> gameData -> currentTemporaryAscension, calls AscensionsData.GetCharactersCount and returns its List size minus one with int32 wrapping. |
+| Gameplay.GetCharactersLevel | 37C5A0 | Calls the current GameMode virtual slot 4, GetGameMode. A zero result calls Random.Range(0, count). Any nonzero result compares currentLevel (+78) and count as signed int32: below count returns currentLevel; otherwise calls GetCharactersCount again and returns that second size minus one. |
+| Gameplay.GetScoreMultiplayer | 37D750 | Starts at float32 1.0 and multiplies each CurrentRelics entry's roguelikeData.pointsMult in enumeration order. The metadata spelling is Multiplayer. |
+
+The character-level calculation is not an unconditional clamp: negative currentLevel survives when below count; zero-size and minimum-int list sizes wrap under subtraction. The second provider result can differ from the first and is asserted independently. Random bounds and its supplied result are recorded explicitly; the audit does not assign semantics to reversed/negative bounds. UpdateScore has no direct UI call in this body; UI behavior, if any, belongs to the virtual callee.
+
+Multiplier cases include empty lists, negative and signed-zero factors, subnormals, overflow, both infinities, quiet/signaling NaNs, exact NaN payload quieting, and order-sensitive overflow sequences. Each multiplication rounds to binary32 with MXCSR 0x1F80 (round-to-nearest, gradual underflow, masked exceptions). Null relic and null roguelikeData failures preserve the already-computed accumulator prefix; exception unwinding/disposal after such failure is not modeled. Successful traversal reaches the explicit disposal gateway. Alternate floating-point environments remain outside scope.
+
+Null checks cover current mode, project instance, game data, ascension, returned list, Score, relic list, individual relic and its data. Explicit failures at runtime-class initialization, mode dispatch, first/second count calls, Random.Range, enumerator creation/advance/disposal and score dispatch stop at the observed prefix. Fixture object memory is checked byte-for-byte unchanged, except the explicitly supplied count provider result. Metadata flags are prewarmed; runtime-class cold paths are separate preserving gateways. A null Gameplay instance is outside the valid receiver fixture contract.
+
+The actual five caller bodies execute in Unicorn 2.1.4. Mode, count provider, Random.Range, list enumeration, Score.UpdateFullScore and class-initialization implementations remain controlled boundaries. The report therefore proves these callers' ordering and argument/value behavior, not whole-game scoring, UI updates, native collection version enforcement or managed exception unwinding. Reproduce with the script's game-root and Dumper-root positional arguments and `--output`; use the private python-emulation PYTHONPATH. Python compilation also passes.

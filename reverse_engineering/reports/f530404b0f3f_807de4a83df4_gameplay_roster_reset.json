@@ -1,0 +1,4451 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3669472,
+      "Name": "Gameplay$$ResetSavedCharacters",
+      "Signature": "void Gameplay__ResetSavedCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3670624,
+      "Name": "Gameplay$$SameHandOut",
+      "Signature": "void Gameplay__SameHandOut (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "metadata_bindings": [
+    {
+      "Address": 40896128,
+      "Name": "System.Collections.Generic.List<CharacterData>_TypeInfo",
+      "Signature": "System_Collections_Generic_List_CharacterData__c*"
+    },
+    {
+      "Address": 40957808,
+      "Name": "Gameplay.<SetupDelay>d__47_TypeInfo",
+      "Signature": "Gameplay__SetupDelay_d__47_c*"
+    },
+    {
+      "Address": 40995824,
+      "Name": "UnityEngine.Object_TypeInfo",
+      "Signature": "UnityEngine_Object_c*"
+    },
+    {
+      "Address": 41022056,
+      "Name": "ProjectContext_TypeInfo",
+      "Signature": "ProjectContext_c*"
+    },
+    {
+      "Address": 40974488,
+      "Name": "Method$System.Collections.Generic.List<CharacterData>..ctor()",
+      "MethodAddress": 0
+    }
+  ],
+  "cases_passed": 80,
+  "native_instructions_executed": 137,
+  "native_relationships": 13,
+  "cases": [
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "class_init",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "unity_null_check",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "unity_null_check"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "metadata",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "metadata",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "metadata",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "metadata",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "typed_pool",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "typed_pool",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "typed_pool",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "typed_pool",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "allocate",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "allocate",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "allocate",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "allocate",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "copy_ctor",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "copy_ctor",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "copy_ctor",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "copy_ctor",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "barrier",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "barrier",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "barrier",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": [
+          "barrier",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "class_init"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "unity_null_check",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "unity_null_check"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "metadata",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "metadata"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "metadata",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "metadata"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "metadata",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "metadata"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "metadata",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "metadata"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "typed_pool",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "typed_pool",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "typed_pool",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "typed_pool",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "typed_pool"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "allocate",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "allocate",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "allocate",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "allocate",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "copy_ctor",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "copy_ctor",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "copy_ctor",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "copy_ctor",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": "copy_ctor"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "barrier",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "barrier",
+          2
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "barrier",
+          3
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": true,
+        "fail": [
+          "barrier",
+          4
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": 10,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "null_collection"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": 20,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": true
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10
+      },
+      "allocation_count": 2,
+      "project_is_null_after": false,
+      "error": "null_collection"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": 30,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": true
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20
+      },
+      "allocation_count": 3,
+      "project_is_null_after": false,
+      "error": "null_collection"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": 100,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": true
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": "null_collection"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": false,
+        "game_present": false,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": true,
+      "error": "null"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": false,
+        "game_present": false,
+        "equality_null": true,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": true,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": false,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": true,
+      "error": "null"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": false,
+        "game_present": true,
+        "equality_null": true,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": true,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": false,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "null"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": false,
+        "equality_null": true,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": true,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": true,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": true,
+      "error": "null"
+    },
+    {
+      "method": "ResetSavedCharacters",
+      "input": {
+        "same_hand": false,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": true,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "unity_null_check",
+          "project_present": true
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 10
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 72
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 20
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 80
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 30
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 88
+        },
+        {
+          "kind": "typed_pool",
+          "character_type": 100
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "copy_ctor",
+          "null_source": false
+        },
+        {
+          "kind": "barrier",
+          "offset": 96
+        }
+      ],
+      "replaced_fields": {
+        "savedTownsfolks": 10,
+        "savedOutsiders": 20,
+        "savedMinions": 30,
+        "savedDemons": 100
+      },
+      "allocation_count": 4,
+      "project_is_null_after": true,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "metadata",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "allocate",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "barrier",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "start_coroutine",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "start_coroutine"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "metadata",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "allocate",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "barrier",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": false,
+        "fail": [
+          "start_coroutine",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "start_coroutine"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "metadata",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "metadata"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "allocate",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "barrier",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "start_coroutine",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": false
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "start_coroutine"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": null,
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": null
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "metadata",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "metadata"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "allocate",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 0,
+      "project_is_null_after": false,
+      "error": "allocate"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "barrier",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "barrier"
+    },
+    {
+      "method": "SameHandOut",
+      "input": {
+        "same_hand": true,
+        "cold": true,
+        "fail": [
+          "start_coroutine",
+          1
+        ],
+        "project_present": true,
+        "game_present": true,
+        "equality_null": false,
+        "null_pool": null,
+        "replace_after_equality": false,
+        "replace_after_first_pool": false,
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "barrier",
+          "offset": 32
+        },
+        {
+          "kind": "start_coroutine",
+          "null_receiver": true
+        }
+      ],
+      "replaced_fields": {},
+      "allocation_count": 1,
+      "project_is_null_after": false,
+      "error": "start_coroutine"
+    }
+  ],
+  "scope": "Native caller instructions with explicit metadata/class initialization, Unity equality, typed-pool, allocation/copy, barrier and StartCoroutine gateways. Source pool contents and engine coroutine scheduling remain unmodeled. Controlled project replacement tests distinguish reread from captured GameData identity."
+}

@@ -1,0 +1,1455 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3653088,
+      "Name": "Gameplay$$DelayedDeckIntro",
+      "Signature": "System_Collections_IEnumerator_o* Gameplay__DelayedDeckIntro (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3734160,
+      "Name": "Gameplay.<DelayedDeckIntro>d__50$$System.Collections.IEnumerator.Reset",
+      "Signature": "void Gameplay__DelayedDeckIntro_d__50__System_Collections_IEnumerator_Reset (Gameplay__DelayedDeckIntro_d__50_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3661472,
+      "Name": "Gameplay$$InitCoroutine",
+      "Signature": "System_Collections_IEnumerator_o* Gameplay__InitCoroutine (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3735120,
+      "Name": "Gameplay.<InitCoroutine>d__41$$System.Collections.IEnumerator.Reset",
+      "Signature": "void Gameplay__InitCoroutine_d__41__System_Collections_IEnumerator_Reset (Gameplay__InitCoroutine_d__41_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3673200,
+      "Name": "Gameplay$$SetupDelay",
+      "Signature": "System_Collections_IEnumerator_o* Gameplay__SetupDelay (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3740304,
+      "Name": "Gameplay.<SetupDelay>d__47$$System.Collections.IEnumerator.Reset",
+      "Signature": "void Gameplay__SetupDelay_d__47__System_Collections_IEnumerator_Reset (Gameplay__SetupDelay_d__47_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3733952,
+      "Name": "Gameplay.<DelayedDeckIntro>d__50$$MoveNext",
+      "Signature": "bool Gameplay__DelayedDeckIntro_d__50__MoveNext (Gameplay__DelayedDeckIntro_d__50_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    }
+  ],
+  "cases_passed": 64,
+  "distinct_native_instructions": 143,
+  "native_relationships": 6,
+  "wait_seconds": 1.0,
+  "cases": [
+    {
+      "entry": "0x37bde0",
+      "options": {
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<DelayedDeckIntro>d__50_TypeInfo"
+        }
+      ],
+      "error": null,
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x37bde0",
+      "options": {
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<DelayedDeckIntro>d__50_TypeInfo"
+        }
+      ],
+      "error": null,
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x37bde0",
+      "options": {
+        "fail": "allocate"
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<DelayedDeckIntro>d__50_TypeInfo"
+        }
+      ],
+      "error": "allocate",
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x37dea0",
+      "options": {
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<InitCoroutine>d__41_TypeInfo"
+        }
+      ],
+      "error": null,
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x37dea0",
+      "options": {
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<InitCoroutine>d__41_TypeInfo"
+        }
+      ],
+      "error": null,
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x37dea0",
+      "options": {
+        "fail": "allocate"
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<InitCoroutine>d__41_TypeInfo"
+        }
+      ],
+      "error": "allocate",
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x380c70",
+      "options": {
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<SetupDelay>d__47_TypeInfo"
+        },
+        {
+          "event": "barrier",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "address": 8590000416
+        }
+      ],
+      "error": null,
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x380c70",
+      "options": {
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<SetupDelay>d__47_TypeInfo"
+        },
+        {
+          "event": "barrier",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "address": 8590000416
+        }
+      ],
+      "error": null,
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x380c70",
+      "options": {
+        "fail": "allocate"
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "Gameplay.<SetupDelay>d__47_TypeInfo"
+        }
+      ],
+      "error": "allocate",
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": -2147483648,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": -2147483648,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": -2147483648,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": -2147483648,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": -1,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": -1,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": -1,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": -1,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 0,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 0,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 0,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 0,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 1,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 1,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 1,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 1,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 2,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 2,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 2,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 2,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 2147483647,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 2147483647,
+        "cold": false
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "blind": 2147483647,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        },
+        {
+          "event": "barrier",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "address": 8589959192
+        }
+      ],
+      "error": null,
+      "state": 1,
+      "current": 8590000384,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "blind": 2147483647,
+        "cold": true
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8590000384
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8590000384,
+          "value": 8
+        }
+      ],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {},
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8590000384,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": -2147483648
+      },
+      "events": [],
+      "error": null,
+      "state": -2147483648,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": -2
+      },
+      "events": [],
+      "error": null,
+      "state": -2,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": -1
+      },
+      "events": [],
+      "error": null,
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 2
+      },
+      "events": [],
+      "error": null,
+      "state": 2,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 2147483647
+      },
+      "events": [],
+      "error": null,
+      "state": 2147483647,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "fail": "allocate"
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        }
+      ],
+      "error": "allocate",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 0,
+        "fail": "wait_ctor"
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "UnityEngine.WaitForSeconds_TypeInfo"
+        },
+        {
+          "event": "wait_ctor",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "seconds": 1.0
+        }
+      ],
+      "error": "wait_ctor",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 1,
+        "cold": true,
+        "fail": "blind_deck"
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8589967360
+        }
+      ],
+      "error": "blind_deck",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": true
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 1,
+        "cold": true,
+        "fail": "class_init"
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8589967360
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8589967360
+        }
+      ],
+      "error": "class_init",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38f9c0",
+      "options": {
+        "state": 1,
+        "cold": true,
+        "fail": "change_state"
+      },
+      "events": [
+        {
+          "event": "blind_deck",
+          "iterator_state": -1,
+          "current": 8589967360
+        },
+        {
+          "event": "class_init",
+          "iterator_state": -1,
+          "current": 8589967360
+        },
+        {
+          "event": "change_state",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "value": 8
+        }
+      ],
+      "error": "change_state",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38fa90",
+      "options": {
+        "reset": "DelayedDeckIntro",
+        "state": -1
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": -1,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": -1,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38fa90",
+      "options": {
+        "reset": "DelayedDeckIntro",
+        "state": 0
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": 0,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": 0,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38fa90",
+      "options": {
+        "reset": "DelayedDeckIntro",
+        "state": 1
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 1,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": 1,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": 1,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": 1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38fe50",
+      "options": {
+        "reset": "InitCoroutine",
+        "state": -1
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": -1,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": -1,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38fe50",
+      "options": {
+        "reset": "InitCoroutine",
+        "state": 0
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": 0,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": 0,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x38fe50",
+      "options": {
+        "reset": "InitCoroutine",
+        "state": 1
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 1,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": 1,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": 1,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": 1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x391290",
+      "options": {
+        "reset": "SetupDelay",
+        "state": -1
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": -1,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": -1,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": -1,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": -1,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x391290",
+      "options": {
+        "reset": "SetupDelay",
+        "state": 0
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 0,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": 0,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": 0,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": 0,
+      "current": 8589967360,
+      "result_bool": false
+    },
+    {
+      "entry": "0x391290",
+      "options": {
+        "reset": "SetupDelay",
+        "state": 1
+      },
+      "events": [
+        {
+          "event": "allocate",
+          "iterator_state": 1,
+          "current": 8589967360,
+          "type": "System.NotSupportedException_TypeInfo"
+        },
+        {
+          "event": "exception_ctor",
+          "iterator_state": 1,
+          "current": 8589967360
+        },
+        {
+          "event": "throw",
+          "iterator_state": 1,
+          "current": 8589967360
+        }
+      ],
+      "error": "not_supported",
+      "state": 1,
+      "current": 8589967360,
+      "result_bool": false
+    }
+  ],
+  "scope": "Seven uncovered factory/continuation/Reset declarations execute natively. Allocator, WaitForSeconds ctor, BlindDeck getter, class init, ChangeGameplayState, exception construction/throw and GC metadata are gateways. Existing SetupDelay/InitCoroutine MoveNext evidence is not duplicated. No scheduler advancement, live timing or cancellation semantics inferred."
+}

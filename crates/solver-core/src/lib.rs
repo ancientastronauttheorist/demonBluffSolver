@@ -14,3 +14,7 @@ pub mod standard_progression;
 pub mod roguelike_progression;
 pub mod roguelike_village_bridge;
 pub mod mode_transition;
+pub mod gameplay_iterator;
+pub mod score_replay;
+pub mod character_filters;
+pub mod gameplay_startup;

@@ -1,0 +1,1518 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3650208,
+      "Name": "Gameplay$$AddRelic",
+      "Signature": "void Gameplay__AddRelic (Gameplay_o* __this, RelicData_o* relic, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 6524384,
+      "Name": "Gameplay$$GetSpecialRuleIfAble<object>",
+      "Signature": "Il2CppObject* Gameplay__GetSpecialRuleIfAble_object_ (Gameplay_o* __this, const MethodInfo_638DE0* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 6524032,
+      "Name": "Gameplay$$GetRuleOfType<__Il2CppFullySharedGenericType>",
+      "Signature": "SpecialRule_o* Gameplay__GetRuleOfType___Il2CppFullySharedGenericType_ (Gameplay_o* __this, const MethodInfo_638C80* method);",
+      "TypeSignature": "iii"
+    }
+  ],
+  "cases_passed": 55,
+  "native_relationships": 7,
+  "distinct_native_instructions": 200,
+  "cases": [
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": false,
+        "capacity": 1,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "grow",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": false,
+        "capacity": 1,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "grow",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": false,
+        "capacity": 4,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "barrier",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": false,
+        "capacity": 4,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "barrier",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": true,
+        "capacity": 1,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "grow",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": true,
+        "capacity": 1,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "grow",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": true,
+        "capacity": 4,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "barrier",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": false,
+        "null_relic": true,
+        "capacity": 4,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "barrier",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": false,
+        "capacity": 1,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "grow",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": false,
+        "capacity": 1,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "grow",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": false,
+        "capacity": 4,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "barrier",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": false,
+        "capacity": 4,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "barrier",
+          "value": 0
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": true,
+        "capacity": 1,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "grow",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": true,
+        "capacity": 1,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "grow",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": true,
+        "capacity": 4,
+        "version": 3
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "barrier",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "null_relic": true,
+        "capacity": 4,
+        "version": 4294967295
+      },
+      "events": [
+        {
+          "event": "class_init"
+        },
+        {
+          "event": "barrier",
+          "value": null
+        }
+      ],
+      "error": null,
+      "count": 2,
+      "version": 0,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "null_list": true
+      },
+      "events": [],
+      "error": "null",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "null_items": true
+      },
+      "events": [],
+      "error": "null",
+      "count": 1,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "class_init"
+        }
+      ],
+      "error": "class_init",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "add",
+      "options": {
+        "capacity": 1,
+        "fail": [
+          "grow",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "grow",
+          "value": 0
+        }
+      ],
+      "error": "grow",
+      "count": 1,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          null
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          null
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1,
+          2
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1,
+          2
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          1,
+          1,
+          2
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          1,
+          1,
+          2
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          null,
+          2
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          null,
+          2
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          null
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          null
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1,
+          2
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1,
+          2
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          1,
+          1,
+          2
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          1,
+          1,
+          2
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": 1
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          null,
+          2
+        ],
+        "cold_rgctx": false,
+        "cold_type": false
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          null,
+          2
+        ],
+        "cold_rgctx": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": null
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "null_list": true
+      },
+      "events": [],
+      "error": "null",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "rgctx_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        }
+      ],
+      "error": "rgctx_init",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "type_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        }
+      ],
+      "error": "type_init",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "is_instance",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        }
+      ],
+      "error": "is_instance",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "mutate_version": true
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": "version",
+      "count": 1,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          1,
+          0
+        ],
+        "mutate_version": true
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 5,
+      "returned": 1
+    },
+    {
+      "method": "type",
+      "options": {
+        "null_list": true
+      },
+      "events": [],
+      "error": "null",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "rgctx_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        }
+      ],
+      "error": "rgctx_init",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "type_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        }
+      ],
+      "error": "type_init",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "is_instance",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        }
+      ],
+      "error": "is_instance",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "cold_rgctx": true,
+        "cold_type": true,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "rgctx_init"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_init"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          0,
+          1
+        ],
+        "mutate_version": true
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "error": "version",
+      "count": 1,
+      "version": 4,
+      "returned": null
+    },
+    {
+      "method": "type",
+      "options": {
+        "rules": [
+          1,
+          0
+        ],
+        "mutate_version": true
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": null,
+      "count": 1,
+      "version": 4,
+      "returned": 1
+    },
+    {
+      "method": "able",
+      "options": {
+        "rules": [
+          1
+        ],
+        "second_cast_false": true
+      },
+      "events": [
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        },
+        {
+          "event": "is_instance",
+          "value": 1
+        }
+      ],
+      "error": "cast",
+      "count": 1,
+      "version": 3,
+      "returned": null
+    }
+  ],
+  "scope": "Actual relic append fast path and both generic reference-return lookup bodies execute. Growth, metadata/type initialization, generic instance classification and versioned enumerator operations are explicit gateways. No relic uniqueness policy, ability/enabled predicate or hidden fully-shared value return ABI is inferred."
+}

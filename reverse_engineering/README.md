@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,341 classifications backed by
-302 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,399 classifications backed by
+315 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -935,7 +935,7 @@ The [base GameMode audit](notes/systems/game_mode_base_surface.md) covers all
 and [progression](notes/systems/standard_mode_progression.md) complete its
 24-method caller surface, including native save/score failure ordering.
 The offline Rust progression replay matches all 304 applicable native fixtures;
-all 699 Rust library tests passed.
+all 726 Rust library tests passed.
 [Roguelike lifecycle](notes/systems/roguelike_standard_lifecycle.md) identifies
 the kill-handler Combine during teardown. The
 [delegate-to-score follow-up](notes/systems/roguelike_delegate_score.md)
@@ -1004,3 +1004,33 @@ The [clocked Reveal adapter](notes/systems/clocked_reveal.md) now derives wait
 consumer/producer timestamps from explicit audited clock transitions. Seven
 tests cover weighted replay, chained drains, fixed selection, counter rollover
 and atomic fallback. All 676 Rust library tests passed.
+
+The [roster composition audit](notes/systems/gameplay_roster_composition.md)
+adds 113 native cases across seven methods, preserving per-caller faction order,
+initial-snapshot filtering and input-list alias clearing.
+[Score/resource callers](notes/systems/gameplay_score_resources.md) add 335 cases
+for ordered float multiplication and mode/count dispatch.
+[Iterator factories](notes/systems/gameplay_iterator_factories.md) add 64 cases
+for the delayed deck intro, receiver capture and Reset failures.
+[Characters lifecycle](notes/systems/characters_lifecycle.md) adds 264 cases for
+singleton publication, ordered pool hiding and four-list construction.
+[Card reset composition](notes/systems/card_standard_reset.md) executes the
+Standard reset and a bounded native UI callback reentry in 19 cases.
+
+The [score lifecycle replay](notes/systems/score_lifecycle.md) matches 4,703
+native fixtures, including exact float bits, partial writes and the explicit
+MXCSR arithmetic contract. [Character filters](notes/systems/characters_filter_tail.md)
+retain distinct managed-Contains and Unity-equality query traces across 83 cases.
+[Saved-roster reset](notes/systems/gameplay_roster_reset.md),
+[startup callers](notes/systems/gameplay_score_startup.md),
+[relic and generic rule lookup](notes/systems/gameplay_relic_rules.md), and
+[Oracle-eye events](notes/systems/gameplay_oracle_eye.md) complete scoped native
+evidence for all 55 top-level Gameplay declarations. This is caller coverage,
+with engine and callback bodies still explicit boundaries.
+
+The [starting-pool bridge](notes/systems/roster_starting_bridge.md) composes lazy
+selection with roster removal across 2,122 native fixtures and 46 weighted paths.
+The [startup composition](notes/systems/gameplay_startup_composition.md) joins
+Init with saved-roster reset, preserving distinct saved/current allocations and
+contrasting RestartGame across 111 native fixtures. Both have bounded Rust
+replays; the complete release library suite passes 726 tests.

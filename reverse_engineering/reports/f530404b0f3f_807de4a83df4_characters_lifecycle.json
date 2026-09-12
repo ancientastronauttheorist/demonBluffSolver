@@ -1,0 +1,7021 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3579136,
+      "Name": "Characters$$Awake",
+      "Signature": "void Characters__Awake (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3590784,
+      "Name": "Characters$$OnEnable",
+      "Signature": "void Characters__OnEnable (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3590784,
+      "Name": "Characters$$OnDisable",
+      "Signature": "void Characters__OnDisable (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3590784,
+      "Name": "Characters$$HideAll",
+      "Signature": "void Characters__HideAll (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3598096,
+      "Name": "Characters$$.ctor",
+      "Signature": "void Characters___ctor (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 264,
+  "constructor_metadata": [
+    {
+      "Address": 40895872,
+      "Name": "System.Collections.Generic.List<Character>_TypeInfo",
+      "Signature": "System_Collections_Generic_List_Character__c*"
+    },
+    {
+      "Address": 40896128,
+      "Name": "System.Collections.Generic.List<CharacterData>_TypeInfo",
+      "Signature": "System_Collections_Generic_List_CharacterData__c*"
+    },
+    {
+      "Address": 40971768,
+      "Name": "Method$System.Collections.Generic.List<Character>..ctor()",
+      "MethodAddress": 0
+    },
+    {
+      "Address": 40974352,
+      "Name": "Method$System.Collections.Generic.List<CharacterData>..ctor()",
+      "MethodAddress": 0
+    }
+  ],
+  "native_relationships": 14,
+  "native_instructions_executed": 110,
+  "cases": [
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": null
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "metadata",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": null
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "barrier",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": "barrier"
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": true,
+      "events": [
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": null
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "metadata",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": true,
+      "events": [
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": null
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "barrier",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": true,
+      "events": [
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": "barrier"
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": true,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": null
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "metadata",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "metadata"
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "barrier",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": "barrier"
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": true,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": true,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": null
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "metadata",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": true,
+      "events": [
+        {
+          "kind": "metadata"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "metadata"
+    },
+    {
+      "method": "Awake",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "barrier",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": true,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "barrier",
+          "field": "Instance"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": true,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "metadata",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "metadata",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "metadata",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "metadata",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "allocate",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "allocate",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32
+      ],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "allocate",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64
+      ],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "allocate",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72
+      ],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "list_ctor",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "list_ctor",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32
+      ],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "list_ctor",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64
+      ],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "list_ctor",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72
+      ],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "barrier",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "barrier",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "barrier",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "barrier",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "base_ctor",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": "base_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "metadata",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "metadata"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "metadata",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "metadata"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "metadata",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "metadata"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "metadata",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "metadata"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "allocate",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "allocate",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32
+      ],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "allocate",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64
+      ],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "allocate",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72
+      ],
+      "instance_is_receiver": false,
+      "error": "allocate"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "list_ctor",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "list_ctor",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32
+      ],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "list_ctor",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64
+      ],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "list_ctor",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72
+      ],
+      "instance_is_receiver": false,
+      "error": "list_ctor"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "barrier",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "barrier",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "barrier",
+        3
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "barrier",
+        4
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": "barrier"
+    },
+    {
+      "method": ".ctor",
+      "pools": null,
+      "cold": true,
+      "failure": [
+        "base_ctor",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "metadata"
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 32
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 64
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 72
+        },
+        {
+          "kind": "allocate"
+        },
+        {
+          "kind": "list_ctor"
+        },
+        {
+          "kind": "barrier",
+          "field": 80
+        },
+        {
+          "kind": "base_ctor"
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [
+        32,
+        64,
+        72,
+        80
+      ],
+      "instance_is_receiver": false,
+      "error": "base_ctor"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 1
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0,
+        1,
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnEnable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 1
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0,
+        1,
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "OnDisable",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": null,
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 1
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0,
+        1,
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": null
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        1,
+        0
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        },
+        {
+          "kind": "get_game_object",
+          "pool_id": 1
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        null
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        0
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": null,
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "get_game_object",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "get_game_object"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        1
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "set_inactive"
+    },
+    {
+      "method": "HideAll",
+      "pools": [
+        0,
+        null,
+        2
+      ],
+      "cold": false,
+      "failure": [
+        "set_inactive",
+        2
+      ],
+      "null_game_objects": [
+        1
+      ],
+      "null_receiver": false,
+      "events": [
+        {
+          "kind": "get_game_object",
+          "pool_id": 0
+        },
+        {
+          "kind": "set_inactive",
+          "pool_id": 0
+        }
+      ],
+      "hidden": [
+        0
+      ],
+      "initialized_offsets": [],
+      "instance_is_receiver": false,
+      "error": "null"
+    }
+  ],
+  "scope": "Authored native caller fixtures. Allocation/list construction, GC barriers, metadata and Unity get_gameObject/SetActive/base constructor are explicit stable gateways. Pool arrays remain stable during callbacks. No live state or complete engine service implementation."
+}

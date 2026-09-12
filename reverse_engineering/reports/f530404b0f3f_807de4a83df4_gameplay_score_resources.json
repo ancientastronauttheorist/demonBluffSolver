@@ -1,0 +1,8193 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "cases_passed": 335,
+  "distinct_native_instructions": 195,
+  "metadata_verified": [
+    {
+      "Address": 3659968,
+      "Name": "Gameplay$$GetScore",
+      "Signature": "Score_o* Gameplay__GetScore (const MethodInfo* method);",
+      "TypeSignature": "ii"
+    },
+    {
+      "Address": 3659600,
+      "Name": "Gameplay$$GetScoreMultiplayer",
+      "Signature": "float Gameplay__GetScoreMultiplayer (const MethodInfo* method);",
+      "TypeSignature": "fi"
+    },
+    {
+      "Address": 3676432,
+      "Name": "Gameplay$$UpdateScore",
+      "Signature": "void Gameplay__UpdateScore (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3655792,
+      "Name": "Gameplay$$GetMaxDay",
+      "Signature": "int32_t Gameplay__GetMaxDay (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3655072,
+      "Name": "Gameplay$$GetCharactersLevel",
+      "Signature": "int32_t Gameplay__GetCharactersLevel (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3873968,
+      "Name": "AscensionsData$$GetCharactersCount",
+      "Signature": "System_Collections_Generic_List_CharactersCount__o* AscensionsData__GetCharactersCount (AscensionsData_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 29910528,
+      "Name": "UnityEngine.Random$$Range",
+      "Signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3707152,
+      "Name": "Score$$UpdateFullScore",
+      "Signature": "void Score__UpdateFullScore (Score_o* __this, int32_t completedDays, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    }
+  ],
+  "field_assertions": {
+    "Gameplay": [
+      "public static List<RelicData> CurrentRelics; // 0x0",
+      "public static Score Score; // 0x8",
+      "public int currentLevel; // 0x78",
+      "public int currentDay; // 0x7C"
+    ],
+    "ProjectContext": [
+      "public GameData gameData; // 0x20",
+      "public static ProjectContext Instance; // 0x0"
+    ],
+    "GameData": [
+      "public AscensionsData currentTemporaryAscension; // 0x78"
+    ],
+    "RelicData": [
+      "public RoguelikeDataInfo roguelikeData; // 0x30"
+    ],
+    "RoguelikeDataInfo": [
+      "public float pointsMult; // 0x14"
+    ]
+  },
+  "cases": [
+    {
+      "method": "GetScore",
+      "input": {
+        "cold": false,
+        "null": null
+      },
+      "value": "score",
+      "error": null,
+      "events": []
+    },
+    {
+      "method": "GetScore",
+      "input": {
+        "cold": false,
+        "null": "score"
+      },
+      "value": "null",
+      "error": null,
+      "events": []
+    },
+    {
+      "method": "GetScore",
+      "input": {
+        "cold": true,
+        "null": null
+      },
+      "value": "score",
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        }
+      ]
+    },
+    {
+      "method": "GetScore",
+      "input": {
+        "cold": true,
+        "null": "score"
+      },
+      "value": "null",
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        }
+      ]
+    },
+    {
+      "method": "GetScore",
+      "input": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "value": null,
+      "error": "class_init",
+      "events": [
+        {
+          "kind": "class_init"
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -2147483648,
+        "cold": false
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -2147483648,
+        "cold": false,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -2147483648,
+        "cold": true
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -2147483648,
+        "cold": true,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -1,
+        "cold": false
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": -1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -1,
+        "cold": false,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": -1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -1,
+        "cold": true
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": -1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": -1,
+        "cold": true,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": -1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 0,
+        "cold": false
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": 0
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 0,
+        "cold": false,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": 0
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 0,
+        "cold": true
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": 0
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 0,
+        "cold": true,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": 0
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 1,
+        "cold": false
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": 1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 1,
+        "cold": false,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": 1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 1,
+        "cold": true
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": 1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 1,
+        "cold": true,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": 1
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 2147483647,
+        "cold": false
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 2147483647,
+        "cold": false,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "update_full_score",
+          "day": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 2147483647,
+        "cold": true
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "day": 2147483647,
+        "cold": true,
+        "fail": [
+          "update_full_score",
+          1
+        ]
+      },
+      "value": null,
+      "error": "update_full_score",
+      "events": [
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "update_full_score",
+          "day": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "UpdateScore",
+      "input": {
+        "null": "score"
+      },
+      "value": null,
+      "error": "null",
+      "events": []
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          -1
+        ]
+      },
+      "value": 4294967294,
+      "error": null,
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          0
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          1
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          7
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          2147483647
+        ]
+      },
+      "value": 2147483646,
+      "error": null,
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "null": "project"
+      },
+      "value": null,
+      "error": "null",
+      "events": []
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "null": "data"
+      },
+      "value": null,
+      "error": "null",
+      "events": []
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "null": "ascension"
+      },
+      "value": null,
+      "error": "null",
+      "events": []
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "sizes": [
+          null
+        ]
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetMaxDay",
+      "input": {
+        "fail": [
+          "counts",
+          1
+        ]
+      },
+      "value": null,
+      "error": "counts",
+      "events": [
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "null": "project"
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "mode"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "null": "data"
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "mode"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "null": "ascension"
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "mode"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "null": "mode"
+      },
+      "value": null,
+      "error": "null",
+      "events": []
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "sizes": [
+          null
+        ]
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "fail": [
+          "counts",
+          1
+        ]
+      },
+      "value": null,
+      "error": "counts",
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -2147483648,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": -1,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 0,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 6,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": -2147483648
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 0
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 2147483647,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 123,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -2147483648,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": -1,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 0,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 6,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 7,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 7,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 2147483647,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -2147483648,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": -1,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 4294967295,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 0,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 6,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 6,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 7,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 7,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 7,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          -2147483648,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          0,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          0,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          7,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          7,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          2147483647,
+          -2147483648
+        ]
+      },
+      "value": 2147483647,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": -1,
+        "level": 2147483647,
+        "sizes": [
+          2147483647,
+          5
+        ]
+      },
+      "value": 4,
+      "error": null,
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "fail": [
+          "mode",
+          1
+        ]
+      },
+      "value": null,
+      "error": "mode",
+      "events": [
+        {
+          "kind": "mode"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 1,
+        "level": 7,
+        "fail": [
+          "counts",
+          2
+        ]
+      },
+      "value": null,
+      "error": "counts",
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "mode": 0,
+        "level": 7,
+        "fail": [
+          "random",
+          1
+        ]
+      },
+      "value": null,
+      "error": "random",
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "random",
+          "minimum": 0,
+          "maximum": 7
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "level": 7,
+        "sizes": [
+          7,
+          null
+        ]
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "mode"
+        },
+        {
+          "kind": "counts"
+        },
+        {
+          "kind": "counts"
+        }
+      ]
+    },
+    {
+      "method": "GetCharactersLevel",
+      "input": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "value": null,
+      "error": "class_init",
+      "events": [
+        {
+          "kind": "class_init"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": []
+      },
+      "value": 1065353216,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216
+        ]
+      },
+      "value": 1065353216,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864
+        ]
+      },
+      "value": 3212836864,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217
+        ]
+      },
+      "value": 1065353217,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039
+        ]
+      },
+      "value": 2139095039,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1
+        ]
+      },
+      "value": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          0
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          1065353216
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          3212836864
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          1065353217
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          2139095039
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          1
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          2139095040
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          4286578688
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          0,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          0
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          2147483648
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          1065353216
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          3212836864
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          1065353217
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          2139095039
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          1
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          2139095040
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          4286578688
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2147483648,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          0
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          1065353216
+        ]
+      },
+      "value": 1065353216,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          3212836864
+        ]
+      },
+      "value": 3212836864,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          1065353217
+        ]
+      },
+      "value": 1065353217,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          2139095039
+        ]
+      },
+      "value": 2139095039,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          1
+        ]
+      },
+      "value": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          2139095040
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          4286578688
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353216,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          0
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          2147483648
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          1065353216
+        ]
+      },
+      "value": 3212836864,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          3212836864
+        ]
+      },
+      "value": 1065353216,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          1065353217
+        ]
+      },
+      "value": 3212836865,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          2139095039
+        ]
+      },
+      "value": 4286578687,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          1
+        ]
+      },
+      "value": 2147483649,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          2139095040
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          4286578688
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          3212836864,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          0
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          1065353216
+        ]
+      },
+      "value": 1065353217,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          3212836864
+        ]
+      },
+      "value": 3212836865,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          1065353217
+        ]
+      },
+      "value": 1065353218,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          2139095039
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          1
+        ]
+      },
+      "value": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          2139095040
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          4286578688
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1065353217,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          0
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          1065353216
+        ]
+      },
+      "value": 2139095039,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          3212836864
+        ]
+      },
+      "value": 4286578687,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          1065353217
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          2139095039
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          1
+        ]
+      },
+      "value": 889192447,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          2139095040
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          4286578688
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          0
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          2147483648
+        ]
+      },
+      "value": 2147483648,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          1065353216
+        ]
+      },
+      "value": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          3212836864
+        ]
+      },
+      "value": 2147483649,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          1065353217
+        ]
+      },
+      "value": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          2139095039
+        ]
+      },
+      "value": 889192447,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          1
+        ]
+      },
+      "value": 0,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          2139095040
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          4286578688
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          0
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          2147483648
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          1065353216
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          3212836864
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          1065353217
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          2139095039
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          1
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          2139095040
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          4286578688
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095040,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          0
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          2147483648
+        ]
+      },
+      "value": 4290772992,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          1065353216
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          3212836864
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          1065353217
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          2139095039
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          1
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          2139095040
+        ]
+      },
+      "value": 4286578688,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          4286578688
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          4286578688,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          0
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          2147483648
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          1065353216
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          3212836864
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          1065353217
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          2139095039
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          1
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          2139095040
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          4286578688
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2143363909,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          0
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          2147483648
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          1065353216
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          3212836864
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          1065353217
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          2139095039
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          1
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          2139095040
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          4286578688
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          2143363909
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139169605,
+          2139169605
+        ]
+      },
+      "value": 2143363909,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          2139095039,
+          1073741824,
+          1056964608
+        ]
+      },
+      "value": 2139095040,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1056964608,
+          1073741824,
+          2139095039
+        ]
+      },
+      "value": 2139095039,
+      "error": null,
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          "null_relic"
+        ]
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "accumulator_bits": 1065353216
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1073741824,
+          "null_info"
+        ]
+      },
+      "value": null,
+      "error": "null",
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "accumulator_bits": 1073741824
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "null": "relics"
+      },
+      "value": null,
+      "error": "null",
+      "events": [],
+      "accumulator_bits": 1065353216
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1073741824
+        ],
+        "cold": false,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "value": null,
+      "error": "enumerator",
+      "events": [
+        {
+          "kind": "enumerator"
+        }
+      ]
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1073741824
+        ],
+        "cold": false,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "value": null,
+      "error": "move_next",
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "accumulator_bits": 1065353216
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1073741824
+        ],
+        "cold": false,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "value": null,
+      "error": "move_next",
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "accumulator_bits": 1073741824
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1073741824
+        ],
+        "cold": false,
+        "fail": [
+          "dispose",
+          1
+        ]
+      },
+      "value": null,
+      "error": "dispose",
+      "events": [
+        {
+          "kind": "enumerator"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "accumulator_bits": 1073741824
+    },
+    {
+      "method": "GetScoreMultiplayer",
+      "input": {
+        "factors": [
+          1073741824
+        ],
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "value": null,
+      "error": "class_init",
+      "events": [
+        {
+          "kind": "class_init"
+        }
+      ]
+    }
+  ],
+  "boundary": "Metadata warmed; optional class initialization, enumerator, mode, character-count provider, Random.Range and Score.UpdateFullScore are explicit preserving gateways. Native exception unwinding, provider bodies and UI effects are not executed."
+}

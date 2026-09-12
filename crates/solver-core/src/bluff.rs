@@ -9,6 +9,8 @@
 pub mod ledger;
 pub mod ascension_script;
 pub mod ascension_starting;
+pub mod roster;
+pub mod roster_starting_bridge;
 pub mod mutant_selector;
 pub mod character_start;
 pub mod reveal;

@@ -1,0 +1,12045 @@
+{
+  "build": "f530404b0f3f_807de4a83df4",
+  "status": "passed",
+  "exact_methods": [
+    {
+      "Address": 3654432,
+      "Name": "Gameplay$$GetAllCurrentCharacters",
+      "Signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetAllCurrentCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3651408,
+      "Name": "Gameplay$$CleanupCharactersList",
+      "Signature": "void Gameplay__CleanupCharactersList (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3653168,
+      "Name": "Gameplay$$FilterIfCanAppearCharacters",
+      "Signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__FilterIfCanAppearCharacters (Gameplay_o* __this, int32_t type, System_Collections_Generic_List_CharacterData__o* inData, System_Collections_Generic_List_CharacterData__o* outData, const MethodInfo* method);",
+      "TypeSignature": "iiiiii"
+    },
+    {
+      "Address": 3656704,
+      "Name": "Gameplay$$GetNotInPlayCharacters",
+      "Signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetNotInPlayCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3655904,
+      "Name": "Gameplay$$GetNotInDeckCharacters",
+      "Signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetNotInDeckCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3660048,
+      "Name": "Gameplay$$GetScriptCharactersOfAlignment",
+      "Signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetScriptCharactersOfAlignment (Gameplay_o* __this, int32_t alignment, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3674720,
+      "Name": "Gameplay$$UpdateCurrentCharacters",
+      "Signature": "void Gameplay__UpdateCurrentCharacters (Gameplay_o* __this, System_Collections_Generic_List_CharacterData__o* randomCharacters, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    }
+  ],
+  "native_cases": 113,
+  "instruction_assertions": 8,
+  "visited_instructions": 1048,
+  "cases": [
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        2,
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            null,
+            1
+          ],
+          [],
+          [
+            3,
+            3
+          ],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        null,
+        1,
+        3,
+        3
+      ],
+      "rosters": [
+        [
+          null,
+          1
+        ],
+        [],
+        [
+          3,
+          3
+        ],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          null,
+          1,
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [],
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": []
+      }
+    },
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "append_fail": 1
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": []
+      }
+    },
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "append_fail": 2
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "append_fail": 3
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "method": "GetAllCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "append_fail": 4
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        2,
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        9,
+        2,
+        5,
+        6,
+        3,
+        1,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        9,
+        2,
+        5,
+        6,
+        3,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1,
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        2,
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ],
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1,
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        9,
+        2,
+        5,
+        6,
+        3,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ],
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1,
+          1,
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        2,
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ],
+        [
+          "allocated1",
+          1
+        ],
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1,
+          1,
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        9,
+        2,
+        5,
+        6,
+        3,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ],
+        [
+          "allocated1",
+          1
+        ],
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          2,
+          4
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        3
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          2
+        ],
+        [
+          "allocated1",
+          4
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          2,
+          4
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        9,
+        5,
+        6,
+        3,
+        1,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          2
+        ],
+        [
+          "allocated1",
+          4
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          9,
+          5,
+          6,
+          3,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          null
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        2,
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          null
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          null
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        9,
+        2,
+        5,
+        6,
+        3,
+        1,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          null
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          "null_character"
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          "null_character"
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1,
+          "null_character"
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1,
+          "null_character"
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          null,
+          null,
+          null,
+          null
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": [
+          1
+        ],
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_this": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        9,
+        2,
+        5,
+        6,
+        3,
+        8
+      ],
+      "rosters": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "allocated1",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_current": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_current": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 1
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": []
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 2
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 3
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 4
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3
+        ]
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": -1,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated2": []
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 0,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated2": []
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        2
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "allocated2",
+          1
+        ],
+        [
+          "allocated2",
+          1
+        ],
+        [
+          "allocated2",
+          2
+        ]
+      ],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated2": [
+          1,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 20,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        3,
+        4
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "allocated2",
+          3
+        ],
+        [
+          "allocated2",
+          4
+        ]
+      ],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated2": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 77,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated2": []
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 2147483647,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated2": []
+      }
+    },
+    {
+      "method": "GetScriptCharactersOfAlignment",
+      "input": {
+        "rosters": [
+          [
+            1,
+            null
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          null
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "allocated2",
+          1
+        ]
+      ],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          null,
+          2,
+          3,
+          4
+        ],
+        "allocated2": [
+          1
+        ]
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          3,
+          2,
+          1,
+          1,
+          7,
+          8
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1,
+          8
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "roster0",
+          8
+        ]
+      ],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        7,
+        5,
+        5,
+        5
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          1,
+          null,
+          2
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1
+        ],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "roster0",
+          1
+        ]
+      ],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        5,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          null
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_input": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "clear_fail": 1
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "clear",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3"
+      ],
+      "versions": [
+        3,
+        3,
+        3,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          null
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        null
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        null
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "clear_fail": 2
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "clear",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2"
+      ],
+      "versions": [
+        3,
+        3,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          null,
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        null,
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3"
+      ],
+      "versions": [
+        3,
+        3,
+        null,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "clear_fail": 3
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "clear",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1"
+      ],
+      "versions": [
+        3,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1
+          ],
+          null,
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1
+        ],
+        null,
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2"
+      ],
+      "versions": [
+        3,
+        null,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "clear_fail": 4
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "clear",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          null,
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        null,
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1"
+      ],
+      "versions": [
+        null,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "input_roster": 0
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "input_roster": 1
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "input_roster": 2
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "input_roster": 3
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          1,
+          1,
+          1
+        ],
+        "out_data": [
+          1,
+          1,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "1": []
+        },
+        "kind": 10,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          1,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          1,
+          1,
+          1
+        ],
+        "out_data": [
+          1,
+          1,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "1": [
+            1
+          ]
+        },
+        "kind": 10,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          1,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          1,
+          1,
+          1
+        ],
+        "out_data": [
+          1,
+          1,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "1": [
+            8
+          ]
+        },
+        "kind": 10,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster0",
+          1
+        ],
+        [
+          "output",
+          1
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "output",
+          1
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "output",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        5,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          1,
+          1,
+          1
+        ],
+        "out_data": [
+          1,
+          1,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "1": [
+            null
+          ]
+        },
+        "kind": 10,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster0",
+          1
+        ],
+        [
+          "output",
+          1
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "output",
+          1
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "output",
+          1
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        5,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          1,
+          1,
+          1
+        ],
+        "out_data": [
+          1,
+          1,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "1": [
+            8,
+            1
+          ]
+        },
+        "kind": 10,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        1,
+        1,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          1,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          2,
+          2,
+          1
+        ],
+        "out_data": [
+          2,
+          2,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": []
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        2,
+        2,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2,
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          2,
+          2,
+          1
+        ],
+        "out_data": [
+          2,
+          2,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            1
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        2,
+        2,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2,
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          2,
+          2,
+          1
+        ],
+        "out_data": [
+          2,
+          2,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "output",
+          2
+        ],
+        [
+          "roster1",
+          2
+        ],
+        [
+          "output",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        5,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          2,
+          2,
+          1
+        ],
+        "out_data": [
+          2,
+          2,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            null
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "output",
+          2
+        ],
+        [
+          "roster1",
+          2
+        ],
+        [
+          "output",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        5,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          2,
+          2,
+          1
+        ],
+        "out_data": [
+          2,
+          2,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8,
+            1
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        2,
+        2,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2,
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          3,
+          3,
+          1
+        ],
+        "out_data": [
+          3,
+          3,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "3": []
+        },
+        "kind": 30,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        3,
+        3,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          3,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          3,
+          3,
+          1
+        ],
+        "out_data": [
+          3,
+          3,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "3": [
+            1
+          ]
+        },
+        "kind": 30,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        3,
+        3,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          3,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          3,
+          3,
+          1
+        ],
+        "out_data": [
+          3,
+          3,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "3": [
+            8
+          ]
+        },
+        "kind": 30,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster2",
+          3
+        ],
+        [
+          "output",
+          3
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "output",
+          3
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        5,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          3,
+          3,
+          1
+        ],
+        "out_data": [
+          3,
+          3,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "3": [
+            null
+          ]
+        },
+        "kind": 30,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster2",
+          3
+        ],
+        [
+          "output",
+          3
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "output",
+          3
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        5,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          3,
+          3,
+          1
+        ],
+        "out_data": [
+          3,
+          3,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "3": [
+            8,
+            1
+          ]
+        },
+        "kind": 30,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        3,
+        3,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          3,
+          3,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          4,
+          1
+        ],
+        "out_data": [
+          4,
+          4,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "4": []
+        },
+        "kind": 100,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        4,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          4,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          4,
+          1
+        ],
+        "out_data": [
+          4,
+          4,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "4": [
+            1
+          ]
+        },
+        "kind": 100,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        4,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          4,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          4,
+          1
+        ],
+        "out_data": [
+          4,
+          4,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "4": [
+            8
+          ]
+        },
+        "kind": 100,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster3",
+          4
+        ],
+        [
+          "output",
+          4
+        ],
+        [
+          "roster3",
+          4
+        ],
+        [
+          "output",
+          4
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        5
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          4,
+          1
+        ],
+        "out_data": [
+          4,
+          4,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "4": [
+            null
+          ]
+        },
+        "kind": 100,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster3",
+          4
+        ],
+        [
+          "output",
+          4
+        ],
+        [
+          "roster3",
+          4
+        ],
+        [
+          "output",
+          4
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        5
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          4,
+          1
+        ],
+        "out_data": [
+          4,
+          4,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "4": [
+            8,
+            1
+          ]
+        },
+        "kind": 100,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        4,
+        4,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          4,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          7,
+          7,
+          1
+        ],
+        "out_data": [
+          7,
+          7,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "7": []
+        },
+        "kind": 123,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        7,
+        7,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          7,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          7,
+          7,
+          1
+        ],
+        "out_data": [
+          7,
+          7,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "7": [
+            1
+          ]
+        },
+        "kind": 123,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        7,
+        7,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          7,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          7,
+          7,
+          1
+        ],
+        "out_data": [
+          7,
+          7,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "7": [
+            8
+          ]
+        },
+        "kind": 123,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "output",
+          7
+        ],
+        [
+          "output",
+          7
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          7,
+          7,
+          1
+        ],
+        "out_data": [
+          7,
+          7,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "7": [
+            null
+          ]
+        },
+        "kind": 123,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "output",
+          7
+        ],
+        [
+          "output",
+          7
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        "in_data": [
+          7,
+          7,
+          1
+        ],
+        "out_data": [
+          7,
+          7,
+          8
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "7": [
+            8,
+            1
+          ]
+        },
+        "kind": 123,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        7,
+        7,
+        8
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          7,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          1
+        ],
+        "out_data": [
+          6
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "6": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": [
+        6
+      ],
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          6
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_input": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_output": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          2
+        ],
+        "out_data": [
+          2
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": null
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          2
+        ],
+        "out_data": [
+          2
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "null_output": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "null",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster1",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          2,
+          2
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "output_is_input": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "enumerator_version",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "input",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated3": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated4": [
+          2,
+          5,
+          6
+        ],
+        "allocated5": [
+          3
+        ],
+        "allocated6": [
+          4,
+          9
+        ],
+        "allocated7": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          3,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          3,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster1",
+          5
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster3",
+          9
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "roster0",
+          8
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          5
+        ],
+        [
+          "allocated5",
+          3
+        ],
+        [
+          "allocated6",
+          4
+        ],
+        [
+          "allocated6",
+          9
+        ],
+        [
+          "allocated7",
+          1
+        ],
+        [
+          "allocated7",
+          8
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        5,
+        5,
+        4,
+        5
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          6
+        ],
+        "allocated5": [],
+        "allocated6": [],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          2,
+          2,
+          2
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          3,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster1",
+          5
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster3",
+          9
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "roster0",
+          8
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          5
+        ],
+        [
+          "allocated5",
+          3
+        ],
+        [
+          "allocated6",
+          4
+        ],
+        [
+          "allocated6",
+          9
+        ],
+        [
+          "allocated7",
+          1
+        ],
+        [
+          "allocated7",
+          8
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        5,
+        5,
+        4,
+        5
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          6
+        ],
+        "allocated5": [],
+        "allocated6": [],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          -1,
+          -1,
+          -1,
+          -1,
+          -2,
+          -2,
+          -2,
+          -2
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          2,
+          5,
+          6
+        ],
+        "allocated5": [
+          3
+        ],
+        "allocated6": [
+          4,
+          9
+        ],
+        "allocated7": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2147483647,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          8
+        ],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster0",
+          1
+        ],
+        [
+          "roster0",
+          8
+        ]
+      ],
+      "removes": [
+        [
+          "allocated7",
+          1
+        ],
+        [
+          "allocated7",
+          8
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        5,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          2,
+          5,
+          6
+        ],
+        "allocated5": [
+          3
+        ],
+        "allocated6": [
+          4,
+          9
+        ],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1
+        ],
+        [
+          5
+        ],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          2,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          5
+        ]
+      ],
+      "removes": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          5
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        5,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [
+          1,
+          2
+        ],
+        "allocated3": [
+          1,
+          2
+        ],
+        "allocated4": [
+          6
+        ],
+        "allocated5": [
+          3
+        ],
+        "allocated6": [
+          4,
+          9
+        ],
+        "allocated7": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 1
+        },
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [
+        20
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 2
+        },
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30
+      ],
+      "draws": [
+        [
+          3,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 3
+        },
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100
+      ],
+      "draws": [
+        [
+          3,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster2",
+          3
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated5",
+          3
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        4,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          5,
+          6
+        ],
+        "allocated5": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "typed_fail": 4
+        },
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "typed",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          3,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster3",
+          4
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated5",
+          3
+        ],
+        [
+          "allocated6",
+          4
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [
+          5,
+          6
+        ],
+        "allocated5": [],
+        "allocated6": [
+          9
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ],
+          "3": [
+            2
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1
+        ],
+        [
+          5
+        ],
+        [
+          3
+        ],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          2,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          5
+        ]
+      ],
+      "removes": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          5
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        5,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [
+          1,
+          2,
+          3
+        ],
+        "allocated3": [
+          1,
+          2,
+          3
+        ],
+        "allocated4": [
+          6
+        ],
+        "allocated5": [
+          3
+        ],
+        "allocated6": [
+          4,
+          9
+        ],
+        "allocated7": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [],
+          "20": [
+            2,
+            5,
+            2
+          ],
+          "30": [],
+          "100": []
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [
+          2,
+          1,
+          0
+        ],
+        "counts": [
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2,
+          2,
+          5
+        ],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          3,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster1",
+          5
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          5
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        6,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [],
+        "allocated5": [],
+        "allocated6": [],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [],
+          "20": [
+            null
+          ],
+          "30": [],
+          "100": []
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          null
+        ],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          null
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          null
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [],
+        "allocated5": [],
+        "allocated6": [],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1
+          ],
+          "20": null,
+          "30": [
+            3
+          ],
+          "100": [
+            4
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [
+        20
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1
+          ],
+          "20": [
+            2
+          ],
+          "30": null,
+          "100": [
+            4
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [],
+        []
+      ],
+      "typed_order": [
+        20,
+        30
+      ],
+      "draws": [
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [],
+        "allocated5": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1
+          ],
+          "20": [
+            2
+          ],
+          "30": [
+            3
+          ],
+          "100": null
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        []
+      ],
+      "typed_order": [
+        20,
+        30,
+        100
+      ],
+      "draws": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster2",
+          3
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated5",
+          3
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        4,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [],
+        "allocated5": [],
+        "allocated6": []
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": null,
+          "20": [
+            2
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "collection",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster3",
+          4
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated5",
+          3
+        ],
+        [
+          "allocated6",
+          4
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [],
+        "allocated3": [],
+        "allocated4": [],
+        "allocated5": [],
+        "allocated6": [],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "in_data": [],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "add_fail": 1
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "add",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "roster3",
+          4
+        ]
+      ],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "add_fail": 2
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "add",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster2",
+          3
+        ]
+      ],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        4,
+        5
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "add_fail": 3
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "add",
+      "returned": null,
+      "rosters": [
+        [],
+        [],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster1",
+          2
+        ]
+      ],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        4,
+        5,
+        5
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "UpdateCurrentCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "add_fail": 4
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "add",
+      "returned": null,
+      "rosters": [
+        [],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster0",
+          1
+        ]
+      ],
+      "removes": [],
+      "clears": [
+        "roster3",
+        "roster2",
+        "roster1",
+        "roster0"
+      ],
+      "versions": [
+        4,
+        5,
+        5,
+        5
+      ],
+      "partial_lists": {
+        "output": []
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          2
+        ],
+        "out_data": [
+          2
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "remove_fail": 1
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "remove",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster1",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2
+        ]
+      }
+    },
+    {
+      "method": "FilterIfCanAppearCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": [
+          2
+        ],
+        "out_data": [
+          2
+        ],
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": {
+          "2": [
+            8
+          ]
+        },
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "remove_fail": 2
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "remove",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "output",
+          2
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        3,
+        4,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [
+          2
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {},
+        "choices": [],
+        "counts": [
+          -2147483648,
+          -2147483648,
+          -2147483648,
+          -2147483648,
+          -2147483648,
+          -2147483648,
+          -2147483648,
+          -2147483648
+        ]
+      },
+      "error": null,
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1,
+          8
+        ],
+        [
+          2,
+          2,
+          5,
+          6
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          4,
+          9
+        ]
+      ],
+      "typed_order": [
+        20,
+        30,
+        100,
+        10
+      ],
+      "draws": [
+        [
+          3,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "adds": [
+        [
+          "roster1",
+          2
+        ],
+        [
+          "roster1",
+          5
+        ],
+        [
+          "roster1",
+          6
+        ],
+        [
+          "roster2",
+          3
+        ],
+        [
+          "roster3",
+          4
+        ],
+        [
+          "roster3",
+          9
+        ],
+        [
+          "roster0",
+          1
+        ],
+        [
+          "roster0",
+          8
+        ]
+      ],
+      "removes": [
+        [
+          "allocated4",
+          2
+        ],
+        [
+          "allocated4",
+          5
+        ],
+        [
+          "allocated4",
+          6
+        ],
+        [
+          "allocated5",
+          3
+        ],
+        [
+          "allocated6",
+          4
+        ],
+        [
+          "allocated6",
+          9
+        ],
+        [
+          "allocated7",
+          1
+        ],
+        [
+          "allocated7",
+          8
+        ]
+      ],
+      "clears": [],
+      "versions": [
+        5,
+        6,
+        4,
+        5
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated3": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated4": [],
+        "allocated5": [],
+        "allocated6": [],
+        "allocated7": []
+      }
+    },
+    {
+      "method": "GetNotInPlayCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "cold": true,
+          "class_fail": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "cctor",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "method": "GetNotInDeckCharacters",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "cold": true,
+          "class_fail": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "cctor",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        100,
+        20,
+        30,
+        10
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [
+          4,
+          9,
+          2,
+          5,
+          6,
+          3,
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "method": "CleanupCharactersList",
+      "input": {
+        "rosters": [
+          [
+            1,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "in_data": null,
+        "out_data": null,
+        "current": null,
+        "pools": {
+          "10": [
+            1,
+            8
+          ],
+          "20": [
+            2,
+            5,
+            6
+          ],
+          "30": [
+            3
+          ],
+          "100": [
+            4,
+            9
+          ]
+        },
+        "deps": null,
+        "kind": 20,
+        "alignment": 10,
+        "options": {
+          "cold": true,
+          "class_fail": true
+        },
+        "choices": [],
+        "counts": [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "error": "cctor",
+      "returned": null,
+      "rosters": [
+        [
+          1,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "typed_order": [
+        20
+      ],
+      "draws": [],
+      "adds": [],
+      "removes": [],
+      "clears": [],
+      "versions": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "partial_lists": {
+        "output": [],
+        "allocated1": [],
+        "allocated2": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated3": [
+          1,
+          1,
+          2,
+          3,
+          4
+        ],
+        "allocated4": [
+          2,
+          5,
+          6
+        ]
+      }
+    }
+  ],
+  "boundaries": [
+    "all seven managed bodies execute; Cleanup calls native aggregation/filter",
+    "native enumerator creation, MoveNext/version rejection, disposal stub, and capacity-sufficient Add execute",
+    "ToArray starting getter is an explicit previously-audited service with ordered calls",
+    "allocation, collection constructors/AddRange/Contains/Remove/index access and Array.Clear are services",
+    "comparison service is first matching reference identity in these fixtures; runtime comparer/Unity object liveness not reconstructed",
+    "Random.Range supplied indices and widths recorded; Unity RNG state not recovered",
+    "generic exception unwinding/finally on thrown service errors is not emulated"
+  ]
+}
