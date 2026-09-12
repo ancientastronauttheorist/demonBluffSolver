@@ -1,0 +1,3007 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_checks": 25,
+  "native_case_count": 192,
+  "cases": [
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": false,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": false,
+      "stop_boundary": "reporter"
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": false,
+      "stop_boundary": "reporter"
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": false,
+      "stop_boundary": "reporter"
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": false,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": false,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": false,
+      "stop_boundary": "reporter"
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": false,
+      "stop_boundary": "reporter"
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": false,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "logging enabled",
+        "report debug callback error"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": false,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": null,
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "handler",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler",
+        "report debug callback error",
+        "logging enabled",
+        "fallback report"
+      ],
+      "returns_published_allocation": false,
+      "stop_boundary": "reporter"
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": false,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    },
+    {
+      "allocation_nonnull": true,
+      "value_type": true,
+      "ctor_captured_error": true,
+      "handler_result": true,
+      "logging_enabled": true,
+      "callback_failure": "enabled",
+      "reporter_failure": true,
+      "events": [
+        "allocate",
+        "lookup zero-argument ctor",
+        "invoke ctor",
+        "override handler"
+      ],
+      "returns_published_allocation": true,
+      "stop_boundary": null
+    }
+  ],
+  "policy": "Captured constructor error is offered to Debug.CallOverridenDebugHandler(exception,null), then IsLoggingEnabled if unhandled, then fallback reporting if enabled. Returning services lead to the published allocation without local rethrow/reset.",
+  "scope": "Native allocation helper, runtime constructor-selection/unboxing, Debug wrappers and bool-invoke bridge. Constructor invocation/capture, reflection metadata, final reporter and GC are services; no managed constructor body, C++ exception unwinding, or final logger implementation is claimed."
+}

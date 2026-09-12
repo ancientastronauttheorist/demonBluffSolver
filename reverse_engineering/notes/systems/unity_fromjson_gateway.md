@@ -68,6 +68,9 @@ The constructor-error fixture verifies that the allocated pointer has already
 been written into the helper's output slot before its exception-handling branch.
 It stops at `0x75A3F6`: this audit does **not** establish whether that later
 runtime reporting path throws, logs, or suppresses a constructor exception.
+The [constructor-reporting follow-up](unity_constructor_reporting.md) now
+executes that path: when its reporting services return, the allocation and
+constructor mutations remain available for subsequent field application.
 The field-application failure fixture writes a sentinel into the destination
 and stops at the application service. At that boundary the mutation is present
 and parse-result destruction has not run. This establishes ordering, not a
