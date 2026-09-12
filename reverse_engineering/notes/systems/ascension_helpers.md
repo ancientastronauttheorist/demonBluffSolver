@@ -95,9 +95,9 @@ concatenation are explicit gateways. Metadata slots use Dumper's exact names
 and are checked before execution. Native bodies and instruction bytes remain
 private; the repository contains authored assertions, metadata and results.
 
-ClassConv's fully-shared generic alternates (`0x602C60`, `0x6032F0`) are not
-covered here. Their managed definitions therefore retain explicit unresolved
-classifications despite the recovered reference-type bodies. JsonUtility is
+ClassConv's fully-shared generic alternates (`0x602C60`, `0x6032F0`) are now
+covered by the [follow-up audit](classconv_shared_copy.md), including their
+hidden-buffer ABI and runtime boxing branches. JsonUtility is
 outside the Assembly-CSharp method denominator. Engine JSON internals, other
 ClassConv helpers and global reachability remain open.
 

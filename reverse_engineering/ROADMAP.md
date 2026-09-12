@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-09-11 evening
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,216 classifications and 287 evidence records
+additional native timing audits. The overlay contains 1,216 classifications and 288 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 47 sets, 968 memberships, 615 exact definitions and 509 native RVAs, with
@@ -29,8 +29,9 @@ Resume with these boundaries in view:
    `0x5520E0` is distinct from reciprocal refresh and leaves its caches untouched.
 2. Continue the ascension-to-acquisition bridge: weighted cached script selection
    is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
-   semantics, fully-shared generic copy alternatives and remaining mode/save
-   callees are explicit boundaries, not interchangeable with known caller logic.
+   semantics and remaining mode/save callees are explicit boundaries. Both
+   fully-shared generic copy alternatives now have native caller/boxing evidence;
+   their actual invoker and engine-serialization services remain open.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.

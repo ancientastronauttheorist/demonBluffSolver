@@ -856,7 +856,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,216 classifications backed by
-287 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+288 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -908,8 +908,9 @@ next audited callees; the complete mode-to-Reveal lifecycle remains open.
 
 The [ascension helper boundary](notes/systems/ascension_helpers.md) verifies
 140 native cases for JSON-copy callers and the distinct lock/unlock selectors.
-Two generic definitions are explicitly unresolved because their fully-shared
-alternates remain unreviewed. Managed JSON wrappers are traced to their engine
+The [fully-shared follow-up](notes/systems/classconv_shared_copy.md) adds 132
+native cases and closes both generic definitions' alternate-body gap. Managed
+JSON wrappers are traced to their engine
 internal-call boundary; UnityPlayer serialization remains open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
