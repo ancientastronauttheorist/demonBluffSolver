@@ -946,6 +946,11 @@ The [native metadata builder](notes/systems/unity_json_metadata.md) adds 226
 fixtures for enumeration, eligibility, parent ordering and joined numeric copy.
 It builds descriptors natively over supplied runtime metadata; compound types,
 real metadata discovery and writer conversion stay open.
+The [numeric serializer/reader join](notes/systems/unity_json_numeric_roundtrip.md)
+now executes 110 compact/pretty round trips and 32 writer-service stops. It joins
+native writer registry, metadata construction, field conversion and rendering to
+native reload, retaining observed boolean and floating-point normalization. Runtime
+metadata discovery and compound/reference serialization remain open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

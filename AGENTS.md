@@ -84,12 +84,15 @@ stop, diagnose, fix, verify, then resume.
     Gate dependent shell steps on successful exit codes. In PowerShell a failed
     native command does not stop later lines; keep validation and commit in a
     checked subprocess sequence or explicitly exit on failure.
+    Wait for report-producing processes to finish successfully before opening
+    their output paths; a yielded session does not establish that a report exists.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
     Resolve export filenames from the target manifest or directory listing;
-    public-role filenames can differ from managed class names. Inspect shared
-    method bodies without printing their potentially enormous alias-header line.
+    public-role names and hexadecimal filename widths can differ from assumptions.
+    Inspect shared method bodies without printing their potentially enormous
+    alias-header line.
     When present, strip the complete comment header; some export formats have
     no header. Fixed line-count skipping is unreliable.
     Unity type trees can omit custom MonoBehaviour fields; check consumed size
@@ -127,7 +130,8 @@ stop, diagnose, fix, verify, then resume.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments at the decoded operand width; byte register writes
-    preserve upper bits. Gate specialized emulator callbacks and snapshots by
+    preserve upper bits. Check call-site register setup before trusting inferred
+    decompiler parameters or constructor return values. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
     Resolve exact class declarations before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.

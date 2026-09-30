@@ -83,6 +83,10 @@ Resume with these boundaries in view:
    now executes 226 fixtures for field eligibility/enumeration, inherited ordering
    and joined copy over supplied metadata. Real managed discovery, compound field
    families and writer conversion remain open.
+   [Numeric save/load composition](notes/systems/unity_json_numeric_roundtrip.md)
+   now executes 110 round trips and 32 controlled writer stops, joining actual
+   native writing/rendering to numeric reload over supplied metadata. Compound
+   serialization, reference processing and real runtime discovery remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
