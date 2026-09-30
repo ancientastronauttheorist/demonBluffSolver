@@ -961,6 +961,10 @@ save/load cases, 44 reader cases, two string-array cases, two shared-array cases
 and 152 service stops. Native array traversal/conversion preserves same-length
 reuse and makes separate allocation requests for copied aliases. Runtime array
 services remain explicit; Lists and compound graphs stay open.
+The [List serializer/reader join](notes/systems/unity_json_lists.md) adds 86 normal
+cases and 373 service stops. Actual backing-field discovery and traversal separate
+logical count from capacity; a null List can be constructed even for a missing
+member. Runtime classification and managed construction remain explicit services.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

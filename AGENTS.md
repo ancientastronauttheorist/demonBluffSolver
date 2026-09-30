@@ -124,6 +124,8 @@ stop, diagnose, fix, verify, then resume.
     them; adjacent saved and current roster fields are distinct state.
     Derive RIP-relative literal slots from decoded operands and resolve their
     exact strings; property names do not establish serialized preference keys.
+    Use the decoded displacement location when an instruction has an immediate
+    operand; the final four instruction bytes need not be its RIP displacement.
     Give overloaded target signatures distinct `prototype_name` values while
     preserving their original metadata signatures and exact RVAs.
     For a shared RVA, reuse its established canonical `applied_prototype_name`

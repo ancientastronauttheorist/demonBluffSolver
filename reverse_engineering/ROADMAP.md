@@ -97,6 +97,11 @@ Resume with these boundaries in view:
    cases and 152 service stops. Native collection processors and element handlers
    execute, preserving reuse/resizing and separate alias allocation requests.
    Lists, compound elements and runtime allocation/discovery remain open.
+   [Scalar/string List composition](notes/systems/unity_json_lists.md) adds 86
+   normal cases and 373 service stops. Native backing-field discovery, collection
+   traversal and constructor wrapper execute, including missing-member allocation
+   for a null List. Runtime classification/construction, enabled lookup caches
+   and compound elements remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
