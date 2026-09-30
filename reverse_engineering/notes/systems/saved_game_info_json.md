@@ -34,9 +34,10 @@ captures writes already made to key/List fields before later failures, without
 claiming native exception unwinding.
 
 This is complete field composition over the pinned public inventory, not live
-save-file access or full startup. Actual `SavedGameInfo` constructor defaults and
-mutation methods, GameData/PlayerPrefs callers, real class discovery and runtime
-allocation are separate boundaries. No game preference is read or written.
+save-file access or full startup. The [native constructor and mutation audit](saved_game_info_methods.md)
+now supplies defaults and value-level joins. GameData/PlayerPrefs callers, real
+class discovery and runtime allocation remain separate boundaries. No game
+preference is read or written.
 
 ```powershell
 python reverse_engineering/scripts/audit_saved_game_info_json.py GAME_ROOT DUMPER_ROOT --output REPORT
