@@ -117,6 +117,9 @@ Resume with these boundaries in view:
    [Native generic FromJson](notes/systems/saved_game_generic_json.md) now runs
    inside Load in 48 cases, 64 service stops and four reader joins. Runtime
    type/context/class/cast helpers and the non-generic gateway remain services.
+   [Native preference wrappers](notes/systems/saved_game_preferences.md) add 52
+   cases, 28 service stops and six JSON joins. Resolver/backend storage and
+   exception construction/throw remain explicit services.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
