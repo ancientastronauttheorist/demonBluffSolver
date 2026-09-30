@@ -71,6 +71,10 @@ Resume with these boundaries in view:
    [Native reader registry construction](notes/systems/unity_json_registry.md)
    now executes 32 fixtures, recovering the actual handler pointers in its 33
    ordinary records and optional extension. Class discovery remains supplied.
+   [Numeric field application](notes/systems/unity_json_primitives.md) now executes
+   nine actual readers in 333 scalar fixtures and sixteen adapter batches over
+   authored descriptors. Field inclusion, descriptor construction and the remaining
+   conversion families remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

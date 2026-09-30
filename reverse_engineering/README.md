@@ -934,6 +934,10 @@ The [native reader registry](notes/systems/unity_json_registry.md) adds 32
 fixtures that construct all 33 handler records, the optional 34th extension,
 storage resets and retained failure prefixes. Class discovery and field
 conversion remain separate boundaries.
+The [numeric reader follow-up](notes/systems/unity_json_primitives.md) executes
+nine actual field handlers in 333 scalar fixtures and sixteen composed adapter
+batches. Lookup, conversion and field writes are native; descriptor construction,
+managed type discovery and the remaining field families stay open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

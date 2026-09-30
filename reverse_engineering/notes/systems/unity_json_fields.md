@@ -64,3 +64,7 @@ Report: `f530404b0f3f_807de4a83df4_unity_json_fields.json`. No native bytes or
 decompiled bodies are retained. This engine audit adds no Assembly-CSharp
 classification. Actual field processors, metadata building, managed-reference
 resolution and the writer-side adapter remain the next boundaries.
+The [numeric-field follow-up](unity_json_primitives.md) now executes nine actual
+registry-selected numeric readers and composes them through this adapter over
+authored descriptors. This report's field callbacks remain supplied; the follow-up
+has its own conversion fixtures and does not establish metadata inclusion.

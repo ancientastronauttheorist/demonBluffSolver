@@ -1,0 +1,3870 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "registry_verified": {
+    "instruction_assertions": 26,
+    "entry_ranges": [
+      [
+        "0x783f40",
+        "0x783fe0"
+      ],
+      [
+        "0xa8f090",
+        "0xa902ce"
+      ],
+      [
+        "0xa8cc80",
+        "0xa8cdf5"
+      ]
+    ],
+    "constructor_boundary": "Leaf ending at its verified return; caller binds exact entry.",
+    "publication_binding": "Reader provider at registry slot +0x48; writer provider at +0x40."
+  },
+  "adapter_verified": {
+    "instruction_assertions": 23,
+    "entry_ranges": [
+      [
+        "0xa8e030",
+        "0xa8e2b5"
+      ],
+      [
+        "0x79bb60",
+        "0x79bbff"
+      ],
+      [
+        "0x784bc0",
+        "0x784c6d"
+      ],
+      [
+        "0x784c70",
+        "0x784d7c"
+      ]
+    ],
+    "reference_store_export": "il2cpp_gc_wbarrier_set_field"
+  },
+  "native_verified": {
+    "instruction_assertions": 72,
+    "complete_field_wrapper_ranges": [
+      [
+        "0xa917d0",
+        "0xa9180e"
+      ],
+      [
+        "0xa91900",
+        "0xa9193e"
+      ],
+      [
+        "0xa91a20",
+        "0xa91a5e"
+      ],
+      [
+        "0xa91db0",
+        "0xa91dee"
+      ],
+      [
+        "0xa91ed0",
+        "0xa91f0e"
+      ],
+      [
+        "0xa92000",
+        "0xa9203e"
+      ],
+      [
+        "0xa92420",
+        "0xa9245e"
+      ],
+      [
+        "0xa92540",
+        "0xa9257e"
+      ],
+      [
+        "0xa92670",
+        "0xa926ae"
+      ]
+    ],
+    "converter_entries": [
+      "0xa00e00",
+      "0xa8ea00",
+      "0xa9b910",
+      "0xa9c810",
+      "0xa9c8d0",
+      "0xa8e930",
+      "0xa8eac0",
+      "0xa9dbd0",
+      "0xa9dc90"
+    ]
+  },
+  "cases": [
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4ffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "01000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "00000080",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ffffff7f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "07000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x120",
+      "handler_rva": "0xa917d0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "01",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "07",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x130",
+      "handler_rva": "0xa91900",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "0000f642",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "000080bf",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "00004041",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "000040c1",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "0000c03f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "0000c0bf",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "0000004f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "000000cf",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "0000804f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "0000804f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "0000005f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "0000805f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "0000805f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "0000807f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "0000c07f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000807f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "000080ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "00000080",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "0000e040",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0000e040",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0000e040",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "0000f642",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "0000f642",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "0000f642",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x188",
+      "handler_rva": "0xa91a20",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "0100",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "0700",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x118",
+      "handler_rva": "0xa91db0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ffffffffffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4ffffffffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "0100000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ffffffff00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "0000008000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ffffff7fffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ffffffff00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "0000000001000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "ffffffffffffff7f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "0700000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x128",
+      "handler_rva": "0xa91ed0",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "0100",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "0000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "0700",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x178",
+      "handler_rva": "0xa92000",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "01",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "00",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "07",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x168",
+      "handler_rva": "0xa92420",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4ffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "01000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "00000080",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ffffff7f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "07000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "07000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x108",
+      "handler_rva": "0xa92540",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2253636f7265223a397d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {},
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a2d317d",
+      "options": {},
+      "value_hex": "ffffffff00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a747275657d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a66616c73657d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a6e756c6c7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a223132227d",
+      "options": {},
+      "value_hex": "0c00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a222d313278797a227d",
+      "options": {},
+      "value_hex": "f4ffffffffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a22616263227d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a7b7d7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a5b5d7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a5b355d7d",
+      "options": {},
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a312e357d",
+      "options": {},
+      "value_hex": "0100000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a2d312e357d",
+      "options": {},
+      "value_hex": "ffffffff00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a323134373438333634387d",
+      "options": {},
+      "value_hex": "0000008000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a2d323134373438333634397d",
+      "options": {},
+      "value_hex": "ffffff7f00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239357d",
+      "options": {},
+      "value_hex": "ffffffff00000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a343239343936373239367d",
+      "options": {},
+      "value_hex": "0000000001000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a393232333337323033363835343737353830377d",
+      "options": {},
+      "value_hex": "ffffffffffffff7f",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631357d",
+      "options": {},
+      "value_hex": "ffffffffffffffff",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a31383434363734343037333730393535313631367d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a31653130307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a31652d3130307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a4e614e7d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a2d496e66696e6974797d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a2d302e307d",
+      "options": {},
+      "value_hex": "0000000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a372c2273636f7265223a31317d",
+      "options": {},
+      "value_hex": "0700000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b226f74686572223a31312c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b226e6573746564223a7b2273636f7265223a31317d2c2273636f7265223a377d",
+      "options": {},
+      "value_hex": "0700000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "reference": false
+      },
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2
+      },
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "field_flags": 524288
+      },
+      "value_hex": "7b00000000000000",
+      "field_found": true,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "parser_flags": 2,
+        "field_flags": 524288
+      },
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    },
+    {
+      "source": "core+0x110",
+      "handler_rva": "0xa92670",
+      "json_utf8_hex": "7b2273636f7265223a3132337d",
+      "options": {
+        "key": "other"
+      },
+      "value_hex": "cdcdcdcdcdcdcdcd",
+      "field_found": false,
+      "field_error": false,
+      "retained_native_context": true
+    }
+  ],
+  "case_count": 333,
+  "adapter_batch_cases": [
+    {
+      "json_utf8_hex": "7b7d",
+      "sources": [
+        "core+0x120",
+        "core+0x130",
+        "core+0x188",
+        "core+0x118",
+        "core+0x128",
+        "core+0x178",
+        "core+0x168",
+        "core+0x108",
+        "core+0x110"
+      ],
+      "values_hex": [
+        "cdcdcdcd",
+        "cd",
+        "cdcdcdcd",
+        "cdcd",
+        "cdcdcdcdcdcdcdcd",
+        "cdcd",
+        "cd",
+        "cdcdcdcd",
+        "cdcdcdcdcdcdcdcd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a3132337d",
+      "sources": [
+        "core+0x120",
+        "core+0x130",
+        "core+0x188",
+        "core+0x118",
+        "core+0x128",
+        "core+0x178",
+        "core+0x168",
+        "core+0x108",
+        "core+0x110"
+      ],
+      "values_hex": [
+        "7b000000",
+        "cd",
+        "cdcdcdcd",
+        "cdcd",
+        "cdcdcdcdcdcdcdcd",
+        "cdcd",
+        "cd",
+        "cdcdcdcd",
+        "cdcdcdcdcdcdcdcd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a312e352c226669656c6431223a322e352c226669656c6432223a332e352c226669656c6433223a342e352c226669656c6434223a352e352c226669656c6435223a362e352c226669656c6436223a372e352c226669656c6437223a382e352c226669656c6438223a392e357d",
+      "sources": [
+        "core+0x120",
+        "core+0x130",
+        "core+0x188",
+        "core+0x118",
+        "core+0x128",
+        "core+0x178",
+        "core+0x168",
+        "core+0x108",
+        "core+0x110"
+      ],
+      "values_hex": [
+        "01000000",
+        "02",
+        "00006040",
+        "0400",
+        "0500000000000000",
+        "0600",
+        "07",
+        "08000000",
+        "0900000000000000"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a372c226669656c6430223a31312c226669656c6431223a2d317d",
+      "sources": [
+        "core+0x120",
+        "core+0x130",
+        "core+0x188",
+        "core+0x118",
+        "core+0x128",
+        "core+0x178",
+        "core+0x168",
+        "core+0x108",
+        "core+0x110"
+      ],
+      "values_hex": [
+        "07000000",
+        "ff",
+        "cdcdcdcd",
+        "cdcd",
+        "cdcdcdcdcdcdcdcd",
+        "cdcd",
+        "cd",
+        "cdcdcdcd",
+        "cdcdcdcdcdcdcdcd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b7d",
+      "sources": [
+        "core+0x120",
+        "core+0x188",
+        "core+0x130"
+      ],
+      "values_hex": [
+        "cdcdcdcd",
+        "cdcdcdcd",
+        "cd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a3132337d",
+      "sources": [
+        "core+0x120",
+        "core+0x188",
+        "core+0x130"
+      ],
+      "values_hex": [
+        "7b000000",
+        "cdcdcdcd",
+        "cd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a312e352c226669656c6431223a322e352c226669656c6432223a332e357d",
+      "sources": [
+        "core+0x120",
+        "core+0x188",
+        "core+0x130"
+      ],
+      "values_hex": [
+        "01000000",
+        "00002040",
+        "03"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a372c226669656c6430223a31312c226669656c6431223a2d317d",
+      "sources": [
+        "core+0x120",
+        "core+0x188",
+        "core+0x130"
+      ],
+      "values_hex": [
+        "07000000",
+        "000080bf",
+        "cd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b7d",
+      "sources": [
+        "core+0x120",
+        "core+0x120",
+        "core+0x120"
+      ],
+      "values_hex": [
+        "cdcdcdcd",
+        "cdcdcdcd",
+        "cdcdcdcd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a3132337d",
+      "sources": [
+        "core+0x120",
+        "core+0x120",
+        "core+0x120"
+      ],
+      "values_hex": [
+        "7b000000",
+        "cdcdcdcd",
+        "cdcdcdcd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a312e352c226669656c6431223a322e352c226669656c6432223a332e357d",
+      "sources": [
+        "core+0x120",
+        "core+0x120",
+        "core+0x120"
+      ],
+      "values_hex": [
+        "01000000",
+        "02000000",
+        "03000000"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a372c226669656c6430223a31312c226669656c6431223a2d317d",
+      "sources": [
+        "core+0x120",
+        "core+0x120",
+        "core+0x120"
+      ],
+      "values_hex": [
+        "07000000",
+        "ffffffff",
+        "cdcdcdcd"
+      ],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b7d",
+      "sources": [],
+      "values_hex": [],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a3132337d",
+      "sources": [],
+      "values_hex": [],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b7d",
+      "sources": [],
+      "values_hex": [],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    },
+    {
+      "json_utf8_hex": "7b226669656c6430223a372c226669656c6430223a31312c226669656c6431223a2d317d",
+      "sources": [],
+      "values_hex": [],
+      "events": [
+        "reference_store",
+        "vector_cleanup_service",
+        "vector_cleanup_service",
+        "vector_cleanup_service"
+      ],
+      "scope_links_cleared": true
+    }
+  ],
+  "adapter_batch_case_count": 16,
+  "executed_address_count": 1465,
+  "scope": "Nine actual registry-selected numeric field handlers over actual native parsed objects, including composed native adapter/descriptor traversal and reference-scope cleanup. Native key lookup, conversion, offset calculation and context restoration execute. GC reference store and vector storage cleanup are supplied services; descriptors and managed layout are explicit fixtures. No metadata inclusion, real managed type discovery, strings, arrays or arbitrary copy claim."
+}
