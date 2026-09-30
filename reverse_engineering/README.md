@@ -951,6 +951,11 @@ now executes 110 compact/pretty round trips and 32 writer-service stops. It join
 native writer registry, metadata construction, field conversion and rendering to
 native reload, retaining observed boolean and floating-point normalization. Runtime
 metadata discovery and compound/reference serialization remain open.
+The [string serializer/reader join](notes/systems/unity_json_strings.md) adds 38
+save/load cases, 13 reader cases, two mixed inherited objects and 67 controlled
+service stops. Actual UTF-16 conversion and field handlers retain the observed
+null-to-empty and embedded-NUL truncation behavior. Runtime string creation and
+thread-local initialization remain explicit services; compound graphs stay open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

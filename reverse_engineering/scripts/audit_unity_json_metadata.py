@@ -127,7 +127,7 @@ class Machine(DescriptorMachine):
                         'il2cpp_type_get_class_or_element_class'):
                 field = self.fields[self.type_fields[cx]]
                 if self.metadata_event(name, [field['name']]):
-                    self.ret(8 if name == 'il2cpp_type_get_type' else field['class'])
+                    self.ret(field.get('type_enum', 8) if name == 'il2cpp_type_get_type' else field['class'])
                 return
             assert cx in self.sources
             if self.metadata_event(name, [self.sources[cx]]):
@@ -189,6 +189,11 @@ class Machine(DescriptorMachine):
             self.type_fields[type_token] = token
             self.class_fields[field['parent']].append(token)
         self.u.mem_write(self.managed, bytes([0xCD]) * 0x100)
+        for field in self.fields.values():
+            if 'initial_hex' in field:
+                initial = bytes.fromhex(field['initial_hex'])
+                assert 0 <= field['offset'] <= 0x100 - len(initial)
+                self.u.mem_write(self.managed + field['offset'], initial)
         self.u.mem_write(self.vector, bytes(0x28))
         self.u.mem_write(self.descriptors, bytes(0x500))
         self.q(self.vector + 0x18, 1)
@@ -226,8 +231,9 @@ class Machine(DescriptorMachine):
                                     x.UC_X86_REG_R8, x.UC_X86_REG_R9], arguments):
             self.u.reg_write(register, value)
         try:
-            self.u.emu_start(self.base + entry, self.stop, timeout=2_000_000,
-                            count=200000)
+            self.u.emu_start(self.base + entry, self.stop,
+                            timeout=getattr(self, 'field_timeout', 2_000_000),
+                            count=getattr(self, 'field_instruction_limit', 200000))
         except Exception as exc:
             raise AssertionError(f'options={options}, '
                                  f'RVA={self.reg(x.UC_X86_REG_RIP)-self.base:x}') from exc

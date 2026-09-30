@@ -28,6 +28,9 @@ class Machine(MetadataMachine):
         self.q(self.registry + (0x140 if writer else 0x148), self.provider)
         self.phase = None
 
+    def field_width(self, field):
+        return WIDTHS[field.get('source', 'core+0x120')]
+
     def hook(self, uc, address, size, data):
         if self.phase != 'writer':
             return super().hook(uc, address, size, data)
@@ -66,7 +69,7 @@ class Machine(MetadataMachine):
         self.registry_build(True)
         for i, value in enumerate(values):
             field = definitions[i]
-            width = WIDTHS[field.get('source', 'core+0x120')]
+            width = self.field_width(field)
             assert len(value) == width
             self.u.mem_write(self.managed + field.get('offset', 0x20 + i * 0x10), value)
         original = bytes(self.u.mem_read(self.managed, 0x100))
@@ -91,7 +94,8 @@ class Machine(MetadataMachine):
             self.u.reg_write(register, value)
         try:
             self.u.emu_start(self.base + 0xAACA50, self.stop,
-                            timeout=2_000_000, count=200000)
+                            timeout=getattr(self, 'field_timeout', 2_000_000),
+                            count=getattr(self, 'field_instruction_limit', 200000))
         except Exception as exc:
             raise AssertionError(f'fields={definitions}, options={options}, '
                                  f'RVA={self.reg(x.UC_X86_REG_RIP)-self.base:x}') from exc
@@ -122,7 +126,7 @@ class Machine(MetadataMachine):
         assert read['returned']
         loaded = []
         for i, field in enumerate(definitions):
-            width = WIDTHS[field.get('source', 'core+0x120')]
+            width = self.field_width(field)
             offset = field.get('offset', 0x20 + i * 0x10)
             loaded.append(bytes(self.u.mem_read(self.managed + offset, width)).hex())
         result.update({'loaded_values_hex': loaded,

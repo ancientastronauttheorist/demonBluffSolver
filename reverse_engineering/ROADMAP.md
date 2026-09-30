@@ -87,6 +87,11 @@ Resume with these boundaries in view:
    now executes 110 round trips and 32 controlled writer stops, joining actual
    native writing/rendering to numeric reload over supplied metadata. Compound
    serialization, reference processing and real runtime discovery remain open.
+   [String save/load composition](notes/systems/unity_json_strings.md) adds 38
+   round trips, 13 reader cases, two mixed inherited objects and 67 service stops.
+   Native UTF-16 conversion executes with explicit thread-local initialization;
+   nullness and embedded NULs are observably lost. Runtime string creation,
+   compound graphs and real metadata discovery remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

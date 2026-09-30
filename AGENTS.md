@@ -103,7 +103,8 @@ stop, diagnose, fix, verify, then resume.
     backed bytes; get_offset_from_rva alone does not establish raw backing.
     Check the section's raw extent before reading data slots, require a full
     file read before unpacking and supply runtime
-    globals explicitly in emulation. With fast-load PE readers, explicitly parse
+    globals and Windows TIB/TLS state explicitly in emulation; do not bypass
+    conversion bodies to hide missing thread-local initialization. With fast-load PE readers, explicitly parse
     the required data directories before using their tables. Verify an unwind entry contains a queried RVA
     before treating it as that instruction's chunk.
     A method can span adjacent unwind chunks; the first chunk's end is not
@@ -133,6 +134,8 @@ stop, diagnose, fix, verify, then resume.
     preserve upper bits. Check call-site register setup before trusting inferred
     decompiler parameters or constructor return values. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
+    Bind snapshot decoders to native storage flags; short inline strings need
+    not share the pointer representation of parsed or longer strings.
     Resolve exact class declarations before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.
     Preserve exact floating-point values when loading native timing fixtures;
