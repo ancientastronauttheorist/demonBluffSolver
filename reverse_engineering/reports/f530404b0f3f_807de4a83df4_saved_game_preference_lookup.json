@@ -8,14 +8,24 @@
       "request_literal_rva": "0x1ffa240",
       "registration": "UnityEngine.PlayerPrefs::GetString",
       "registration_index": 2172,
-      "engine_target_rva": "0xf3150"
+      "engine_target_rva": "0xf3150",
+      "first_unwind_fragment": [
+        "0xf3150",
+        "0xf3350"
+      ],
+      "complete_engine_method_claimed": false
     },
     {
       "request": "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
       "request_literal_rva": "0x1ffa170",
       "registration": "UnityEngine.PlayerPrefs::TrySetSetString",
       "registration_index": 2169,
-      "engine_target_rva": "0xf22b0"
+      "engine_target_rva": "0xf22b0",
+      "first_unwind_fragment": [
+        "0xf22b0",
+        "0xf23f3"
+      ],
+      "complete_engine_method_claimed": false
     }
   ],
   "native_lookup_cases": [

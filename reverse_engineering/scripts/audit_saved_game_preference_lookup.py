@@ -24,6 +24,7 @@ def audit(game_root):
     raw = engine_path.read_bytes()
     assert hashlib.sha256(raw).hexdigest().upper() == ENGINE_SHA256
     engine = pefile.PE(data=raw, fast_load=True)
+    engine.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_EXCEPTION']])
     def cstring(pe, rva):
         section = pe.get_section_by_rva(rva)
         assert section and 0 <= rva - section.VirtualAddress < section.SizeOfRawData
@@ -51,6 +52,8 @@ def audit(game_root):
         assert cstring(game, literal) == request
         name = request.split('(', 1)[0]
         assert bindings[name] == {'index': index, 'rva': target}
+        unwind = next(e for e in engine.DIRECTORY_ENTRY_EXCEPTION if e.struct.BeginAddress == target)
+        assert not unwind.unwindinfo.Flags & 4
         pointer = game.OPTIONAL_HEADER.ImageBase + target  # Authored lookup value, never invoked here.
         fixtures += [(request, [(name, pointer)], pointer, 'pref:' + name + ':fallback'),
                      (request, [(name, pointer), (request, 0x12345678)], 0x12345678, 'pref:' + name + ':exact-precedence'),
@@ -58,7 +61,9 @@ def audit(game_root):
                      (request, [], 0, 'pref:' + name + ':missing'),
                      (request, [('UnityEngine.PlayerPrefs::Other', pointer)], 0, 'pref:' + name + ':wrong-prefix')]
         requests.append({'request': request, 'request_literal_rva': hex(literal), 'registration': name,
-                         'registration_index': index, 'engine_target_rva': hex(target)})
+                         'registration_index': index, 'engine_target_rva': hex(target),
+                         'first_unwind_fragment': [hex(target), hex(unwind.struct.EndAddress)],
+                         'complete_engine_method_claimed': False})
     report = audit_gateway(game_root, fixtures)
     cases = [r for r in report['lookup_cases'] if r['case'].startswith('pref:')]
     assert len(cases) == 10

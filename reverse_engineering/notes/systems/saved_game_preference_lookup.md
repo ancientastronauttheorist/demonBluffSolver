@@ -23,6 +23,9 @@ registrations; the engine targets are not invoked. Runtime map population,
 resolver failure/exception policy, preference marshalling and platform storage
 remain open. Next entries for offline engine-body work are `0xF3150` and
 `0xF22B0`; verify their complete unwind/chained ranges before export or emulation.
+Their verified initial unwind fragments are `0xF3150..0xF3350` and
+`0xF22B0..0xF23F3`, respectively. Neither fragment alone establishes a complete
+engine method boundary; the report marks that distinction explicitly.
 
 The shared JSON gateway audit accepts additional lookup fixtures. Its default
 report reruns identically, and the preference report reruns independently.
