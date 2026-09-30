@@ -976,6 +976,9 @@ adds all five callers, 132 cases, 20 service stops and ten value-level JSON join
 The [SavedGameData persistence callers](notes/systems/saved_game_data.md) add all
 four native methods in 44 cases, 41 service stops and six JSON joins. Preference
 storage, generic gateway internals and runtime discovery remain services.
+The [native generic FromJson wrapper](notes/systems/saved_game_generic_json.md)
+now executes inside Load in 48 cases, 64 service stops and four field-reader
+joins. Type/context/class/cast helpers and the non-generic gateway remain services.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
