@@ -75,6 +75,10 @@ Resume with these boundaries in view:
    nine actual readers in 333 scalar fixtures and sixteen adapter batches over
    authored descriptors. Field inclusion, descriptor construction and the remaining
    conversion families remain open.
+   [Numeric descriptor construction](notes/systems/unity_json_descriptors.md)
+   adds 105 construction fixtures and 36 copies joining actual factory output to
+   numeric application. Metadata exports remain services; native field eligibility
+   and enumeration are next boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

@@ -938,6 +938,10 @@ The [numeric reader follow-up](notes/systems/unity_json_primitives.md) executes
 nine actual field handlers in 333 scalar fixtures and sixteen composed adapter
 batches. Lookup, conversion and field writes are native; descriptor construction,
 managed type discovery and the remaining field families stay open.
+The [numeric descriptor factory](notes/systems/unity_json_descriptors.md) now
+executes 105 construction fixtures and 36 factory-to-adapter numeric copies.
+Registry lookup and descriptor writes are native; runtime metadata exports,
+eligibility and enumeration remain separate boundaries.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
