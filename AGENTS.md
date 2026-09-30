@@ -4,7 +4,7 @@ This file is the operating guide for Codex and other coding agents working in
 this repository. It is adapted from `CLAUDE.md`, with Claude-specific process
 language translated into agent-neutral rules.
 
-When subagents are requested or authorized, use `gpt-6-astra` for them.
+When subagents are requested or authorized, inherit the parent agent's model.
 
 ## Goal
 
@@ -47,7 +47,7 @@ stop, diagnose, fix, verify, then resume.
     a trailing `/*` or partial-name wildcard on a directory argument; this also
     applies to documentation filename prefixes in multi-command batches.
     Resolve all uncertain filenames, including audit scripts and status/summary
-    documents, versioned coverage inventories and Rust module roots, with
+    documents, versioned coverage inventories, role/knowledge-base files and Rust module roots, with
     `rg --files` before reading. Do not
     infer an audit filename from a role name or assume a module uses `mod.rs`.
     Retain the returned directory when opening a resolved basename; a script
@@ -61,6 +61,8 @@ stop, diagnose, fix, verify, then resume.
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order and omit empty placeholder hunks.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
+    Prefer apply_patch or PowerShell here-strings for multiline Python edits;
+    nested shell and python -c quoting can fail before an edit executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
     Coordinate shared Rust builds after agents confirm all declared module and
