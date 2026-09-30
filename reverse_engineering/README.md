@@ -965,6 +965,9 @@ The [List serializer/reader join](notes/systems/unity_json_lists.md) adds 86 nor
 cases and 373 service stops. Actual backing-field discovery and traversal separate
 logical count from capacity; a null List can be constructed even for a missing
 member. Runtime classification and managed construction remain explicit services.
+The [native List classifier](notes/systems/unity_json_list_classifier.md) replaces
+the classification service in 18 direct cases and six joined copies. It compares
+the exact class name and corlib image; runtime metadata and construction stay open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

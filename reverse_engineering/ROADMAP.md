@@ -102,6 +102,10 @@ Resume with these boundaries in view:
    traversal and constructor wrapper execute, including missing-member allocation
    for a null List. Runtime classification/construction, enabled lookup caches
    and compound elements remain open.
+   [Native List classification](notes/systems/unity_json_list_classifier.md) adds
+   eighteen exact name/image cases and six joined copies. Classification now
+   executes over supplied class metadata; managed construction/discovery and
+   compound elements remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

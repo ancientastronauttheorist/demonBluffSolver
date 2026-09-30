@@ -134,7 +134,7 @@ stop, diagnose, fix, verify, then resume.
     evidence, not a false prototype or a target that fails union validation.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
-    Validate ABI arguments at the decoded operand width; byte register writes
+    Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
     decompiler parameters or constructor return values. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
