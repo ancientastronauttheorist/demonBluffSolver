@@ -93,5 +93,17 @@ Run with the private Unicorn 2.1.4 runtime on PYTHONPATH:
 python reverse_engineering/scripts/audit_manage_setup_caller.py GAME_ROOT DUMPER_ROOT --output reverse_engineering/reports/f530404b0f3f_807de4a83df4_manage_setup_caller.json
 ```
 
-Native fixtures and Python compilation pass. No Rust or shared coverage
-inventory is changed, and no proprietary bytes or decompiler bodies are stored.
+Native fixtures and Python compilation pass. No proprietary bytes or
+decompiler bodies are stored.
+
+
+The isolated `bluff::manage_setup_caller` replay now preserves identity
+registries, stable occurrence lists, signed Count arithmetic, captured arrays
+and mutable owner references through the complete supplied-gateway sequence.
+Its eight focused tests pass, including exact event/state comparison with all
+140 native fixtures, wrapping signed minimum, class-initialization load timing,
+null publication ordering and bounded retained snapshots. Its controlled
+post-gateway writes are explicit service effects, not recursive engine calls.
+The subsequent [action bridge](character_action_setup.md) adds supported role
+behavior after the separate physical initialization producer; it does not
+reinterpret this generic caller's supplied Init or Act gateways as real bodies.

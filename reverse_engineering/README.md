@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,435 classifications backed by
-331 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+337 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1066,4 +1066,4 @@ records the remaining setup, identity, RNG and continuation-state joins.
 
 The [ManageCharacters prefix audit](notes/systems/manage_pool_prefix.md) adds 44 native cases for the pool-builder handoff and first Init arguments. Builders remain supplied services; this prefix stops before Init or empty-board publication. Full startup-to-acquisition composition remains open.
 
-The September 30 checkpoint adds [complete setup caller orchestration](notes/systems/manage_setup_caller.md), [exact unique-source composition](notes/systems/unique_source_composition.md), [card initialization and first-yield publication](notes/systems/character_initialization.md), and a bounded [pool-to-selector bridge](notes/systems/pool_ledger_bridge.md). Each preserves its supplied service boundaries; full setup/writer/scheduler composition remains open.
+The September 30 checkpoint adds [complete setup caller orchestration](notes/systems/manage_setup_caller.md), [exact unique-source composition](notes/systems/unique_source_composition.md), [card initialization and first-yield publication](notes/systems/character_initialization.md), and a bounded [pool-to-selector bridge](notes/systems/pool_ledger_bridge.md). The subsequent [actual shared pool prefix](notes/systems/manage_pool_composition.md), [pool-history ledger bridge](notes/systems/manage_pool_ledger_bridge.md), [initialization producer](notes/systems/setup_initialization_batch.md), and [setup action bridge](notes/systems/character_action_setup.md) preserve their distinct provenance requirements. All 798 Rust library tests pass; full setup/writer/scheduler composition remains open.

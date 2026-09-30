@@ -72,6 +72,10 @@ stop, diagnose, fix, verify, then resume.
     Coordinate shared Rust builds after agents confirm all declared module and
     test files and pending review fixes are complete; an in-progress module can
     break unrelated tests even after an earlier freeze was announced.
+    If spawning hits the agent thread limit, reuse available workers only when
+    their model matches the current user preference; otherwise continue in the
+    primary agent. Completed tasks may still retain their thread slots, and
+    existing workers do not change models when this guide changes.
     Resolve each completed module's actual path before adding its declaration;
     a module name alone does not identify whether its parent is `lib.rs` or a
     nested module such as `bluff.rs`.

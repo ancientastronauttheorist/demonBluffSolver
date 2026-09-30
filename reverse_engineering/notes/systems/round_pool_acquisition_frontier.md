@@ -43,12 +43,15 @@ failure of the unique builder preventing the duplicate builder and later setup.
 Shared pool/script identities must be mapped explicitly: the current kernels
 construct distinct intermediate lists and do not prove arbitrary alias/reentrancy.
 
-The immediate next native join is ManageCharacters through the two builders with
-preserving creation/layout/callback services, followed by actual unique source
-getters and its filter/predicate service transition. Keep existing duplicate
-composition as the tested subordinate boundary. The next Rust join should retain
-one combined RNG/callback/state history and a combined support/retention budget;
-never recompute a prior lazy selection or rebuild a round pool after acquisition.
+The [actual Manage pool composition](manage_pool_composition.md) now closes the
+native prefix through both builders, source getters, filters and predicates in
+760 fixtures, preserving supplied layout/collection/callback services. Its Rust
+kernel retains one combined RNG/cache/state history. The subsequent
+[ledger bridge](manage_pool_ledger_bridge.md) consumes that history once; it
+requires independent proof of intervening setup completion and selector order.
+The next native join is actual initialization and supported writer dispatch after
+this pool prefix. Never recompute a prior lazy selection or rebuild a round pool
+after acquisition.
 
 ## Pool identity to ledger and Reveal
 
@@ -99,4 +102,4 @@ The [ManageCharacters prefix audit](manage_pool_prefix.md) now verifies caller h
 
 The [complete setup caller](manage_setup_caller.md) now executes every pass and normal return under supplied gateways in 140 native fixtures. [Unique-source composition](unique_source_composition.md) executes the actual starting/fallback/script getters, lazy typed getter, filters and captured predicate in 516 fixtures, preserving one source/pool RNG history. [Initialization](character_initialization.md) executes Init/InitWithNoReset, Hidden RefreshCharacter and first-yield publication in 475 fixtures. Their offline Rust kernels preserve their supported boundaries.
 
-The [pool ledger bridge](pool_ledger_bridge.md) now maps numeric pool identities to canonical selectors and retains construction failure mass. Its unique getter inputs remain supplied. The actual ManageCharacters-to-both-builders join and production of supported Start-writer/continuation state are still the next transaction boundaries; complete engine scheduling remains open.
+The earlier [pool ledger bridge](pool_ledger_bridge.md) maps numeric identities to canonical selectors with supplied unique getter inputs. The [actual shared pool prefix](manage_pool_composition.md) and [history-consuming ledger bridge](manage_pool_ledger_bridge.md) now retain the real source history and construction failure mass. The [initialization producer](setup_initialization_batch.md) and [supported action bridge](character_action_setup.md) produce explicit actor/continuation state through guarded writer kernels. They do not execute one full native setup transaction or recover engine admission order; joining those boundaries remains the next frontier.

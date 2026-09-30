@@ -67,7 +67,7 @@ pub struct Replay {
     pub outcomes: Vec<Outcome>,
 }
 
-fn names_valid(assets: &BTreeMap<u16, Asset>, names: &BTreeMap<u16, String>) -> bool {
+pub(super) fn names_valid(assets: &BTreeMap<u16, Asset>, names: &BTreeMap<u16, String>) -> bool {
     let mut seen = BTreeSet::new();
     assets.len() == names.len()
         && assets.iter().all(|(id, asset)| {
@@ -87,7 +87,7 @@ fn names_valid(assets: &BTreeMap<u16, Asset>, names: &BTreeMap<u16, String>) -> 
         })
 }
 
-fn map(items: &Items, names: &BTreeMap<u16, String>) -> Result<Vec<String>, LedgerError> {
+pub(super) fn map(items: &Items, names: &BTreeMap<u16, String>) -> Result<Vec<String>, LedgerError> {
     items
         .iter()
         .map(|id| {
@@ -193,7 +193,7 @@ fn validate(c: &Context) -> Result<(), LedgerError> {
     Ok(())
 }
 
-fn json_units(value: &Value) -> usize {
+pub(super) fn json_units(value: &Value) -> usize {
     1 + match value {
         Value::Array(values) => values.iter().map(json_units).sum(),
         Value::Object(values) => values.values().map(json_units).sum(),

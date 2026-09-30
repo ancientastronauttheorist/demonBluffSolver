@@ -127,10 +127,13 @@ result. It never executes role actions or infers readiness.
 
 The Rust boundary deliberately excludes the native corpus's injected failures,
 null dependencies and mutating callbacks rather than pretending to reconstruct
-those services. Four isolated tests include comparison of 162 successful joined
+those services. Six isolated tests include comparison of 162 successful joined
 native cases, callback timing, no-reset preservation, continuation retention,
 overflow, boundary rejection and capacity rejection. Module declaration and
-shared-build validation are coordinated by the parent task.
+shared-build validation are coordinated by the parent task. The subsequent
+[setup initialization batch](setup_initialization_batch.md) joins successful
+caller occurrences to explicit actor/allocation state and adds a native repeated
+initializer sequence audit.
 
 Reproduce with Unicorn 2.1.4 on the private emulation PYTHONPATH:
 

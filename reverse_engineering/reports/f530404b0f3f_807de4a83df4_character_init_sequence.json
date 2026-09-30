@@ -1,0 +1,906 @@
+{
+  "build": "f530404b0f3f_807de4a83df4",
+  "methods": [
+    {
+      "Address": 3562016,
+      "Name": "Character$$Init",
+      "Signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "TypeSignature": "viiii"
+    },
+    {
+      "Address": 3561248,
+      "Name": "Character$$InitWithNoReset",
+      "Signature": "void Character__InitWithNoReset (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "TypeSignature": "viiii"
+    },
+    {
+      "Address": 3626672,
+      "Name": "Character.<DelayReveal>d__84$$MoveNext",
+      "Signature": "bool Character__DelayReveal_d__84__MoveNext (Character__DelayReveal_d__84_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    }
+  ],
+  "sequence_count": 4,
+  "initializer_calls": 12,
+  "native_instructions_executed": 324,
+  "cases": [
+    {
+      "initial": [
+        {
+          "actor": 8589938688,
+          "data": 8590000128,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589939648,
+          "status_target": 8589942784
+        },
+        {
+          "actor": 8589942784,
+          "data": 8590004224,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589943744,
+          "status_target": 8589942784
+        }
+      ],
+      "calls": [
+        {
+          "method": "Init",
+          "actor_index": 0,
+          "data_index": 0,
+          "display_id": 3,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590196736,
+          "wait": 8590196992,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262272
+            }
+          ]
+        },
+        {
+          "method": "Init",
+          "actor_index": 0,
+          "data_index": 1,
+          "display_id": 2,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590004224,
+            "role": 8590262528,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 10,
+            "id": 2,
+            "state": 5,
+            "previous": 5,
+            "info_version": 19,
+            "status_count": 0,
+            "status_version": 25,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197248,
+          "wait": 8590197504,
+          "clone_calls": [
+            {
+              "source": 8590020608,
+              "result": 8590262528
+            }
+          ]
+        },
+        {
+          "method": "Init",
+          "actor_index": 1,
+          "data_index": 0,
+          "display_id": 1,
+          "before": {
+            "actor": 8589942784,
+            "data": 8590004224,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589942784,
+            "data": 8590000128,
+            "role": 8590262784,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 1,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197760,
+          "wait": 8590198016,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262784
+            }
+          ]
+        }
+      ],
+      "continuations": [
+        {
+          "identity": 8590131200,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590131456
+        },
+        {
+          "identity": 8590196736,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590196992
+        },
+        {
+          "identity": 8590197248,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590197504
+        },
+        {
+          "identity": 8590197760,
+          "state": 1,
+          "actor": 8589942784,
+          "current": 8590198016
+        }
+      ]
+    },
+    {
+      "initial": [
+        {
+          "actor": 8589938688,
+          "data": 8590000128,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589939648,
+          "status_target": 8589942784
+        },
+        {
+          "actor": 8589942784,
+          "data": 8590004224,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589943744,
+          "status_target": 8589942784
+        }
+      ],
+      "calls": [
+        {
+          "method": "InitWithNoReset",
+          "actor_index": 0,
+          "data_index": 0,
+          "display_id": 3,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590196736,
+          "wait": 8590196992,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262272
+            }
+          ]
+        },
+        {
+          "method": "InitWithNoReset",
+          "actor_index": 0,
+          "data_index": 1,
+          "display_id": 2,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590004224,
+            "role": 8590262528,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 2,
+            "state": 5,
+            "previous": 5,
+            "info_version": 19,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197248,
+          "wait": 8590197504,
+          "clone_calls": [
+            {
+              "source": 8590020608,
+              "result": 8590262528
+            }
+          ]
+        },
+        {
+          "method": "Init",
+          "actor_index": 1,
+          "data_index": 0,
+          "display_id": 1,
+          "before": {
+            "actor": 8589942784,
+            "data": 8590004224,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589942784,
+            "data": 8590000128,
+            "role": 8590262784,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 1,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197760,
+          "wait": 8590198016,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262784
+            }
+          ]
+        }
+      ],
+      "continuations": [
+        {
+          "identity": 8590131200,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590131456
+        },
+        {
+          "identity": 8590196736,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590196992
+        },
+        {
+          "identity": 8590197248,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590197504
+        },
+        {
+          "identity": 8590197760,
+          "state": 1,
+          "actor": 8589942784,
+          "current": 8590198016
+        }
+      ]
+    },
+    {
+      "initial": [
+        {
+          "actor": 8589938688,
+          "data": 8590000128,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589939648,
+          "status_target": 8589942784
+        },
+        {
+          "actor": 8589942784,
+          "data": 8590004224,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589943744,
+          "status_target": 8589942784
+        }
+      ],
+      "calls": [
+        {
+          "method": "Init",
+          "actor_index": 0,
+          "data_index": 0,
+          "display_id": 3,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590196736,
+          "wait": 8590196992,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262272
+            }
+          ]
+        },
+        {
+          "method": "InitWithNoReset",
+          "actor_index": 0,
+          "data_index": 1,
+          "display_id": 2,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590004224,
+            "role": 8590262528,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 2,
+            "state": 5,
+            "previous": 5,
+            "info_version": 19,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197248,
+          "wait": 8590197504,
+          "clone_calls": [
+            {
+              "source": 8590020608,
+              "result": 8590262528
+            }
+          ]
+        },
+        {
+          "method": "InitWithNoReset",
+          "actor_index": 1,
+          "data_index": 0,
+          "display_id": 1,
+          "before": {
+            "actor": 8589942784,
+            "data": 8590004224,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589942784,
+            "data": 8590000128,
+            "role": 8590262784,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 1,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197760,
+          "wait": 8590198016,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262784
+            }
+          ]
+        }
+      ],
+      "continuations": [
+        {
+          "identity": 8590131200,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590131456
+        },
+        {
+          "identity": 8590196736,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590196992
+        },
+        {
+          "identity": 8590197248,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590197504
+        },
+        {
+          "identity": 8590197760,
+          "state": 1,
+          "actor": 8589942784,
+          "current": 8590198016
+        }
+      ]
+    },
+    {
+      "initial": [
+        {
+          "actor": 8589938688,
+          "data": 8590000128,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589939648,
+          "status_target": 8589942784
+        },
+        {
+          "actor": 8589942784,
+          "data": 8590004224,
+          "role": 11936128518282651045,
+          "bluff_role": 11936128518282651045,
+          "bluff": 11936128518282651045,
+          "runtime": 11936128518282651045,
+          "register_as": 11936128518282651045,
+          "alignment": 10,
+          "id": 73,
+          "state": 20,
+          "previous": 10,
+          "info_version": 17,
+          "status_count": 3,
+          "status_version": 23,
+          "resistance": 8589943744,
+          "status_target": 8589942784
+        }
+      ],
+      "calls": [
+        {
+          "method": "InitWithNoReset",
+          "actor_index": 0,
+          "data_index": 0,
+          "display_id": 3,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590196736,
+          "wait": 8590196992,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262272
+            }
+          ]
+        },
+        {
+          "method": "Init",
+          "actor_index": 0,
+          "data_index": 1,
+          "display_id": 2,
+          "before": {
+            "actor": 8589938688,
+            "data": 8590000128,
+            "role": 8590262272,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 3,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589938688,
+            "data": 8590004224,
+            "role": 8590262528,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 10,
+            "id": 2,
+            "state": 5,
+            "previous": 5,
+            "info_version": 19,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589939648,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197248,
+          "wait": 8590197504,
+          "clone_calls": [
+            {
+              "source": 8590020608,
+              "result": 8590262528
+            }
+          ]
+        },
+        {
+          "method": "Init",
+          "actor_index": 1,
+          "data_index": 0,
+          "display_id": 1,
+          "before": {
+            "actor": 8589942784,
+            "data": 8590004224,
+            "role": 11936128518282651045,
+            "bluff_role": 11936128518282651045,
+            "bluff": 11936128518282651045,
+            "runtime": 11936128518282651045,
+            "register_as": 11936128518282651045,
+            "alignment": 10,
+            "id": 73,
+            "state": 20,
+            "previous": 10,
+            "info_version": 17,
+            "status_count": 3,
+            "status_version": 23,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "after": {
+            "actor": 8589942784,
+            "data": 8590000128,
+            "role": 8590262784,
+            "bluff_role": 11936128518282651045,
+            "bluff": 0,
+            "runtime": 0,
+            "register_as": 0,
+            "alignment": 20,
+            "id": 1,
+            "state": 5,
+            "previous": 20,
+            "info_version": 18,
+            "status_count": 0,
+            "status_version": 24,
+            "resistance": 8589943744,
+            "status_target": 8589942784
+          },
+          "iterator": 8590197760,
+          "wait": 8590198016,
+          "clone_calls": [
+            {
+              "source": 8590016512,
+              "result": 8590262784
+            }
+          ]
+        }
+      ],
+      "continuations": [
+        {
+          "identity": 8590131200,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590131456
+        },
+        {
+          "identity": 8590196736,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590196992
+        },
+        {
+          "identity": 8590197248,
+          "state": 1,
+          "actor": 8589938688,
+          "current": 8590197504
+        },
+        {
+          "identity": 8590197760,
+          "state": 1,
+          "actor": 8589942784,
+          "current": 8590198016
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Explicit synchronous first-yield invocation; no readiness or resume ordering.",
+    "RefreshCharacter and RefreshView, cloning, Unity/runtime operations are service boundaries.",
+    "Only warm metadata, valid dependencies and inert callbacks are used in this sequence corpus.",
+    "Existing iterator bytes remain unchanged; no yielded iterator is resumed or cancelled."
+  ]
+}

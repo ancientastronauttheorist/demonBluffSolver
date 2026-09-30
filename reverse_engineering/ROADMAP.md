@@ -1,15 +1,15 @@
 # Full Reconstruction Roadmap
 
-## Continuation checkpoint: 2026-09-30 midday
+## Continuation checkpoint: 2026-09-30 setup composition
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,435 classifications and 331 evidence records
+additional native timing audits. The overlay contains 1,435 classifications and 337 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 772 Rust library tests; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 798 Rust library tests; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -23,6 +23,17 @@ identity, stable-script and ordered-selector provenance. See [setup caller](note
 [initialization](notes/systems/character_initialization.md), and
 [pool ledger bridge](notes/systems/pool_ledger_bridge.md). RefreshCharacter
 currently has only a Hidden-state joined slice and remains explicitly unresolved.
+
+The actual [Manage pool composition](notes/systems/manage_pool_composition.md)
+now joins both builders and their sources in 760 native fixtures. A second
+[ledger bridge](notes/systems/manage_pool_ledger_bridge.md) consumes those combined
+histories once and uses final current roster identities. The
+[initialization producer](notes/systems/setup_initialization_batch.md) retains
+physical aliases and distinct continuations, backed by twelve native repeated
+initializer calls. [Action dispatch](notes/systems/character_action_setup.md)
+adds 370 native Init/Start caller fixtures and a supported producer-to-writer
+bridge. These remain separate guarded compositions; complete setup-to-scheduler
+execution and unsupported writers are still open.
 
 Resume with these boundaries in view:
 

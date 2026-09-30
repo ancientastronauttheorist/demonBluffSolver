@@ -259,3 +259,47 @@ fn allocations_cannot_alias_retained_objects_or_waits() {
     });
     assert!(matches!(replay(&bad), Err(LedgerError::InvalidContext)));
 }
+
+#[test]
+fn prior_iterators_and_waits_cannot_alias_known_incompatible_objects() {
+    let c = context();
+    for identity in [c.actor.identity, c.data, c.actor.role.unwrap(), 1234] {
+        let mut bad = c.clone();
+        bad.continuations.push(Continuation {
+            identity,
+            actor: 1234,
+            state: 1,
+            current: Some(88),
+        });
+        assert!(matches!(replay(&bad), Err(LedgerError::InvalidContext)));
+    }
+    for current in [0, c.actor.identity, c.data, 77] {
+        let mut bad = c.clone();
+        bad.continuations.push(Continuation {
+            identity: 77,
+            actor: c.actor.identity,
+            state: 1,
+            current: Some(current),
+        });
+        assert!(matches!(replay(&bad), Err(LedgerError::InvalidContext)));
+    }
+    let mut shared = c;
+    shared.continuations = vec![
+        Continuation {
+            identity: 77,
+            actor: shared.actor.identity,
+            state: 1,
+            current: Some(88),
+        },
+        Continuation {
+            identity: 78,
+            actor: 1234,
+            state: 1,
+            current: Some(88),
+        },
+    ];
+    assert_eq!(
+        replay(&shared).unwrap().continuations[..2],
+        shared.continuations
+    );
+}

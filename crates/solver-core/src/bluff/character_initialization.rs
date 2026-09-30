@@ -202,6 +202,13 @@ fn validate(c: &Context) -> Result<(), LedgerError> {
     );
     retained.extend(c.actor.infos.iter().flatten().copied());
     retained.extend(c.actor.dead_prefab.as_ref().map(|p| p.identity));
+    retained.extend(c.continuations.iter().map(|pending| pending.actor));
+    let non_iterators = retained.clone();
+    let currents: BTreeSet<_> = c
+        .continuations
+        .iter()
+        .filter_map(|pending| pending.current)
+        .collect();
     for pending in &c.continuations {
         if pending.identity == 0
             || pending.actor == 0
@@ -214,6 +221,13 @@ fn validate(c: &Context) -> Result<(), LedgerError> {
         }
         retained.extend([pending.identity, pending.actor]);
         retained.extend(pending.current);
+    }
+    if ids
+        .iter()
+        .any(|id| non_iterators.contains(id) || currents.contains(id))
+        || currents.iter().any(|id| non_iterators.contains(id))
+    {
+        return Err(LedgerError::InvalidContext);
     }
     if retained.contains(&c.continuation_identity) || retained.contains(&c.wait_identity) {
         return Err(LedgerError::InvalidContext);
