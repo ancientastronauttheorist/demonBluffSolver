@@ -2,9 +2,10 @@
 
 Pinned build `f530404b0f3f_807de4a83df4` and the existing UnityPlayer fingerprint.
 The native audit executes `0xA8E030`, reference-context construction at
-`0x784BC0`, and descriptor traversal at `0x79BB60`. It contains 152 fixtures,
+`0x784BC0`, descriptor traversal at `0x79BB60` and normal reference-scope cleanup
+at `0x784C70`. It contains 166 fixtures,
 including cache matrices, cold initialization, controlled descriptor changes and
-gateway failure prefixes. Nineteen exact instruction assertions cover the three
+gateway failure prefixes. Twenty-three exact instruction assertions cover the four
 complete entry ranges, the code after the adapter's first return, traversal
 writes and the independently resolved reference-store export. Successful returns
 preserve the stack and eight nonvolatile integer registers.
@@ -38,8 +39,12 @@ Setting the parser's field-error flag does not terminate this descriptor loop.
 The individual field callbacks write authored integers solely to make ordering
 and retention observable. They do not implement native member lookup, field
 offset discovery, numeric conversion, strings, arrays, nested construction or
-managed references. Reference-scope and metadata-storage cleanup are inert
-gateways. The fixtures keep the managed-reference processing flag clear; its
+managed references. Vector-storage cleanup remains an inert gateway.
+Native scope cleanup now clears both the parser's active scope pointer
+and the scope's parser reference before cleaning its two vector stores. Failure
+at a later vector-cleanup gateway preserves those clears. Auxiliary reference
+payloads remain null; their destruction paths are not executed. The fixtures
+keep the managed-reference processing flag clear; its
 registry/finalization branches remain outside this boundary. Runtime discovery
 and exception unwinding are also unclaimed.
 

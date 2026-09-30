@@ -927,7 +927,7 @@ remain explicit services. The [native parser and tree renderer](notes/systems/un
 adds 89 natural input cases and eighteen controlled diagnostics, preserving
 duplicate keys, byte strings and exact numeric payloads. Metadata-directed
 managed field application remains open. The
-[metadata adapter audit](notes/systems/unity_json_fields.md) adds 152 fixtures for
+[metadata adapter audit](notes/systems/unity_json_fields.md) adds 166 fixtures for
 cache selection and native descriptor traversal while retaining individual field
 processors and metadata discovery as explicit services.
 

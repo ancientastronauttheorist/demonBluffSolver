@@ -36,6 +36,8 @@ class Machine(ParserMachine):
                                    for i in range(4)],
                 'cache_published': self.rq(self.cache_slot) == self.cache,
                 'runtime_initialized': self.rq(self.base + 0x1CD6AF8) == self.runtime,
+                'reference_scope_linked': self.ref_scope is not None and
+                    self.rq(self.last_tree + 0x10) == self.ref_scope,
                 'cursor_index': None if self.cursor is None else
                     (self.rq(self.cursor + 8) - self.descriptors) // 0x80,
                 'remaining': None if self.cursor is None else self.rd(self.cursor + 0x18),
@@ -90,6 +92,8 @@ class Machine(ParserMachine):
                 self.ret()
         elif a == 0x79BB60:
             self.cursor = cx
+        elif a == 0x784BC0:
+            self.ref_scope = cx
         elif address in (self.services + 0x200, self.services + 0x280):
             index = (cx - self.descriptors - 0x10) // 0x80
             assert cx == self.descriptors + index * 0x80 + 0x10
@@ -114,10 +118,12 @@ class Machine(ParserMachine):
                     self.q(self.cache + 0x30, 0)
                 self.ret()
         elif a == 0x784C70:
-            if self.event('reference_scope_cleanup', []):
-                self.ret()
+            assert cx == self.ref_scope
+            self.event('reference_scope_cleanup', [])
         elif a == 0x14E2D0:
-            if self.event('metadata_storage_cleanup', []):
+            storage = 'references' if cx == self.ref_scope + 0x58 else (
+                'pending_references' if cx == self.ref_scope + 0x18 else 'metadata')
+            if self.event('metadata_storage_cleanup', [storage]):
                 self.ret()
 
     def apply(self, options):
@@ -152,7 +158,7 @@ class Machine(ParserMachine):
         self.field_error = options.get('field_error', False)
         self.mutate_cache = options.get('mutate_cache', False)
         self.events, self.counts, self.field_calls = [], {}, []
-        self.cursor, self.error = None, None
+        self.cursor, self.error, self.ref_scope = None, None, None
         x = self.x
         sp = self.stack + 0x18008
         self.q(sp, self.stop)
@@ -187,6 +193,7 @@ class Machine(ParserMachine):
 def verify_native(m):
     instructions = {}
     ranges = [(0xA8E030, 0xA8E2B5), (0x79BB60, 0x79BBFF), (0x784BC0, 0x784C6D),
+              (0x784C70, 0x784D7C),
               (0x76DAE5, 0x76DAF8)]
     for a, b in ranges:
         raw = m.pe.get_data(a, b - a)
@@ -194,7 +201,7 @@ def verify_native(m):
         decoded = list(m.cs.disasm(raw, a))
         assert sum(i.size for i in decoded) == b - a
         instructions.update({i.address: i for i in decoded})
-    for a, b in ranges[:3]:
+    for a, b in ranges[:4]:
         assert any(e.struct.BeginAddress == a and e.struct.EndAddress == b
                    for e in m.pe.DIRECTORY_ENTRY_EXCEPTION)
     checks = {
@@ -216,6 +223,10 @@ def verify_native(m):
         0x79BBE6: ('call', 'qword ptr [r8 + 8]'),
         0x79BBFE: ('ret', ''),
         0x784C6C: ('ret', ''),
+        0x784C92: ('mov', 'qword ptr [rax + 0x10], rbp'),
+        0x784C96: ('mov', 'qword ptr [rcx + 0x10], rbp'),
+        0x784D5A: ('call', '0x14e2d0'),
+        0x784D77: ('jmp', '0x14e2d0'),
         0x76DAF1: ('mov', 'qword ptr [rip + 0x1568b90], rax'),
     }
     for address, expected in checks.items():
@@ -233,7 +244,7 @@ def verify_native(m):
     assert 0x76DAF1 + 7 + 0x1568B90 == 0x1CD6688
     assert 0x79BB99 + 6 + 0x153AAE9 == 0x1CD6688
     return {'instruction_assertions': len(checks),
-            'entry_ranges': [[hex(a), hex(b)] for a, b in ranges[:3]],
+            'entry_ranges': [[hex(a), hex(b)] for a, b in ranges[:4]],
             'reference_store_export': 'il2cpp_gc_wbarrier_set_field'}
 
 
@@ -255,6 +266,7 @@ def audit(game_root):
                     assert ('metadata_build' in kinds) == (not hit)
                     assert result['final']['cache_published'] == (preseed or lookup_cache)
                     assert result['final']['remaining'] == 0
+                    assert not result['final']['reference_scope_linked']
                     cases.append(result)
     baselines = [{}, {'preseed': False}, {'preseed': False, 'lookup_cache': False},
                  {'directions': [8]}, {'fields': 0}, {'cold_runtime': True},
@@ -293,7 +305,7 @@ def audit(game_root):
             'cases': cases, 'case_count': len(cases),
             'executed_address_count': len(m.executed),
             'field_adapter_address_count': len(m.field_executed),
-            'scope': 'Actual metadata adapter, native reference context and descriptor traversal. Cache discovery/build and individual field bodies remain supplied; reference-scope and metadata cleanup are inert gateways. No managed field inclusion/conversion or arbitrary serialization claim.'}
+            'scope': 'Actual metadata adapter, native reference-context construction, descriptor traversal and normal reference-scope cleanup. Cache discovery/build and individual field bodies remain supplied; vector storage cleanup is inert. Auxiliary reference payloads remain null and managed-reference finalization stays disabled. No managed field inclusion/conversion or arbitrary serialization claim.'}
 
 
 if __name__ == '__main__':
