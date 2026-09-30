@@ -6,7 +6,7 @@ save/read cases pass. Twenty exact instruction/export assertions cover the
 classifier and the complete runtime-export initializer unwind families.
 
 The native predicate obtains the class name, compares seven bytes against the
-exact `List`1` plus NUL literal, then requires the class's image to equal the
+exact ``List`1`` plus NUL literal, then requires the class's image to equal the
 runtime corlib image. It does not query a namespace, generic arguments, field
 layout or inheritance. Both a mismatching name and a mismatching image reject
 the supplied class. Case changes, another arity, longer prefixes and empty names

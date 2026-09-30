@@ -106,6 +106,10 @@ Resume with these boundaries in view:
    eighteen exact name/image cases and six joined copies. Classification now
    executes over supplied class metadata; managed construction/discovery and
    compound elements remain open.
+   [SavedGameInfo field composition](notes/systems/saved_game_info_json.md) joins
+   all three pinned public fields in 21 normal cases and 528 service stops.
+   Actual game constructor/mutation/persistence callers and runtime discovery
+   remain separate from this native engine field pipeline.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

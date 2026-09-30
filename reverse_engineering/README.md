@@ -968,6 +968,11 @@ member. Runtime classification and managed construction remain explicit services
 The [native List classifier](notes/systems/unity_json_list_classifier.md) replaces
 the classification service in 18 direct cases and six joined copies. It compares
 the exact class name and corlib image; runtime metadata and construction stay open.
+The [SavedGameInfo field join](notes/systems/saved_game_info_json.md) now executes
+its complete pinned three-field inventory in 21 normal cases and 528 service
+stops. Native string/List copying composes over actual field names and offsets;
+constructor defaults, game mutation/persistence callers and runtime discovery
+remain separate boundaries.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

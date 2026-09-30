@@ -123,7 +123,8 @@ stop, diagnose, fix, verify, then resume.
     Bind offsets to the pinned class's exact field declarations before naming
     them; adjacent saved and current roster fields are distinct state.
     Derive RIP-relative literal slots from decoded operands and resolve their
-    exact strings; property names do not establish serialized preference keys.
+    exact strings before writing executable probes; do not leave unresolved
+    numeric placeholders. Property names do not establish serialized preference keys.
     Use the decoded displacement location when an instruction has an immediate
     operand; the final four instruction bytes need not be its RIP displacement.
     Give overloaded target signatures distinct `prototype_name` values while
