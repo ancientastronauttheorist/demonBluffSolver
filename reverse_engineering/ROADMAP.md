@@ -1,18 +1,28 @@
 # Full Reconstruction Roadmap
 
-## Continuation checkpoint: 2026-09-12 overnight
+## Continuation checkpoint: 2026-09-30 midday
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,434 classifications and 327 evidence records
+additional native timing audits. The overlay contains 1,435 classifications and 331 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 747 Rust library tests; full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 772 Rust library tests; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
+
+New caller/source/init joins now include 140 complete ManageCharacters caller fixtures,
+516 unique-source composition fixtures and 475 initialization/first-yield fixtures.
+Bounded Rust replays compare their supported native traces. The pool-to-selector
+bridge preserves joint probabilities and construction failure mass under explicit
+identity, stable-script and ordered-selector provenance. See [setup caller](notes/systems/manage_setup_caller.md),
+[unique sources](notes/systems/unique_source_composition.md),
+[initialization](notes/systems/character_initialization.md), and
+[pool ledger bridge](notes/systems/pool_ledger_bridge.md). RefreshCharacter
+currently has only a Hidden-state joined slice and remains explicitly unresolved.
 
 Resume with these boundaries in view:
 

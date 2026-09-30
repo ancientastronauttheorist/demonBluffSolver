@@ -225,6 +225,27 @@ fn draws<'a>(pools: &'a SelectorPools, selector: &Selector) -> Result<Vec<Draw<'
 /// input. Any unsupported/failing branch rejects the whole operation. Failure
 /// side effects (notably Drunk corruption before a failed draw) are not emulated.
 pub fn replay_selectors(ledger: &SelectorLedger) -> Result<Vec<SelectorPath>, LedgerError> {
+    replay_selectors_bounded(ledger, MAX_PATHS, MAX_RETAINED_ENTRIES)
+}
+
+pub(super) fn path_units(path: &SelectorPath) -> usize {
+    1 + path.pools.unique.len()
+        + path.pools.duplicate.len()
+        + path.pools.must_include.len()
+        + path.pools.script.villagers.len()
+        + path.pools.script.outcasts.len()
+        + path.pools.script.minions.len()
+        + path.pools.script.demons.len()
+        + path.trace.len()
+}
+
+/// Composition callers may impose a smaller shared working budget. Pending,
+/// current and newly cloned paths all count before allocation of the new path.
+pub(super) fn replay_selectors_bounded(
+    ledger: &SelectorLedger,
+    max_paths: usize,
+    max_retained: usize,
+) -> Result<Vec<SelectorPath>, LedgerError> {
     if ledger.rule_version != SELECTOR_LEDGER_NATIVE_V1
         || ledger.events.len() > MAX_EVENTS
         || !pool_is_valid(&ledger.pools.unique)
@@ -245,6 +266,17 @@ pub fn replay_selectors(ledger: &SelectorLedger) -> Result<Vec<SelectorPath>, Le
         }
         seen[usize::from(event.position)] = true;
     }
+    let initial_units = 1
+        + ledger.pools.unique.len()
+        + ledger.pools.duplicate.len()
+        + ledger.pools.must_include.len()
+        + ledger.pools.script.villagers.len()
+        + ledger.pools.script.outcasts.len()
+        + ledger.pools.script.minions.len()
+        + ledger.pools.script.demons.len();
+    if max_paths == 0 || initial_units > max_retained {
+        return Err(LedgerError::Capacity);
+    }
     let mut paths = vec![SelectorPath {
         probability: Probability {
             numerator: 1,
@@ -256,30 +288,28 @@ pub fn replay_selectors(ledger: &SelectorLedger) -> Result<Vec<SelectorPath>, Le
     for event in &ledger.events {
         let mut next = Vec::new();
         let mut retained_entries = 0usize;
+        let mut pending_entries = paths.iter().map(path_units).sum::<usize>();
+        let mut pending_paths = paths.len();
         for path in paths {
+            let current_units = path_units(&path);
+            pending_entries -= current_units;
+            pending_paths -= 1;
             for draw in draws(&path.pools, &event.selector)? {
                 let probability = path.probability.multiply(
                     draw.branch_numerator,
                     draw.branch_denominator * draw.candidates.len() as u64,
                 )?;
                 for (index, role) in draw.candidates {
-                    if next.len() >= MAX_PATHS {
+                    if pending_paths + next.len() + 2 > max_paths {
                         return Err(LedgerError::Capacity);
                     }
-                    let script = &path.pools.script;
-                    let entry_budget = path.pools.unique.len()
-                        + path.pools.duplicate.len()
-                        + path.pools.must_include.len()
-                        + script.villagers.len()
-                        + script.outcasts.len()
-                        + script.minions.len()
-                        + script.demons.len()
-                        + path.trace.len()
-                        + 2; // next trace and possible script append
-                    retained_entries = retained_entries
-                        .checked_add(entry_budget)
+                    let entry_budget = current_units + 2; // next trace and possible script append
+                    let working_entries = retained_entries
+                        .checked_add(pending_entries)
+                        .and_then(|n| n.checked_add(current_units))
+                        .and_then(|n| n.checked_add(entry_budget))
                         .ok_or(LedgerError::Capacity)?;
-                    if retained_entries > MAX_RETAINED_ENTRIES {
+                    if working_entries > max_retained {
                         return Err(LedgerError::Capacity);
                     }
                     let mut branch = path.clone();
@@ -322,6 +352,7 @@ pub fn replay_selectors(ledger: &SelectorLedger) -> Result<Vec<SelectorPath>, Le
                         script_added,
                         corruption_attempt,
                     });
+                    retained_entries += path_units(&branch);
                     next.push(branch);
                 }
             }
@@ -653,6 +684,33 @@ mod tests {
         assert_eq!(paths[0].pools, ledger.pools);
         assert_eq!(paths[0].probability, p(1, 1));
         assert!(paths[0].trace.is_empty());
+    }
+
+    #[test]
+    fn composition_caps_include_current_path_before_cloning() {
+        let ledger = input(vec![Selector::Demon], &[]);
+        let before = ledger.clone();
+        // Five pool/script entries + path header; the new path adds one trace
+        // and one script entry. Both current and new path exist during cloning.
+        assert_eq!(
+            replay_selectors_bounded(&ledger, 2, 14),
+            replay_selectors(&ledger)
+        );
+        assert_eq!(
+            replay_selectors_bounded(&ledger, 1, 14),
+            Err(LedgerError::Capacity)
+        );
+        assert_eq!(
+            replay_selectors_bounded(&ledger, 2, 13),
+            Err(LedgerError::Capacity)
+        );
+        assert_eq!(ledger, before);
+        let empty = input(vec![], &[]);
+        assert_eq!(replay_selectors_bounded(&empty, 1, 6).unwrap().len(), 1);
+        assert_eq!(
+            replay_selectors_bounded(&empty, 1, 5),
+            Err(LedgerError::Capacity)
+        );
     }
 
     #[test]

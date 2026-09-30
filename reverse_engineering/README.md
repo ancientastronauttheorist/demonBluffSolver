@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,434 classifications backed by
-327 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,435 classifications backed by
+331 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1065,3 +1065,5 @@ framework services. The [pool-to-acquisition frontier](notes/systems/round_pool_
 records the remaining setup, identity, RNG and continuation-state joins.
 
 The [ManageCharacters prefix audit](notes/systems/manage_pool_prefix.md) adds 44 native cases for the pool-builder handoff and first Init arguments. Builders remain supplied services; this prefix stops before Init or empty-board publication. Full startup-to-acquisition composition remains open.
+
+The September 30 checkpoint adds [complete setup caller orchestration](notes/systems/manage_setup_caller.md), [exact unique-source composition](notes/systems/unique_source_composition.md), [card initialization and first-yield publication](notes/systems/character_initialization.md), and a bounded [pool-to-selector bridge](notes/systems/pool_ledger_bridge.md). Each preserves its supplied service boundaries; full setup/writer/scheduler composition remains open.

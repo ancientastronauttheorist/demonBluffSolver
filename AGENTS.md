@@ -57,6 +57,8 @@ stop, diagnose, fix, verify, then resume.
     when even the containing directory is unconfirmed.
     Evidence sources can name corpus directories as well as files; validate the
     referenced path's existence without assuming every source is a single file.
+    Resolve and validate every coverage target before appending evidence; a new
+    partial method audit can require an explicit unresolved classification.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order and omit empty placeholder hunks.
@@ -65,8 +67,11 @@ stop, diagnose, fix, verify, then resume.
     nested shell and python -c quoting can fail before an edit executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
+    Bind indexed literal-array expressions before using them in serde_json::json!
+    values, or parenthesize the complete expression for the macro parser.
     Coordinate shared Rust builds after agents confirm all declared module and
-    test files are complete; an in-progress module can break unrelated tests.
+    test files and pending review fixes are complete; an in-progress module can
+    break unrelated tests even after an earlier freeze was announced.
     Resolve each completed module's actual path before adding its declaration;
     a module name alone does not identify whether its parent is `lib.rs` or a
     nested module such as `bluff.rs`.

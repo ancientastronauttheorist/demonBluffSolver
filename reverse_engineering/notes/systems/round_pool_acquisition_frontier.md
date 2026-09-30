@@ -94,3 +94,9 @@ callbacks, unsupported writers, general PlayerLoop/queue contents, List internal
 and unsupplied RNG state remain explicit boundaries.
 
 The [ManageCharacters prefix audit](manage_pool_prefix.md) now verifies caller handoff and first Init arguments across 44 native cases. Its pool builders remain supplied gateways, and it stops before Init or empty-board publication; the complete composition above remains open.
+
+## September 30 progress
+
+The [complete setup caller](manage_setup_caller.md) now executes every pass and normal return under supplied gateways in 140 native fixtures. [Unique-source composition](unique_source_composition.md) executes the actual starting/fallback/script getters, lazy typed getter, filters and captured predicate in 516 fixtures, preserving one source/pool RNG history. [Initialization](character_initialization.md) executes Init/InitWithNoReset, Hidden RefreshCharacter and first-yield publication in 475 fixtures. Their offline Rust kernels preserve their supported boundaries.
+
+The [pool ledger bridge](pool_ledger_bridge.md) now maps numeric pool identities to canonical selectors and retains construction failure mass. Its unique getter inputs remain supplied. The actual ManageCharacters-to-both-builders join and production of supported Start-writer/continuation state are still the next transaction boundaries; complete engine scheduling remains open.
