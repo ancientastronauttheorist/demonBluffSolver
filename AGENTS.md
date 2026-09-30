@@ -106,7 +106,9 @@ stop, diagnose, fix, verify, then resume.
     globals and Windows TIB/TLS state explicitly in emulation; do not bypass
     conversion bodies to hide missing thread-local initialization. With fast-load PE readers, explicitly parse
     the required data directories before using their tables. Verify an unwind entry contains a queried RVA
-    before treating it as that instruction's chunk.
+    before treating it as that instruction's chunk. Pointer-backed leaf entries
+    can lack unwind records or saved Ghidra definitions; verify their decoded
+    wrapper before requesting a containing-function export.
     A method can span adjacent unwind chunks; the first chunk's end is not
     necessarily the method's end. Resolve the next verified managed entry.
     Decode from a verified entry/instruction boundary before selecting a later
@@ -143,7 +145,8 @@ stop, diagnose, fix, verify, then resume.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
     An export batch may abort at its first missing target; require a per-target
-    completion record before reading any subsequent requested output.
+    completion record before reading any subsequent requested output. Inspect
+    those records before issuing a separate file read, even when exit status is zero.
     Pass explicit `0x`-prefixed RVAs to `DumpContaining`; bare numeric strings
     can select decimal addresses and bare hexadecimal letters fail parsing.
     For omitted initializer or virtual functions, resolve entries from their native pointer

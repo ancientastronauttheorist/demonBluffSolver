@@ -92,6 +92,11 @@ Resume with these boundaries in view:
    Native UTF-16 conversion executes with explicit thread-local initialization;
    nullness and embedded NULs are observably lost. Runtime string creation,
    compound graphs and real metadata discovery remain open.
+   [Scalar/string array composition](notes/systems/unity_json_arrays.md) adds 72
+   numeric round trips, 44 reader cases, two string-array cases, two shared-array
+   cases and 152 service stops. Native collection processors and element handlers
+   execute, preserving reuse/resizing and separate alias allocation requests.
+   Lists, compound elements and runtime allocation/discovery remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

@@ -956,6 +956,11 @@ save/load cases, 13 reader cases, two mixed inherited objects and 67 controlled
 service stops. Actual UTF-16 conversion and field handlers retain the observed
 null-to-empty and embedded-NUL truncation behavior. Runtime string creation and
 thread-local initialization remain explicit services; compound graphs stay open.
+The [one-dimensional array join](notes/systems/unity_json_arrays.md) adds 72 numeric
+save/load cases, 44 reader cases, two string-array cases, two shared-array cases
+and 152 service stops. Native array traversal/conversion preserves same-length
+reuse and makes separate allocation requests for copied aliases. Runtime array
+services remain explicit; Lists and compound graphs stay open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
