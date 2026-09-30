@@ -1,0 +1,118 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "verified_registration_pair_count": 3447,
+  "requests": [
+    {
+      "request": "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+      "request_literal_rva": "0x1ffa240",
+      "registration": "UnityEngine.PlayerPrefs::GetString",
+      "registration_index": 2172,
+      "engine_target_rva": "0xf3150"
+    },
+    {
+      "request": "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+      "request_literal_rva": "0x1ffa170",
+      "registration": "UnityEngine.PlayerPrefs::TrySetSetString",
+      "registration_index": 2169,
+      "engine_target_rva": "0xf22b0"
+    }
+  ],
+  "native_lookup_cases": [
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::GetString:fallback",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::GetString"
+      ],
+      "resolved": true,
+      "resolved_pointer": "0x1800f3150"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::GetString:exact-precedence",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)"
+      ],
+      "resolved": true,
+      "resolved_pointer": "0x12345678"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::GetString:bare",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::GetString"
+      ],
+      "resolved": true,
+      "resolved_pointer": "0x1800f3150"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::GetString:missing",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::GetString"
+      ],
+      "resolved": false,
+      "resolved_pointer": "0x0"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::GetString:wrong-prefix",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::GetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::GetString"
+      ],
+      "resolved": false,
+      "resolved_pointer": "0x0"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::TrySetSetString:fallback",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::TrySetSetString"
+      ],
+      "resolved": true,
+      "resolved_pointer": "0x1800f22b0"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::TrySetSetString:exact-precedence",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)"
+      ],
+      "resolved": true,
+      "resolved_pointer": "0x12345678"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::TrySetSetString:bare",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::TrySetSetString"
+      ],
+      "resolved": true,
+      "resolved_pointer": "0x1800f22b0"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::TrySetSetString:missing",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::TrySetSetString"
+      ],
+      "resolved": false,
+      "resolved_pointer": "0x0"
+    },
+    {
+      "case": "pref:UnityEngine.PlayerPrefs::TrySetSetString:wrong-prefix",
+      "constructed_keys": [
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)",
+        "UnityEngine.PlayerPrefs::TrySetSetString"
+      ],
+      "resolved": false,
+      "resolved_pointer": "0x0"
+    }
+  ],
+  "native_lookup_case_count": 10,
+  "reused_gateway_native_checks": 20,
+  "scope": "Exact native preference request literals and all 3447 shipped registration pairs are verified. Ten native GameAssembly map lookup/fallback fixtures join the names with authored pointer values. Registration population in a live map, engine preference entry bodies, storage and exception behavior remain open; no preference access occurs."
+}

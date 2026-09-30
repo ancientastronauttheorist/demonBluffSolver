@@ -11,7 +11,7 @@ from audit_character_assets import BUILD
 from audit_unityplayer_wait import ENGINE_SHA256
 
 
-def audit(game_root):
+def audit(game_root, extra_lookup=None):
     import capstone
     import pefile
     import unicorn
@@ -118,14 +118,15 @@ def audit(game_root):
         elif a not in gi: raise AssertionError(f'lookup left boundary {a:x}')
     uc.hook_add(unicorn.UC_HOOK_CODE,ghook)
     lookup=[]
-    for requested, entries, expected, label in [
+    lookup_specs = [
         (request,[(name,base+0x191D80)],base+0x191D80,'parameter fallback'),
         (request,[(name,base+0x191D80),(request,0x12345678)],0x12345678,'exact precedence'),
         (name,[(name,base+0x191D80)],base+0x191D80,'bare exact'),
         (request,[],0,'unregistered'),
         ('UnityEngine.JsonUtility::Missing(System.Object)',[(name,base+0x191D80)],0,'missing prefix'),
         ('UnityEngine.JsonUtility::Missing',[(name,base+0x191D80)],0,'missing bare'),
-    ]:
+    ]
+    for requested, entries, expected, label in lookup_specs + (extra_lookup or []):
         state.clear();state['strings']=[]
         sentinel=arena+0x100;uc.mem_write(sentinel,bytes(0x80));uc.mem_write(sentinel+0x19,b'\x01')
         nodes=[]
@@ -140,6 +141,8 @@ def audit(game_root):
         if label=='parameter fallback': assert state['strings']==[request,request,name]
         if label=='exact precedence': assert state['strings']==[request]
         lookup.append({'case':label,'constructed_keys':state['strings'],'resolved':bool(value)})
+        if label.startswith('pref:'):
+            lookup[-1]['resolved_pointer'] = hex(value)
     uc,base,arena,service,q,rq,ret,run = machine(engine,ei)
     state={}
     q(base+rip(ei,0xFA18C8,0),service)

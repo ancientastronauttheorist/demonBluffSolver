@@ -983,6 +983,9 @@ The [native preference wrappers](notes/systems/saved_game_preferences.md) add
 52 cases, 28 service stops and six JSON joins inside those callers, retaining
 cached lookup, empty defaults and failed-write exception ordering. Internal-call
 resolution, platform storage and exception construction/throw remain services.
+The [preference lookup join](notes/systems/saved_game_preference_lookup.md) now
+verifies both shipped registration pairs and ten native fallback/precedence
+cases. Engine preference entries and platform storage remain open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

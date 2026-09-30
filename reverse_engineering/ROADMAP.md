@@ -120,6 +120,10 @@ Resume with these boundaries in view:
    [Native preference wrappers](notes/systems/saved_game_preferences.md) add 52
    cases, 28 service stops and six JSON joins. Resolver/backend storage and
    exception construction/throw remain explicit services.
+   The [preference registration join](notes/systems/saved_game_preference_lookup.md)
+   verifies both exact requests against shipped bare names and ten native lookup
+   cases. Next engine entries are `0xF3150` (GetString) and `0xF22B0` (TrySetSetString);
+   their bodies, marshalling and platform storage remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

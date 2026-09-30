@@ -27,8 +27,10 @@ The exact requests are:
 - `UnityEngine.PlayerPrefs::TrySetSetString(System.String,System.String)`
 
 The repeated `Set` in the second request is present in the pinned native literal.
-This audit supplies resolver results; it does not assert equality with an engine
-registration name or establish fallback lookup behavior.
+This wrapper audit supplies resolver results. The separate
+[request-to-registration join](saved_game_preference_lookup.md) now verifies both
+bare registrations and native signature fallback; platform backend execution
+remains open.
 
 Controlled stops independently check every service occurrence in three baseline
 calls, preserving complete event prefixes and snapshots, including cached
