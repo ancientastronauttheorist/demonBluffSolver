@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-09-30 setup composition
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,440 classifications and 338 evidence records
+additional native timing audits. The overlay contains 1,444 classifications and 339 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -110,7 +110,10 @@ Resume with these boundaries in view:
    all three pinned public fields in 21 normal cases and 528 service stops.
    [SavedGameInfo construction and mutation](notes/systems/saved_game_info_methods.md)
    now execute all five callers in 132 cases, 20 controlled service stops and ten
-   value-level JSON joins. Persistence callers and runtime discovery remain open.
+   value-level JSON joins. [SavedGameData persistence callers](notes/systems/saved_game_data.md)
+   add all four methods in 44 cases, 41 service stops and six native JSON joins.
+   Actual preference storage, generic gateway internals and runtime discovery
+   remain explicit boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

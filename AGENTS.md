@@ -69,6 +69,8 @@ stop, diagnose, fix, verify, then resume.
     nested shell and python -c quoting can fail before an edit executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
+    Check imported report/helper schemas before indexing their fields; a build
+    constant is not necessarily repeated inside a returned layout dictionary.
     Bind indexed literal-array expressions before using them in serde_json::json!
     values, or parenthesize the complete expression for the macro parser.
     Coordinate shared Rust builds after agents confirm all declared module and

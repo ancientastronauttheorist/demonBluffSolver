@@ -247,7 +247,7 @@ class Machine:
             self.error = kind
             self.u.emu_stop()
 
-    def run(self, method, state=None, new_value=None, options=None):
+    def prepare(self, state=None, new_value=None, options=None):
         options = options or {}
         state = state or {}
         self.u.mem_write(self.arena, bytes(0x80000))
@@ -281,6 +281,9 @@ class Machine:
         argument = self.string(new_value)
         self.events, self.counts = [], {}
         self.failure, self.error = options.get('failure'), None
+        return argument
+
+    def invoke(self, rva, receiver, argument=0):
         x = self.x
         sp = self.stack + 0x18008
         self.q(sp, self.stop)
@@ -288,19 +291,25 @@ class Machine:
                      x.UC_X86_REG_R12, x.UC_X86_REG_R13, x.UC_X86_REG_R14, x.UC_X86_REG_R15]
         for i, register in enumerate(registers):
             self.u.reg_write(register, 0xFAB00000 + i)
-        for register, value in [(x.UC_X86_REG_RSP, sp), (x.UC_X86_REG_RCX, self.saved),
+        for register, value in [(x.UC_X86_REG_RSP, sp), (x.UC_X86_REG_RCX, receiver),
                                 (x.UC_X86_REG_RDX, argument), (x.UC_X86_REG_R8, 0)]:
             self.u.reg_write(register, value)
         try:
-            self.u.emu_start(self.base + METHODS[method][0], self.stop, timeout=2_000_000, count=100000)
+            self.u.emu_start(self.base + rva, self.stop, timeout=10_000_000, count=100000)
         except Exception as exc:
-            raise AssertionError(f'{method}, {options}, RVA={self.reg(x.UC_X86_REG_RIP)-self.base:x}') from exc
+            raise AssertionError(f'entry={rva:x}, RVA={self.reg(x.UC_X86_REG_RIP)-self.base:x}') from exc
         returned = self.reg(x.UC_X86_REG_RIP) == self.stop
         assert returned or self.error
         if returned:
             assert self.reg(x.UC_X86_REG_RSP) == sp + 8
             for i, register in enumerate(registers):
                 assert self.reg(register) == 0xFAB00000 + i
+        return returned
+
+    def run(self, method, state=None, new_value=None, options=None):
+        options, state = options or {}, state or {}
+        argument = self.prepare(state, new_value, options)
+        returned = self.invoke(METHODS[method][0], self.saved, argument)
         final = self.snapshot()
         return {'method': method, 'input_state': state, 'argument': new_value, 'options': options,
                 'events': self.events.copy(), 'returned': returned, 'error': self.error, 'final': final}

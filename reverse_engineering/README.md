@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,440 classifications backed by
-338 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,444 classifications backed by
+339 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -973,7 +973,9 @@ its complete pinned three-field inventory in 21 normal cases and 528 service
 stops. Native string/List copying composes over actual field names and offsets;
 the [native constructor and mutation audit](notes/systems/saved_game_info_methods.md)
 adds all five callers, 132 cases, 20 service stops and ten value-level JSON joins.
-Persistence callers and runtime discovery remain separate boundaries.
+The [SavedGameData persistence callers](notes/systems/saved_game_data.md) add all
+four native methods in 44 cases, 41 service stops and six JSON joins. Preference
+storage, generic gateway internals and runtime discovery remain services.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
