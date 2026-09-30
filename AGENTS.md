@@ -63,6 +63,8 @@ stop, diagnose, fix, verify, then resume.
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order and omit empty placeholder hunks.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
+    For Unicode diagnostics, use ASCII-safe JSON or explicitly configure UTF-8
+    console output; the default Windows console encoding may reject valid text.
     Prefer apply_patch or PowerShell here-strings for multiline Python edits;
     nested shell and python -c quoting can fail before an edit executes.
     Build report input snapshots from explicit serializable fields; `locals()`
@@ -96,14 +98,16 @@ stop, diagnose, fix, verify, then resume.
     IL2CPP runtime offsets to asset bytes. Validate following reference IDs.
     For native PE inspection, distinguish zero-filled virtual data from file-
     backed bytes; require a full file read before unpacking and supply runtime
-    globals explicitly in emulation. Verify an unwind entry contains a queried RVA
+    globals explicitly in emulation. With fast-load PE readers, explicitly parse
+    the required data directories before using their tables. Verify an unwind entry contains a queried RVA
     before treating it as that instruction's chunk.
     A method can span adjacent unwind chunks; the first chunk's end is not
     necessarily the method's end. Resolve the next verified managed entry.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
     Include the entire final instruction when sizing a decode range, exclude
-    trailing alignment padding, and verify all return paths rather than stopping
+    trailing alignment padding, account for embedded jump tables as data, and
+    verify all return paths rather than stopping
     at the first `ret`. Assert requested addresses decoded before indexing them.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.

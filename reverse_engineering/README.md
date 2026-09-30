@@ -923,7 +923,10 @@ two-entry registration module. Its 31 native cases cover ToJson marshaling and
 inline results. The [FromJson gateway](notes/systems/unity_fromjson_gateway.md)
 adds 180 native cases for rank rejection, create/overwrite class selection,
 allocation ordering and partial failures. Core parsing and field application
-remain explicit services.
+remain explicit services. The [native parser and tree renderer](notes/systems/unity_json_parser.md)
+adds 89 natural input cases and eighteen controlled diagnostics, preserving
+duplicate keys, byte strings and exact numeric payloads. Metadata-directed
+managed field application remains open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
@@ -999,6 +1002,9 @@ The [bounded phase-eight inventory](notes/systems/unity_wait_phase8_inventory.md
 records 23 verified global loads and 158 verified immediate slot branches,
 including the five known dispatch instructions. No additional dispatcher is
 established; computed masks, aliases and unverified candidates remain open.
+The [phase-eight ownership handoff](notes/systems/unity_wait_phase8_handoff.md)
+adds eighteen chained-unwind families and three pointer-backed forwarding leaves;
+it does not establish their receiver aliases or phase masks.
 
 The [clocked Reveal adapter](notes/systems/clocked_reveal.md) now derives wait
 consumer/producer timestamps from explicit audited clock transitions. Seven

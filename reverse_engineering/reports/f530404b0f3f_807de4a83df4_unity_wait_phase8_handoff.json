@@ -1,0 +1,484 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "status": "boundary/ownership handoff; no phase-eight dispatcher established",
+  "global_load_count": 23,
+  "chained_unwind_families": [
+    {
+      "root": "0xfea50",
+      "loads": [
+        "0xfebe4"
+      ],
+      "chunks": [
+        [
+          "0xfea50",
+          "0xfeb58"
+        ],
+        [
+          "0xfeb58",
+          "0xfeb84"
+        ],
+        [
+          "0xfeb84",
+          "0xfed42"
+        ],
+        [
+          "0xfed42",
+          "0xfeeef"
+        ],
+        [
+          "0xfeeef",
+          "0xfefb2"
+        ],
+        [
+          "0xfefb2",
+          "0xfeff2"
+        ]
+      ],
+      "instruction_count": 370,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0xff000",
+      "loads": [
+        "0xff0d3"
+      ],
+      "chunks": [
+        [
+          "0xff000",
+          "0xff13d"
+        ]
+      ],
+      "instruction_count": 92,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0xff3d0",
+      "loads": [
+        "0xff499"
+      ],
+      "chunks": [
+        [
+          "0xff3d0",
+          "0xff479"
+        ],
+        [
+          "0xff479",
+          "0xff4b8"
+        ],
+        [
+          "0xff4b8",
+          "0xff545"
+        ],
+        [
+          "0xff545",
+          "0xff555"
+        ],
+        [
+          "0xff555",
+          "0xff589"
+        ]
+      ],
+      "instruction_count": 120,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0xff590",
+      "loads": [
+        "0xff65f"
+      ],
+      "chunks": [
+        [
+          "0xff590",
+          "0xff731"
+        ]
+      ],
+      "instruction_count": 122,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0xff740",
+      "loads": [
+        "0xff952"
+      ],
+      "chunks": [
+        [
+          "0xff740",
+          "0xff860"
+        ],
+        [
+          "0xff860",
+          "0xff99a"
+        ],
+        [
+          "0xff99a",
+          "0xffb36"
+        ],
+        [
+          "0xffb36",
+          "0xffb5b"
+        ],
+        [
+          "0xffb5b",
+          "0xffc19"
+        ],
+        [
+          "0xffc19",
+          "0xffc57"
+        ]
+      ],
+      "instruction_count": 317,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0xffc60",
+      "loads": [
+        "0xffdeb"
+      ],
+      "chunks": [
+        [
+          "0xffc60",
+          "0xffd61"
+        ],
+        [
+          "0xffd61",
+          "0x10006f"
+        ],
+        [
+          "0x10006f",
+          "0x10012d"
+        ],
+        [
+          "0x10012d",
+          "0x10016a"
+        ]
+      ],
+      "instruction_count": 331,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x100170",
+      "loads": [
+        "0x10030e"
+      ],
+      "chunks": [
+        [
+          "0x100170",
+          "0x100271"
+        ],
+        [
+          "0x100271",
+          "0x100656"
+        ],
+        [
+          "0x100656",
+          "0x100693"
+        ]
+      ],
+      "instruction_count": 339,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x100f80",
+      "loads": [
+        "0x101071"
+      ],
+      "chunks": [
+        [
+          "0x100f80",
+          "0x101091"
+        ],
+        [
+          "0x101091",
+          "0x101139"
+        ],
+        [
+          "0x101139",
+          "0x101183"
+        ]
+      ],
+      "instruction_count": 146,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x4405a0",
+      "loads": [
+        "0x4405c9"
+      ],
+      "chunks": [
+        [
+          "0x4405a0",
+          "0x440632"
+        ]
+      ],
+      "instruction_count": 33,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x59f5e0",
+      "loads": [
+        "0x59f683"
+      ],
+      "chunks": [
+        [
+          "0x59f5e0",
+          "0x59f5e9"
+        ],
+        [
+          "0x59f5e9",
+          "0x59f62e"
+        ],
+        [
+          "0x59f62e",
+          "0x59f65d"
+        ],
+        [
+          "0x59f65d",
+          "0x59f67b"
+        ],
+        [
+          "0x59f67b",
+          "0x59f6c7"
+        ],
+        [
+          "0x59f6c7",
+          "0x59f743"
+        ]
+      ],
+      "instruction_count": 76,
+      "all_memory_b8_operand_sites": [
+        "0x59f692"
+      ]
+    },
+    {
+      "root": "0x5b7af0",
+      "loads": [
+        "0x5b7afd"
+      ],
+      "chunks": [
+        [
+          "0x5b7af0",
+          "0x5b7b2a"
+        ]
+      ],
+      "instruction_count": 14,
+      "all_memory_b8_operand_sites": [
+        "0x5b7b0c"
+      ]
+    },
+    {
+      "root": "0x779070",
+      "loads": [
+        "0x7792c7"
+      ],
+      "chunks": [
+        [
+          "0x779070",
+          "0x779367"
+        ]
+      ],
+      "instruction_count": 179,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x779370",
+      "loads": [
+        "0x779480",
+        "0x779876"
+      ],
+      "chunks": [
+        [
+          "0x779370",
+          "0x7793f3"
+        ],
+        [
+          "0x7793f3",
+          "0x7794fe"
+        ],
+        [
+          "0x7794fe",
+          "0x7798d2"
+        ]
+      ],
+      "instruction_count": 316,
+      "all_memory_b8_operand_sites": [
+        "0x779605"
+      ]
+    },
+    {
+      "root": "0x77d120",
+      "loads": [
+        "0x77d196",
+        "0x77d266"
+      ],
+      "chunks": [
+        [
+          "0x77d120",
+          "0x77d33b"
+        ]
+      ],
+      "instruction_count": 149,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x77d340",
+      "loads": [
+        "0x77d36a"
+      ],
+      "chunks": [
+        [
+          "0x77d340",
+          "0x77d350"
+        ],
+        [
+          "0x77d350",
+          "0x77d360"
+        ],
+        [
+          "0x77d360",
+          "0x77d38f"
+        ],
+        [
+          "0x77d38f",
+          "0x77d4c3"
+        ],
+        [
+          "0x77d4c3",
+          "0x77d4e0"
+        ],
+        [
+          "0x77d4e0",
+          "0x77d533"
+        ],
+        [
+          "0x77d533",
+          "0x77d54c"
+        ],
+        [
+          "0x77d54c",
+          "0x77d54d"
+        ]
+      ],
+      "instruction_count": 138,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x77e550",
+      "loads": [
+        "0x77e5fa"
+      ],
+      "chunks": [
+        [
+          "0x77e550",
+          "0x77e5b0"
+        ],
+        [
+          "0x77e5b0",
+          "0x77e5c8"
+        ],
+        [
+          "0x77e5c8",
+          "0x77e757"
+        ],
+        [
+          "0x77e757",
+          "0x77e7b6"
+        ],
+        [
+          "0x77e7b6",
+          "0x77e7c7"
+        ],
+        [
+          "0x77e7c7",
+          "0x77e8c0"
+        ],
+        [
+          "0x77e8c0",
+          "0x77e8c7"
+        ]
+      ],
+      "instruction_count": 204,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0x77e8d0",
+      "loads": [
+        "0x77e8f3"
+      ],
+      "chunks": [
+        [
+          "0x77e8d0",
+          "0x77e935"
+        ]
+      ],
+      "instruction_count": 30,
+      "all_memory_b8_operand_sites": []
+    },
+    {
+      "root": "0xe57140",
+      "loads": [
+        "0xe57176"
+      ],
+      "chunks": [
+        [
+          "0xe57140",
+          "0xe57205"
+        ]
+      ],
+      "instruction_count": 48,
+      "all_memory_b8_operand_sites": []
+    }
+  ],
+  "prior_verified_leaf_loads": [
+    "0x5b7ce0",
+    "0x5b7d29",
+    "0x5b7d50"
+  ],
+  "new_pointer_backed_leaves": [
+    {
+      "entry": "0x304a50",
+      "end_exclusive": "0x304a6a",
+      "static_pointer_slot": "0x1932bf0",
+      "address_publication_site": null,
+      "receiver_global": "0x1cd5710",
+      "branch": "0x304a62",
+      "mask": "caller-supplied; no phase classification",
+      "wait_global_alias_relation": "unproved"
+    },
+    {
+      "entry": "0x6d0bc0",
+      "end_exclusive": "0x6d0bd1",
+      "static_pointer_slot": "0x196a7c8",
+      "address_publication_site": null,
+      "receiver_global": "0x1c6e728",
+      "branch": "0x6d0bca",
+      "mask": "caller-supplied; no phase classification",
+      "wait_global_alias_relation": "unproved"
+    },
+    {
+      "entry": "0xefaa30",
+      "end_exclusive": "0xefaa47",
+      "static_pointer_slot": null,
+      "address_publication_site": "0xefcb86",
+      "receiver_global": "0x1cd1f28",
+      "branch": "0xefaa3f",
+      "mask": "caller-supplied; no phase classification",
+      "wait_global_alias_relation": "unproved"
+    }
+  ],
+  "new_b8_argument_site": {
+    "site": "0x779605",
+    "call": "0x77960f",
+    "callee_pointer_global": "0x1cd6310",
+    "argument_base_global": "0x1c6e708",
+    "limit": "Exact sites verified; path-sensitive RSI provenance not automated."
+  },
+  "remaining_raw_candidate": "0x1467e7f",
+  "remaining_work": [
+    "Prove receiver alias/publication relations for the three forwarding globals.",
+    "Find verified entry or code-pointer provenance for raw 0x1467e7f.",
+    "Implement path-sensitive inter-chunk register/stack alias and computed-mask dataflow.",
+    "Trace callers of forwarding leaves and known wait dispatchers.",
+    "Ownership and operand inventory are not reachability or phase-admission proof."
+  ]
+}

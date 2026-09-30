@@ -98,3 +98,6 @@ exception services and allocator policy remain boundaries. In particular,
 supplied parser outcomes are fixtures, not predictions for the given JSON.
 The audit does not recover field inclusion, nested construction, object-reference
 resolution, arbitrary supported-class behavior or complete JSON semantics.
+The subsequent [native parser audit](unity_json_parser.md) executes parsing,
+tree construction and parsed-tree rendering for explicit byte inputs. Metadata
+field application remains a separate boundary.

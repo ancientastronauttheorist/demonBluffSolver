@@ -51,6 +51,9 @@ Resume with these boundaries in view:
    A bounded phase-eight inventory checks 23 global loads and 158 immediate
    slot branches without establishing another dispatcher. Continue from its
    explicit candidate/exclusion list rather than repeating the same search.
+   The [phase-eight handoff](notes/systems/unity_wait_phase8_handoff.md) expands
+   eighteen chained-unwind families and establishes entries for three raw
+   forwarding candidates. Their receiver aliases and caller masks remain open.
 2. Continue the ascension-to-acquisition bridge: weighted cached script selection
    is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
    semantics and remaining mode/save callees are explicit boundaries. Both
@@ -58,7 +61,9 @@ Resume with these boundaries in view:
    their actual invoker and engine-serialization services remain open.
    Engine JSON registration/fallback and ToJson/FromJson gateways are now
    audited, including conditional constructor-error reporting and allocation
-   retention; core parsing and field application remain next boundaries.
+   retention. [Core parser and parsed-tree rendering](notes/systems/unity_json_parser.md)
+   now execute 89 natural inputs and eighteen controlled diagnostics. Actual
+   metadata field application and managed-object traversal remain next boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
@@ -80,8 +85,9 @@ Resume with these boundaries in view:
    Rotation/highlight replay and full diagnostic Reveal-wrapper callers are
    audited, with transform, formatting and UI callback internals still explicit.
    Continue from [the pool-to-acquisition handoff](notes/systems/round_pool_acquisition_frontier.md):
-   join ManageCharacters to both builders, then produce the exact actor/pool/
-   continuation state required by the existing acquisition and scheduled replays.
+   extend the actual ManageCharacters/both-builders prefix through native Init
+   and writer dispatch, then join the exact actor/pool/continuation state required
+   by the existing acquisition and scheduled replays.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.

@@ -94,4 +94,6 @@ native string allocation policy, field inclusion, supported-type checks,
 reference resolution and actual JSON serialization remain open. FromJson's
 engine body is only identified in the registration pair, not executed here.
 No additional Assembly-CSharp managed method classification follows from
-auditing these runtime/engine helpers.
+auditing these runtime/engine helpers. The subsequent
+[parser and parsed-tree renderer](unity_json_parser.md) now executes those
+engine cores for explicit inputs; managed-object field traversal remains open.
