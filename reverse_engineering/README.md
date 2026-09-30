@@ -942,6 +942,10 @@ The [numeric descriptor factory](notes/systems/unity_json_descriptors.md) now
 executes 105 construction fixtures and 36 factory-to-adapter numeric copies.
 Registry lookup and descriptor writes are native; runtime metadata exports,
 eligibility and enumeration remain separate boundaries.
+The [native metadata builder](notes/systems/unity_json_metadata.md) adds 226
+fixtures for enumeration, eligibility, parent ordering and joined numeric copy.
+It builds descriptors natively over supplied runtime metadata; compound types,
+real metadata discovery and writer conversion stay open.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

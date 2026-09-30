@@ -79,6 +79,10 @@ Resume with these boundaries in view:
    adds 105 construction fixtures and 36 copies joining actual factory output to
    numeric application. Metadata exports remain services; native field eligibility
    and enumeration are next boundaries.
+   [Native numeric metadata construction](notes/systems/unity_json_metadata.md)
+   now executes 226 fixtures for field eligibility/enumeration, inherited ordering
+   and joined copy over supplied metadata. Real managed discovery, compound field
+   families and writer conversion remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

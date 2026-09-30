@@ -126,6 +126,9 @@ stop, diagnose, fix, verify, then resume.
     evidence, not a false prototype or a target that fails union validation.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
+    Validate ABI arguments at the decoded operand width; byte register writes
+    preserve upper bits. Gate specialized emulator callbacks and snapshots by
+    phase, since base constructors can invoke overrides before derived state exists.
     Resolve exact class declarations before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.
     Preserve exact floating-point values when loading native timing fixtures;
