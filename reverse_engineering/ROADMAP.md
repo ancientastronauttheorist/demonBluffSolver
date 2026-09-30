@@ -63,7 +63,11 @@ Resume with these boundaries in view:
    audited, including conditional constructor-error reporting and allocation
    retention. [Core parser and parsed-tree rendering](notes/systems/unity_json_parser.md)
    now execute 89 natural inputs and eighteen controlled diagnostics. Actual
-   metadata field application and managed-object traversal remain next boundaries.
+   [Metadata adapter traversal](notes/systems/unity_json_fields.md) now executes
+   152 fixtures for direction-9 cache selection, cold initialization, descriptor
+   order and retained failures. Individual field conversion bodies and metadata
+   discovery remain supplied; writer-side traversal and managed references remain
+   next boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

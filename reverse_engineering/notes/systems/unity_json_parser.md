@@ -70,4 +70,7 @@ This extends the [FromJson gateway](unity_fromjson_gateway.md) and
 [ToJson gateway](unity_json_gateway.md). Metadata-directed field application at
 `0xA8E030`, managed-reference resolution, general object serialization at
 `0xAACA50`, allocation failures and exception unwinding remain separate boundaries.
-It adds no Assembly-CSharp method classification.
+It adds no Assembly-CSharp method classification. The subsequent
+[metadata adapter audit](unity_json_fields.md) executes cache selection and
+descriptor traversal with supplied individual field bodies; concrete field
+conversion and managed-object copy semantics remain open.

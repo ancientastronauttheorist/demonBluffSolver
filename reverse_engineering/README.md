@@ -926,7 +926,10 @@ allocation ordering and partial failures. Core parsing and field application
 remain explicit services. The [native parser and tree renderer](notes/systems/unity_json_parser.md)
 adds 89 natural input cases and eighteen controlled diagnostics, preserving
 duplicate keys, byte strings and exact numeric payloads. Metadata-directed
-managed field application remains open.
+managed field application remains open. The
+[metadata adapter audit](notes/systems/unity_json_fields.md) adds 152 fixtures for
+cache selection and native descriptor traversal while retaining individual field
+processors and metadata discovery as explicit services.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

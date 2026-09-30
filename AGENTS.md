@@ -97,7 +97,9 @@ stop, diagnose, fix, verify, then resume.
     Serialized Boolean fields may align individually; do not apply contiguous
     IL2CPP runtime offsets to asset bytes. Validate following reference IDs.
     For native PE inspection, distinguish zero-filled virtual data from file-
-    backed bytes; require a full file read before unpacking and supply runtime
+    backed bytes; get_offset_from_rva alone does not establish raw backing.
+    Check the section's raw extent before reading data slots, require a full
+    file read before unpacking and supply runtime
     globals explicitly in emulation. With fast-load PE readers, explicitly parse
     the required data directories before using their tables. Verify an unwind entry contains a queried RVA
     before treating it as that instruction's chunk.
