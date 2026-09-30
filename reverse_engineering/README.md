@@ -930,6 +930,10 @@ managed field application remains open. The
 [metadata adapter audit](notes/systems/unity_json_fields.md) adds 166 fixtures for
 cache selection and native descriptor traversal while retaining individual field
 processors and metadata discovery as explicit services.
+The [native reader registry](notes/systems/unity_json_registry.md) adds 32
+fixtures that construct all 33 handler records, the optional 34th extension,
+storage resets and retained failure prefixes. Class discovery and field
+conversion remain separate boundaries.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

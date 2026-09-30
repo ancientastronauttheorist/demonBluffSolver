@@ -68,6 +68,9 @@ Resume with these boundaries in view:
    order and retained failures. Individual field conversion bodies and metadata
    discovery remain supplied; writer-side traversal and managed references remain
    next boundaries.
+   [Native reader registry construction](notes/systems/unity_json_registry.md)
+   now executes 32 fixtures, recovering the actual handler pointers in its 33
+   ordinary records and optional extension. Class discovery remains supplied.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
