@@ -1055,7 +1055,12 @@ by these methods.
 The [Character constructor audit](notes/systems/character_constructor.md)
 adds 26 fixtures, six callback probes and eleven stopped prefixes. It verifies
 physical List allocation/publication, nonzero defaults, the empty saved string
-and restored-stack base tailcall. Scene/initializer ordering remains separate.
+and restored-stack base tailcall. Scene ordering remains separate.
+The [constructor-to-initializer join](notes/systems/character_constructor_init.md)
+now carries those produced Lists/defaults through actual initialization, Hidden
+refresh and first yield in 148 fixtures, three reuse sequences, four callback
+probes and 119 stops. Native actor-byte retention and physical List version
+changes are checked; components and scheduler handoff remain supplied.
 The [role callback publication join](notes/systems/character_role_callback.md)
 adds 185 cases and 47 exact stopped prefixes, executing the freshly installed
 closure through delayed-result construction and one explicit first yield.
