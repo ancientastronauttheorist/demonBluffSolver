@@ -155,7 +155,7 @@ stop, diagnose, fix, verify, then resume.
     phase, since base constructors can invoke overrides before derived state exists.
     Bind snapshot decoders to native storage flags; short inline strings need
     not share the pointer representation of parsed or longer strings.
-    Resolve exact class declarations before extracting dump blocks; prefix matches
+    Resolve exact type declarations, including enums, before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.
     Discover compiler-generated iterator suffixes from metadata or exact dump
     declarations; a remembered ordinal is not a verified generated class name.
