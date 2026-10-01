@@ -155,6 +155,8 @@ stop, diagnose, fix, verify, then resume.
     not share the pointer representation of parsed or longer strings.
     Resolve exact class declarations before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.
+    Discover compiler-generated iterator suffixes from metadata or exact dump
+    declarations; a remembered ordinal is not a verified generated class name.
     Preserve exact floating-point values when loading native timing fixtures;
     check parser rounding before weakening a failed exact comparison.
     Check each requested export's result before reading its file: a successful
