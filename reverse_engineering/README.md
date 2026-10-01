@@ -1038,6 +1038,11 @@ including native AddTutorial/Save and four storage reloads. It separates
 presentation reset from persisted completion reset, retains post-save-failure
 mutations and checks controller publication after a note's early return.
 Unity/event/coroutine/timing effects remain explicit services.
+The [tutorial registration audit](notes/systems/tutorial_event_wiring.md)
+adds OnEnable/OnDisable in 228 retained cases and 100 exact stopped prefixes.
+Seven event fields preserve ordered delegate tokens; generic second-cast
+failure retains the new field pointer before its barrier. Combine/Remove and
+casts remain supplied services; actual event dispatch remains separate.
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
