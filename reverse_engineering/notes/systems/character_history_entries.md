@@ -71,3 +71,22 @@ python reverse_engineering/scripts/audit_character_history_entries.py GAME_ROOT 
 ```
 
 Report: `f530404b0f3f_807de4a83df4_character_history_entries.json`.
+
+## Guarded Rust history/type replay
+
+The separate `bluff::character_history_entries` API compares 93 supported normal
+native cases/baselines and both retained five-call alias sequences in six tests.
+It preserves full Actor, physical List/count/version/backing-memory state, raw
+metadata bytes/class DWORD and service-entry snapshots. Append and last-removal
+barriers retain their different version timing, null last info is returned, and
+AL-only liveness plus u32 type patterns retain exact native widths.
+
+Same-List history/hover aliases remain supported. Distinct shared backing arrays,
+growth, signed-negative/oversized counts, empty get, mutations and failures
+reject. Declared capacity bounds every access; retained diagnostic tail storage
+does not add valid elements. Future sequence counts and whole retained snapshot
+work are reserved before maps/clones. Exact typed bindings distinguish
+CharacterTrailerInfo from CharacterData while data/register/bluff asset aliases
+and self status target remain valid. Runtime metadata/class effects, GC and
+liveness are independently verified supplied normal services. All 838 Rust
+library tests and the release build passed.

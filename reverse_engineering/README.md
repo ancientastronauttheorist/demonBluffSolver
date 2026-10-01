@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 832 Rust library tests and the release build pass.
+All 838 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1103,6 +1103,10 @@ four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;
 current-info lookup on an empty List reaches an index guard. Register-as type
 selection preserves native field reload and DWORD return width.
+Its guarded Rust caller compares 93 normal profiles and two retained alias
+sequences in six tests, preserving complete storage/Actor and barrier-time
+snapshots. Declared capacity bounds all accesses, including diagnostic tail
+retention; growth, invalid storage, mutation and failure remain rejected.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
