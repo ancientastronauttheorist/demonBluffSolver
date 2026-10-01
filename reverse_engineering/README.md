@@ -1177,10 +1177,16 @@ explicit supplied outcomes. Queue/save behavior and real scheduling are outside
 this caller contract; aggregate future snapshot work validates before cloning.
 
 The [Oracle presentation audit](notes/systems/character_oracle_presentation.md)
-adds two complete native callers in129 cases, two retained sequences and26
+adds two complete native callers in 129 cases, two retained sequences and 26
 exact stopped prefixes. Captured Acted and saved-colour recipients remain
 distinct from later field reloads; Color return-buffer and raw byte/DWORD
 gates are exact. Named game/Unity services and actual rendering remain open.
+
+The [RevealOrder presentation audit](notes/systems/reveal_order_presentation.md)
+adds two native callers in 50 cases, two retained sequences and six exact
+stopped prefixes. Init captures the order DWORD, activates the GameObject,
+then captures text before formatting and reloads its virtual class afterward.
+Unity/formatting/TMP implementations and an actual Oracle join remain open.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

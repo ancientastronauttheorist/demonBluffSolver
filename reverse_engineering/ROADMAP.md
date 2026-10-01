@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,512 classifications and 375 evidence records
+additional native timing audits. The overlay contains 1,514 classifications and 376 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -172,10 +172,16 @@ explicit supplied outcomes. Queue/save behavior and real scheduling are outside
 this caller contract; aggregate future snapshot work validates before cloning.
 
 The [Oracle presentation audit](notes/systems/character_oracle_presentation.md)
-adds two complete native callers in129 cases, two retained sequences and26
+adds two complete native callers in 129 cases, two retained sequences and 26
 exact stopped prefixes. Captured Acted and saved-colour recipients remain
 distinct from later field reloads; Color return-buffer and raw byte/DWORD
 gates are exact. Named game/Unity services and actual rendering remain open.
+
+The [RevealOrder presentation audit](notes/systems/reveal_order_presentation.md)
+adds two native callers in 50 cases, two retained sequences and six exact
+stopped prefixes. Init captures the order DWORD, activates the GameObject,
+then captures text before formatting and reloads its virtual class afterward.
+Unity/formatting/TMP implementations and an actual Oracle join remain open.
 
 Resume with these boundaries in view:
 
