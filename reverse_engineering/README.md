@@ -1044,6 +1044,11 @@ closure through delayed-result construction and one explicit first yield.
 Old and new delegates retain separate triggers; repeated invocations allocate
 distinct iterators and waits. Real role effects and scheduler admission remain
 supplied, and second resume/history/UI require separate composition evidence.
+The [history and speech publication join](notes/systems/character_role_publication.md)
+now supplies that separate evidence in 158 cases, four alias/order sequences and
+196 stopped prefixes. Native history append and Day decrement precede speech
+registration; explicit later speech resumes preserve text/saved-pointer ordering
+and the distinct trailer override. Real coroutine readiness remains unclaimed.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
