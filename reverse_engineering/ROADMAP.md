@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,506 classifications and 368 evidence records
+additional native timing audits. The overlay contains 1,508 classifications and 369 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -140,6 +140,12 @@ executes 1,728 normal combinations, additional policy/alias/callback profiles
 and 149 stopped prefixes through actual death/status/action callers. The evil
 capture is a source argument; accepted statuses store the separately supplied
 null target. Concrete role/HP/subscriber policies and real timing remain open.
+
+The [death tutorial generator join](notes/systems/tutorial_death_generators.md)
+adds both native MoveNext callers in 64 fixtures and 220 stops. Summary gates
+bypass null captures; Poison tests Corrupted rather than a death-reason field.
+Both explicitly supplied resume orders join queued presentation and two saves,
+with runtime/class/List/Unity services and real scheduling still separate.
 
 Resume with these boundaries in view:
 

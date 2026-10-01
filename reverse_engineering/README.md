@@ -1075,6 +1075,12 @@ The generator uses Character.acteds rather than its icon, then joins Show30,
 native queue unrestriction, close/hide and the later Show80/save. Explicit
 resumes and supplied services keep engine readiness outside the claim.
 
+The [death tutorial generator join](notes/systems/tutorial_death_generators.md)
+adds both native MoveNext callers in 64 fixtures and 220 stops. Summary gates
+bypass null captures; Poison tests Corrupted rather than a death-reason field.
+Both explicitly supplied resume orders join queued presentation and two saves,
+with runtime/class/List/Unity services and real scheduling still separate.
+
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
