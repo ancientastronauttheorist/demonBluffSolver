@@ -132,7 +132,11 @@ Resume with these boundaries in view:
    [Native registry setter](notes/systems/unity_preferences_setter.md) adds 132
    cases and 41 service stops. Actual signed-byte hashing, argument formatting
    and setter cleanup run through the Windows API boundary. The getter's type,
-   legacy fallback and C-string policies and provider acquisition remain open.
+   legacy fallback and C-string policies follow below; provider acquisition remains open.
+   [Native registry getter](notes/systems/unity_preferences_getter.md) adds 398
+   cases and 65 service stops, including independent size/data lookup fallback,
+   binary versus ASCII-string policy, NUL truncation and authored race responses.
+   Runtime/API outcomes and provider acquisition remain explicit services.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

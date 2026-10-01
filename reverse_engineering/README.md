@@ -994,6 +994,10 @@ The [registry setter](notes/systems/unity_preferences_setter.md) adds 132 cases
 and 41 service stops with actual signed-byte hashing and key formatting. Values
 use an explicit binary count; Windows key names truncate at embedded NULs.
 Registry APIs and provider acquisition remain supplied services.
+The [registry getter](notes/systems/unity_preferences_getter.md) adds 398 cases
+and 65 service stops for hashed/legacy lookup, type checks and data-read races.
+Accepted stored values truncate at NUL; legacy string values require every
+returned byte to be ASCII. Windows outcomes and provider acquisition remain services.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
