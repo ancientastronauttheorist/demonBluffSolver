@@ -985,7 +985,11 @@ cached lookup, empty defaults and failed-write exception ordering. Internal-call
 resolution, platform storage and exception construction/throw remain services.
 The [preference lookup join](notes/systems/saved_game_preference_lookup.md) now
 verifies both shipped registration pairs and ten native fallback/precedence
-cases. Engine preference entries and platform storage remain open.
+cases. Platform storage remains open; engine entry execution follows below.
+The [engine preference entries](notes/systems/unity_preferences_entries.md) now
+execute native conversion and chained cleanup in 380 cases and 42 service stops.
+Length-aware entry interfaces preserve embedded NULs; backend storage and other
+allocator modes remain separate boundaries.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

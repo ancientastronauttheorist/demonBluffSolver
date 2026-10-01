@@ -123,7 +123,12 @@ Resume with these boundaries in view:
    The [preference registration join](notes/systems/saved_game_preference_lookup.md)
    verifies both exact requests against shipped bare names and ten native lookup
    cases. Next engine entries are `0xF3150` (GetString) and `0xF22B0` (TrySetSetString);
-   their bodies, marshalling and platform storage remain open.
+   their native entry execution follows below; registry processing and platform
+   storage remain open.
+   [Engine preference entries](notes/systems/unity_preferences_entries.md) now
+   execute their native conversion and chained cleanup in 380 cases and 42
+   service stops. Backend registry processing and other allocator modes remain
+   open. Entry interfaces preserve explicit lengths, including embedded NULs.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
