@@ -1063,6 +1063,12 @@ Explicit native resumes retain wait bits and the same restricted queue through
 callback unrestriction, close/hide, queue processing and two saves. Real elapsed
 time, engine scheduling and event admission remain outside this composition.
 
+The [CharacterInfo tutorial join](notes/systems/tutorial_character_info_join.md)
+adds actual publication and generator execution in 15 fixtures and 164 stops.
+The generator uses Character.acteds rather than its icon, then joins Show30,
+native queue unrestriction, close/hide and the later Show80/save. Explicit
+resumes and supplied services keep engine readiness outside the claim.
+
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
