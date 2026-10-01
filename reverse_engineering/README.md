@@ -1104,6 +1104,12 @@ adds six complete callers in 112 cases, four reuse sequences, one supplied UI
 callback and 25 exact stopped prefixes. It preserves native iterator captures,
 float/trigger bits and immediate speech/UI order; registration alone does not
 establish generator execution or readiness.
+The [Character presentation helper audit](notes/systems/character_presentation_helpers.md)
+adds six complete callers in 311 cases, two retained sequences and 15 stopped
+prefixes. Exact byte gates, field reloads and transform bits retain partial
+UI writes. CharacterView/CardHighlight bodies and Unity rendering are supplied
+boundaries rather than implementations established by these callers.
+
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;
