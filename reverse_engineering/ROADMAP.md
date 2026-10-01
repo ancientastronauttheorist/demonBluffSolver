@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,508 classifications and 369 evidence records
+additional native timing audits. The overlay contains 1,510 classifications and 370 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -146,6 +146,12 @@ adds both native MoveNext callers in 64 fixtures and 220 stops. Summary gates
 bypass null captures; Poison tests Corrupted rather than a death-reason field.
 Both explicitly supplied resume orders join queued presentation and two saves,
 with runtime/class/List/Unity services and real scheduling still separate.
+
+The [hover/description-hide audit](notes/systems/character_description_hide.md)
+adds two complete callers in 52 cases, two retained sequences and nine stops.
+It preserves the captured left Acted, later nullable speech reload and physical
+Action dispatch order. Actor memory diagnostics do not infer valid sentinel
+objects; game-owned presentation and Unity/runtime services remain supplied.
 
 Resume with these boundaries in view:
 

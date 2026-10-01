@@ -1152,6 +1152,12 @@ and 149 stopped prefixes through actual death/status/action callers. The evil
 capture is a source argument; accepted statuses store the separately supplied
 null target. Concrete role/HP/subscriber policies and real timing remain open.
 
+The [hover/description-hide audit](notes/systems/character_description_hide.md)
+adds two complete callers in 52 cases, two retained sequences and nine stops.
+It preserves the captured left Acted, later nullable speech reload and physical
+Action dispatch order. Actor memory diagnostics do not infer valid sentinel
+objects; game-owned presentation and Unity/runtime services remain supplied.
+
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;
