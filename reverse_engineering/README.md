@@ -1134,6 +1134,12 @@ snapshots preserve float/trigger bits, null/self captures and physical aliases.
 Supplied registration identities do not infer a void caller return; aggregate
 future snapshot budgets and typed identities validate before cloning.
 
+The [CharacterView presentation join](notes/systems/character_view_presentation.md)
+adds four native bodies in 193 standalone cases, 22 disguise joins, two retained
+sequences and 92 stopped prefixes. Native colour, sprite and activation requests
+preserve physical aliases and partial writes; DOTween, renderer, text and data
+art services remain supplied. Concurrent array-size races remain unclaimed.
+
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;
