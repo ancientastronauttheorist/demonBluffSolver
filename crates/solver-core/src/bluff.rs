@@ -18,6 +18,7 @@ pub mod pool_ledger_bridge;
 pub mod unique_source_composition;
 pub mod manage_setup_caller;
 pub mod character_initialization;
+pub mod character_refresh;
 pub mod manage_pool_composition;
 pub mod setup_initialization_batch;
 pub mod setup_action_bridge;

@@ -1,15 +1,15 @@
 # Full Reconstruction Roadmap
 
-## Continuation checkpoint: 2026-09-30 setup composition
+## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,444 classifications and 340 evidence records
+additional native timing audits. The overlay contains 1,444 classifications and 341 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 798 Rust library tests; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 804 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -21,8 +21,12 @@ bridge preserves joint probabilities and construction failure mass under explici
 identity, stable-script and ordered-selector provenance. See [setup caller](notes/systems/manage_setup_caller.md),
 [unique sources](notes/systems/unique_source_composition.md),
 [initialization](notes/systems/character_initialization.md), and
-[pool ledger bridge](notes/systems/pool_ledger_bridge.md). RefreshCharacter
-currently has only a Hidden-state joined slice and remains explicitly unresolved.
+[pool ledger bridge](notes/systems/pool_ledger_bridge.md). The complete standalone
+[RefreshCharacter caller](notes/systems/character_refresh.md) now executes 2,094
+fixtures, ten callback mutations and twenty controlled stops. Its guarded Rust
+replay matches 1,975 supported normal fixtures and preserves physical data/UI
+aliases. The existing initializer join remains scoped to Hidden state; arbitrary
+post-initializer states and scheduler admission still require composition evidence.
 
 The actual [Manage pool composition](notes/systems/manage_pool_composition.md)
 now joins both builders and their sources in 760 native fixtures. A second
