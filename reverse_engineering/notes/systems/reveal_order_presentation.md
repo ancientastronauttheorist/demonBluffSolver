@@ -125,3 +125,13 @@ exception gateway are supplied named boundaries. The constructor is omitted;
 component references are declared serialized/runtime fixture inputs. This audit
 closes the two standalone RevealOrder caller bodies without claiming an actual
 Oracle-to-RevealOrder joined execution, renderer effects or service internals.
+
+## Guarded Rust caller replay
+
+The guarded Rust [RevealOrder replay](notes/systems/reveal_order_presentation.md)
+compares 23 normal native profiles and two retained sequences in 4 tests.
+Physical records, supplied effects, order bits and captured text retain exact
+service-entry chronology. Future snapshot work validates before cloning;
+formatting, Unity/TMP implementation and actual Oracle composition remain open.
+
+4 guarded Rust tests compare 23 supported normal native RevealOrder profiles and two retained four-call sequences. Complete represented physical records and supplied service bookkeeping compare modeled service-entry snapshots and final state. Low-DWORD order capture retains upper caller-slot bits; Init changes DL only, activates before text capture, formats before guarded setter, then reads physical TMP class/MethodInfo. Formatter results and Unity/TMP effects are independently supplied. Known nominal identities and complete future text/record/snapshot budgets validate before maps/clones. Unconsumed sentinel bytes and fixture-relative stack addresses remain diagnostic projections. Null owner, mutation, stopped/failure paths, renderer and actual Oracle composition are excluded.
