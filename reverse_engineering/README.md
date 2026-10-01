@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 838 Rust library tests and the release build pass.
+All 843 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1051,6 +1051,12 @@ adds five new caller definitions in 445 cases and 179 exact stops. Native
 hide callbacks process queues by the count of restricted records, then show
 before removal. Save failure retains earlier note/completion/queue effects;
 coroutine publication and explicit callback invocation do not prove readiness.
+The [tutorial handler publication audit](notes/systems/tutorial_handler_publication.md)
+adds four complete handlers in 55 fixtures and 42 exact stopped prefixes.
+Start and kill handlers retain ordered routine captures, including reversed
+poison fields. Level handling rereads gameplay after publication callbacks;
+runtime services and generated routine execution remain explicit boundaries.
+
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and

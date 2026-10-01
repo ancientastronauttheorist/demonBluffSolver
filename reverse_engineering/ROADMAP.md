@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,485 classifications and 360 evidence records
+additional native timing audits. The overlay contains 1,489 classifications and 361 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 838 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 843 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -92,6 +92,12 @@ Its guarded Rust caller compares 93 normal profiles and two retained alias
 sequences in six tests, preserving complete storage/Actor and barrier-time
 snapshots. Declared capacity bounds all accesses, including diagnostic tail
 retention; growth, invalid storage, mutation and failure remain rejected.
+
+The [tutorial handler publication audit](notes/systems/tutorial_handler_publication.md)
+adds four complete handlers in 55 fixtures and 42 exact stopped prefixes.
+Start and kill handlers retain ordered routine captures, including reversed
+poison fields. Level handling rereads gameplay after publication callbacks;
+runtime services and generated routine execution remain explicit boundaries.
 
 Resume with these boundaries in view:
 
