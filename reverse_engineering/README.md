@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 822 Rust library tests and the release build pass.
+All 827 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1066,6 +1066,10 @@ now carries those produced Lists/defaults through actual initialization, Hidden
 refresh and first yield in 148 fixtures, three reuse sequences, four callback
 probes and 119 stops. Native actor-byte retention and physical List version
 changes are checked; components and scheduler handoff remain supplied.
+Its guarded Rust producer replay compares 153 normal profiles in five tests,
+retaining complete intermediate/final Actor and physical storage/UI state.
+Constructor and refresh projections remain separate; runtime traces and real
+readiness are not inferred.
 The [role callback publication join](notes/systems/character_role_callback.md)
 adds 185 cases and 47 exact stopped prefixes, executing the freshly installed
 closure through delayed-result construction and one explicit first yield.

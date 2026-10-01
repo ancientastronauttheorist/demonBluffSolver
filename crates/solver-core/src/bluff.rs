@@ -18,6 +18,7 @@ pub mod pool_ledger_bridge;
 pub mod unique_source_composition;
 pub mod manage_setup_caller;
 pub mod character_initialization;
+pub mod character_constructor_init;
 pub mod character_refresh;
 pub mod character_refresh_view;
 pub mod character_role_publication;

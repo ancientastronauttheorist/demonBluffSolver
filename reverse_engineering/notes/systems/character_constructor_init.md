@@ -127,3 +127,21 @@ Reproduce with Unicorn 2.1.4 and the private emulation PYTHONPATH:
 ```powershell
 python reverse_engineering/scripts/audit_character_constructor_init.py GAME_ROOT DUMPER_ROOT --output reverse_engineering/reports/f530404b0f3f_807de4a83df4_character_constructor_init.json
 ```
+
+## Guarded Rust producer replay
+
+The separate `bluff::character_constructor_init` module compares 153 supported
+normal profiles: 148 fixtures, three retained sequences and two cold baselines.
+Five focused tests retain complete intermediate/final Actor fields, physical
+Lists/defaults, old storage, status backing values, UI controls and continuations.
+Constructor APIs and the initializer/RefreshCharacter/RefreshView semantic
+projections are compared separately; no merged raw metadata trace is claimed.
+
+Serialized components and transform/template bindings are explicit valid inputs.
+Base, constructors, callbacks and UI are inert; role clone outcomes and synchronous
+first yield require independent provenance. New empty Lists share their supplied
+static array, while retained backing arrays are unaliased. Known typed/callback
+collisions and fresh allocation aliases reject. Whole-producer projection work is
+reserved before maps/clones. Scene loading, mutations/failures, later resumes and
+real readiness remain outside the contract. All 827 Rust library tests and the
+release build passed.

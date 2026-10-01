@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,476 classifications and 355 evidence records
+additional native timing audits. The overlay contains 1,476 classifications and 356 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 822 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 827 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -49,6 +49,10 @@ executes 148 fixtures, three reuse sequences, four callback probes and 119 exact
 stops. Constructor-produced physical Lists/defaults feed actual initialization,
 Hidden refresh and first yield without replacement; scene loading and real
 scheduler readiness remain supplied boundaries.
+Its guarded Rust producer replay compares 153 normal profiles in five tests,
+retaining complete intermediate/final Actor and physical storage/UI state.
+Constructor and refresh projections remain separate; runtime traces and real
+readiness are not inferred.
 
 The actual [Manage pool composition](notes/systems/manage_pool_composition.md)
 now joins both builders and their sources in 760 native fixtures. A second
