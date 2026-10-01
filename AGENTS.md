@@ -59,8 +59,9 @@ stop, diagnose, fix, verify, then resume.
     referenced path's existence without assuming every source is a single file.
     Resolve and validate every coverage target before appending evidence; a new
     partial method audit can require an explicit unresolved classification.
-    Do not guess filenames or repeat an unexpanded wildcard search. Read the
-    current text before preparing an exact-match patch to a changed guide, and
+    Do not guess filenames or repeat an unexpanded wildcard search. Inspect the
+    current read result before preparing an exact-match patch to a changed guide; use
+    its returned lines rather than remembered fragments, and
     keep patch hunks in file order and omit empty placeholder hunks.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
     For Unicode diagnostics, use ASCII-safe JSON or explicitly configure UTF-8
@@ -109,7 +110,8 @@ stop, diagnose, fix, verify, then resume.
     conversion bodies to hide missing thread-local initialization. With fast-load PE readers, explicitly parse
     the required data directories before using their tables. Verify an unwind entry contains a queried RVA
     before treating it as that instruction's chunk. Pointer-backed leaf entries
-    can lack unwind records or saved Ghidra definitions; verify their decoded
+    can lack unwind records or saved Ghidra definitions; check lookup presence
+    before selecting an entry, and verify their decoded
     wrapper before requesting a containing-function export.
     A method can span adjacent unwind chunks; the first chunk's end is not
     necessarily the method's end. Resolve the next verified managed entry.
@@ -140,7 +142,9 @@ stop, diagnose, fix, verify, then resume.
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
-    decompiler parameters or constructor return values. Gate callbacks and snapshots by
+    decompiler parameters or constructor return values. Author failed API output
+    effects explicitly; a failure status alone does not specify changes to
+    input capacity/type fields that a retry may consume. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
     Bind snapshot decoders to native storage flags; short inline strings need
     not share the pointer representation of parsed or longer strings.

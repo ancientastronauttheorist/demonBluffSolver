@@ -140,8 +140,10 @@ Resume with these boundaries in view:
    [Native provider acquisition](notes/systems/unity_preferences_provider.md)
    adds 163 cases, 14 entry joins and 152 stops for cached configuration, both
    handles, path conversion and invalidation/retry. [Cold token discovery](notes/systems/unity_preferences_token.md)
-   adds 87 cases, five cache sequences and 17 stops. Joined cold discovery,
-   runtime configuration loading and actual OS outcomes remain separate boundaries.
+   adds 87 cases, five cache sequences and 17 stops. [Joined cold discovery](notes/systems/unity_preferences_cold_provider.md)
+   adds 25 provider cases, four entry joins and 99 stops with actual predicate,
+   acquisition and storage-entry execution in one emulator. Runtime configuration
+   loading and actual OS outcomes remain separate boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

@@ -1003,6 +1003,9 @@ adds 163 standalone cases, 14 entry joins and 152 service stops for path changes
 read/write acquisition and cache recovery. [Cold token discovery](notes/systems/unity_preferences_token.md)
 adds 87 cases, five cache sequences and 17 stops. Actual OS services and runtime
 configuration initialization remain explicit boundaries.
+The [cold-provider composition](notes/systems/unity_preferences_cold_provider.md)
+adds 25 provider cases, four entry joins and 99 stops in one emulator, retaining
+token-cache behavior through native handle recovery. Windows outcomes remain supplied.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

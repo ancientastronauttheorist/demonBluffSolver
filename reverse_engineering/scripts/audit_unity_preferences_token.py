@@ -38,6 +38,8 @@ class TokenServices:
         self.token_allocated = False
 
     def token_snapshot(self):
+        # Release lists are call histories; allocated is the latest allocation
+        # outcome, not a model of real Windows ownership after release.
         return {'cached_value': self.rq(self.base + CACHE) & 0xFFFFFFFF,
                 'api_calls': self.token_api_calls.copy(), 'allocated': self.token_allocated,
                 'closed_handles': self.token_closed_handles.copy(), 'freed_buffers': self.token_freed_buffers.copy()}

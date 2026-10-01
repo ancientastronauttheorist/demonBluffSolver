@@ -57,11 +57,15 @@ the next call then skips discovery. This distinction is executed in repeated
 calls rather than inferred from the return value.
 
 A nonnull token handle is closed even when the authored open operation failed
-but wrote a handle. An allocated buffer is freed after both successful and
-failed data queries. `CloseHandle` and `LocalFree` return values are ignored:
+but wrote a handle. An allocated buffer is passed to `LocalFree` after both
+successful and failed data queries. `CloseHandle` and `LocalFree` return values are ignored:
 fixtures exercise their failures without changing the cached result. A
 successfully obtained subauthority of `0xFFFFFFFF` itself leaves the sentinel,
 so the next call discovers again.
+
+Snapshot `closed_handles` and `freed_buffers` fields record attempted API calls,
+including authored failures. `allocated` records the latest allocation result;
+it is not updated by release calls and does not claim current OS ownership.
 
 BOOL and last-error results are consumed at 32-bit widths. Authored services
 poison upper `RAX`; native `test eax,eax` and DWORD stores still behave exactly.
