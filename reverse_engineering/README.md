@@ -990,6 +990,10 @@ The [engine preference entries](notes/systems/unity_preferences_entries.md) now
 execute native conversion and chained cleanup in 380 cases and 42 service stops.
 Length-aware entry interfaces preserve embedded NULs; backend storage and other
 allocator modes remain separate boundaries.
+The [registry setter](notes/systems/unity_preferences_setter.md) adds 132 cases
+and 41 service stops with actual signed-byte hashing and key formatting. Values
+use an explicit binary count; Windows key names truncate at embedded NULs.
+Registry APIs and provider acquisition remain supplied services.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

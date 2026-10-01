@@ -152,6 +152,8 @@ stop, diagnose, fix, verify, then resume.
     An export batch may abort at its first missing target; require a per-target
     completion record before reading any subsequent requested output. Inspect
     those records before issuing a separate file read, even when exit status is zero.
+    Do not batch a process wait with a dependent output read; inspect the wait
+    result first and read only targets explicitly reported complete.
     Pass explicit `0x`-prefixed RVAs to `DumpContaining`; bare numeric strings
     can select decimal addresses and bare hexadecimal letters fail parsing.
     For omitted initializer or virtual functions, resolve entries from their native pointer

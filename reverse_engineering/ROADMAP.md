@@ -129,6 +129,10 @@ Resume with these boundaries in view:
    execute their native conversion and chained cleanup in 380 cases and 42
    service stops. Backend registry processing and other allocator modes remain
    open. Entry interfaces preserve explicit lengths, including embedded NULs.
+   [Native registry setter](notes/systems/unity_preferences_setter.md) adds 132
+   cases and 41 service stops. Actual signed-byte hashing, argument formatting
+   and setter cleanup run through the Windows API boundary. The getter's type,
+   legacy fallback and C-string policies and provider acquisition remain open.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
