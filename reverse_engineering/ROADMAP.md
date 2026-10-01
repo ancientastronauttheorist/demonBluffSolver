@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,495 classifications and 362 evidence records
+additional native timing audits. The overlay contains 1,500 classifications and 363 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -104,6 +104,12 @@ adds six complete callers in 311 cases, two retained sequences and 15 stopped
 prefixes. Exact byte gates, field reloads and transform bits retain partial
 UI writes. CharacterView/CardHighlight bodies and Unity rendering are supplied
 boundaries rather than implementations established by these callers.
+
+The [Character tutorial generator join](notes/systems/tutorial_character_generators.md)
+adds five game-owned definitions in 47 fixtures and 206 exact stopped prefixes.
+Explicit native resumes retain wait bits and the same restricted queue through
+callback unrestriction, close/hide, queue processing and two saves. Real elapsed
+time, engine scheduling and event admission remain outside this composition.
 
 Resume with these boundaries in view:
 

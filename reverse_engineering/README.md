@@ -1057,6 +1057,12 @@ Start and kill handlers retain ordered routine captures, including reversed
 poison fields. Level handling rereads gameplay after publication callbacks;
 runtime services and generated routine execution remain explicit boundaries.
 
+The [Character tutorial generator join](notes/systems/tutorial_character_generators.md)
+adds five game-owned definitions in 47 fixtures and 206 exact stopped prefixes.
+Explicit native resumes retain wait bits and the same restricted queue through
+callback unrestriction, close/hide, queue processing and two saves. Real elapsed
+time, engine scheduling and event admission remain outside this composition.
+
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
