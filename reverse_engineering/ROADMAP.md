@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,445 classifications and 344 evidence records
+additional native timing audits. The overlay contains 1,446 classifications and 345 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -173,6 +173,11 @@ Resume with these boundaries in view:
    trips and ten controlled stops. Malformed binary UTF-8 returns cached empty
    before JSON and reaches native fresh-save construction. Cross-emulator text
    is transferred without runtime identity or allocation ownership.
+   The [tutorial-reset caller join](notes/systems/reset_tutorial_button_join.md)
+   adds 26 cases and ten controlled stops, following the exact ProjectContext
+   chain into native reset, JSON and storage. Persistence failures retain the
+   already-cleared tutorial List. Singleton production and Unity Button routing
+   remain explicit boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

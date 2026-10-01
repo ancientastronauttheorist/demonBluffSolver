@@ -1022,6 +1022,11 @@ adds 24 direct constructors, 48 getters, twenty Loads, two round trips and ten
 stops. Malformed binary UTF-8 takes the native fresh-save branch before JSON;
 the getter's earlier NUL truncation and REG_SZ ASCII policy remain distinct.
 Adapters transfer text only, preserving separate object and allocator identities.
+The [tutorial-reset caller join](notes/systems/reset_tutorial_button_join.md)
+adds 26 cases and ten controlled stops, following ProjectContext through the
+native reset, JSON and storage pipeline. Failed persistence retains the earlier
+clear; unlocked-character values and versions remain unchanged. Singleton
+production and Unity Button event routing remain supplied.
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
