@@ -1006,6 +1006,10 @@ configuration initialization remain explicit boundaries.
 The [cold-provider composition](notes/systems/unity_preferences_cold_provider.md)
 adds 25 provider cases, four entry joins and 99 stops in one emulator, retaining
 token-cache behavior through native handle recovery. Windows outcomes remain supplied.
+The [save/storage value composition](notes/systems/saved_game_storage_join.md)
+adds 43 cases and 22 outer service stops, joining native save/mutation callers,
+the JSON field pipeline and actual preference provider/getter/setter execution.
+Registry contents and cross-emulator values remain explicit authored boundaries.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
