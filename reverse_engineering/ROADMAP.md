@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,510 classifications and 374 evidence records
+additional native timing audits. The overlay contains 1,512 classifications and 375 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -111,7 +111,7 @@ Explicit native resumes retain wait bits and the same restricted queue through
 callback unrestriction, close/hide, queue processing and two saves. Real elapsed
 time, engine scheduling and event admission remain outside this composition.
 
-Its guarded Rust factory/direct speech replay compares 116 supported normal
+The guarded Rust factory/direct speech replay compares 116 supported normal
 profiles and retained sequences in seven tests. Complete Actor/iterator/UI
 snapshots preserve float/trigger bits, null/self captures and physical aliases.
 Supplied registration identities do not infer a void caller return; aggregate
@@ -153,23 +153,29 @@ It preserves the captured left Acted, later nullable speech reload and physical
 Action dispatch order. Actor memory diagnostics do not infer valid sentinel
 objects; game-owned presentation and Unity/runtime services remain supplied.
 
-Its guarded Rust standalone replay compares 166 normal native profiles in six
+The guarded Rust CharacterView replay compares 166 normal native profiles in six
 tests, including every service-entry snapshot and final modeled state. All View
 fields and physical UI aliases retain exact colour/float/byte/DWORD semantics;
 future snapshot work is bounded before cloning. Disguise joins, mutations,
 failures, renderer behavior and scheduling remain outside the contract.
 
-Its guarded Rust replay compares 42 normal native contexts and two retained
+The guarded Rust hover/description-hide replay compares 42 normal native contexts and two retained
 sequences in five tests. It preserves the full supplied logical Actor, raw byte
 gates, nullable speech and physical selected Action identity/target/MethodInfo.
 Service snapshots compare the modeled projection; callable pointers, runtime
 internals and diagnostic sentinel references remain supplied provenance.
 
-The guarded Rust death-generator replay compares 48 native profiles in seven
+The guarded Rust [death-generator replay](notes/systems/tutorial_death_show_requests.md) compares 48 native profiles in seven
 tests, including full represented physical bytes, wait/state/current captures
 and observed Show arguments. Runtime, List, transform and Show acceptance are
 explicit supplied outcomes. Queue/save behavior and real scheduling are outside
 this caller contract; aggregate future snapshot work validates before cloning.
+
+The [Oracle presentation audit](notes/systems/character_oracle_presentation.md)
+adds two complete native callers in129 cases, two retained sequences and26
+exact stopped prefixes. Captured Acted and saved-colour recipients remain
+distinct from later field reloads; Color return-buffer and raw byte/DWORD
+gates are exact. Named game/Unity services and actual rendering remain open.
 
 Resume with these boundaries in view:
 
