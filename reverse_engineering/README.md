@@ -1046,6 +1046,10 @@ complete field leaves in 146 fixtures, five barrier stops and four retained
 setter/getter sequences. Raw pointers, low-DWORD enum widths and unrelated actor
 bytes are checked; runtime creation and delegate invocation are not performed
 by these methods.
+The [Character constructor audit](notes/systems/character_constructor.md)
+adds 26 fixtures, six callback probes and eleven stopped prefixes. It verifies
+physical List allocation/publication, nonzero defaults, the empty saved string
+and restored-stack base tailcall. Scene/initializer ordering remains separate.
 The [role callback publication join](notes/systems/character_role_callback.md)
 adds 185 cases and 47 exact stopped prefixes, executing the freshly installed
 closure through delayed-result construction and one explicit first yield.

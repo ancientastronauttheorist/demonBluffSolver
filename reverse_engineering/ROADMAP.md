@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,460 classifications and 349 evidence records
+additional native timing audits. The overlay contains 1,461 classifications and 350 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -39,6 +39,11 @@ The [Character field surface](notes/systems/character_fields.md) executes
 thirteen exact getters/setters in 146 cases, five stopped barriers and four
 retained sequences. These leaves preserve raw references and enum widths;
 `CreateRuntimeData` stores its argument without allocation or initialization.
+The complete [Character constructor](notes/systems/character_constructor.md)
+adds 26 fixtures, six callback probes and eleven stops, executing all 46 native
+instructions. It publishes two distinct List allocations, one-use/act defaults
+and the empty saved string before its supplied MonoBehaviour base gateway.
+Scene ordering, serialized component production and initializer joins remain open.
 
 The actual [Manage pool composition](notes/systems/manage_pool_composition.md)
 now joins both builders and their sources in 760 native fixtures. A second
