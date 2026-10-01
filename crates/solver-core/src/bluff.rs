@@ -24,6 +24,7 @@ pub mod character_refresh_view;
 pub mod character_role_publication;
 pub mod character_history_entries;
 pub mod character_publication_entries;
+pub mod character_view_presentation;
 pub mod saved_game_info;
 pub mod tutorial_event_wiring;
 pub mod tutorial_handler_publication;

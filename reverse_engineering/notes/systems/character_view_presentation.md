@@ -111,3 +111,13 @@ python reverse_engineering/scripts/audit_character_view_presentation.py GAME_ROO
 Report: `f530404b0f3f_807de4a83df4_character_view_presentation.json`.
 Two independent final producers emitted identical 13,321,805-byte reports
 (SHA-256 `6e63e4d368df750087ca40a6fd17120311ab5fb3ea0db78453d8cbb1ecd4e083`).
+
+## Guarded Rust replay
+
+Its guarded Rust standalone replay compares 166 normal native profiles in six
+tests, including every service-entry snapshot and final modeled state. All View
+fields and physical UI aliases retain exact colour/float/byte/DWORD semantics;
+future snapshot work is bounded before cloning. Disguise joins, mutations,
+failures, renderer behavior and scheduling remain outside the contract.
+
+Six guarded Rust tests compare 166 supported normal standalone native CharacterView profiles, exact service-entry snapshots and final modeled states. All declared View fields, physical Image/GameObject aliases, raw metadata/class widths, Color/float/DL/type bits and retained unconsumed ranges survive. Complete future snapshot work validates before maps/clones. Named UI/text/art/DOTween/runtime services remain independently supplied; native mutations, stops, disguise joins, renderer and scheduling are excluded.
