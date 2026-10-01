@@ -1081,6 +1081,11 @@ The separate guarded Rust replay compares 78 supported normal fixtures/baselines
 and two distinct-record chronology sequences in five tests. Physical aliases,
 UTF-16 units, wrapping uses and UI order are retained; growth, mutations, failures
 and unsupported resume schedules reject atomically.
+The [factory and direct speech entry audit](notes/systems/character_publication_entries.md)
+adds six complete callers in 112 cases, four reuse sequences, one supplied UI
+callback and 25 exact stopped prefixes. It preserves native iterator captures,
+float/trigger bits and immediate speech/UI order; registration alone does not
+establish generator execution or readiness.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
