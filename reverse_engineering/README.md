@@ -1170,6 +1170,12 @@ gates, nullable speech and physical selected Action identity/target/MethodInfo.
 Service snapshots compare the modeled projection; callable pointers, runtime
 internals and diagnostic sentinel references remain supplied provenance.
 
+The guarded Rust death-generator replay compares 48 native profiles in seven
+tests, including full represented physical bytes, wait/state/current captures
+and observed Show arguments. Runtime, List, transform and Show acceptance are
+explicit supplied outcomes. Queue/save behavior and real scheduling are outside
+this caller contract; aggregate future snapshot work validates before cloning.
+
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;

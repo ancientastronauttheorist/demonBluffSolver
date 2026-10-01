@@ -29,6 +29,7 @@ pub mod character_description_hide;
 pub mod saved_game_info;
 pub mod tutorial_event_wiring;
 pub mod tutorial_handler_publication;
+pub mod tutorial_death_generators;
 pub mod manage_pool_composition;
 pub mod setup_initialization_batch;
 pub mod setup_action_bridge;
