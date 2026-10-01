@@ -1090,6 +1090,11 @@ adds six complete callers in 112 cases, four reuse sequences, one supplied UI
 callback and 25 exact stopped prefixes. It preserves native iterator captures,
 float/trigger bits and immediate speech/UI order; registration alone does not
 establish generator execution or readiness.
+The [history/type caller audit](notes/systems/character_history_entries.md) adds
+four complete callers in 116 cases, two retained alias sequences, one supplied
+callback and 12 exact stops. Append and last-removal version/barrier order differ;
+current-info lookup on an empty List reaches an index guard. Register-as type
+selection preserves native field reload and DWORD return width.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

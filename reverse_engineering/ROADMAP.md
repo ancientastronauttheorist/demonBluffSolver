@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,476 classifications and 356 evidence records
+additional native timing audits. The overlay contains 1,480 classifications and 357 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -83,6 +83,11 @@ adds six complete callers in 112 cases, four reuse sequences, one supplied UI
 callback and 25 exact stops. Native captures preserve float/trigger bits; direct
 speech activates UI before reloading its component. Registration remains supplied
 and does not imply generator execution or readiness.
+The [history/type caller audit](notes/systems/character_history_entries.md) adds
+four complete callers in 116 cases, two retained alias sequences, one supplied
+callback and 12 exact stops. Append and last-removal version/barrier order differ;
+current-info lookup on an empty List reaches an index guard. Register-as type
+selection preserves native field reload and DWORD return width.
 
 Resume with these boundaries in view:
 
