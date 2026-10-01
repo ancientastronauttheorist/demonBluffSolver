@@ -1011,6 +1011,13 @@ adds 43 cases and 22 outer service stops, joining native save/mutation callers,
 the JSON field pipeline and actual preference provider/getter/setter execution.
 Registry contents and cross-emulator values remain explicit authored boundaries.
 
+The [exported IL2CPP string constructors](notes/systems/il2cpp_string_creation.md)
+execute native UTF-8 validation/conversion and managed UTF-16 construction in
+720 cases and seven controlled stops. Malformed UTF-8 returns cached empty,
+discarding a valid prefix. Explicit-length construction retains embedded NULs;
+the C-string wrappers truncate first. GC, class globals and allocator services
+remain supplied, and this runtime audit adds no Assembly-CSharp classification.
+
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
 native cases for mode publication, initialization, state changes, catalogue

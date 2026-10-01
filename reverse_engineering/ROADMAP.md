@@ -153,6 +153,11 @@ Resume with these boundaries in view:
    setter bodies in 43 cases and 22 outer service stops. Runtime construction,
    object identity, private List versions and actual OS outcomes remain separate
    boundaries; the adapters transfer only public values.
+   [Exported runtime string construction](notes/systems/il2cpp_string_creation.md)
+   now executes native validation/conversion, temporary wide-string callers and
+   managed UTF-16 construction in 720 cases and seven controlled stops. Malformed
+   UTF-8 returns cached empty rather than replacement characters. Runtime class
+   discovery, GC, arbitrary pointers and overflow remain explicit boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
