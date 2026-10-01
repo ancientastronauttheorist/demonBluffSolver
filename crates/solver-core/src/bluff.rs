@@ -23,6 +23,7 @@ pub mod character_refresh;
 pub mod character_refresh_view;
 pub mod character_role_publication;
 pub mod saved_game_info;
+pub mod tutorial_event_wiring;
 pub mod manage_pool_composition;
 pub mod setup_initialization_batch;
 pub mod setup_action_bridge;

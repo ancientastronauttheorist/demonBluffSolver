@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,480 classifications and 357 evidence records
+additional native timing audits. The overlay contains 1,480 classifications and 358 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 827 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 832 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -234,6 +234,9 @@ Resume with these boundaries in view:
    stops. Seven event slots retain physical delegate identity/order, including
    a generic second-cast failure after pointer storage and before its barrier.
    Combine/Remove/casts are supplied; automatic handler dispatch remains open.
+   Its guarded Rust caller compares 226 normal profiles and four cast stops in
+   five tests, retaining all 29 fields and exact physical/header/pointer order.
+   Supplied delegate outcomes do not implement CLR multicast or event dispatch.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

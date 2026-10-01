@@ -105,3 +105,19 @@ The separately verified
 [tutorial persistence join](tutorial_persistence_join.md) reconstructs the
 EnableTutorial target's normal caller chain into Note.Show, AddTutorial and
 Save; it does not establish automatic dispatch from these event registrations.
+
+## Guarded Rust registration replay
+
+The separate `bluff::tutorial_event_wiring` API compares 226 normal native
+profiles/baselines and four separately verified cast failures in five tests.
+It retains all 29 static fields, physical delegates and headers, exact target/
+MethodInfo bindings, raw metadata bytes, unchanged class DWORD and complete
+per-call/service-entry snapshots. Pointer-width casts and plain Action header
+equality preserve the native partial store before a second-cast failure.
+
+Combine/Remove, constructors and casts are independently supplied outcomes,
+including their exact returned/created physical tokens. No multicast algorithm
+or event invocation is implemented. Normal and native-cast-stop contracts have
+separate guards; arbitrary runtime failures reject. Retained input/future records,
+invocation slots and full snapshot work are reserved before maps/clones.
+All 832 Rust library tests and the release build passed.

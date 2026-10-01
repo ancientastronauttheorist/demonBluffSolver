@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 827 Rust library tests and the release build pass.
+All 832 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1043,6 +1043,9 @@ adds OnEnable/OnDisable in 228 retained cases and 100 exact stopped prefixes.
 Seven event fields preserve ordered delegate tokens; generic second-cast
 failure retains the new field pointer before its barrier. Combine/Remove and
 casts remain supplied services; actual event dispatch remains separate.
+Its guarded Rust caller compares 226 normal profiles and four cast stops in
+five tests, retaining all 29 fields and exact physical/header/pointer order.
+Supplied delegate outcomes do not implement CLR multicast or event dispatch.
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
