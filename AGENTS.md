@@ -82,6 +82,8 @@ stop, diagnose, fix, verify, then resume.
     Coordinate shared Rust builds after agents confirm all declared module and
     test files and pending review fixes are complete; an in-progress module can
     break unrelated tests even after an earlier freeze was announced.
+    Create declared child test files before running rustfmt; it resolves child
+    modules even when the new parent has not entered a shared Cargo build.
     If spawning hits the agent thread limit, reuse available workers only when
     their model matches the current user preference; otherwise continue in the
     primary agent. Completed tasks may still retain their thread slots, and
