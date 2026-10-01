@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 845 Rust library tests and the release build pass.
+All 850 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1056,6 +1056,12 @@ adds four complete handlers in 55 fixtures and 42 exact stopped prefixes.
 Start and kill handlers retain ordered routine captures, including reversed
 poison fields. Level handling rereads gameplay after publication callbacks;
 runtime services and generated routine execution remain explicit boundaries.
+
+Its guarded Rust publication replay compares all 48 supported normal native
+fixtures in five tests, preserving capture/barrier order, physical routine
+identity and raw metadata/class widths. Retained unconsumed byte ranges exclude
+consumed gameplay fields; future allocations and whole-state snapshots reserve
+capacity before cloning. Callbacks, failures and routine scheduling reject.
 
 The [Character tutorial generator join](notes/systems/tutorial_character_generators.md)
 adds five game-owned definitions in 47 fixtures and 206 exact stopped prefixes.
