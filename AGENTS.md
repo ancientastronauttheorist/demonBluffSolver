@@ -65,6 +65,8 @@ stop, diagnose, fix, verify, then resume.
     current read result before preparing an exact-match patch to a changed guide; use
     its returned lines rather than remembered fragments, and
     keep patch hunks in file order and omit empty placeholder hunks.
+    Re-read relevant lines after formatting before preparing an exact-match patch;
+    formatting can change line wrapping even when the code's behavior is unchanged.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
     For Unicode diagnostics, use ASCII-safe JSON or explicitly configure UTF-8
     console output; the default Windows console encoding may reject valid text.
