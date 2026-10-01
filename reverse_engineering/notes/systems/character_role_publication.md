@@ -115,7 +115,7 @@ construction/invocation, role results, preappend/event implementations, list gro
 trailer lookup, Unity lifetime/object/string/log/text/Wait services, ActedVersion.Show,
 layout effects and coroutine registration/resume adapters remain supplied. Real
 scheduler interleaving, UI animation, delegate internals, object destruction and
-native exception unwinding remain open. No Rust or live-game changes are included.
+native exception unwinding remain open. The native audit itself does not alter live-game behavior.
 
 ```powershell
 $env:PYTHONPATH='B:/CodexTools/DemonBluffReverseEngineering/python-emulation'
@@ -123,3 +123,22 @@ python reverse_engineering/scripts/audit_character_role_publication.py GAME_ROOT
 ```
 
 Report: `f530404b0f3f_807de4a83df4_character_role_publication.json`.
+
+## Guarded Rust publication replay
+
+The separate `bluff::character_role_publication` replay compares 78 supported
+normal native fixtures/baselines and two distinct-record forward/reverse result
+sequences in five focused tests. It starts from independently verified suspended
+results after first yield, allowing at most two result resumes before contiguous
+speech completion in registration order. Readiness and cross-kind interleaving
+remain outside this version.
+
+Complete Actor state, physical ActedInfo/reference List/string records and history
+identities are retained. Strings carry UTF-16 units, including NUL and unpaired
+surrogates. Shared reference Lists and repeated layout occurrences are preserved;
+shared nonnull backing arrays are excluded. Typed identities and callback/layout
+collisions, fresh allocation aliases, capacity and aggregate retained work are
+validated before cloning. Runtime/captures, Unity liveness, trailer lookup, inert
+callbacks/UI, no-growth storage and supplied resume order require explicit verified
+provenance. Mutating callbacks, service failures and unsupported schedules reject
+atomically. All 822 Rust library tests and the release build pass.

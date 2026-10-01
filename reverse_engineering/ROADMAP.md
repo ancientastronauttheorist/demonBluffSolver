@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,470 classifications and 353 evidence records
+additional native timing audits. The overlay contains 1,470 classifications and 354 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 817 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 822 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -70,6 +70,10 @@ adds 158 cases, four chronology/alias sequences and 196 exact stops through
 explicit result and speech resumes. It preserves pointer history, wrapping Day
 uses, trailer speech overrides and savedAct publication order. Registration and
 resumes are supplied schedules; elapsed time and real readiness remain open.
+Its guarded Rust replay compares 78 supported normal fixtures/baselines and two
+distinct-record chronology sequences, retaining physical history/string aliases,
+exact UTF-16 units and service order. Five focused tests pass; growth, mutations,
+failures and cross-kind interleaving remain outside the accepted contract.
 
 Resume with these boundaries in view:
 
