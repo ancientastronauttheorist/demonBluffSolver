@@ -59,3 +59,13 @@ Two successful independent native producers emitted identical 1,456,143-byte
 reports, SHA-256 `787dabd8850d3f253c8bc481b31e4adf70472976405da3da532a63c9508fa7d4`.
 The final source includes peer-reviewed loaded-delegate handling and explicit
 null/mutation outcome checks.
+
+## Guarded Rust replay
+
+Its guarded Rust replay compares 42 normal native contexts and two retained
+sequences in five tests. It preserves the full supplied logical Actor, raw byte
+gates, nullable speech and physical selected Action identity/target/MethodInfo.
+Service snapshots compare the modeled projection; callable pointers, runtime
+internals and diagnostic sentinel references remain supplied provenance.
+
+Five guarded Rust tests compare 42 supported normal native contexts and two retained sequences. Exact supplied-service entry order and modeled snapshots preserve raw hover/left byte gates, captured left Acted, nullable speech, physical selected Action identities/targets/MethodInfo and full logical Actor retention. Diagnostic native Actor padding is checked for retention without inferring typed sentinel objects; callable pointers and metadata/class/static internals remain supplied provenance. Complete future snapshot budgets precede maps/clones. Mutation, stops, failure, actual service implementations and scheduling are excluded.

@@ -1164,6 +1164,12 @@ fields and physical UI aliases retain exact colour/float/byte/DWORD semantics;
 future snapshot work is bounded before cloning. Disguise joins, mutations,
 failures, renderer behavior and scheduling remain outside the contract.
 
+Its guarded Rust replay compares 42 normal native contexts and two retained
+sequences in five tests. It preserves the full supplied logical Actor, raw byte
+gates, nullable speech and physical selected Action identity/target/MethodInfo.
+Service snapshots compare the modeled projection; callable pointers, runtime
+internals and diagnostic sentinel references remain supplied provenance.
+
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;
