@@ -998,6 +998,11 @@ The [registry getter](notes/systems/unity_preferences_getter.md) adds 398 cases
 and 65 service stops for hashed/legacy lookup, type checks and data-read races.
 Accepted stored values truncate at NUL; legacy string values require every
 returned byte to be ASCII. Windows outcomes and provider acquisition remain services.
+The [native preference provider](notes/systems/unity_preferences_provider.md)
+adds 163 standalone cases, 14 entry joins and 152 service stops for path changes,
+read/write acquisition and cache recovery. [Cold token discovery](notes/systems/unity_preferences_token.md)
+adds 87 cases, five cache sequences and 17 stops. Actual OS services and runtime
+configuration initialization remain explicit boundaries.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189

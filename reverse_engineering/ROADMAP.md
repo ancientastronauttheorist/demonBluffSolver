@@ -137,6 +137,11 @@ Resume with these boundaries in view:
    cases and 65 service stops, including independent size/data lookup fallback,
    binary versus ASCII-string policy, NUL truncation and authored race responses.
    Runtime/API outcomes and provider acquisition remain explicit services.
+   [Native provider acquisition](notes/systems/unity_preferences_provider.md)
+   adds 163 cases, 14 entry joins and 152 stops for cached configuration, both
+   handles, path conversion and invalidation/retry. [Cold token discovery](notes/systems/unity_preferences_token.md)
+   adds 87 cases, five cache sequences and 17 stops. Joined cold discovery,
+   runtime configuration loading and actual OS outcomes remain separate boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

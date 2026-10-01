@@ -19,6 +19,9 @@ class Machine(EntryMachine):
         return {**super().snapshot(), 'native_set_requests': self.native_set_requests.copy(),
                 'registry_requests': self.registry_requests.copy(), 'registry_writes': self.registry_writes.copy()}
 
+    def expected_registry_handle(self):
+        return 0xABCDEF
+
     def hook(self, uc, address, size, data):
         rva, x = address - self.base, self.x
         cx, dx, r8, r9 = [self.reg(r) for r in (x.UC_X86_REG_RCX, x.UC_X86_REG_RDX,
@@ -36,7 +39,7 @@ class Machine(EntryMachine):
             self.executed.add(rva)
             sp = self.reg(x.UC_X86_REG_RSP)
             pointer, count = self.rq(sp + 0x28), self.rq(sp + 0x30) & 0xFFFFFFFF
-            assert cx == 0xABCDEF and r8 & 0xFFFFFFFF == 0 and r9 & 0xFFFFFFFF == 3
+            assert cx == self.expected_registry_handle() and r8 & 0xFFFFFFFF == 0 and r9 & 0xFFFFFFFF == 3
             assert 1 <= count <= 65537
             request = [self.cstring(dx).hex(), r9 & 0xFFFFFFFF,
                        bytes(uc.mem_read(pointer, count)).hex(), count]

@@ -120,7 +120,8 @@ stop, diagnose, fix, verify, then resume.
     verify all return paths rather than stopping
     at the first `ret`. Assert requested addresses decoded before indexing them.
     Derive exact instruction assertions from that decode, including operands
-    on folded return stubs; do not infer their encoding from decompiled C.
+    on folded return stubs and expected call-site counts; do not infer encoding
+    from decompiled C or count sites manually.
     Read numeric constants before assigning units or expected magnitudes.
     Bind offsets to the pinned class's exact field declarations before naming
     them; adjacent saved and current roster fields are distinct state.

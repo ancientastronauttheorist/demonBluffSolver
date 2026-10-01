@@ -147,6 +147,9 @@ class Machine(ParserMachine):
                 self.put_string(cx, raw)
                 self.ret(cx)
 
+    def prepare_run(self):
+        """Optional subclass initialization after per-call allocation reset."""
+
     def run(self, direction, key, value, options=None):
         self.options = options or {}
         self.events, self.counts, self.backend_writes = [], {}, []
@@ -154,6 +157,7 @@ class Machine(ParserMachine):
         self.strings, self.string_cursor = {}, self.arena + 0x600000
         self.allocations, self.next_alloc = {}, self.arena + 0x20000
         self.u.mem_write(self.backend + 8, bytes([int(self.options.get('blocked', False))]))
+        self.prepare_run()
         a, b = self.make_string(key), self.make_string(value)
         storage = [(v['chars'], bytes(self.u.mem_read(v['chars'], v['length'] * 2 + 2))) for v in self.strings.values()]
         x, sp = self.x, self.stack + 0x18008

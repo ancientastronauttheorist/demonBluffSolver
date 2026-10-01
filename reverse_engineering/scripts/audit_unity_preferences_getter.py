@@ -37,7 +37,7 @@ class Machine(SetterMachine):
             self.executed.add(rva)
             sp = self.reg(x.UC_X86_REG_RSP)
             buffer, size_pointer = self.rq(sp + 0x28), self.rq(sp + 0x30)
-            assert cx == 0xABCDEF and r8 == 0 and r9 and size_pointer
+            assert cx == self.expected_registry_handle() and r8 == 0 and r9 and size_pointer
             capacity = int.from_bytes(uc.mem_read(size_pointer, 4), 'little') if buffer else None
             index = len(self.query_requests)
             responses = self.options.get('query_responses', [])
