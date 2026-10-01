@@ -78,6 +78,8 @@ stop, diagnose, fix, verify, then resume.
     can also capture closure functions and fail only at final JSON serialization.
     Check imported report/helper schemas before indexing their fields; a build
     constant is not necessarily repeated inside a returned layout dictionary.
+    Inspect inherited emulator initialization before using its attributes;
+    a dependency imported locally by a base class need not be an instance field.
     Bind indexed literal-array expressions before using them in serde_json::json!
     values, or parenthesize the complete expression for the macro parser.
     Coordinate shared Rust builds after agents confirm all declared module and
@@ -98,6 +100,8 @@ stop, diagnose, fix, verify, then resume.
     to source-edit or integration helper commands before their dependent steps.
     Wait for report-producing processes to finish successfully before opening
     their output paths; a yielded session does not establish that a report exists.
+    Compile edited Python audit syntax before launching report producers; bind
+    or parenthesize Boolean expressions following equality comparisons.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
