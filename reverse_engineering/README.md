@@ -1140,6 +1140,12 @@ sequences and 92 stopped prefixes. Native colour, sprite and activation requests
 preserve physical aliases and partial writes; DOTween, renderer, text and data
 art services remain supplied. Concurrent array-size races remain unclaimed.
 
+The [delayed Demon-kill join](notes/systems/character_delayed_demon_kill.md)
+executes 1,728 normal combinations, additional policy/alias/callback profiles
+and 149 stopped prefixes through actual death/status/action callers. The evil
+capture is a source argument; accepted statuses store the separately supplied
+null target. Concrete role/HP/subscriber policies and real timing remain open.
+
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
 callback and 12 exact stops. Append and last-removal version/barrier order differ;
