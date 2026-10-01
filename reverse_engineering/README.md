@@ -1046,6 +1046,11 @@ casts remain supplied services; actual event dispatch remains separate.
 Its guarded Rust caller compares 226 normal profiles and four cast stops in
 five tests, retaining all 29 fields and exact physical/header/pointer order.
 Supplied delegate outcomes do not implement CLR multicast or event dispatch.
+The [tutorial close/reveal join](notes/systems/tutorial_close_reveal_join.md)
+adds five new caller definitions in 445 cases and 179 exact stops. Native
+hide callbacks process queues by the count of restricted records, then show
+before removal. Save failure retains earlier note/completion/queue effects;
+coroutine publication and explicit callback invocation do not prove readiness.
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
