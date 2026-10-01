@@ -1032,6 +1032,12 @@ compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
 All 817 Rust library tests and the release build pass.
+The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
+adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
+including native AddTutorial/Save and four storage reloads. It separates
+presentation reset from persisted completion reset, retains post-save-failure
+mutations and checks controller publication after a note's early return.
+Unity/event/coroutine/timing effects remain explicit services.
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and

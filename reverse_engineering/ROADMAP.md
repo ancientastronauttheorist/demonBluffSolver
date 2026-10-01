@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,461 classifications and 350 evidence records
+additional native timing audits. The overlay contains 1,468 classifications and 351 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -200,6 +200,12 @@ Resume with these boundaries in view:
    entry snapshots, wrapping versions, retained backing slots and ordered fresh
    List publication. Growth and runtime services remain explicit; aggregate slot
    and text budgets are checked before snapshot cloning. Six focused tests pass.
+   The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
+   adds seven previously unclassified methods in 474 cases and 64 exact stops.
+   Presentation reset is distinct from persisted completion reset; native showing
+   joins AddTutorial/Save and four storage reloads. Controller type/delegate
+   publication can follow a note's early return. Unity/event/timing services and
+   remaining tutorial methods remain explicit boundaries.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms
