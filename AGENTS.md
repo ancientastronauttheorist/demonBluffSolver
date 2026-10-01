@@ -52,6 +52,8 @@ stop, diagnose, fix, verify, then resume.
     infer an audit filename from a role name or assume a module uses `mod.rs`.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
+    Inspect filename-discovery results before issuing dependent reads; do not
+    batch discovery with reads against guessed paths.
     Verify a documented directory exists before searching it, since directory
     maps can describe intended layout. Start with repository-root `rg --files`
     when even the containing directory is unconfirmed.
