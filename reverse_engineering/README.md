@@ -1023,6 +1023,12 @@ stops. Malformed binary UTF-8 takes the native fresh-save branch before JSON;
 the getter's earlier NUL truncation and REG_SZ ASCII policy remain distinct.
 Adapters transfer text only, preserving separate object and allocator identities.
 
+The [complete RefreshView caller](notes/systems/character_refresh_view.md)
+executes 1,645 fixtures, eight callback mutations, three retained sequences and
+29 controlled stops. It verifies death-object publication before the barrier,
+separate transform queries, exact Vector3 bits and disguise-icon predicates.
+Unity APIs and rendering remain explicit services.
+
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
 native cases for mode publication, initialization, state changes, catalogue
