@@ -62,7 +62,8 @@ stop, diagnose, fix, verify, then resume.
     Resolve and validate every coverage target before appending evidence; a new
     partial method audit can require an explicit unresolved classification.
     Do not guess filenames or repeat an unexpanded wildcard search. Inspect the
-    current read result before preparing an exact-match patch to a changed guide; use
+    current read result before preparing an exact-match patch to any changed file,
+    including earlier inserted prose; use
     its returned lines rather than remembered fragments, and
     keep patch hunks in file order and omit empty placeholder hunks.
     Re-read relevant lines after formatting before preparing an exact-match patch;
