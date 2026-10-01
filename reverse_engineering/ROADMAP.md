@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,460 classifications and 347 evidence records
+additional native timing audits. The overlay contains 1,460 classifications and 348 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -32,6 +32,9 @@ adds 1,645 fixtures, eight callback mutations, three retained sequences and 29
 controlled stops, preserving exact transform bits and partial pointer/UI writes.
 Unity liveness, transforms, Instantiate, metadata and renderer behavior remain
 explicit supplied boundaries.
+Its separate guarded Rust caller replay compares 1,639 normal native fixtures
+and three retained sequences, preserving UI/Transform aliases, exact vector
+bits and consumed fresh-allocation plans. Seven focused tests pass.
 The [Character field surface](notes/systems/character_fields.md) executes
 thirteen exact getters/setters in 146 cases, five stopped barriers and four
 retained sequences. These leaves preserve raw references and enum widths;

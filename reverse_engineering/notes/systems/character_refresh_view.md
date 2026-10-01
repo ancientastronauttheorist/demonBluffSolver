@@ -130,3 +130,18 @@ Independent private and repository reports must match as JSON values. No copied
 native bytes or decompiled bodies enter the repository. This standalone report
 does not broaden the current bounded Rust view projection or the existing
 initializer/scheduler composition; their explicit contracts remain unchanged.
+
+The separate `bluff::character_refresh_view` replay now accepts versioned
+`character_refresh_view_native_v1` contexts with independently verified native
+bindings, Unity liveness, inert services/callbacks and normal completion. It
+retains the complete initializer Actor, physical UI/Transform records, exact
+Vector3 bits and ordered API/store/barrier events. Fresh allocation identities
+and both transform-query outputs are supplied explicitly. The consumed fresh
+creation plan is removed so a later refresh reuses the retained live object.
+
+Seven focused tests compare 1,639 supported normal native fixtures and three
+retained sequences, plus API arguments/order, physical aliases, field retention
+and guarded capacity/provenance rejection. References naming the same physical
+object must agree on liveness. Null dependencies, callback mutations and service
+failures remain outside the replay. It does not feed the live solver, existing
+view projection or scheduler and does not infer real Unity lifetime/rendering.

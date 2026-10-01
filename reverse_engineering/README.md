@@ -1033,6 +1033,9 @@ executes 1,645 fixtures, eight callback mutations, three retained sequences and
 29 controlled stops. It verifies death-object publication before the barrier,
 separate transform queries, exact Vector3 bits and disguise-icon predicates.
 Unity APIs and rendering remain explicit services.
+The separate guarded Rust caller replay compares 1,639 supported native
+fixtures and three retained sequences in seven focused tests, preserving
+physical aliases and rejecting inconsistent liveness or unsupported provenance.
 The [Character field surface](notes/systems/character_fields.md) adds thirteen
 complete field leaves in 146 fixtures, five barrier stops and four retained
 setter/getter sequences. Raw pointers, low-DWORD enum widths and unrelated actor
