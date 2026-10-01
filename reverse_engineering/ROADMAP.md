@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,460 classifications and 348 evidence records
+additional native timing audits. The overlay contains 1,460 classifications and 349 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 804 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 817 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -190,6 +190,11 @@ Resume with these boundaries in view:
    chain into native reset, JSON and storage. Persistence failures retain the
    already-cleared tutorial List. Singleton production and Unity Button routing
    remain explicit boundaries.
+   The [guarded SavedGameInfo replay](notes/systems/saved_game_info_replay.md)
+   compares all 134 normal native method/JSON-caller fixtures, including service
+   entry snapshots, wrapping versions, retained backing slots and ordered fresh
+   List publication. Growth and runtime services remain explicit; aggregate slot
+   and text budgets are checked before snapshot cloning. Six focused tests pass.
    All declarations of GameMode, StandardMode, RoguelikeStandard, AdvancedMode,
    RoguelikeMode and SavesGame now have caller evidence. Standard and roguelike
    progression have versioned Rust replays. Native delegate composition confirms

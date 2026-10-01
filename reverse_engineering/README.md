@@ -1027,6 +1027,11 @@ adds 26 cases and ten controlled stops, following ProjectContext through the
 native reset, JSON and storage pipeline. Failed persistence retains the earlier
 clear; unlocked-character values and versions remain unchanged. Singleton
 production and Unity Button event routing remain supplied.
+The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
+compares 134 normal native method/JSON-caller fixtures and service-entry List
+snapshots in six focused tests. It retains versions and backing slots, requires
+supplied growth/allocation outcomes and rejects aggregate capacity overflow.
+All 817 Rust library tests and the release build pass.
 
 The [complete RefreshView caller](notes/systems/character_refresh_view.md)
 executes 1,645 fixtures, eight callback mutations, three retained sequences and
