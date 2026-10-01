@@ -49,7 +49,8 @@ stop, diagnose, fix, verify, then resume.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents, versioned coverage inventories, role/knowledge-base files and Rust module roots, with
     `rg --files` before reading. Do not
-    infer an audit filename from a role name or assume a module uses `mod.rs`.
+    infer an audit filename from a role name, expand a Rust import alias into a
+    guessed basename, or assume a module uses `mod.rs`.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
     Inspect filename-discovery results before issuing dependent reads; do not
@@ -93,7 +94,8 @@ stop, diagnose, fix, verify, then resume.
     nested module such as `bluff.rs`.
     Gate dependent shell steps on successful exit codes. In PowerShell a failed
     native command does not stop later lines; keep validation and commit in a
-    checked subprocess sequence or explicitly exit on failure.
+    checked subprocess sequence or explicitly exit on failure. This also applies
+    to source-edit or integration helper commands before their dependent steps.
     Wait for report-producing processes to finish successfully before opening
     their output paths; a yielded session does not establish that a report exists.
 11. Serialize Ghidra headless commands that open the same saved project.
