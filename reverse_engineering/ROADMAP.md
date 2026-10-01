@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,444 classifications and 343 evidence records
+additional native timing audits. The overlay contains 1,445 classifications and 344 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -43,6 +43,11 @@ initializer calls. [Action dispatch](notes/systems/character_action_setup.md)
 adds 370 native Init/Start caller fixtures and a supported producer-to-writer
 bridge. These remain separate guarded compositions; complete setup-to-scheduler
 execution and unsupported writers are still open.
+The [role callback publication join](notes/systems/character_role_callback.md)
+executes RoleAct, its installed callback, delayed-result construction and an
+explicit first MoveNext in 185 cases and 47 stopped prefixes. Retained callbacks
+preserve their captured triggers after the role field is overwritten. Concrete
+role effects, second resume/history/UI and real scheduling remain open.
 
 Resume with these boundaries in view:
 

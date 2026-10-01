@@ -1028,6 +1028,12 @@ executes 1,645 fixtures, eight callback mutations, three retained sequences and
 29 controlled stops. It verifies death-object publication before the barrier,
 separate transform queries, exact Vector3 bits and disguise-icon predicates.
 Unity APIs and rendering remain explicit services.
+The [role callback publication join](notes/systems/character_role_callback.md)
+adds 185 cases and 47 exact stopped prefixes, executing the freshly installed
+closure through delayed-result construction and one explicit first yield.
+Old and new delegates retain separate triggers; repeated invocations allocate
+distinct iterators and waits. Real role effects and scheduler admission remain
+supplied, and second resume/history/UI require separate composition evidence.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
