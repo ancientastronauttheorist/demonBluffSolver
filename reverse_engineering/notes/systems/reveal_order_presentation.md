@@ -126,7 +126,7 @@ component references are declared serialized/runtime fixture inputs. This audit
 closes the two standalone RevealOrder caller bodies without claiming an actual
 Oracle-to-RevealOrder joined execution, renderer effects or service internals.
 
-## Guarded Rust caller replay
+## Constructor continuation
 
 The separate constructor remains unclassified. Read-only entry inspection binds
 `tdi5735.m0002` to the exact `RevealOrder..ctor` declaration, signature
@@ -147,7 +147,9 @@ Win64 stack/nonvolatile state. A later ctor-to-Init/Hide sequence must still
 provide the text component as serialized/runtime input. These inspection
 findings do not promote constructor coverage or establish a native replay.
 
-The guarded Rust [RevealOrder replay](notes/systems/reveal_order_presentation.md)
+## Guarded Rust caller replay
+
+The guarded Rust [RevealOrder replay](../../../crates/solver-core/src/bluff/reveal_order_presentation.rs)
 compares 23 normal native profiles and two retained sequences in 4 tests.
 Physical records, supplied effects, order bits and captured text retain exact
 service-entry chronology. Future snapshot work validates before cloning;

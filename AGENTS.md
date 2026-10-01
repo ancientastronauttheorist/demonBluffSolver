@@ -32,7 +32,8 @@ stop, diagnose, fix, verify, then resume.
 5. After every loss, analyze the critical decisions and either fix the bug or
    document why the loss was unavoidable.
 6. Commit and push after every completed game or discrete live-run fix. Do not
-   batch unrelated discoveries.
+   batch unrelated discoveries. After pushing, use a new follow-up commit for
+   corrections rather than amending published history or requiring a force push.
 7. Mouse only in live runs. No keyboard shortcuts.
 8. Pair screenshots with memory-reader checks. Screenshot is UI ground truth;
    memory is validation and post-mortem truth.
