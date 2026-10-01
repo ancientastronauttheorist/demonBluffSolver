@@ -55,8 +55,9 @@ stop, diagnose, fix, verify, then resume.
     name mentioned in notes is not necessarily relative to the repository root.
     Inspect filename-discovery results before issuing dependent reads; do not
     batch discovery with reads against guessed paths.
-    Verify a documented directory exists before searching it, since directory
-    maps can describe intended layout. Start with repository-root `rg --files`
+    Verify a documented directory exists before searching it, including optional
+    tool configuration directories such as `.cargo`, since directory maps can
+    describe intended layout. Start with repository-root `rg --files`
     when even the containing directory is unconfirmed.
     Evidence sources can name corpus directories as well as files; validate the
     referenced path's existence without assuming every source is a single file.
