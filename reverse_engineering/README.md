@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 843 Rust library tests and the release build pass.
+All 845 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1115,6 +1115,12 @@ adds six complete callers in 311 cases, two retained sequences and 15 stopped
 prefixes. Exact byte gates, field reloads and transform bits retain partial
 UI writes. CharacterView/CardHighlight bodies and Unity rendering are supplied
 boundaries rather than implementations established by these callers.
+
+Its guarded Rust factory/direct speech replay compares 116 supported normal
+profiles and retained sequences in seven tests. Complete Actor/iterator/UI
+snapshots preserve float/trigger bits, null/self captures and physical aliases.
+Supplied registration identities do not infer a void caller return; aggregate
+future snapshot budgets and typed identities validate before cloning.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
