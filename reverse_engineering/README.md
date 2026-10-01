@@ -1017,6 +1017,11 @@ execute native UTF-8 validation/conversion and managed UTF-16 construction in
 discarding a valid prefix. Explicit-length construction retains embedded NULs;
 the C-string wrappers truncate first. GC, class globals and allocator services
 remain supplied, and this runtime audit adds no Assembly-CSharp classification.
+The [runtime string/storage join](notes/systems/saved_game_runtime_strings.md)
+adds 24 direct constructors, 48 getters, twenty Loads, two round trips and ten
+stops. Malformed binary UTF-8 takes the native fresh-save branch before JSON;
+the getter's earlier NUL truncation and REG_SZ ASCII policy remain distinct.
+Adapters transfer text only, preserving separate object and allocator identities.
 
 The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
