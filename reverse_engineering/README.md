@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,580 classifications backed by
-423 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,581 classifications backed by
+424 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1465,6 +1465,11 @@ The actual [identity-generation caller](notes/systems/character_data_identity.md
 compares 141 cases and 1,053 full stopped prefixes. Its nine captured array
 stores, eight integer scratch writes, complete stack and retained histories
 are verified while RNG, boxing and formatting remain supplied services.
+
+The actual [preference-loading caller](notes/systems/character_data_preferences.md)
+compares 181 cases and 87 full stopped prefixes. It clears currentSkin first,
+reloads each actor ID, and requests every matching captured preference skin
+in order; actual skin loading remains a supplied boundary.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

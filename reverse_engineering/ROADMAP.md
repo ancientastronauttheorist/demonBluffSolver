@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,580 classifications and 423 evidence records
+additional native timing audits. The overlay contains 1,581 classifications and 424 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -460,6 +460,11 @@ The actual [identity-generation caller](notes/systems/character_data_identity.md
 compares 141 cases and 1,053 full stopped prefixes. Its nine captured array
 stores, eight integer scratch writes, complete stack and retained histories
 are verified while RNG, boxing and formatting remain supplied services.
+
+The actual [preference-loading caller](notes/systems/character_data_preferences.md)
+compares 181 cases and 87 full stopped prefixes. It clears currentSkin first,
+reloads each actor ID, and requests every matching captured preference skin
+in order; actual skin loading remains a supplied boundary.
 
 Resume with these boundaries in view:
 
