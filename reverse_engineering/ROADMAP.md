@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,528 classifications and 385 evidence records
+additional native timing audits. The overlay contains 1,528 classifications and 386 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -243,6 +243,12 @@ native menu callers in 151 contexts, four retained sequences and 18 full stopped
 prefixes. Active-state capture and field reload, Escape low-byte gating and exact
 setter register widths preserve callback timing. Engine input and GameObject
 effects remain supplied; the shared NightStep alias is not promoted.
+
+The actual [Oracle-to-Acted join](notes/systems/character_oracle_acted_join.md)
+executes 331 cases, two retained sequences and 85 complete stopped prefixes.
+Captured Acted/layout receivers and array elements survive later field changes,
+while current lengths and parent fields are reloaded in native order. ActedVersion
+Show, layout engine and the separate View/RevealOrder services remain supplied.
 
 Resume with these boundaries in view:
 
