@@ -131,3 +131,24 @@ Private peer:
 Read-only peer review found no blockers after the alias/captured-array,
 unsigned-branch and dual-codec checks. Rust/bridge/simulation and live gameplay
 are unaffected by this offline native caller family.
+
+## Guarded Rust text caller replay
+
+The guarded Rust [CharacterData text replay](notes/systems/character_data_text_consumers.md)
+compares 100 normal native fixtures across six methods and two retained
+continuation calls. Five tests verify full storage, ordered service requests,
+raw call ABI, exact callers, nullable results and the name store before its barrier.
+
+Five guarded Rust tests compare 100 inert normal native fixtures across six CharacterData text methods and two complete retained suffix calls against full authored record bytes, prior/ordered histories, entry raw registers, exact service raw ABI/site/caller, return bits and completed states. Exact QWORD-empty/unsigned lowDWORD RNG index behavior, captured translation and original-owner fallback, nullable input/results and reached name store before barrier are retained. Nominal consumed storage, three-slot index admission, disjoint overflow-safe extents, strict schema and complete future history/snapshot work validate before cloning; unsupported input falls back atomically. Whole integer RNG, localization/conversion/name/barrier services supplied; barrier return residue is supplied zero in the frozen audit contract and void-return diagnostics do not imply a managed value. Callbacks, guards/faults/stops, engine admission, rendering, acquisition interleaving and unwinding excluded.
+
+Source: [character_data_text_consumers.rs](../../../crates/solver-core/src/bluff/character_data_text_consumers.rs).
+The normal fixture subset contains GetFlavorText 29, GetTranslatedName 22,
+GetIWasTranslated 22, GetIfLies 10, GetHints 10 and UpdateCharacterName 7.
+The retained suffix begins after an excluded callback changed the array:
+its explicit initial full state and prior histories are preserved across both
+supported inert calls. Other callback paths and native guard/fault paths remain
+outside this Rust contract. All 907 Rust library tests and the release build
+pass; the 36 RE infrastructure tests passed at the immediately preceding
+native checkpoint. Simulation/Python bridge suites were not rerun for this
+offline-only replay. Read-only peer review independently transcribed all 100
+normal fixtures and the two retained calls without a behavior or ABI blocker.

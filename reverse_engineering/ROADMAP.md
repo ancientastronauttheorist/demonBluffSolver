@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,572 classifications and 413 evidence records
+additional native timing audits. The overlay contains 1,572 classifications and 414 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 902 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 907 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -410,6 +410,11 @@ The [reward color join](notes/systems/character_reward_color_join.md)
 executes seven actual native bodies, 475 cases and 534 complete stopped prefixes.
 UpdateViewReal captures the border array but reloads character data for each
 border color, then tail-calls a supplied RefreshView.
+
+The guarded Rust [CharacterData text replay](notes/systems/character_data_text_consumers.md)
+compares 100 normal native fixtures across six methods and two retained
+continuation calls. Five tests verify full storage, ordered service requests,
+raw call ABI, exact callers, nullable results and the name store before its barrier.
 
 Resume with these boundaries in view:
 

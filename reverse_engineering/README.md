@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,572 classifications backed by
-413 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+414 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 902 Rust library tests and the release build pass.
+All 907 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1415,6 +1415,11 @@ The [reward color join](notes/systems/character_reward_color_join.md)
 executes seven actual native bodies, 475 cases and 534 complete stopped prefixes.
 UpdateViewReal captures the border array but reloads character data for each
 border color, then tail-calls a supplied RefreshView.
+
+The guarded Rust [CharacterData text replay](notes/systems/character_data_text_consumers.md)
+compares 100 normal native fixtures across six methods and two retained
+continuation calls. Five tests verify full storage, ordered service requests,
+raw call ABI, exact callers, nullable results and the name store before its barrier.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
