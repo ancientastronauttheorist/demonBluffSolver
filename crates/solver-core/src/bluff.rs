@@ -30,6 +30,7 @@ pub mod reveal_order_presentation;
 pub mod card_tokens;
 pub mod in_game_settings;
 pub mod character_data_consumers;
+pub mod character_data_description;
 pub mod hint_info_constructor;
 pub mod character_reward_initialization;
 pub mod saved_game_info;

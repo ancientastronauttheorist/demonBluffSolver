@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,569 classifications backed by
-409 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+410 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 897 Rust library tests and the release build pass.
+All 902 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1396,6 +1396,11 @@ The [CardInteraction lifecycle audit](notes/systems/card_interaction_lifecycle.m
 executes both complete registration callers across 130 cases, four retained
 sequences and 61 exact stopped prefixes. It pins captured animation and
 Character receivers, delegate operands and the native click-field store.
+
+The guarded Rust [description getter replay](notes/systems/character_data_description.md)
+compares 145 normal native contexts and three complete retained sequences in
+five tests. Full storage, raw service arguments, exact callers, histories and
+return identities match; nominal input and future snapshot work are bounded.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,569 classifications and 409 evidence records
+additional native timing audits. The overlay contains 1,569 classifications and 410 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 897 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 902 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -392,6 +392,11 @@ executes both complete registration callers across 130 cases, four retained
 sequences and 61 exact stopped prefixes. It pins captured animation and
 Character receivers, delegate operands and the native click-field store.
 
+The guarded Rust [description getter replay](notes/systems/character_data_description.md)
+compares 145 normal native contexts and three complete retained sequences in
+five tests. Full storage, raw service arguments, exact callers, histories and
+return identities match; nominal input and future snapshot work are bounded.
+
 Resume with these boundaries in view:
 
 1. The explicit `bluff::clock` transitions now feed the weighted scheduler via
@@ -565,11 +570,12 @@ Resume with these boundaries in view:
    native caller evidence, including delayed speech and text/scale animation.
    Rotation/highlight replay and full diagnostic Reveal-wrapper callers are
    audited, with transform, formatting and UI callback internals still explicit.
-   CharacterView, hover/description, Oracle and RevealOrder now have complete
-   scoped caller audits and guarded normal replay contracts. Next compose the
-   Oracle caller with actual RevealOrder, CharacterView and Acted consumers over
-   one retained physical state; separate caller evidence does not establish that
-   join. Likewise connect delayed-kill callbacks to tutorial publication and
+   All 77 Character declarations now have scoped evidence. CharacterView,
+   hover/description, Oracle and RevealOrder have scoped caller audits and
+   guarded normal replay contracts. Separate actual Oracle joins now execute
+   RevealOrder, CharacterView and Acted; next compose all three over one retained
+   physical state. Those separate joins do not establish the combined chain.
+   Likewise connect delayed-kill callbacks to tutorial publication and
    event dispatch before inferring engine readiness or subscriber lifetimes.
    Continue from [the pool-to-acquisition handoff](notes/systems/round_pool_acquisition_frontier.md):
    extend the actual ManageCharacters/both-builders prefix through native Init

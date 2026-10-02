@@ -115,3 +115,21 @@ outside this bounded audit.
 
 Run the source with the pinned game and Dumper directories as positional
 arguments and `--output`; PYTHONPATH must include the private emulation directory.
+
+## Guarded Rust caller replay
+
+The guarded Rust [description getter replay](notes/systems/character_data_description.md)
+compares 145 normal native contexts and three complete retained sequences in
+five tests. Full storage, raw service arguments, exact callers, histories and
+return identities match; nominal input and future snapshot work are bounded.
+
+Five guarded Rust tests compare 145 supported normal native CharacterData.GetDescription contexts and three complete retained three-call sequences against every represented record byte, full service-entry snapshot/raw RCX/RDX/R8/R9, exact caller/site/ordinal, return identity, cumulative history/count and final state. Stable English/Polish reconvert the same description; other raw DWORD languages retain the first result. Nullable input/results and aliases remain explicit whole supplied converter contracts. Typed active Data/class/statics/Instance/game chain, exact diagnostic sizes, disjoint overflow-safe extents, strict schema, counter overflow and complete future snapshot/history budgets validate before maps/clones; unsupported input falls back atomically. Callback mutations, guards/faults/stops, conversion internals, Unity/CLR admission, rendering, acquisition interleaving and native unwinding remain excluded.
+
+Source: [character_data_description.rs](../../../crates/solver-core/src/bluff/character_data_description.rs).
+The native fixture graph admits 15 calls and rejects 16 at the complete future
+work bound; this is a graph-specific cost boundary, not a universal call limit.
+Capacity checks retain prior native/service histories and account for all new
+entry/completed snapshots before cloning. Unconsumed diagnostic bytes remain.
+Five focused tests, all 902 Rust library tests and the release build pass.
+The current reverse-engineering infrastructure suite passes 36 tests. Python
+bridge and simulation suites were not rerun for this offline replay.
