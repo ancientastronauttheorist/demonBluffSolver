@@ -182,3 +182,18 @@ Character.RevealReal and GC barrier implementations remain supplied. This
 caller audit does not prove Unity or CLR object admission, rendering, real event
 dispatch, scheduling, runtime initialization or managed exception behavior.
 It does not promote a constructor, shared alias or any downstream callee.
+
+## Guarded Rust caller replay
+
+The guarded Rust [reward initialization replay](notes/systems/character_init_reward.md)
+compares 34 normal native contexts and two complete retained three-call sequences
+in five tests. Full physical storage, phase/history logs, raw service registers,
+exact caller returns and cumulative ordinals match native snapshots. Nominal
+storage and future work validate before cloning; service bodies remain supplied.
+
+Five guarded Rust tests compare 34 supported normal native InitReward contexts/baselines and two complete retained three-call sequences against every represented physical byte, native phase, service-entry snapshot, full raw argument, exact caller return, cumulative ordinal and final state. Captured Acted/input data, explicit whole get_gameObject outputs, three pointer stores/barriers, alignment/current-state loads, Hidden state and nullable Action callback match native chronology. All original records and prior activation/callback/reveal histories remain. Nominal reference types, consumed versus unconsumed diagnostic window sizes, disjoint overflow-safe storage, history references and future complete snapshot/history work validate before maps/clones; rejection is atomic. Unity/Action/GC/RevealReal bodies, callback mutations, guard/stopped paths, runtime admission, renderer and unwinding are excluded.
+
+Source: [character_reward_initialization.rs](../../../crates/solver-core/src/bluff/character_reward_initialization.rs).
+Five focused tests, all 897 Rust library tests and the release build pass.
+The current reverse-engineering suite passes 36 tests. Simulation and Python
+bridge suites were not rerun for this offline replay.

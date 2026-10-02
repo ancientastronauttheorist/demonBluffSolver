@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,552 classifications backed by
-399 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+400 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 892 Rust library tests and the release build pass.
+All 897 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1337,6 +1337,12 @@ The [RevealBluff audit](notes/systems/character_bluff_presentation.md) executes
 result reaches TMP directly, and the physical TMP class remains in R9. Every
 full event and final state matches an independent model; supplied UpdateView
 precedes RefreshView without another bluff read.
+
+The guarded Rust [reward initialization replay](notes/systems/character_init_reward.md)
+compares 34 normal native contexts and two complete retained three-call sequences
+in five tests. Full physical storage, phase/history logs, raw service registers,
+exact caller returns and cumulative ordinals match native snapshots. Nominal
+storage and future work validate before cloning; service bodies remain supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

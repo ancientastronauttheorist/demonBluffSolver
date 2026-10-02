@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,552 classifications and 399 evidence records
+additional native timing audits. The overlay contains 1,552 classifications and 400 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 892 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 897 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -332,6 +332,12 @@ The [RevealBluff audit](notes/systems/character_bluff_presentation.md) executes
 result reaches TMP directly, and the physical TMP class remains in R9. Every
 full event and final state matches an independent model; supplied UpdateView
 precedes RefreshView without another bluff read.
+
+The guarded Rust [reward initialization replay](notes/systems/character_init_reward.md)
+compares 34 normal native contexts and two complete retained three-call sequences
+in five tests. Full physical storage, phase/history logs, raw service registers,
+exact caller returns and cumulative ordinals match native snapshots. Nominal
+storage and future work validate before cloning; service bodies remain supplied.
 
 Resume with these boundaries in view:
 
