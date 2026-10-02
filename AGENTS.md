@@ -92,7 +92,9 @@ stop, diagnose, fix, verify, then resume.
     constant is not necessarily repeated inside a returned layout dictionary.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
-    pins or substitute a nearby summary count. Calculate capacity boundaries
+    pins or substitute a nearby summary count. Read a family's actual caller
+    sentinel and native base before adapting another family's Rust fixtures.
+    Calculate capacity boundaries
     from complete storage and future snapshot costs before asserting admission.
     Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
     keys can accidentally print an entire retained or stopped report corpus.
@@ -111,6 +113,8 @@ stop, diagnose, fix, verify, then resume.
     break unrelated tests even after an earlier freeze was announced.
     Create declared child test files before running rustfmt; it resolves child
     modules even when the new parent has not entered a shared Cargo build.
+    Format edited Rust files explicitly instead of running workspace-wide
+    `cargo fmt --all`; it can rewrite unrelated legacy source and test files.
     If spawning hits the agent thread limit, reuse available workers only when
     their model matches the current user preference; otherwise continue in the
     primary agent. Completed tasks may still retain their thread slots, and
