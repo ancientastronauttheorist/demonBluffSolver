@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,583 classifications backed by
-428 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,584 classifications backed by
+429 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1490,6 +1490,11 @@ The guarded Rust [identity-generation replay](notes/systems/character_data_ident
 compares 46 inert normal native cases, 15 retained rows and three full sequences.
 Five tests check the complete stack, captured array/values, integer scratch
 writes, metadata, histories and raw ABI, with atomic context rejection.
+
+The actual [SkinData constructor caller](notes/systems/skin_data_constructor.md)
+verifies the complete two-instruction tail wrapper across 33 cases and four
+retained sequences. It clears the method argument and preserves owner storage;
+the ScriptableObject base implementation remains supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,583 classifications and 428 evidence records
+additional native timing audits. The overlay contains 1,584 classifications and 429 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -485,6 +485,11 @@ The guarded Rust [identity-generation replay](notes/systems/character_data_ident
 compares 46 inert normal native cases, 15 retained rows and three full sequences.
 Five tests check the complete stack, captured array/values, integer scratch
 writes, metadata, histories and raw ABI, with atomic context rejection.
+
+The actual [SkinData constructor caller](notes/systems/skin_data_constructor.md)
+verifies the complete two-instruction tail wrapper across 33 cases and four
+retained sequences. It clears the method argument and preserves owner storage;
+the ScriptableObject base implementation remains supplied.
 
 Resume with these boundaries in view:
 
