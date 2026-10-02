@@ -117,6 +117,9 @@ stop, diagnose, fix, verify, then resume.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
+    Keep complete proprietary native instruction bytes and disassembly in the
+    private artifact workspace. Tracked audits use authored selected operand
+    assertions and per-body fingerprints instead of complete native exports.
     Resolve export filenames from the target manifest or directory listing;
     public-role names and hexadecimal filename widths can differ from assumptions.
     Inspect shared method bodies without printing their potentially enormous
