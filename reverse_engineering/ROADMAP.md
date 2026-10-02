@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,542 classifications and 389 evidence records
+additional native timing audits. The overlay contains 1,542 classifications and 390 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 882 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 887 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -267,6 +267,12 @@ executes eight getters and skin selectors in 354 profiles, four retained sequenc
 and 56 complete stopped prefixes. It preserves nullable outputs, raw enum widths,
 art_cute defaults and captured versus reloaded skin/literal references. Byte retention
 allows only completed writes; Unity liveness and larger provider bodies remain supplied.
+
+The guarded Rust [CharacterData replay](notes/systems/character_data_consumers.md) compares
+146 normal profiles, eight inert baselines and three retained sequences in five
+tests. All represented byte storage, flags and comparison histories remain in
+service-entry snapshots. Nullable returns, raw enum DWORDs and independent
+comparison AL match native behavior; future clone work validates before replay.
 
 Resume with these boundaries in view:
 

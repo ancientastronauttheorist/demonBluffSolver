@@ -161,3 +161,18 @@ including the 32 earlier infrastructure tests and four snapshot codec tests.
 There are 149 decoded instructions, 145 executed nontrap instructions, and
 26 direct instruction assertions plus decoded call-count checks. No Rust build,
 simulation suite, live game or Python bridge regression was run by this audit.
+
+## Guarded Rust caller replay
+
+The guarded Rust [CharacterData replay](notes/systems/character_data_consumers.md) compares
+146 normal profiles, eight inert baselines and three retained sequences in five
+tests. All represented byte storage, flags and comparison histories remain in
+service-entry snapshots. Nullable returns, raw enum DWORDs and independent
+comparison AL match native behavior; future clone work validates before replay.
+
+Five guarded Rust tests compare 146 supported normal CharacterData profiles, eight inert baselines and three retained sequences against all represented records, metadata flags, completed comparison histories, service-entry states and full return values. Nullable pointer leaves and zero-extended enum DWORDs preserve raw values. Independently supplied Unity comparison AL controls default/skin selection; warm and cold runtime paths preserve chronology. Nominal types, complete consumed storage and aggregate future snapshot/log budgets validate before maps/clones; replay leaves input unchanged. Callback mutation, native guards/failures, engine liveness, localization and View composition are excluded.
+
+Source: [character_data_consumers.rs](../../../crates/solver-core/src/bluff/character_data_consumers.rs).
+Five focused tests, all 887 Rust library tests and the release build pass.
+The current reverse-engineering suite passes 36 tests. Simulation and Python
+bridge suites were not rerun for this offline replay.
