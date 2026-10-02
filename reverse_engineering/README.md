@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,515 classifications backed by
-379 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,517 classifications backed by
+380 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1206,6 +1206,12 @@ executes both native caller/callee families in one physical state across 182
 cases, eight retained sequences and 88 full stopped prefixes. Order/text capture,
 TMP class reload and shared GameObject aliases retain exact chronology; other
 game-owned, runtime, formatting and Unity services remain supplied.
+
+The [CardTokens audit](notes/systems/card_tokens.md) executes both native
+callers in 302 cases, two retained sequences and 73 full stopped prefixes.
+Five independent key branches preserve ordered physical tag effects, pointer
+reloads and exact byte/register widths. Input collection and Unity tag effects
+remain explicit supplied services; no live keyboard or rendering is inferred.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

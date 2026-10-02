@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,515 classifications and 379 evidence records
+additional native timing audits. The overlay contains 1,517 classifications and 380 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -201,6 +201,12 @@ executes both native caller/callee families in one physical state across 182
 cases, eight retained sequences and 88 full stopped prefixes. Order/text capture,
 TMP class reload and shared GameObject aliases retain exact chronology; other
 game-owned, runtime, formatting and Unity services remain supplied.
+
+The [CardTokens audit](notes/systems/card_tokens.md) executes both native
+callers in 302 cases, two retained sequences and 73 full stopped prefixes.
+Five independent key branches preserve ordered physical tag effects, pointer
+reloads and exact byte/register widths. Input collection and Unity tag effects
+remain explicit supplied services; no live keyboard or rendering is inferred.
 
 Resume with these boundaries in view:
 
