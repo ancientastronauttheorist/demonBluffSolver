@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,552 classifications backed by
-400 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,554 classifications backed by
+401 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1348,6 +1348,12 @@ compares 34 normal native contexts and two complete retained three-call sequence
 in five tests. Full physical storage, phase/history logs, raw service registers,
 exact caller returns and cumulative ordinals match native snapshots. Nominal
 storage and future work validate before cloning; service bodies remain supplied.
+
+The complete [Character event lifecycle](notes/systems/character_event_lifecycle.md)
+executes 282 cases, four retained sequences and 252 full stopped prefixes.
+Seven channels preserve captured old Actions and exact instance/static destination
+reloads. Every full snapshot, raw call and cumulative ordinal matches an independent
+model; CLR delegates, engine lifecycle and subscriber bodies remain supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

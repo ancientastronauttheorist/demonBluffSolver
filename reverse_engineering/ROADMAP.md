@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,552 classifications and 400 evidence records
+additional native timing audits. The overlay contains 1,554 classifications and 401 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -343,6 +343,12 @@ compares 34 normal native contexts and two complete retained three-call sequence
 in five tests. Full physical storage, phase/history logs, raw service registers,
 exact caller returns and cumulative ordinals match native snapshots. Nominal
 storage and future work validate before cloning; service bodies remain supplied.
+
+The complete [Character event lifecycle](notes/systems/character_event_lifecycle.md)
+executes 282 cases, four retained sequences and 252 full stopped prefixes.
+Seven channels preserve captured old Actions and exact instance/static destination
+reloads. Every full snapshot, raw call and cumulative ordinal matches an independent
+model; CLR delegates, engine lifecycle and subscriber bodies remain supplied.
 
 Resume with these boundaries in view:
 
