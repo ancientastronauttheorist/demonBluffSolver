@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,548 classifications backed by
-392 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+393 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1295,6 +1295,12 @@ executes Init and OnDisable in 96 cases, two retained sequences and 72 complete
 stopped prefixes. It preserves captured first-channel operands, reloaded second
 interaction and the original data argument through later stores and InitReward.
 Action/Delegate services and event admission remain explicitly supplied.
+
+The complete [HintInfo constructor audit](notes/systems/hint_info_constructor.md)
+executes 288 cases, two retained sequences and 25 full stopped prefixes. An
+independent byte-level model checks raw arguments and every partial snapshot,
+including early register captures, late stack title/flavor/Color loads and exact
+fault sites. This closes the prior single hover-argument constructor limitation.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
