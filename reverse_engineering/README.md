@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,572 classifications backed by
-412 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+413 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1410,6 +1410,11 @@ The [CharacterData constructor](notes/systems/character_data_constructor.md)
 executes 148 cases and 205 full stopped prefixes. It captures six allocated
 lists across supplied constructor calls, publishes them with reference barriers,
 and sets the native bluffable and picking bytes before the base tail call.
+
+The [reward color join](notes/systems/character_reward_color_join.md)
+executes seven actual native bodies, 475 cases and 534 complete stopped prefixes.
+UpdateViewReal captures the border array but reloads character data for each
+border color, then tail-calls a supplied RefreshView.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

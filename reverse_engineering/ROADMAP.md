@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,572 classifications and 412 evidence records
+additional native timing audits. The overlay contains 1,572 classifications and 413 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -405,6 +405,11 @@ The [CharacterData constructor](notes/systems/character_data_constructor.md)
 executes 148 cases and 205 full stopped prefixes. It captures six allocated
 lists across supplied constructor calls, publishes them with reference barriers,
 and sets the native bluffable and picking bytes before the base tail call.
+
+The [reward color join](notes/systems/character_reward_color_join.md)
+executes seven actual native bodies, 475 cases and 534 complete stopped prefixes.
+UpdateViewReal captures the border array but reloads character data for each
+border color, then tail-calls a supplied RefreshView.
 
 Resume with these boundaries in view:
 
