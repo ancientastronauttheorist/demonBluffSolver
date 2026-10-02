@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,566 classifications and 407 evidence records
+additional native timing audits. The overlay contains 1,567 classifications and 408 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -381,6 +381,11 @@ The [CharacterData description audit](notes/systems/character_data_description.m
 executes 298 cases, nine retained sequences and 27 exact stopped prefixes.
 It pins the current language reloads and repeated conversion of the same
 description field, including callback changes and partial recovery.
+
+The [Character description caller](notes/systems/character_show_description.md)
+executes 310 cases, four retained sequences and 262 full stopped prefixes.
+Its complete native branches preserve captured speech targets, savedAct
+publication, history highlighting and the full hint/delegate call ABI.
 
 Resume with these boundaries in view:
 

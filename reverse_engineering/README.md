@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,566 classifications backed by
-407 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,567 classifications backed by
+408 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1386,6 +1386,11 @@ The [CharacterData description audit](notes/systems/character_data_description.m
 executes 298 cases, nine retained sequences and 27 exact stopped prefixes.
 It pins the current language reloads and repeated conversion of the same
 description field, including callback changes and partial recovery.
+
+The [Character description caller](notes/systems/character_show_description.md)
+executes 310 cases, four retained sequences and 262 full stopped prefixes.
+Its complete native branches preserve captured speech targets, savedAct
+publication, history highlighting and the full hint/delegate call ABI.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
