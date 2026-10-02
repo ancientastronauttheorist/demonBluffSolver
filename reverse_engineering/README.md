@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,542 classifications backed by
-390 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,546 classifications backed by
+391 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1278,6 +1278,12 @@ The guarded Rust [CharacterData replay](notes/systems/character_data_consumers.m
 tests. All represented byte storage, flags and comparison histories remain in
 service-entry snapshots. Nullable returns, raw enum DWORDs and independent
 comparison AL match native behavior; future clone work validates before replay.
+
+The [Character art preferences audit](notes/systems/character_art_preferences.md)
+executes four complete bodies in 518 cases, five retained sequences and 110
+full stopped prefixes. Native SetupArt preserves captured sprites, exact type
+DWORDs and later Image reloads, including aliased GameObjects. Appearance/data
+selection, Unity effects and preference subscription remain supplied boundaries.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,542 classifications and 390 evidence records
+additional native timing audits. The overlay contains 1,546 classifications and 391 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -273,6 +273,12 @@ The guarded Rust [CharacterData replay](notes/systems/character_data_consumers.m
 tests. All represented byte storage, flags and comparison histories remain in
 service-entry snapshots. Nullable returns, raw enum DWORDs and independent
 comparison AL match native behavior; future clone work validates before replay.
+
+The [Character art preferences audit](notes/systems/character_art_preferences.md)
+executes four complete bodies in 518 cases, five retained sequences and 110
+full stopped prefixes. Native SetupArt preserves captured sprites, exact type
+DWORDs and later Image reloads, including aliased GameObjects. Appearance/data
+selection, Unity effects and preference subscription remain supplied boundaries.
 
 Resume with these boundaries in view:
 
