@@ -59,7 +59,8 @@ stop, diagnose, fix, verify, then resume.
     and preserve it in the write path. Before freeze, compare each resolved
     script, note and report path with its assigned path.
     Inspect filename-discovery results before issuing dependent reads; do not
-    batch discovery with reads against guessed paths. A worker's source-ready
+    batch discovery with reads against guessed paths, even for a previously
+    discussed family whose exact note basename is not recorded. A worker's source-ready
     notice does not establish that its planned note or report already exists.
     Verify a documented directory exists before searching it, including optional
     tool configuration directories such as `.cargo`, since directory maps can
