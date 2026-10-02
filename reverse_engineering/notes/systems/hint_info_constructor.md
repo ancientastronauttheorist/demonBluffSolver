@@ -81,3 +81,18 @@ passed. The script, note and report are frozen for parent integration.
 Reproduce with `audit_hint_info_constructor.py <game-root> <dumper-root>
 --output <report>`, using the pinned private directories and setting PYTHONPATH
 to the private python-emulation runtime. No native binary bytes are published.
+
+## Guarded Rust caller replay
+
+The guarded Rust [HintInfo constructor replay](notes/systems/hint_info_constructor.md)
+compares 262 inert native call inputs in five tests, preserving complete physical
+records, argument slots, prior history and full service-entry raw arguments.
+Nullable aliases and exact Color bytes survive reuse; nominal storage and future
+clone/history budgets validate before replay. GC and callback effects stay excluded.
+
+Five guarded Rust tests compare 258 supported inert native constructor profiles/baselines and four normal retained-call inputs against every represented physical byte, argument slot, native-entry/completed-barrier history, service-entry snapshot, full raw argument and exact caller return. Nullable reference masks, String aliases and raw 16-byte Color copies match native output. Known nominal types, disjoint complete 128-byte diagnostic windows, overflow-safe identity extents, first-call arguments and future aggregate history/snapshot budgets validate before maps/clones; input remains unchanged. Constructor reuse and independent volatile service bits are verified. Callback mutations, stopped/fault paths, actual allocation/GC, runtime admission, renderer and unwinding are excluded.
+
+Source: [hint_info_constructor.rs](../../../crates/solver-core/src/bluff/hint_info_constructor.rs).
+Five focused tests, all 892 Rust library tests and the release build pass.
+The current reverse-engineering suite passes 36 tests. Simulation and Python
+bridge suites were not rerun for this offline replay.

@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,548 classifications and 394 evidence records
+additional native timing audits. The overlay contains 1,548 classifications and 395 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 887 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 892 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -302,6 +302,12 @@ executes 221 profiles, four retained sequences and 173 full stopped prefixes.
 Original data and produced sprites survive later field changes while actual
 getters reload current skin; full raw arguments and native phases remain in
 service snapshots. Runtime/Unity/TMP and animation remain separate boundaries.
+
+The guarded Rust [HintInfo constructor replay](notes/systems/hint_info_constructor.md)
+compares 262 inert native call inputs in five tests, preserving complete physical
+records, argument slots, prior history and full service-entry raw arguments.
+Nullable aliases and exact Color bytes survive reuse; nominal storage and future
+clone/history budgets validate before replay. GC and callback effects stay excluded.
 
 Resume with these boundaries in view:
 
