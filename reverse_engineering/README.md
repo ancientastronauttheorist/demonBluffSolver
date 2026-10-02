@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,571 classifications backed by
-411 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,572 classifications backed by
+412 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1405,6 +1405,11 @@ return identities match; nominal input and future snapshot work are bounded.
 The [card audio callers](notes/systems/card_interaction_audio.md) execute
 82 cases and 24 full stopped prefixes. Both consume a float RNG draw before
 reloading the audio callback, then dispatch their exact sound identifier.
+
+The [CharacterData constructor](notes/systems/character_data_constructor.md)
+executes 148 cases and 205 full stopped prefixes. It captures six allocated
+lists across supplied constructor calls, publishes them with reference barriers,
+and sets the native bluffable and picking bytes before the base tail call.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
