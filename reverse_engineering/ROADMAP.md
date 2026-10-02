@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,534 classifications and 388 evidence records
+additional native timing audits. The overlay contains 1,542 classifications and 389 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -261,6 +261,12 @@ executes five callers in 83 cases, two retained sequences and 50 full stopped
 prefixes. Hover executes the actual HintInfo constructor, retaining the callback
 captured before allocation and reloading Character/pivot after construction.
 List membership, callback effects and the whole RevealNoAct callee remain supplied.
+
+The [CharacterData consumer audit](notes/systems/character_data_consumers.md)
+executes eight getters and skin selectors in 354 profiles, four retained sequences
+and 56 complete stopped prefixes. It preserves nullable outputs, raw enum widths,
+art_cute defaults and captured versus reloaded skin/literal references. Byte retention
+allows only completed writes; Unity liveness and larger provider bodies remain supplied.
 
 Resume with these boundaries in view:
 

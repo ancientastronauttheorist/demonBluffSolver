@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,534 classifications backed by
-388 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,542 classifications backed by
+389 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1266,6 +1266,12 @@ executes five callers in 83 cases, two retained sequences and 50 full stopped
 prefixes. Hover executes the actual HintInfo constructor, retaining the callback
 captured before allocation and reloading Character/pivot after construction.
 List membership, callback effects and the whole RevealNoAct callee remain supplied.
+
+The [CharacterData consumer audit](notes/systems/character_data_consumers.md)
+executes eight getters and skin selectors in 354 profiles, four retained sequences
+and 56 complete stopped prefixes. It preserves nullable outputs, raw enum widths,
+art_cute defaults and captured versus reloaded skin/literal references. Byte retention
+allows only completed writes; Unity liveness and larger provider bodies remain supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
