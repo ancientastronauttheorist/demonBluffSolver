@@ -9,7 +9,7 @@ and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 877 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 877 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -225,6 +225,12 @@ The guarded Rust [CardTokens replay](notes/systems/card_tokens.md) compares
 Complete represented physical storage and supplied ledgers retain service-entry
 chronology, ordered tag aliases and exact byte/register widths. Future snapshot
 and log work validates before cloning; engine effects and failure paths are excluded.
+
+The Oracle-to-View report now losslessly interns repeated complete snapshots.
+Its 16.1 MB encoding expands to exactly the prior 61.9 MB report, including
+all 168 complete stopped prefixes. Hash verification and independent mutable
+expansion are covered by four codec tests; all 36 reverse-engineering tests pass.
+This storage change adds no method coverage.
 
 The actual [Oracle-to-CharacterView join](notes/systems/character_oracle_view_join.md)
 executes both native families across 253 cases, six retained sequences and 168

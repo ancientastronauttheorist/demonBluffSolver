@@ -59,11 +59,15 @@ checked unchanged. Physical field identity is serialized separately from
 supplied component values. Sentinel data and larger diagnostic windows do not
 establish complete valid managed runtime objects or extend their real layouts.
 
-The report pools only diagnostic byte windows through SHA-256 memory references.
-Its 90 distinct blobs retain every original byte; the imported
-`expand_memory(report)` verifies blob hashes and restores full snapshots.
+The report pools diagnostic byte windows and complete repeated authored
+snapshots through SHA-256 references. Its 90 memory blobs and 1,810 snapshot
+blobs retain every original byte and field. Decode with
+`expand_memory(expand_snapshots(report))`; both decoders verify blob hashes.
 Each producer asserts exact expanded round-trip equality after all native
-prefix checks. Logical state, event order and field identities remain explicit.
+prefix checks. Independent verification compared the expanded report against
+the previous unpooled-snapshot producer and rechecked all 168 complete stopped
+prefixes. Event order and field identities remain intact, and expanded snapshots
+have independent mutable storage. This storage change adds no native coverage.
 
 ## Actual caller composition
 
@@ -118,9 +122,9 @@ used, and private native bytes remain outside the repository.
 
 Executable: [audit_character_oracle_view_join.py](../../scripts/audit_character_oracle_view_join.py).
 Report: [f530404b0f3f_807de4a83df4_character_oracle_view_join.json](../../reports/f530404b0f3f_807de4a83df4_character_oracle_view_join.json).
-Two successful independent final producers emitted identical 61,856,055-byte
-reports, SHA-256 `f6f4bfaec3adeb351b29219e4c76c4e30eaccc52e402f502069d5f4a8eacf91d`.
-Python syntax compilation, all 32 reverse-engineering tests and focused diff
+Two successful independent final producers emitted identical 16,070,921-byte
+reports, SHA-256 `057c661f710b1a5cde7b8705f4f34f51dda5072c1553c8f6e7fa4f660a1f7724`.
+Python syntax compilation, all 36 reverse-engineering tests and focused diff
 checks passed.
 
 ```powershell

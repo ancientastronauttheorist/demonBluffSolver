@@ -1231,6 +1231,12 @@ Complete represented physical storage and supplied ledgers retain service-entry
 chronology, ordered tag aliases and exact byte/register widths. Future snapshot
 and log work validates before cloning; engine effects and failure paths are excluded.
 
+The Oracle-to-View report now losslessly interns repeated complete snapshots.
+Its 16.1 MB encoding expands to exactly the prior 61.9 MB report, including
+all 168 complete stopped prefixes. Hash verification and independent mutable
+expansion are covered by four codec tests; all 36 reverse-engineering tests pass.
+This storage change adds no method coverage.
+
 The actual [Oracle-to-CharacterView join](notes/systems/character_oracle_view_join.md)
 executes both native families across 253 cases, six retained sequences and 168
 full stopped prefixes. Captured animation/data/text, later reloads and shared

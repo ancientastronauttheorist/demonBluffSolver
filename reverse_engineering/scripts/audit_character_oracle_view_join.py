@@ -14,6 +14,7 @@ from audit_character_assets import BUILD
 from audit_character_oracle_presentation import Machine as OracleMachine, TARGETS as ORACLE_TARGETS
 from audit_character_view_presentation import Machine as ViewVerifier, TARGETS as VIEW_TARGETS
 from audit_character_oracle_reveal_join import pool_memory
+from audit_report_snapshots import pool_snapshots
 
 
 class Machine(OracleMachine):
@@ -348,5 +349,5 @@ def audit(game_root, dumper_root):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__); p.add_argument('game_root', type=Path); p.add_argument('dumper_root', type=Path); p.add_argument('--output', type=Path, required=True)
     args = p.parse_args(); report = audit(args.game_root, args.dumper_root)
-    args.output.write_text(json.dumps(pool_memory(report), sort_keys=True, separators=(',', ':'), ensure_ascii=True) + '\n', encoding='utf-8')
+    args.output.write_text(json.dumps(pool_snapshots(pool_memory(report)), sort_keys=True, separators=(',', ':'), ensure_ascii=True) + '\n', encoding='utf-8')
     print(json.dumps(report['summary']))
