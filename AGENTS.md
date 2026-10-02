@@ -50,8 +50,9 @@ stop, diagnose, fix, verify, then resume.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents, versioned coverage inventories, role/knowledge-base files and Rust module roots, with
     `rg --files` before reading. Do not
-    infer an audit filename from a role name, expand a Rust import alias into a
-    guessed basename, or assume a module uses `mod.rs`.
+    infer an audit filename from a role name or descriptive note title, expand a
+    Rust import alias into a guessed basename, or assume a module uses `mod.rs`.
+    Follow an audit's exact linked script path after verifying it exists.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
     Before creating an audit artifact, verify its assigned full output directory
