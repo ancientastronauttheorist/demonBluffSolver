@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,521 classifications backed by
-381 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,525 classifications backed by
+382 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1218,6 +1218,12 @@ four native bodies in 142 cases, two retained sequences and 81 full stopped
 prefixes. Update tail-calls the actual Close body; canvas/animation captures and
 later reloads retain callback timing and exact register widths. Input, Unity,
 formatting and tween implementations remain explicit supplied services.
+
+The [pin-button audit](notes/systems/pin_deck_view_button.md) adds four native
+callers in 213 contexts, 12 retained sequences and 22 full stopped prefixes.
+Setting DWORD gates, registration source capture and later static/callback
+reloads preserve exact native chronology. Settings, delegate and UI effects
+remain supplied; twelve trap/post-store stub instructions are explicitly unexecuted.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
