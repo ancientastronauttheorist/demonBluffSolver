@@ -274,6 +274,11 @@ tests. All represented byte storage, flags and comparison histories remain in
 service-entry snapshots. Nullable returns, raw enum DWORDs and independent
 comparison AL match native behavior; future clone work validates before replay.
 
+The Character art report now losslessly pools full snapshots as well as bytes.
+Its 15.0 MB encoding expands to exactly the prior 43.0 MB report, including all
+110 complete stopped prefixes and raw service arguments. Both successful producers
+match; this storage change adds no native method coverage.
+
 The [Character art preferences audit](notes/systems/character_art_preferences.md)
 executes four complete bodies in 518 cases, five retained sequences and 110
 full stopped prefixes. Native SetupArt preserves captured sprites, exact type

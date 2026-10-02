@@ -76,15 +76,17 @@ Image.set_sprite, metadata initialization and class initialization are also
 named supplied services. No Unity rendering, scheduler, live game state, or
 complete preference event subscription is claimed.
 
-The report uses lossless SHA-256 pooling only for complete authored memory
-buffers; every pooled buffer is hash-verified and an expansion round trip must
-reproduce the original report exactly. Logical and raw ABI evidence remains
-unpooled. Two independent final producer processes emitted identical
-42,962,680-byte reports, SHA-256
-`4ceb344314d059c9bb6187724bc2c5ab5ffa31e071489bdb8f3971f245c37ad1`.
+The report losslessly pools complete authored memory buffers and repeated full
+snapshots. Decode with `expand_memory(expand_snapshots(report))`; every blob is
+hash-verified, and expansion creates independently mutable snapshots. Independent
+verification reproduced every value of the earlier 42,962,680-byte report and
+rechecked all 110 complete stopped prefixes. No field, raw ABI value, event or
+native evidence was dropped. Two independent final producer processes emitted
+identical 14,961,467-byte reports, SHA-256
+`62d227fe6885508e4b2113e2b2b3bb6605355e279515a16d6f511eaa2e49d248`.
 Python syntax compilation, all 36 reverse-engineering infrastructure tests,
 and `git diff --check` passed. The private independent peer is
-`B:/CodexTools/DemonBluffReverseEngineering/artifacts/f530404b0f3f_807de4a83df4/character_art_preferences.peer.private.json`.
+`B:/CodexTools/DemonBluffReverseEngineering/artifacts/f530404b0f3f_807de4a83df4/character_art_preferences_snapshots_peer.json`.
 
 Reproduce with `audit_character_art_preferences.py`, supplying the pinned game
 directory, Dumper directory and output path with `--game-root`, `--dumper-root`,

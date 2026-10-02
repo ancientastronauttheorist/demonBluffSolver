@@ -11,6 +11,7 @@ import capstone
 from audit_character_assets import BUILD
 from audit_il2cpp_string_creation import Machine as NativeMachine
 from audit_character_oracle_reveal_join import pool_memory
+from audit_report_snapshots import pool_snapshots
 
 TARGETS = {0x367890: ('ReInitPreferences', 'tdi5487.m0020', 0x367963),
            0x3688B0: ('SetupArt', 'tdi5487.m0021', 0x3689C0),
@@ -361,11 +362,11 @@ def audit(game_root, dumper_root):
               'retained_sequences': len(sequences), 'baseline_count': len(baselines), 'stopped_prefixes': len(stops),
               'native_instructions': len(m.instructions), 'observed_addresses': len(m.executed), 'terminal_traps_excluded': [b['terminal_trap'] for b in m.bounds.values()],
               'cases': rows, 'sequences': sequences, 'baselines': baselines, 'stops': stops}
-    return pool_memory(result)
+    return pool_snapshots(pool_memory(result))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--game-root', required=True); parser.add_argument('--dumper-root', required=True); parser.add_argument('--output', required=True)
     args = parser.parse_args(); result = audit(args.game_root, args.dumper_root)
-    Path(args.output).write_text(json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    Path(args.output).write_text(json.dumps(result, separators=(',', ':'), sort_keys=True) + '\n', encoding='utf-8')
     print(json.dumps({k: result[k] for k in ['cases_passed', 'native_instructions', 'stopped_prefixes', 'retained_sequences']}))
