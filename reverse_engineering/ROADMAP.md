@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,584 classifications and 429 evidence records
+additional native timing audits. The overlay contains 1,585 classifications and 430 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -490,6 +490,11 @@ The actual [SkinData constructor caller](notes/systems/skin_data_constructor.md)
 verifies the complete two-instruction tail wrapper across 33 cases and four
 retained sequences. It clears the method argument and preserves owner storage;
 the ScriptableObject base implementation remains supplied.
+
+The actual [SkinData ID generator](notes/systems/skin_data_identity.md)
+verifies five captured entries and four integer draws through 117 cases, six
+retained sequences and 445 full stopped prefixes. All four declared SkinData
+methods now have native caller audits; their Unity and save services remain supplied.
 
 Resume with these boundaries in view:
 

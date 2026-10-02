@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,584 classifications backed by
-429 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,585 classifications backed by
+430 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1495,6 +1495,11 @@ The actual [SkinData constructor caller](notes/systems/skin_data_constructor.md)
 verifies the complete two-instruction tail wrapper across 33 cases and four
 retained sequences. It clears the method argument and preserves owner storage;
 the ScriptableObject base implementation remains supplied.
+
+The actual [SkinData ID generator](notes/systems/skin_data_identity.md)
+verifies five captured entries and four integer draws through 117 cases, six
+retained sequences and 445 full stopped prefixes. All four declared SkinData
+methods now have native caller audits; their Unity and save services remain supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
