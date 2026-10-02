@@ -165,6 +165,8 @@ stop, diagnose, fix, verify, then resume.
     effects explicitly; a failure status alone does not specify changes to
     input capacity/type fields that a retry may consume. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
+    Qualify callback mutations at shared gateways by the verified native caller
+    or decoded return site so a parent call cannot trigger a callee-only effect.
     Bind snapshot decoders to native storage flags; short inline strings need
     not share the pointer representation of parsed or longer strings.
     Resolve exact type declarations, including enums, before extracting dump blocks; prefix matches
