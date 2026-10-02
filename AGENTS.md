@@ -113,6 +113,8 @@ stop, diagnose, fix, verify, then resume.
     a later call's mutation plan onto an earlier setup-only call.
     Bind indexed literal-array expressions before using them in serde_json::json!
     values, or parenthesize the complete expression for the macro parser.
+    Parenthesize Rust cast expressions before comparison operators, especially
+    `as T` followed by `<`, to avoid parsing the comparison as generic arguments.
     Coordinate shared Rust builds after agents confirm all declared module and
     test files and pending review fixes are complete; an in-progress module can
     break unrelated tests even after an earlier freeze was announced.
