@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,528 classifications and 387 evidence records
+additional native timing audits. The overlay contains 1,534 classifications and 388 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -255,6 +255,12 @@ The guarded Rust [settings replay](notes/systems/in_game_settings.md) compares
 Complete physical storage, request ledgers and service-entry snapshots preserve
 Escape gating, active state and full method-specific setter registers. Future
 state/log work validates before cloning; engine effects and failures are excluded.
+
+The [DeckCharacter surface audit](notes/systems/deck_character_surface.md)
+executes five callers in 83 cases, two retained sequences and 50 full stopped
+prefixes. Hover executes the actual HintInfo constructor, retaining the callback
+captured before allocation and reloading Character/pivot after construction.
+List membership, callback effects and the whole RevealNoAct callee remain supplied.
 
 Resume with these boundaries in view:
 

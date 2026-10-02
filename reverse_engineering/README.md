@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,528 classifications backed by
-387 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,534 classifications backed by
+388 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1260,6 +1260,12 @@ The guarded Rust [settings replay](notes/systems/in_game_settings.md) compares
 Complete physical storage, request ledgers and service-entry snapshots preserve
 Escape gating, active state and full method-specific setter registers. Future
 state/log work validates before cloning; engine effects and failures are excluded.
+
+The [DeckCharacter surface audit](notes/systems/deck_character_surface.md)
+executes five callers in 83 cases, two retained sequences and 50 full stopped
+prefixes. Hover executes the actual HintInfo constructor, retaining the callback
+captured before allocation and reloading Character/pivot after construction.
+List membership, callback effects and the whole RevealNoAct callee remain supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
