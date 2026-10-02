@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,572 classifications and 414 evidence records
+additional native timing audits. The overlay contains 1,573 classifications and 415 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -415,6 +415,11 @@ The guarded Rust [CharacterData text replay](notes/systems/character_data_text_c
 compares 100 normal native fixtures across six methods and two retained
 continuation calls. Five tests verify full storage, ordered service requests,
 raw call ABI, exact callers, nullable results and the name store before its barrier.
+
+The [MouseExit caller](notes/systems/card_interaction_mouse_exit.md)
+executes 58 cases and 67 full stopped prefixes. Its native hover callback,
+captured highlight loop, movement and scale requests retain exact raw ABI
+and reload animation IDs independently of the earlier Kill capture.
 
 Resume with these boundaries in view:
 
