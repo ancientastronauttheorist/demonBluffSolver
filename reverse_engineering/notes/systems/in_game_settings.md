@@ -124,3 +124,18 @@ The independent private peer is
 `B:/CodexTools/DemonBluffReverseEngineering/artifacts/f530404b0f3f_807de4a83df4/in_game_settings_peer.json`.
 All 32 reverse-engineering infrastructure tests passed. No Rust build,
 simulation suite, live game or Python bridge regression was run by this audit.
+
+## Guarded Rust caller replay
+
+The guarded Rust [settings replay](notes/systems/in_game_settings.md) compares
+92 normal native profiles and two retained seven-call sequences in five tests.
+Complete physical storage, request ledgers and service-entry snapshots preserve
+Escape gating, active state and full method-specific setter registers. Future
+state/log work validates before cloning; engine effects and failures are excluded.
+
+Five guarded Rust tests compare 92 supported normal InGameSettings native profiles and two retained seven-call sequences against every represented physical byte, service-entry state, argument, ledger and final state. Independent low-byte returns preserve Escape gating and active state; method-specific DL-only and whole-EDX writes preserve full register values. Nominal identities, record kinds, consumed references and future aggregate state/log budgets validate before maps/clones; inputs remain unchanged. Pointer callbacks, guards/failures, engine lifecycle/input/UI and unwinding are excluded.
+
+Source: [in_game_settings.rs](../../../crates/solver-core/src/bluff/in_game_settings.rs).
+Five focused tests, all 882 Rust library tests and the release build pass.
+The current reverse-engineering suite passes 36 tests. Simulation and Python
+bridge suites were not rerun for this offline replay.

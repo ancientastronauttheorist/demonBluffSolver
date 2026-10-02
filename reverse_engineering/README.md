@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,528 classifications backed by
-386 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+387 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 877 Rust library tests and the release build pass.
+All 882 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1254,6 +1254,12 @@ executes 331 cases, two retained sequences and 85 complete stopped prefixes.
 Captured Acted/layout receivers and array elements survive later field changes,
 while current lengths and parent fields are reloaded in native order. ActedVersion
 Show, layout engine and the separate View/RevealOrder services remain supplied.
+
+The guarded Rust [settings replay](notes/systems/in_game_settings.md) compares
+92 normal native profiles and two retained seven-call sequences in five tests.
+Complete physical storage, request ledgers and service-entry snapshots preserve
+Escape gating, active state and full method-specific setter registers. Future
+state/log work validates before cloning; engine effects and failures are excluded.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
