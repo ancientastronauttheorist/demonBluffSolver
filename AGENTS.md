@@ -55,7 +55,8 @@ stop, diagnose, fix, verify, then resume.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
     Inspect filename-discovery results before issuing dependent reads; do not
-    batch discovery with reads against guessed paths.
+    batch discovery with reads against guessed paths. A worker's source-ready
+    notice does not establish that its planned note or report already exists.
     Verify a documented directory exists before searching it, including optional
     tool configuration directories such as `.cargo`, since directory maps can
     describe intended layout. Start with repository-root `rg --files`
@@ -161,7 +162,11 @@ stop, diagnose, fix, verify, then resume.
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
-    decompiler parameters or constructor return values. Author failed API output
+    decompiler parameters or constructor return values. Initialize recorded unused
+    volatile entry registers explicitly so preceding fixtures cannot supply
+    accidental diagnostic bits. Capture raw service arguments and caller sites
+    at entry, including stopped services, rather than only after completion.
+    Author failed API output
     effects explicitly; a failure status alone does not specify changes to
     input capacity/type fields that a retry may consume. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
