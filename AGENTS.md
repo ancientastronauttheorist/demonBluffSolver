@@ -167,6 +167,8 @@ stop, diagnose, fix, verify, then resume.
     phase, since base constructors can invoke overrides before derived state exists.
     Qualify callback mutations at shared gateways by the verified native caller
     or decoded return site so a parent call cannot trigger a callee-only effect.
+    Separate per-invocation service ordinals from retained chronological logs;
+    a prior call's count must not suppress the next call's authored callback.
     Bind snapshot decoders to native storage flags; short inline strings need
     not share the pointer representation of parsed or longer strings.
     Resolve exact type declarations, including enums, before extracting dump blocks; prefix matches
