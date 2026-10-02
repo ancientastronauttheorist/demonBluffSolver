@@ -55,6 +55,9 @@ stop, diagnose, fix, verify, then resume.
     Follow an audit's exact linked script path after verifying it exists.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
+    Resolve extractor outputs separately from tool installation directories;
+    a Dumper version identifies neither its build-specific output directory nor
+    a verified copy of script.json, dump.cs or il2cpp.h.
     Before creating an audit artifact, verify its assigned full output directory
     and preserve it in the write path. Before freeze, compare each resolved
     script, note and report path with its assigned path.
