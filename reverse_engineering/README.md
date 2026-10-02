@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,562 classifications backed by
-403 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+404 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1366,6 +1366,11 @@ execute 159 cases, four retained sequences and 16 exact stopped prefixes.
 Flavor keeps its captured array across RNG callbacks, translations use the
 original-owner Unity-name fallback, and name writes precede their barrier.
 Every full snapshot/raw call/final byte matches an independent model.
+
+The [reward initialization join](notes/systems/character_reward_init_join.md)
+executes actual side selection, reward initialization and real presentation
+in one retained graph. Its 144 cases, ten sequences and 141 exact stopped
+prefixes preserve captured inputs and late callback changes across the chain.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,562 classifications and 403 evidence records
+additional native timing audits. The overlay contains 1,562 classifications and 404 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -361,6 +361,11 @@ execute 159 cases, four retained sequences and 16 exact stopped prefixes.
 Flavor keeps its captured array across RNG callbacks, translations use the
 original-owner Unity-name fallback, and name writes precede their barrier.
 Every full snapshot/raw call/final byte matches an independent model.
+
+The [reward initialization join](notes/systems/character_reward_init_join.md)
+executes actual side selection, reward initialization and real presentation
+in one retained graph. Its 144 cases, ten sequences and 141 exact stopped
+prefixes preserve captured inputs and late callback changes across the chain.
 
 Resume with these boundaries in view:
 
