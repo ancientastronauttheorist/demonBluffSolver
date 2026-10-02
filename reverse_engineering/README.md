@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,581 classifications backed by
-424 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+425 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1470,6 +1470,11 @@ The actual [preference-loading caller](notes/systems/character_data_preferences.
 compares 181 cases and 87 full stopped prefixes. It clears currentSkin first,
 reloads each actor ID, and requests every matching captured preference skin
 in order; actual skin loading remains a supplied boundary.
+
+The [initializer physical-state audit](notes/systems/character_initializers.md)
+compares both complete initializer bodies across 211 cases and 248 full stopped
+prefixes. An independent instruction model checks 74 full physical records,
+registers, stores and histories, with reset/capture/reload semantics checked separately.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
