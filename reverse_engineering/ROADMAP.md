@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,549 classifications and 396 evidence records
+additional native timing audits. The overlay contains 1,551 classifications and 397 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -314,6 +314,12 @@ executes 72 cases, three retained sequences and 28 exact stopped prefixes.
 An independent model compares every full snapshot and raw service call, including
 captured Acted/input identities and late alignment/state reads. RevealReal and
 Unity/Action services remain explicit boundaries.
+
+The [reward presentation audit](notes/systems/character_reward_presentation.md)
+executes SetupObject and RevealReal in 341 cases, three retained sequences and
+61 full stopped prefixes. Every event and final state matches an independent
+model. Captured name, sprite and background identities remain distinct from
+later Data/component reloads; art/View/engine bodies stay supplied here.
 
 Resume with these boundaries in view:
 
