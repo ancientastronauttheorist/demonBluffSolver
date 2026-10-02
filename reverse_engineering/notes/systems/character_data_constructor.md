@@ -112,3 +112,28 @@ No actual heap allocator, generic List internals, metadata resolver, collector,
 base constructor or Unity initialization executes here. Their supplied effects
 are explicit inputs. Skin loading, preferences, identity generation and engine
 asset construction require separate evidence.
+
+## Guarded Rust constructor replay
+
+The guarded Rust [CharacterData constructor replay](notes/systems/character_data_constructor.md)
+compares 66 normal native fixtures and three resumed recovery calls. Five tests
+verify all 37 physical records, complete histories and volatile registers,
+exact generic metadata, six captured list stores and the base-constructor tail.
+
+Five guarded Rust tests compare 66 inert normal CharacterData ctor native fixtures and three resumed recovery calls against all37diagnostic records/8192bytes, all five complete prior supplied-history categories/native entries, every ordered current service boundary, seven volatile integer/six XMM registers and exact original-sentinel tail caller. Ten exact generic metadata slots/cold flag, six captured List allocations/constructors/stores/barriers, legal CharacterData List aliases and final bluffable/picking byte writes are preserved; currentSkin/usuallyDisguised and unrelated bytes retain initial state. Strict nested schema, nominal kinds/windows/disjoint checked extents, base overflow and complete future entry/history/snapshot work validate before cloning; unsupported contexts reject atomically. Supplied allocation results and whole metadata/List ctor/barrier/base services inert. Callbacks, failed/null-owner prefixes, actual allocation/generic/GC/Unity policy and unwinding excluded.
+
+Source: [character_data_constructor.rs](../../../crates/solver-core/src/bluff/character_data_constructor.rs).
+All 66 inert normal native cases and three post-failure recovery calls are
+compared at every complete snapshot. Each recovered call retains the earlier
+full bytes, native entries and five explicit categorized histories; the Rust
+API does not invent a global ordering between prior history categories. Its
+current invocation emits the exact ordered service trace. A separate Rust
+two-call continuation test checks that the second call skips completed cold
+metadata initialization and retains allocation histories. Per-service step
+ordinals reset per invocation, matching the native audit fixture convention.
+The five explicit history categories prevent future map-shape allocation from
+escaping the pre-clone reservation. Callback and stopped paths remain native
+evidence rather than supported Rust behavior. All 917 Rust library tests and
+the release build pass; independent read-only peer review found no blockers.
+The 36 RE infrastructure tests passed at the immediately preceding skin-change
+checkpoint. Simulation/Python bridge suites were not rerun for this offline replay.

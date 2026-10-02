@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,578 classifications and 419 evidence records
+additional native timing audits. The overlay contains 1,578 classifications and 420 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 912 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 917 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -440,6 +440,11 @@ The [skin change composition](notes/systems/character_data_change_skin_join.md)
 executes ChangeSkin and its actual unlock lookup together across 260 cases and
 161 exact stopped prefixes. The caller stores its original skin even when
 unlock lookup selects another skin with the same ID.
+
+The guarded Rust [CharacterData constructor replay](notes/systems/character_data_constructor.md)
+compares 66 normal native fixtures and three resumed recovery calls. Five tests
+verify all 37 physical records, complete histories and volatile registers,
+exact generic metadata, six captured list stores and the base-constructor tail.
 
 Resume with these boundaries in view:
 

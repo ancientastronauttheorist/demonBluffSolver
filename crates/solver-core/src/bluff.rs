@@ -33,6 +33,7 @@ pub mod character_data_consumers;
 pub mod character_data_description;
 pub mod character_data_text_consumers;
 pub mod character_loc_text;
+pub mod character_data_constructor;
 pub mod hint_info_constructor;
 pub mod character_reward_initialization;
 pub mod saved_game_info;
