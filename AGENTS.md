@@ -88,8 +88,10 @@ stop, diagnose, fix, verify, then resume.
     can also capture closure functions and fail only at final JSON serialization.
     Check imported report/helper schemas before indexing their fields; a build
     constant is not necessarily repeated inside a returned layout dictionary.
-    Read exact report counters before authoring checkpoint assertions; do not
-    hand-count operand pins or substitute a nearby summary count.
+    Read exact report counters and filtered corpus sizes before authoring
+    checkpoint or native-fixture test assertions; do not hand-count operand
+    pins or substitute a nearby summary count. Calculate capacity boundaries
+    from complete storage and future snapshot costs before asserting admission.
     Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
     keys can accidentally print an entire retained or stopped report corpus.
     Inspect sequence container shapes before iterating calls; retained sequences
