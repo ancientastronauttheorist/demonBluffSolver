@@ -72,6 +72,8 @@ stop, diagnose, fix, verify, then resume.
     Re-read relevant lines after formatting before preparing an exact-match patch;
     formatting can change line wrapping even when the code's behavior is unchanged.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
+    Preserve physical newline translation when reproducing text reports for
+    byte comparisons; Windows text-mode writes can emit CRLF from a final LF.
     For Unicode diagnostics, use ASCII-safe JSON or explicitly configure UTF-8
     console output; the default Windows console encoding may reject valid text.
     Prefer apply_patch or PowerShell here-strings for multiline Python edits;
