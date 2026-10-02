@@ -82,3 +82,23 @@ Whole search/emptiness implementations, locale contents, runtime admission,
 engine localization, exception unwinding and other CharacterLoc methods remain
 open. Separate CharacterData caller evidence does not establish an actual
 CharacterData-to-CharacterLoc composed native join.
+
+## Guarded Rust getter replay
+
+The guarded Rust [CharacterLoc text replay](notes/systems/character_loc_text.md)
+compares 102 normal native fixtures, three full retained sequences and three
+resumed suffixes. Five tests verify full storage and histories, all seven
+volatile integer and six XMM registers, exact callers and nullable results.
+
+Five guarded Rust tests compare 102 inert normal CharacterLoc getter fixtures, three complete retained sequences and three resumed suffixes against full record bytes, prior and ordered histories, all seven volatile integer and six XMM registers, exact service sites/callers/ordinals, nullable supplied results and completed states. Captured LocaleLoc, AL-only emptiness branching, reached selected-field reload and full-zero null results are preserved. Nominal consumed storage, disjoint checked extents, strict schema, base/count overflow and full future history/snapshot work validate before cloning; unsupported input rejects atomically. Whole FindLocaleLoc and String.IsNullOrEmpty services supplied. Nullable owner/code admission is solely the supplied finder contract. Callback paths, native faults/stops, real locale/string policy, engine admission, rendering, acquisition interleaving and unwinding excluded.
+
+Source: [character_loc_text.rs](../../../crates/solver-core/src/bluff/character_loc_text.rs).
+The fixture subset contains all 102 inert normal cases, three complete
+three-call sequences and three two-call resumed suffixes. Explicit full
+initial bytes, native entries and service histories retain earlier callback
+effects without replaying the unsupported callback. Other callback paths,
+guards and native faults remain outside the Rust contract. All 912 Rust
+library tests and the release build pass. The 36 RE infrastructure tests
+passed at the immediately preceding native checkpoint. Simulation/Python
+bridge suites were not rerun for this offline-only replay. Independent
+read-only peer review found no behavior, ABI or validation blocker.

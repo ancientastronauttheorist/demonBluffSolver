@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,577 classifications and 417 evidence records
+additional native timing audits. The overlay contains 1,577 classifications and 418 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 907 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 912 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -430,6 +430,11 @@ The [CharacterLoc text getters](notes/systems/character_loc_text.md)
 execute 134 cases and ten full stopped prefixes. They capture the locale record,
 branch on the supplied emptiness result low byte, then reload its current text.
 The locale search and string implementation remain explicit service boundaries.
+
+The guarded Rust [CharacterLoc text replay](notes/systems/character_loc_text.md)
+compares 102 normal native fixtures, three full retained sequences and three
+resumed suffixes. Five tests verify full storage and histories, all seven
+volatile integer and six XMM registers, exact callers and nullable results.
 
 Resume with these boundaries in view:
 

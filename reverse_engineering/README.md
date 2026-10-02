@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,577 classifications backed by
-417 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+418 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 907 Rust library tests and the release build pass.
+All 912 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1435,6 +1435,11 @@ The [CharacterLoc text getters](notes/systems/character_loc_text.md)
 execute 134 cases and ten full stopped prefixes. They capture the locale record,
 branch on the supplied emptiness result low byte, then reload its current text.
 The locale search and string implementation remain explicit service boundaries.
+
+The guarded Rust [CharacterLoc text replay](notes/systems/character_loc_text.md)
+compares 102 normal native fixtures, three full retained sequences and three
+resumed suffixes. Five tests verify full storage and histories, all seven
+volatile integer and six XMM registers, exact callers and nullable results.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
