@@ -73,6 +73,8 @@ stop, diagnose, fix, verify, then resume.
     including earlier inserted prose; use
     its returned lines rather than remembered fragments, and
     keep patch hunks in file order and omit empty placeholder hunks.
+    For literal source fragments containing regex metacharacters, use `rg -F`
+    with separate `-e` arguments; do not prepare a dependent patch after a failed search.
     Re-read relevant lines after formatting before preparing an exact-match patch;
     formatting can change line wrapping even when the code's behavior is unchanged.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
@@ -86,12 +88,16 @@ stop, diagnose, fix, verify, then resume.
     can also capture closure functions and fail only at final JSON serialization.
     Check imported report/helper schemas before indexing their fields; a build
     constant is not necessarily repeated inside a returned layout dictionary.
+    Read exact report counters before authoring checkpoint assertions; do not
+    hand-count operand pins or substitute a nearby summary count.
     Inspect sequence container shapes before iterating calls; retained sequences
     can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;
     a dependency imported locally by a base class need not be an instance field.
     Check inherited harness preconditions before composing retained native calls;
     derive branch expectations from retained storage rather than fresh-fixture defaults.
+    Qualify callback plans by the invocation that can reach them; do not carry
+    a later call's mutation plan onto an earlier setup-only call.
     Bind indexed literal-array expressions before using them in serde_json::json!
     values, or parenthesize the complete expression for the macro parser.
     Coordinate shared Rust builds after agents confirm all declared module and
