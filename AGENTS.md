@@ -90,6 +90,8 @@ stop, diagnose, fix, verify, then resume.
     constant is not necessarily repeated inside a returned layout dictionary.
     Read exact report counters before authoring checkpoint assertions; do not
     hand-count operand pins or substitute a nearby summary count.
+    Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
+    keys can accidentally print an entire retained or stopped report corpus.
     Inspect sequence container shapes before iterating calls; retained sequences
     can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;
