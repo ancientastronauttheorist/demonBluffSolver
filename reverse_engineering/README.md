@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,573 classifications backed by
-415 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,575 classifications backed by
+416 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1425,6 +1425,11 @@ The [MouseExit caller](notes/systems/card_interaction_mouse_exit.md)
 executes 58 cases and 67 full stopped prefixes. Its native hover callback,
 captured highlight loop, movement and scale requests retain exact raw ABI
 and reload animation IDs independently of the earlier Kill capture.
+
+The [skin lookup callers](notes/systems/character_data_skin_lookup.md)
+execute 352 cases and 151 full stopped prefixes. CheckIfSkinUnlocked uses the
+first matching skin, while LoadSkin keeps scanning and stores every match.
+Separate cleanup-frame probes preserve their explicit exception boundary.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
