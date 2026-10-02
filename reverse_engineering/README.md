@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,579 classifications backed by
-421 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+422 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1455,6 +1455,11 @@ The actual [locale search/getter join](notes/systems/character_loc_search_join.m
 compares 504 cases and 166 full stopped prefixes. Both text getters consume
 the first matching captured locale record from actual FindLocaleLoc, with
 one shared stack graph and explicit synthetic cleanup evidence.
+
+The eight-body [reward-to-RefreshView join](notes/systems/character_reward_refresh_join.md)
+executes 744 cases and 1,129 complete stopped prefixes over 84 physical records.
+It retains all four recorded argument registers and full storage; broader
+volatile-register evidence remains an explicit boundary.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
