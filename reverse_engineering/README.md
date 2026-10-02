@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,525 classifications backed by
-383 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+384 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1230,6 +1230,12 @@ The guarded Rust [CardTokens replay](notes/systems/card_tokens.md) compares
 Complete represented physical storage and supplied ledgers retain service-entry
 chronology, ordered tag aliases and exact byte/register widths. Future snapshot
 and log work validates before cloning; engine effects and failure paths are excluded.
+
+The actual [Oracle-to-CharacterView join](notes/systems/character_oracle_view_join.md)
+executes both native families across 253 cases, six retained sequences and 168
+full stopped prefixes. Captured animation/data/text, later reloads and shared
+GameObjects preserve callback chronology and exact warm/cold register values.
+RevealOrder, Acted and engine/data services remain explicit supplied boundaries.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

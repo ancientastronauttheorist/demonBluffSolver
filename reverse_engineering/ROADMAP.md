@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,525 classifications and 383 evidence records
+additional native timing audits. The overlay contains 1,525 classifications and 384 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -225,6 +225,12 @@ The guarded Rust [CardTokens replay](notes/systems/card_tokens.md) compares
 Complete represented physical storage and supplied ledgers retain service-entry
 chronology, ordered tag aliases and exact byte/register widths. Future snapshot
 and log work validates before cloning; engine effects and failure paths are excluded.
+
+The actual [Oracle-to-CharacterView join](notes/systems/character_oracle_view_join.md)
+executes both native families across 253 cases, six retained sequences and 168
+full stopped prefixes. Captured animation/data/text, later reloads and shared
+GameObjects preserve callback chronology and exact warm/cold register values.
+RevealOrder, Acted and engine/data services remain explicit supplied boundaries.
 
 Resume with these boundaries in view:
 
