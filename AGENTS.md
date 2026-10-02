@@ -215,6 +215,9 @@ stop, diagnose, fix, verify, then resume.
     can select another class and modifiers can differ from an assumed declaration.
     Bound each block by that declaration's closing brace, not an optional
     Properties marker that can skip into the next type.
+    For Dumper RVA/VA/Offset comments, preserve the observed spelling or parse
+    and compare numeric values; do not regenerate exact comment strings from
+    normalized lowercase addresses.
     Discover compiler-generated iterator suffixes from metadata or exact dump
     declarations; a remembered ordinal is not a verified generated class name.
     Preserve exact floating-point values when loading native timing fixtures;
