@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,546 classifications backed by
-391 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,548 classifications backed by
+392 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1289,6 +1289,12 @@ executes four complete bodies in 518 cases, five retained sequences and 110
 full stopped prefixes. Native SetupArt preserves captured sprites, exact type
 DWORDs and later Image reloads, including aliased GameObjects. Appearance/data
 selection, Unity effects and preference subscription remain supplied boundaries.
+
+The [DeckCharacter registration audit](notes/systems/deck_character_registration.md)
+executes Init and OnDisable in 96 cases, two retained sequences and 72 complete
+stopped prefixes. It preserves captured first-channel operands, reloaded second
+interaction and the original data argument through later stores and InitReward.
+Action/Delegate services and event admission remain explicitly supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

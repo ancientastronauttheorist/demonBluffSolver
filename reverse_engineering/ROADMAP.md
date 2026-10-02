@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,546 classifications and 391 evidence records
+additional native timing audits. The overlay contains 1,548 classifications and 392 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -284,6 +284,12 @@ executes four complete bodies in 518 cases, five retained sequences and 110
 full stopped prefixes. Native SetupArt preserves captured sprites, exact type
 DWORDs and later Image reloads, including aliased GameObjects. Appearance/data
 selection, Unity effects and preference subscription remain supplied boundaries.
+
+The [DeckCharacter registration audit](notes/systems/deck_character_registration.md)
+executes Init and OnDisable in 96 cases, two retained sequences and 72 complete
+stopped prefixes. It preserves captured first-channel operands, reloaded second
+interaction and the original data argument through later stores and InitReward.
+Action/Delegate services and event admission remain explicitly supplied.
 
 Resume with these boundaries in view:
 
