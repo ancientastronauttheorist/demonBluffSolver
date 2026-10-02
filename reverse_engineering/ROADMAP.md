@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,517 classifications and 380 evidence records
+additional native timing audits. The overlay contains 1,521 classifications and 381 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -207,6 +207,12 @@ callers in 302 cases, two retained sequences and 73 full stopped prefixes.
 Five independent key branches preserve ordered physical tag effects, pointer
 reloads and exact byte/register widths. Input collection and Unity tag effects
 remain explicit supplied services; no live keyboard or rendering is inferred.
+
+The [DeckView visibility audit](notes/systems/deck_view_visibility.md) executes
+four native bodies in 142 cases, two retained sequences and 81 full stopped
+prefixes. Update tail-calls the actual Close body; canvas/animation captures and
+later reloads retain callback timing and exact register widths. Input, Unity,
+formatting and tween implementations remain explicit supplied services.
 
 Resume with these boundaries in view:
 
