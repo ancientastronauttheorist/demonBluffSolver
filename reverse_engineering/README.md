@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,548 classifications backed by
-393 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+394 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1301,6 +1301,12 @@ executes 288 cases, two retained sequences and 25 full stopped prefixes. An
 independent byte-level model checks raw arguments and every partial snapshot,
 including early register captures, late stack title/flavor/Color loads and exact
 fault sites. This closes the prior single hover-argument constructor limitation.
+
+The actual [View-to-CharacterData join](notes/systems/character_view_data_join.md)
+executes 221 profiles, four retained sequences and 173 full stopped prefixes.
+Original data and produced sprites survive later field changes while actual
+getters reload current skin; full raw arguments and native phases remain in
+service snapshots. Runtime/Unity/TMP and animation remain separate boundaries.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

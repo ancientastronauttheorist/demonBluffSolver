@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,548 classifications and 393 evidence records
+additional native timing audits. The overlay contains 1,548 classifications and 394 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -296,6 +296,12 @@ executes 288 cases, two retained sequences and 25 full stopped prefixes. An
 independent byte-level model checks raw arguments and every partial snapshot,
 including early register captures, late stack title/flavor/Color loads and exact
 fault sites. This closes the prior single hover-argument constructor limitation.
+
+The actual [View-to-CharacterData join](notes/systems/character_view_data_join.md)
+executes 221 profiles, four retained sequences and 173 full stopped prefixes.
+Original data and produced sprites survive later field changes while actual
+getters reload current skin; full raw arguments and native phases remain in
+service snapshots. Runtime/Unity/TMP and animation remain separate boundaries.
 
 Resume with these boundaries in view:
 
