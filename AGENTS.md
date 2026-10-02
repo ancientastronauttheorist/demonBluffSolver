@@ -61,6 +61,8 @@ stop, diagnose, fix, verify, then resume.
     Before creating an audit artifact, verify its assigned full output directory
     and preserve it in the write path. Before freeze, compare each resolved
     script, note and report path with its assigned path.
+    Normalize repository-relative paths with as_posix() when comparing against
+    Git's forward-slash path output on Windows.
     Inspect filename-discovery results before issuing dependent reads; do not
     batch discovery with reads against guessed paths, even for a previously
     discussed family whose exact note basename is not recorded. A worker's source-ready

@@ -176,3 +176,30 @@ infrastructure checks passed. The report is 32,045,328 bytes, SHA-256
 No actual allocation, RNG, boxing, cast, formatting,
 metadata resolver, collector, Unity name access or exception runtime executes;
 their whole supplied inputs/effects remain explicit.
+
+## Guarded Rust normal caller replay
+
+The guarded Rust [identity-generation replay](notes/systems/character_data_identity.md)
+compares 46 inert normal native cases, 15 retained rows and three full sequences.
+Five tests check the complete stack, captured array/values, integer scratch
+writes, metadata, histories and raw ABI, with atomic context rejection.
+
+The normal replay retains all 31 physical windows, including the complete
+152-byte stack, and all thirteen explicit categorized service histories. It
+does not invent ordering across prior categories; current steps are ordered.
+Original captured values are stored even when the supplied successful cast
+returns another nominal identity. EAX writes preserve neighboring scratch bytes.
+The low DWORD array length must admit all nine stores before cloning.
+Nominal ranges cannot overlap each other or the three native roots/flag, and
+all exclusive endpoints are checked. Canonical lowercase XMM diagnostics and
+required nullable scalar fields prevent lossy or missing evidence. Future work
+reserves 452 units per call (200 for an entry plus 42 complete history records),
+43 snapshots per call plus two, and trace/final ABI storage separately; the
+checked work limit is 4,194,304. Callbacks, stopped/exceptional calls and traps
+remain native evidence rather than supported future replay behavior.
+
+Source: [character_data_identity.rs](../../../crates/solver-core/src/bluff/character_data_identity.rs).
+All 928 Rust library tests and the release build pass; all 36 RE infrastructure
+tests passed at the native checkpoint. Independent read-only review found no
+remaining blockers. Simulation and Python bridge suites were not rerun for
+these offline caller modules.

@@ -123,3 +123,27 @@ The matching private peer is
 All 36 RE infrastructure tests pass. Actual preferences persistence, collection
 and string implementations, skin loading, runtime admission and exception
 machinery remain outside this caller contract.
+
+## Guarded Rust normal caller replay
+
+The guarded Rust [preference-loading replay](notes/systems/character_data_preferences.md)
+compares 84 inert normal native cases and eight retained calls. Six tests check
+complete physical state, chronological history, volatile registers, duplicate
+skin requests, cold recovery and atomic storage/budget/schema guards.
+
+The replay consumes explicit whole-service outputs for saved lookup, 24-byte
+enumeration, MoveNext, equality and inert LoadSkin. Every future call is normal
+and finite; historical native entries and service results retain the full prior
+state. Per-invocation ordinals reset while the chronological history persists.
+All nominal record ranges are checked against each other and native metadata
+slots/flag; the output and active enumerators are the designated scratch
+interiors. Complete future entry, history, iterator, trace and snapshot costs
+are reserved before cloning. The fixed Call input reservation includes a
+conservative 160-byte allowance. Cleanup, callback and stopped paths remain
+native evidence rather than supported future Rust calls.
+
+Source: [character_data_preferences.rs](../../../crates/solver-core/src/bluff/character_data_preferences.rs).
+All 928 Rust library tests and the release build pass; all 36 RE infrastructure
+tests passed at the native checkpoint. Independent read-only review found no
+remaining blockers. Simulation and Python bridge suites were not rerun for
+these offline caller modules.

@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,583 classifications and 426 evidence records
+additional native timing audits. The overlay contains 1,583 classifications and 428 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 917 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 928 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -475,6 +475,16 @@ The actual [SkinData unlock callers](notes/systems/skin_unlock.md)
 compare 91 cases and 183 full stopped prefixes. The audit preserves AL return
 residues, the signed ID-length gate, captured save recipients and later ID/List
 reloads, while save persistence and generic collection services remain supplied.
+
+The guarded Rust [preference-loading replay](notes/systems/character_data_preferences.md)
+compares 84 inert normal native cases and eight retained calls. Six tests check
+complete physical state, chronological history, volatile registers, duplicate
+skin requests, cold recovery and atomic storage/budget/schema guards.
+
+The guarded Rust [identity-generation replay](notes/systems/character_data_identity.md)
+compares 46 inert normal native cases, 15 retained rows and three full sequences.
+Five tests check the complete stack, captured array/values, integer scratch
+writes, metadata, histories and raw ABI, with atomic context rejection.
 
 Resume with these boundaries in view:
 

@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,583 classifications backed by
-426 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+428 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 917 Rust library tests and the release build pass.
+All 928 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1480,6 +1480,16 @@ The actual [SkinData unlock callers](notes/systems/skin_unlock.md)
 compare 91 cases and 183 full stopped prefixes. The audit preserves AL return
 residues, the signed ID-length gate, captured save recipients and later ID/List
 reloads, while save persistence and generic collection services remain supplied.
+
+The guarded Rust [preference-loading replay](notes/systems/character_data_preferences.md)
+compares 84 inert normal native cases and eight retained calls. Six tests check
+complete physical state, chronological history, volatile registers, duplicate
+skin requests, cold recovery and atomic storage/budget/schema guards.
+
+The guarded Rust [identity-generation replay](notes/systems/character_data_identity.md)
+compares 46 inert normal native cases, 15 retained rows and three full sequences.
+Five tests check the complete stack, captured array/values, integer scratch
+writes, metadata, histories and raw ABI, with atomic context rejection.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
