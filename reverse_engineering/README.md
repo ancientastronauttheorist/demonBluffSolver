@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,565 classifications backed by
-405 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+406 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1376,6 +1376,11 @@ The [CardInteraction setup audit](notes/systems/card_interaction_awake.md)
 executes Awake and both hover gates. Its 67 cases, four retained sequences
 and 21 exact stopped prefixes pin Character and animation-ID stores,
 Int32 boxing width, literal reload timing and one-byte hover writes.
+
+The [reward art join](notes/systems/character_reward_art_join.md)
+now executes six actual bodies through Data art selection and SetupArt.
+Its 394 cases, 14 retained sequences and 337 exact stopped prefixes
+verify captured Sprite versus reloaded type and Image receivers across the chain.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
