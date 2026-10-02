@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,581 classifications and 425 evidence records
+additional native timing audits. The overlay contains 1,583 classifications and 426 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -470,6 +470,11 @@ The [initializer physical-state audit](notes/systems/character_initializers.md)
 compares both complete initializer bodies across 211 cases and 248 full stopped
 prefixes. An independent instruction model checks 74 full physical records,
 registers, stores and histories, with reset/capture/reload semantics checked separately.
+
+The actual [SkinData unlock callers](notes/systems/skin_unlock.md)
+compare 91 cases and 183 full stopped prefixes. The audit preserves AL return
+residues, the signed ID-length gate, captured save recipients and later ID/List
+reloads, while save persistence and generic collection services remain supplied.
 
 Resume with these boundaries in view:
 

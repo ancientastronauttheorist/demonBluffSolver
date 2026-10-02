@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,581 classifications backed by
-425 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,583 classifications backed by
+426 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1475,6 +1475,11 @@ The [initializer physical-state audit](notes/systems/character_initializers.md)
 compares both complete initializer bodies across 211 cases and 248 full stopped
 prefixes. An independent instruction model checks 74 full physical records,
 registers, stores and histories, with reset/capture/reload semantics checked separately.
+
+The actual [SkinData unlock callers](notes/systems/skin_unlock.md)
+compare 91 cases and 183 full stopped prefixes. The audit preserves AL return
+residues, the signed ID-length gate, captured save recipients and later ID/List
+reloads, while save persistence and generic collection services remain supplied.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
