@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,525 classifications backed by
-384 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,528 classifications backed by
+385 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1236,6 +1236,12 @@ executes both native families across 253 cases, six retained sequences and 168
 full stopped prefixes. Captured animation/data/text, later reloads and shared
 GameObjects preserve callback chronology and exact warm/cold register values.
 RevealOrder, Acted and engine/data services remain explicit supplied boundaries.
+
+The [InGameSettings audit](notes/systems/in_game_settings.md) executes three
+native menu callers in 151 contexts, four retained sequences and 18 full stopped
+prefixes. Active-state capture and field reload, Escape low-byte gating and exact
+setter register widths preserve callback timing. Engine input and GameObject
+effects remain supplied; the shared NightStep alias is not promoted.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

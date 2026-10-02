@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,525 classifications and 384 evidence records
+additional native timing audits. The overlay contains 1,528 classifications and 385 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -231,6 +231,12 @@ executes both native families across 253 cases, six retained sequences and 168
 full stopped prefixes. Captured animation/data/text, later reloads and shared
 GameObjects preserve callback chronology and exact warm/cold register values.
 RevealOrder, Acted and engine/data services remain explicit supplied boundaries.
+
+The [InGameSettings audit](notes/systems/in_game_settings.md) executes three
+native menu callers in 151 contexts, four retained sequences and 18 full stopped
+prefixes. Active-state capture and field reload, Escape low-byte gating and exact
+setter register widths preserve callback timing. Engine input and GameObject
+effects remain supplied; the shared NightStep alias is not promoted.
 
 Resume with these boundaries in view:
 
