@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,579 classifications and 422 evidence records
+additional native timing audits. The overlay contains 1,580 classifications and 423 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -455,6 +455,11 @@ The eight-body [reward-to-RefreshView join](notes/systems/character_reward_refre
 executes 744 cases and 1,129 complete stopped prefixes over 84 physical records.
 It retains all four recorded argument registers and full storage; broader
 volatile-register evidence remains an explicit boundary.
+
+The actual [identity-generation caller](notes/systems/character_data_identity.md)
+compares 141 cases and 1,053 full stopped prefixes. Its nine captured array
+stores, eight integer scratch writes, complete stack and retained histories
+are verified while RNG, boxing and formatting remain supplied services.
 
 Resume with these boundaries in view:
 
