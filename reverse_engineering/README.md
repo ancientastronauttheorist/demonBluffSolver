@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,551 classifications backed by
-397 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+398 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1325,6 +1325,12 @@ executes SetupObject and RevealReal in 341 cases, three retained sequences and
 61 full stopped prefixes. Every event and final state matches an independent
 model. Captured name, sprite and background identities remain distinct from
 later Data/component reloads; art/View/engine bodies stay supplied here.
+
+The [Character art-to-Data join](notes/systems/character_art_data_join.md) executes
+535 profiles, six retained sequences and 216 exact stopped prefixes through
+seven actual bodies. The first sprite survives a later independent appearance
+selection; current skin reloads and separate type reads match complete physical
+state. Appearance and Unity/runtime services remain explicit boundaries.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
