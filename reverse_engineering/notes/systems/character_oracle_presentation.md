@@ -113,3 +113,11 @@ SHA-256 `93a608ce21cbc4dc2634b4967b421d8ce2c424d89f7c97deefeaf8146655596c`.
 $env:PYTHONPATH='B:/CodexTools/DemonBluffReverseEngineering/python-emulation'
 python reverse_engineering/scripts/audit_character_oracle_presentation.py GAME_ROOT DUMPER_ROOT --output REPORT
 ```
+
+## Separate actual RevealOrder composition
+
+The [Oracle-to-RevealOrder audit](character_oracle_reveal_join.md) now executes
+those two native callees inside these callers with one physical state. This
+standalone audit/report retains its original supplied boundary; the new report
+verifies capture/reload chronology, aliases and full stopped prefixes. Other
+game-owned and engine services remain supplied in that separate join.

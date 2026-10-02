@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,515 classifications and 378 evidence records
+additional native timing audits. The overlay contains 1,515 classifications and 379 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -181,7 +181,8 @@ The [RevealOrder presentation audit](notes/systems/reveal_order_presentation.md)
 adds two native callers in 50 cases, two retained sequences and six exact
 stopped prefixes. Init captures the order DWORD, activates the GameObject,
 then captures text before formatting and reloads its virtual class afterward.
-Unity/formatting/TMP implementations and an actual Oracle join remain open.
+Unity/formatting/TMP implementations remain supplied; the separate actual
+Oracle join below now verifies the game-owned composition.
 
 The guarded Rust [RevealOrder replay](notes/systems/reveal_order_presentation.md)
 compares 23 normal native profiles and two retained sequences in 4 tests.
@@ -194,6 +195,12 @@ adds the exact folded wrapper in 54 contexts, six full stopped prefixes and 11
 retained constructor/presentation sequences. It forwards the owner and zeroed
 MethodInfo to a supplied MonoBehaviour base without initializing custom text.
 Shared aliases are not promoted; Unity construction and serialization remain open.
+
+The actual [Oracle-to-RevealOrder join](notes/systems/character_oracle_reveal_join.md)
+executes both native caller/callee families in one physical state across 182
+cases, eight retained sequences and 88 full stopped prefixes. Order/text capture,
+TMP class reload and shared GameObject aliases retain exact chronology; other
+game-owned, runtime, formatting and Unity services remain supplied.
 
 Resume with these boundaries in view:
 
