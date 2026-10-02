@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-02 native physical state and SkinData
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,585 classifications and 430 evidence records
+additional native timing audits. The overlay contains 1,585 classifications and 431 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 928 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 933 Rust library tests, 36 reverse-engineering tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -495,6 +495,11 @@ The actual [SkinData ID generator](notes/systems/skin_data_identity.md)
 verifies five captured entries and four integer draws through 117 cases, six
 retained sequences and 445 full stopped prefixes. All four declared SkinData
 methods now have native caller audits; their Unity and save services remain supplied.
+
+The guarded Rust [SkinData constructor replay](notes/systems/skin_data_constructor.md)
+compares all 32 normal native cases and seven normal retained calls, including
+stopped-call recovery. Five tests check complete storage, tail-call ABI, explicit
+supplied base writes and atomic schema, identity and capacity rejection.
 
 Resume with these boundaries in view:
 

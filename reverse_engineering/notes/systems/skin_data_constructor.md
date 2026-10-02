@@ -105,3 +105,30 @@ python reverse_engineering/scripts/audit_skin_data_constructor.py `
 No actual ScriptableObject base implementation, Unity allocation/registration,
 managed admission, unrelated folded alias, or wider constructor provenance is
 asserted by this small caller audit.
+
+## Guarded Rust normal caller replay
+
+The guarded Rust [SkinData constructor replay](notes/systems/skin_data_constructor.md)
+compares all 32 normal native cases and seven normal retained calls, including
+stopped-call recovery. Five tests check complete storage, tail-call ABI, explicit
+supplied base writes and atomic schema, identity and capacity rejection.
+
+The bounded replay retains all fourteen physical windows, complete native-entry
+and completed-service histories, all sixteen GPRs and sixteen XMM values. It
+clears RDX before the tail gateway, keeps the original receiver/caller/SP, and
+applies only the two explicitly admitted supplied base write shapes. The
+constructor itself writes no owner or stack bytes. Three complete normal
+two-call sequences and the normal recovery suffix compare full retained state.
+Supplied stops remain native evidence and reject as future calls.
+
+Nominal field references, complete disjoint window extents, canonical XMM
+strings, caller sentinel, aligned external stack and exclusive endpoints validate
+before cloning. Nested records/calls reject unknown fields; retained ABI/history
+objects validate exact keys and values. Future history and snapshot growth is
+reserved under checked work bounds. No actual ScriptableObject implementation,
+allocation default or Unity runtime construction is inferred.
+
+Source: [skin_data_constructor.rs](../../../crates/solver-core/src/bluff/skin_data_constructor.rs).
+All 933 Rust library tests, the release build and 36 RE infrastructure tests
+passed. Independent read-only peer review found no remaining blockers.
+Simulation and Python bridge suites were not rerun for this offline module.

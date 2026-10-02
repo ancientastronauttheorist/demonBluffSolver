@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,585 classifications backed by
-430 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+431 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1031,7 +1031,7 @@ The [guarded SavedGameInfo Rust replay](notes/systems/saved_game_info_replay.md)
 compares 134 normal native method/JSON-caller fixtures and service-entry List
 snapshots in six focused tests. It retains versions and backing slots, requires
 supplied growth/allocation outcomes and rejects aggregate capacity overflow.
-All 928 Rust library tests and the release build pass.
+All 933 Rust library tests and the release build pass.
 The [tutorial presentation/persistence join](notes/systems/tutorial_persistence_join.md)
 adds seven complete caller methods in 474 cases and 64 exact stopped prefixes,
 including native AddTutorial/Save and four storage reloads. It separates
@@ -1500,6 +1500,11 @@ The actual [SkinData ID generator](notes/systems/skin_data_identity.md)
 verifies five captured entries and four integer draws through 117 cases, six
 retained sequences and 445 full stopped prefixes. All four declared SkinData
 methods now have native caller audits; their Unity and save services remain supplied.
+
+The guarded Rust [SkinData constructor replay](notes/systems/skin_data_constructor.md)
+compares all 32 normal native cases and seven normal retained calls, including
+stopped-call recovery. Five tests check complete storage, tail-call ABI, explicit
+supplied base writes and atomic schema, identity and capacity rejection.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
