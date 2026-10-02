@@ -1,6 +1,6 @@
 # Full Reconstruction Roadmap
 
-## Continuation checkpoint: 2026-10-01 native storage and refresh
+## Continuation checkpoint: 2026-10-02 native physical state and SkinData
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
 additional native timing audits. The overlay contains 1,585 classifications and 430 evidence records
@@ -680,6 +680,22 @@ Resume with these boundaries in view:
    extend the actual ManageCharacters/both-builders prefix through native Init
    and writer dispatch, then join the exact actor/pool/continuation state required
    by the existing acquisition and scheduled replays.
+   The next bounded composition should run ManageCharacters `tdi5505.m0006`
+   at `36CE30` through every actual Init occurrence, stopping at `36D01E`
+   before publication. Replace the synthetic dataRef-only service at call site
+   `36CFDA` with the complete [physical initializer](notes/systems/character_initializers.md)
+   `tdi5487.m0025` at `365A20..365D73`, returning to `36CFDF`.
+   Start with board `[A,A]` and roster `[D0,D1]`: displayed IDs are `[2,1]`,
+   final data is `D1`, and two distinct state-zero iterators retain owner `A`.
+   Preserve the first iterator after the second occurrence. Then test a board
+   replacement during first Init and a stopped second Init callback.
+   Unify physical aliases and metadata roots; bind each initializer contract to
+   the real receiver, incoming data, nested stack and occurrence allocation.
+   Extend the independent interpreter for native internal calls/returns rather
+   than treating every call as supplied. Keep RefreshCharacter/RefreshView and
+   StartCoroutine supplied for this first join. It establishes neither role
+   cloning nor first yield; those require the subsequent actual Hidden refresh
+   and DelayReveal MoveNext composition before Act Init/Start and scheduling.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.
@@ -690,6 +706,8 @@ Resume with these boundaries in view:
 Start with the linked clock, ascension setup/helpers and GameData lifecycle
 notes in README. Proprietary exports remain in the private artifact workspace.
 No live game or automation loop was used for this reconstruction session.
+The untracked ActivatePick script/note remain unfinished drafts without a frozen
+canonical report or coverage promotion; keep them separate from these checkpoints.
 
 ## Definition of complete
 
