@@ -128,24 +128,12 @@ Oracle-to-RevealOrder joined execution, renderer effects or service internals.
 
 ## Constructor continuation
 
-The separate constructor remains unclassified. Read-only entry inspection binds
-`tdi5735.m0002` to the exact `RevealOrder..ctor` declaration, signature
-`void RevealOrder___ctor(RevealOrder_o* __this, const MethodInfo* method)` and
-TypeSignature `vii`. Its shared entry `0x33E820..0x33E827` clears EDX and
-tail-forwards the unchanged RCX owner to `0x1C79770`. It touches no object fields,
-stack or metadata and does not initialize `text`. Nine alignment bytes precede
-the next verified managed entry at `0x33E830`.
-
-The gateway is folded across several Unity constructor declarations. Preserve
-RevealOrder's nominal MonoBehaviour base; neither an alias name nor the 218
-declarations sharing this wrapper establishes each declaration's behavior.
-Existing Acted/ActedVersion evidence targets their constructors only.
-The next audit should pin this exact declaration and complete wrapper, supply
-the base gateway explicitly, and verify owner/zero-MethodInfo tail-call ABI,
-full retained storage, normal/stopped prefixes, null/fresh/reused owners and
-Win64 stack/nonvolatile state. A later ctor-to-Init/Hide sequence must still
-provide the text component as serialized/runtime input. These inspection
-findings do not promote constructor coverage or establish a native replay.
+The separate [constructor audit](reveal_order_constructor.md) now classifies
+only `tdi5735.m0002`: its complete two-instruction wrapper zeroes RDX and
+tail-forwards the owner to an explicitly supplied MonoBehaviour base. It performs
+no custom text initialization. Full stopped prefixes and retained constructor-to-
+Init/Hide sequences use explicit serialized/runtime component input; folded
+aliases, engine construction and serialization admission remain separate.
 
 ## Guarded Rust caller replay
 

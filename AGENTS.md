@@ -82,6 +82,8 @@ stop, diagnose, fix, verify, then resume.
     constant is not necessarily repeated inside a returned layout dictionary.
     Inspect inherited emulator initialization before using its attributes;
     a dependency imported locally by a base class need not be an instance field.
+    Check inherited harness preconditions before composing retained native calls;
+    derive branch expectations from retained storage rather than fresh-fixture defaults.
     Bind indexed literal-array expressions before using them in serde_json::json!
     values, or parenthesize the complete expression for the macro parser.
     Coordinate shared Rust builds after agents confirm all declared module and

@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,444 classifications backed by
-339 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,515 classifications backed by
+378 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1193,6 +1193,12 @@ compares 23 normal native profiles and two retained sequences in 4 tests.
 Physical records, supplied effects, order bits and captured text retain exact
 service-entry chronology. Future snapshot work validates before cloning;
 formatting, Unity/TMP implementation and actual Oracle composition remain open.
+
+The [RevealOrder constructor audit](notes/systems/reveal_order_constructor.md)
+adds the exact folded wrapper in 54 contexts, six full stopped prefixes and 11
+retained constructor/presentation sequences. It forwards the owner and zeroed
+MethodInfo to a supplied MonoBehaviour base without initializing custom text.
+Shared aliases are not promoted; Unity construction and serialization remain open.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,514 classifications and 377 evidence records
+additional native timing audits. The overlay contains 1,515 classifications and 378 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -188,6 +188,12 @@ compares 23 normal native profiles and two retained sequences in 4 tests.
 Physical records, supplied effects, order bits and captured text retain exact
 service-entry chronology. Future snapshot work validates before cloning;
 formatting, Unity/TMP implementation and actual Oracle composition remain open.
+
+The [RevealOrder constructor audit](notes/systems/reveal_order_constructor.md)
+adds the exact folded wrapper in 54 contexts, six full stopped prefixes and 11
+retained constructor/presentation sequences. It forwards the owner and zeroed
+MethodInfo to a supplied MonoBehaviour base without initializing custom text.
+Shared aliases are not promoted; Unity construction and serialization remain open.
 
 Resume with these boundaries in view:
 
