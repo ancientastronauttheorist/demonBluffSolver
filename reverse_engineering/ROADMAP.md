@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,565 classifications and 406 evidence records
+additional native timing audits. The overlay contains 1,566 classifications and 407 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -376,6 +376,11 @@ The [reward art join](notes/systems/character_reward_art_join.md)
 now executes six actual bodies through Data art selection and SetupArt.
 Its 394 cases, 14 retained sequences and 337 exact stopped prefixes
 verify captured Sprite versus reloaded type and Image receivers across the chain.
+
+The [CharacterData description audit](notes/systems/character_data_description.md)
+executes 298 cases, nine retained sequences and 27 exact stopped prefixes.
+It pins the current language reloads and repeated conversion of the same
+description field, including callback changes and partial recovery.
 
 Resume with these boundaries in view:
 
