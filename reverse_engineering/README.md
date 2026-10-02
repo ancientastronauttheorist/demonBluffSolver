@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,548 classifications backed by
-395 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,549 classifications backed by
+396 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1313,6 +1313,12 @@ compares 262 inert native call inputs in five tests, preserving complete physica
 records, argument slots, prior history and full service-entry raw arguments.
 Nullable aliases and exact Color bytes survive reuse; nominal storage and future
 clone/history budgets validate before replay. GC and callback effects stay excluded.
+
+The complete [Character.InitReward caller](notes/systems/character_init_reward.md)
+executes 72 cases, three retained sequences and 28 exact stopped prefixes.
+An independent model compares every full snapshot and raw service call, including
+captured Acted/input identities and late alignment/state reads. RevealReal and
+Unity/Action services remain explicit boundaries.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
