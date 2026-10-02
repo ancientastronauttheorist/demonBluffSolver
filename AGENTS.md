@@ -83,6 +83,8 @@ stop, diagnose, fix, verify, then resume.
     can also capture closure functions and fail only at final JSON serialization.
     Check imported report/helper schemas before indexing their fields; a build
     constant is not necessarily repeated inside a returned layout dictionary.
+    Inspect sequence container shapes before iterating calls; retained sequences
+    can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;
     a dependency imported locally by a base class need not be an instance field.
     Check inherited harness preconditions before composing retained native calls;
