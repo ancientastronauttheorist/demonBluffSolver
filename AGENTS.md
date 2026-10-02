@@ -115,6 +115,8 @@ stop, diagnose, fix, verify, then resume.
     values, or parenthesize the complete expression for the macro parser.
     Parenthesize Rust cast expressions before comparison operators, especially
     `as T` followed by `<`, to avoid parsing the comparison as generic arguments.
+    Match borrowed serde_json::Value operands in fixture assertions; a borrowed
+    input needs a borrowed expected Value rather than an owned macro result.
     Coordinate shared Rust builds after agents confirm all declared module and
     test files and pending review fixes are complete; an in-progress module can
     break unrelated tests even after an earlier freeze was announced.
