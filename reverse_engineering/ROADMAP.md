@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,525 classifications and 382 evidence records
+additional native timing audits. The overlay contains 1,525 classifications and 383 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 872 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 877 Rust library tests and the release build; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -219,6 +219,12 @@ callers in 213 contexts, 12 retained sequences and 22 full stopped prefixes.
 Setting DWORD gates, registration source capture and later static/callback
 reloads preserve exact native chronology. Settings, delegate and UI effects
 remain supplied; twelve trap/post-store stub instructions are explicitly unexecuted.
+
+The guarded Rust [CardTokens replay](notes/systems/card_tokens.md) compares
+267 supported normal native profiles and two retained sequences in five tests.
+Complete represented physical storage and supplied ledgers retain service-entry
+chronology, ordered tag aliases and exact byte/register widths. Future snapshot
+and log work validates before cloning; engine effects and failure paths are excluded.
 
 Resume with these boundaries in view:
 

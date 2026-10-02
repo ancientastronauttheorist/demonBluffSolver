@@ -97,3 +97,18 @@ python reverse_engineering/scripts/audit_card_tokens.py `
   --dumper-root 'B:/CodexTools/DemonBluffReverseEngineering/artifacts/f530404b0f3f_807de4a83df4/il2cppdumper-v6.7.46' `
   --output 'B:/CodexTools/DemonBluffReverseEngineering/artifacts/f530404b0f3f_807de4a83df4/card_tokens_peer.json'
 ```
+
+## Guarded Rust caller replay
+
+The guarded Rust [CardTokens replay](notes/systems/card_tokens.md) compares
+267 supported normal native profiles and two retained sequences in five tests.
+Complete represented physical storage and supplied ledgers retain service-entry
+chronology, ordered tag aliases and exact byte/register widths. Future snapshot
+and log work validates before cloning; engine effects and failure paths are excluded.
+
+Five guarded Rust tests compare 267 supported normal CardTokens native profiles and two retained four-call sequences against complete represented physical storage, service-entry snapshots, exact arguments, ledgers and final state. Independently supplied key/active low-byte results and volatile register bits preserve five ordered branch effects and physical aliases. Nominal identities, consumed references and complete future snapshot/log budgets validate before maps/clones; replay leaves input unchanged. Pointer mutation, native guard/failure paths, engine lifecycle/input/rendering and exception unwinding are excluded.
+
+Source: [card_tokens.rs](../../../crates/solver-core/src/bluff/card_tokens.rs).
+Five focused tests, all 877 Rust library tests, the release build and 32
+reverse-engineering checks passed. The simulation and Python bridge suites
+were not rerun for this offline caller reconstruction.
