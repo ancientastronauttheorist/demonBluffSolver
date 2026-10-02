@@ -315,6 +315,11 @@ An independent model compares every full snapshot and raw service call, includin
 captured Acted/input identities and late alignment/state reads. RevealReal and
 Unity/Action services remain explicit boundaries.
 
+The reward and bluff presentation reports now losslessly pool raw memory
+as well as full snapshots. Together they shrink from 50.3 MB to 13.8 MB and
+expand to exactly every prior field, byte and stopped prefix. Two independent
+native producers per family match; this storage change adds no method coverage.
+
 The [reward presentation audit](notes/systems/character_reward_presentation.md)
 executes SetupObject and RevealReal in 341 cases, three retained sequences and
 61 full stopped prefixes. Every event and final state matches an independent

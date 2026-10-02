@@ -11,6 +11,7 @@ import capstone
 from audit_character_assets import BUILD
 from audit_character_reward_presentation import Machine as FrozenMachine, FIELDS, POISON
 from audit_report_snapshots import pool_snapshots
+from audit_character_oracle_reveal_join import pool_memory
 
 START,END,NEXT=0x368130,0x368292,0x3682A0
 BLUFF_FIELDS=dict(FIELDS,bluff=0x58)
@@ -234,4 +235,4 @@ def audit(game_root,dumper_root):
     return {'build':BUILD,'schema':'character_bluff_presentation_native_v1','targets':m.targets,'supplied_declarations':m.supplied,'bounds':m.bounds,'operand_assertions':{hex(a):list(v) for a,v in m.checks.items()},'metadata_flag_rva':hex(m.flag),'metadata_slot_rva':hex(m.slot-m.base),'virtual_slots':{'text':{'slot':66,'function_offset':0x558,'method_offset':0x560,'r9':'physical TMP class'},'color':{'slot':23,'function_offset':0x2A8,'method_offset':0x2B0}},'decoded_instructions':len(m.instructions),'executed_instructions':len(set(m.instructions)&m.executed),'observed_addresses':len(m.executed),'cases':cases,'sequences':seq,'baselines':bases,'stops':stops,'summary':{'cases':len(cases),'normal_returns':sum(r['returned'] for r in cases),'native_stops':sum(not r['returned'] for r in cases),'sequences':len(seq),'baselines':len(bases),'stops':len(stops)},'scope':'Exact RevealBluff only; frozen reward presentation allocation/ABI/type pins reused, other bodies excluded. Nullable ToUpper result forwarded unchanged; R9 physical TMP class; actor.bluff source. SetupArt/Data getters, TMP/Unity, metadata/class runtime, ordered UpdateView and tail RefreshView supplied. Authored aliases/callbacks, no renderer/scheduler/runtime object admission/unwinding.'}
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('game_root');p.add_argument('dumper_root');p.add_argument('--output',required=True);a=p.parse_args();r=audit(a.game_root,a.dumper_root);Path(a.output).write_text(json.dumps(pool_snapshots(r),sort_keys=True,separators=(',',':'))+'\n',encoding='utf-8');print(json.dumps(r['summary']))
+    p=argparse.ArgumentParser();p.add_argument('game_root');p.add_argument('dumper_root');p.add_argument('--output',required=True);a=p.parse_args();r=audit(a.game_root,a.dumper_root);Path(a.output).write_text(json.dumps(pool_snapshots(pool_memory(r)),sort_keys=True,separators=(',',':'))+'\n',encoding='utf-8');print(json.dumps(r['summary']))

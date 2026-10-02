@@ -10,6 +10,7 @@ from pathlib import Path
 import capstone
 from audit_character_assets import BUILD
 from audit_il2cpp_string_creation import Machine as NativeMachine
+from audit_character_oracle_reveal_join import pool_memory
 from audit_report_snapshots import pool_snapshots
 
 TARGETS={0x3689D0:('SetupObject','tdi5487.m0019',0x368A44,0x368A50),0x3682A0:('RevealReal','tdi5487.m0044',0x36840E,0x368410)}
@@ -313,4 +314,4 @@ def audit(game_root,dumper_root):
     return {'build':BUILD,'schema':'character_reward_presentation_native_v1','targets':m.targets,'supplied_declarations':m.supplied,'bounds':m.bounds,'operand_assertions':{hex(a):list(v) for a,v in m.checks.items()},'metadata_flag_rva':hex(m.flag),'metadata_slot_rvas':[hex(m.slot-m.base),hex(m.literal_slot-m.base)],'virtual_slots':{'text':{'slot':66,'function_offset':0x558,'method_offset':0x560},'color':{'slot':23,'function_offset':0x2A8,'method_offset':0x2B0}},'decoded_instructions':len(m.instructions),'executed_instructions':len(set(m.instructions)&m.executed),'observed_addresses':len(m.executed),'cases':cases,'sequences':seq,'baselines':bases,'stops':stops,'summary':{'cases':len(cases),'normal_returns':sum(r['returned'] for r in cases),'native_stops':sum(not r['returned'] for r in cases),'sequences':len(seq),'baselines':len(bases),'stops':len(stops)},'scope':'Actual SetupObject/RevealReal only. InitReward excluded. SetupArt/GetArt/GetArtType/UpdateViewReal, String.ToUpper, TMP/Unity, GC/runtime services supplied. Authored diagnostic memory/alias callbacks; no renderer, runtime object admission or native unwinding.'}
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('game_root');p.add_argument('dumper_root');p.add_argument('--output',required=True);a=p.parse_args();r=audit(a.game_root,a.dumper_root);Path(a.output).write_text(json.dumps(pool_snapshots(r),sort_keys=True,separators=(',',':'))+'\n',encoding='utf-8');print(json.dumps(r['summary']))
+    p=argparse.ArgumentParser();p.add_argument('game_root');p.add_argument('dumper_root');p.add_argument('--output',required=True);a=p.parse_args();r=audit(a.game_root,a.dumper_root);Path(a.output).write_text(json.dumps(pool_snapshots(pool_memory(r)),sort_keys=True,separators=(',',':'))+'\n',encoding='utf-8');print(json.dumps(r['summary']))

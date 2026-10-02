@@ -94,3 +94,19 @@ passed. The script, note and report are frozen for parent integration.
 
 Run `audit_character_reward_presentation.py` with positional pinned game and
 Dumper directories and `--output`; PYTHONPATH must include python-emulation.
+
+## Lossless authored-memory pooling
+
+The current producer additionally pools raw diagnostic memory before full
+snapshots, using `sha256-authored-memory-hex-v1`. Expand full snapshots first
+with `audit_report_snapshots.expand_snapshots`, then memory with
+`audit_character_oracle_reveal_join.expand_memory`. Every expanded field equals
+the prior snapshot-pooled report, including every service-entry snapshot and
+stopped prefix. No native execution, coverage, diagnostic bytes or semantics
+change. Two newly syntax-preceded successful independent native producers match.
+
+Current size: 6116022 bytes, versus 22237039 previously.
+SHA-256: `409a0eb29d26eb67d4ad35857c732928ed2dae2a32d09a8684ac54b36f76129c`.
+Memory blobs: 106; full snapshot blobs: 1124.
+Private current peer: `B:/CodexTools/DemonBluffReverseEngineering/artifacts/f530404b0f3f_807de4a83df4/character_reward_presentation.pooled.first.private.json`.
+The previous peer and report hash above retain the earlier encoding provenance.
