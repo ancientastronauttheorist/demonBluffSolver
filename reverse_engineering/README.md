@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,577 classifications backed by
-418 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,578 classifications backed by
+419 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1440,6 +1440,11 @@ The guarded Rust [CharacterLoc text replay](notes/systems/character_loc_text.md)
 compares 102 normal native fixtures, three full retained sequences and three
 resumed suffixes. Five tests verify full storage and histories, all seven
 volatile integer and six XMM registers, exact callers and nullable results.
+
+The [skin change composition](notes/systems/character_data_change_skin_join.md)
+executes ChangeSkin and its actual unlock lookup together across 260 cases and
+161 exact stopped prefixes. The caller stores its original skin even when
+unlock lookup selects another skin with the same ID.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

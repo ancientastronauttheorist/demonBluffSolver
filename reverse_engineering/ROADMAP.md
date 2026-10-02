@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,577 classifications and 418 evidence records
+additional native timing audits. The overlay contains 1,578 classifications and 419 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -435,6 +435,11 @@ The guarded Rust [CharacterLoc text replay](notes/systems/character_loc_text.md)
 compares 102 normal native fixtures, three full retained sequences and three
 resumed suffixes. Five tests verify full storage and histories, all seven
 volatile integer and six XMM registers, exact callers and nullable results.
+
+The [skin change composition](notes/systems/character_data_change_skin_join.md)
+executes ChangeSkin and its actual unlock lookup together across 260 cases and
+161 exact stopped prefixes. The caller stores its original skin even when
+unlock lookup selects another skin with the same ID.
 
 Resume with these boundaries in view:
 
