@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,556 classifications and 402 evidence records
+additional native timing audits. The overlay contains 1,562 classifications and 403 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -355,6 +355,12 @@ execute 420 profiles, four retained sequences and 56 full stopped prefixes.
 Array capture follows membership; later iterations reload length and slots.
 Details gates preserve byte versus DWORD behavior and physical delegate identity.
 Every complete event and final state matches an independent ordered model.
+
+The six [CharacterData text callers](notes/systems/character_data_text_consumers.md)
+execute 159 cases, four retained sequences and 16 exact stopped prefixes.
+Flavor keeps its captured array across RNG callbacks, translations use the
+original-owner Unity-name fallback, and name writes precede their barrier.
+Every full snapshot/raw call/final byte matches an independent model.
 
 Resume with these boundaries in view:
 

@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,556 classifications backed by
-402 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,562 classifications backed by
+403 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1360,6 +1360,12 @@ execute 420 profiles, four retained sequences and 56 full stopped prefixes.
 Array capture follows membership; later iterations reload length and slots.
 Details gates preserve byte versus DWORD behavior and physical delegate identity.
 Every complete event and final state matches an independent ordered model.
+
+The six [CharacterData text callers](notes/systems/character_data_text_consumers.md)
+execute 159 cases, four retained sequences and 16 exact stopped prefixes.
+Flavor keeps its captured array across RNG callbacks, translations use the
+original-owner Unity-name fallback, and name writes precede their barrier.
+Every full snapshot/raw call/final byte matches an independent model.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied
