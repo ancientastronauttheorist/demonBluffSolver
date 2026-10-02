@@ -54,6 +54,9 @@ stop, diagnose, fix, verify, then resume.
     guessed basename, or assume a module uses `mod.rs`.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
+    Before creating an audit artifact, verify its assigned full output directory
+    and preserve it in the write path. Before freeze, compare each resolved
+    script, note and report path with its assigned path.
     Inspect filename-discovery results before issuing dependent reads; do not
     batch discovery with reads against guessed paths. A worker's source-ready
     notice does not establish that its planned note or report already exists.
@@ -180,6 +183,8 @@ stop, diagnose, fix, verify, then resume.
     not share the pointer representation of parsed or longer strings.
     Resolve exact type declarations, including enums, before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.
+    Bound each block by that declaration's closing brace, not an optional
+    Properties marker that can skip into the next type.
     Discover compiler-generated iterator suffixes from metadata or exact dump
     declarations; a remembered ordinal is not a verified generated class name.
     Preserve exact floating-point values when loading native timing fixtures;
