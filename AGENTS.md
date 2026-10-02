@@ -87,8 +87,10 @@ stop, diagnose, fix, verify, then resume.
     byte comparisons; Windows text-mode writes can emit CRLF from a final LF.
     For Unicode diagnostics, use ASCII-safe JSON or explicitly configure UTF-8
     console output; the default Windows console encoding may reject valid text.
-    Prefer apply_patch or PowerShell here-strings for multiline Python edits;
-    nested shell and python -c quoting can fail before an edit executes.
+    Prefer apply_patch or PowerShell here-strings for multiline Python edits
+    and diagnostic scripts; save nontrivial multiline diagnostics instead of
+    embedding exec strings in python -c. Nested shell quoting can fail before
+    the code executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
     Check imported report/helper schemas before indexing their fields; a build
