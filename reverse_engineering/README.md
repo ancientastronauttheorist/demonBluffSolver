@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,562 classifications backed by
-404 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,565 classifications backed by
+405 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1371,6 +1371,11 @@ The [reward initialization join](notes/systems/character_reward_init_join.md)
 executes actual side selection, reward initialization and real presentation
 in one retained graph. Its 144 cases, ten sequences and 141 exact stopped
 prefixes preserve captured inputs and late callback changes across the chain.
+
+The [CardInteraction setup audit](notes/systems/card_interaction_awake.md)
+executes Awake and both hover gates. Its 67 cases, four retained sequences
+and 21 exact stopped prefixes pin Character and animation-ID stores,
+Int32 boxing width, literal reload timing and one-byte hover writes.
 
 The [history/type caller audit](notes/systems/character_history_entries.md) adds
 four complete callers in 116 cases, two retained alias sequences, one supplied

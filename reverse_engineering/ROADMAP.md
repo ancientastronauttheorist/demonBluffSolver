@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-10-01 native storage and refresh
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,562 classifications and 404 evidence records
+additional native timing audits. The overlay contains 1,565 classifications and 405 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -366,6 +366,11 @@ The [reward initialization join](notes/systems/character_reward_init_join.md)
 executes actual side selection, reward initialization and real presentation
 in one retained graph. Its 144 cases, ten sequences and 141 exact stopped
 prefixes preserve captured inputs and late callback changes across the chain.
+
+The [CardInteraction setup audit](notes/systems/card_interaction_awake.md)
+executes Awake and both hover gates. Its 67 cases, four retained sequences
+and 21 exact stopped prefixes pin Character and animation-ID stores,
+Int32 boxing width, literal reload timing and one-byte hover writes.
 
 Resume with these boundaries in view:
 
