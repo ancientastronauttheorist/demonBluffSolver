@@ -1,0 +1,151 @@
+{
+  "schema": "archived_hunter_ui_review_v1",
+  "information_lane": "public_pixel_review_development",
+  "review_scope": "two_exact_archived_captures_only",
+  "build_binding": {
+    "status": "unresolved",
+    "candidate_build_id": "f530404b0f3f_807de4a83df4",
+    "capture_time_binary_or_asset_fingerprints": null
+  },
+  "catalog_order_is_action_chronology": false,
+  "captures": [
+    {
+      "private_capture_basename": "asc84_v1_start.jpg",
+      "sha256": "951893116f0cbc2a261a6530d44582699f8e54cda0fe37efcc3a4739a66bc1c4",
+      "dimensions": [
+        2560,
+        1440
+      ],
+      "format": "JPEG",
+      "review_method": "tool_assisted_visual_inspection",
+      "public_pixels": {
+        "n_cards": 10,
+        "find_and_execute_evil_count": 3,
+        "objective_subtitle": "2 Minions and 1 Demon",
+        "evils_killed": [
+          0,
+          3
+        ],
+        "village": [
+          1,
+          7
+        ],
+        "ascension": 84,
+        "score": 0,
+        "hp": 10,
+        "hud_counts_left_to_right": [
+          6,
+          1,
+          2,
+          1
+        ],
+        "board_visibility": "all_board_cards_face_down",
+        "clockwise_display_ids_from_top": [
+          10,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visible_deck_strip_labels": [
+          "DOPPELGANGER",
+          "CHANCELLOR",
+          "MINION",
+          "POOKA",
+          "PLAGUE DOCTOR"
+        ],
+        "full_deck_occurrence_multiset": null,
+        "wrong_execution_cost": null,
+        "phase": null
+      }
+    },
+    {
+      "private_capture_basename": "asc84_v1_after_flip.jpg",
+      "sha256": "69b12fef258586204ad4f51aebbfb6aac94d8ecce13718e98eecc88f54343ba8",
+      "dimensions": [
+        2560,
+        1440
+      ],
+      "format": "JPEG",
+      "review_method": "tool_assisted_visual_inspection",
+      "public_pixels": {
+        "n_cards": 10,
+        "find_and_execute_evil_count": 3,
+        "objective_subtitle": "2 Minions and 1 Demon",
+        "evils_killed": [
+          0,
+          3
+        ],
+        "village": [
+          1,
+          7
+        ],
+        "ascension": 84,
+        "score": 0,
+        "hp": 10,
+        "hud_counts_left_to_right": [
+          6,
+          1,
+          2,
+          1
+        ],
+        "board_visibility": "all_board_cards_face_up",
+        "clockwise_display_ids_from_top": [
+          10,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visible_deck_strip_labels": [
+          "DOPPELGANGER",
+          "CHANCELLOR",
+          "MINION",
+          "POOKA",
+          "PLAGUE DOCTOR"
+        ],
+        "full_deck_occurrence_multiset": null,
+        "wrong_execution_cost": null,
+        "phase": null,
+        "hunter_capture": {
+          "display_id": 3,
+          "apparent_role_label": "HUNTER",
+          "visible_words": "I am 1 card away from closest Evil",
+          "visible_line_layout": [
+            "I am 1 card",
+            "away from",
+            "closest Evil"
+          ],
+          "literal_managed_string_newlines": null,
+          "explicit_numbered_speech_targets": [],
+          "public_geometric_adjacent_ids": [
+            2,
+            4
+          ],
+          "native_acted_reference_order": null
+        }
+      }
+    }
+  ],
+  "player_history_admitted": false,
+  "conditional_hunter_baa_domain_admitted": false,
+  "exclusions": [
+    "No intermediate single-card captures or verified action/reveal order.",
+    "No capture-time binary/asset identity; file labels and times are not proof.",
+    "Full public role occurrence multiset and wrong-execution cost unavailable.",
+    "Ten-card mixed-role board is outside the four/five-card Hunter/Baa domain.",
+    "Visual line wrapping is not proof of managed-string newline encoding.",
+    "Native target order, hidden truth, statuses, queue and RNG are not observations.",
+    "No live control, solver action, phase-legality, held-out or policy claim."
+  ]
+}

@@ -4,8 +4,8 @@
 //! each exact event to a reviewed UI capture before admission. This module does
 //! not verify image pixels, native scheduling, world completeness, or policy
 //! quality. The legacy snapshot projection is deliberately narrower than the
-//! lossless history: one Day, a fully exposed deck and empty passive Judge
-//! reveals plus exact Judge results. Other transitions remain unsupported.
+//! lossless history: a single-Day Judge adapter and a conditional initial-Day
+//! Hunter/Baa adapter. Other transitions remain unsupported.
 
 use crate::types::{CardInfo, DeckComposition, GameState};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -14,6 +14,7 @@ use std::collections::{BTreeMap, BTreeSet};
 pub const SCHEMA_VERSION: &str = "player_history_v1";
 pub const BUILD_ID: &str = "f530404b0f3f_807de4a83df4";
 pub const PROJECTION_DOMAIN: &str = "public_judge_single_day_v1";
+pub const HUNTER_BAA_PROJECTION_DOMAIN: &str = "conditional_initial_day_hunter_baa_v1";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -701,10 +702,15 @@ impl AdmittedPlayerHistory {
     }
 
     /// Mechanical compatibility projection, NOT a certified solver domain or
-    /// planner recommendation. No clue maps are accepted from callers. Judge
-    /// claims are parsed from the exact native public string, not truth flags.
+    /// planner recommendation. Selects the narrow single-Day Judge or
+    /// conditional initial-Day Hunter/Baa adapter by domain ID. No clue maps
+    /// are accepted from callers; claims/distances derive from exact public
+    /// strings rather than truth flags or native-only target references.
     /// Unsupported transitions fail closed rather than erase chronology.
     pub fn project_legacy_snapshot(&self) -> Result<GameState, ProjectionError> {
+        if self.history.domain_id == HUNTER_BAA_PROJECTION_DOMAIN {
+            return self.project_conditional_hunter_baa_snapshot();
+        }
         let unsupported = |ordinal, reason: &str| ProjectionError::Unsupported {
             ordinal,
             reason: reason.into(),
@@ -928,6 +934,232 @@ impl AdmittedPlayerHistory {
             return Err(incomplete(
                 None,
                 "missing public deck, HP or wrong-execution cost",
+            ));
+        }
+        Ok(state)
+    }
+
+    /// Conditional observation projection only. The trusted review contract
+    /// supplies distinct physical seats in native cyclic order [1,..,N] and a
+    /// finished writer-free setup. These are not inferred from domain_id, HUD,
+    /// memory state or the success of this mechanical adapter. No hidden setup
+    /// assumptions or native reference lists are added to planner input.
+    fn project_conditional_hunter_baa_snapshot(&self) -> Result<GameState, ProjectionError> {
+        let unsupported = |ordinal, reason: &str| ProjectionError::Unsupported {
+            ordinal,
+            reason: reason.into(),
+        };
+        let incomplete = |ordinal, reason: &str| ProjectionError::Incomplete {
+            ordinal,
+            reason: reason.into(),
+        };
+        let mut state = GameState::default();
+        let mut deck_seen = false;
+        let mut hp_seen = false;
+        let mut cost_seen = false;
+        let mut phase_checkpoint = None;
+        let mut pending = None;
+        for event in &self.history.events {
+            let ordinal = Some(event.ordinal);
+            if matches!(event.phase, Phase::Night | Phase::Terminal) {
+                return Err(unsupported(
+                    ordinal,
+                    "Hunter/Baa adapter excludes Night/terminal transitions",
+                ));
+            }
+            match &event.observation {
+                Observation::DeckObserved(deck) => {
+                    if deck_seen || !matches!(deck.n_cards, 4 | 5) || deck.n_evil != 1 {
+                        return Err(unsupported(
+                            ordinal,
+                            "Hunter/Baa adapter requires one initial four/five-seat one-Evil deck",
+                        ));
+                    }
+                    if deck.header_counts.source != HeaderSource::VisibleHud
+                        || [
+                            deck.header_counts.villagers,
+                            deck.header_counts.outcasts,
+                            deck.header_counts.minions,
+                            deck.header_counts.demons,
+                        ]
+                        .iter()
+                        .any(Option::is_none)
+                    {
+                        return Err(incomplete(
+                            ordinal,
+                            "Hunter/Baa adapter needs all four visible HUD counts",
+                        ));
+                    }
+                    if deck.header_counts.villagers != Some(deck.n_cards - 1)
+                        || deck.header_counts.outcasts != Some(0)
+                        || deck.header_counts.minions != Some(0)
+                        || deck.header_counts.demons != Some(1)
+                    {
+                        return Err(unsupported(
+                            ordinal,
+                            "HUD counts outside conditional Hunter/Baa domain",
+                        ));
+                    }
+                    let mut hunters = 0;
+                    let mut baas = 0;
+                    for slot in &deck.slots {
+                        match slot {
+                            DeckSlot::Exposed {
+                                role,
+                                faction: PublicFaction::Villager,
+                            } if role == "Hunter" => hunters += 1,
+                            DeckSlot::Exposed {
+                                role,
+                                faction: PublicFaction::Demon,
+                            } if role == "Baa" => baas += 1,
+                            DeckSlot::Obscured {} => {
+                                return Err(unsupported(
+                                    ordinal,
+                                    "conditional public pool cannot contain obscured identities",
+                                ))
+                            }
+                            _ => {
+                                return Err(unsupported(
+                                    ordinal,
+                                    "public pool outside conditional Hunter/Baa domain",
+                                ))
+                            }
+                        }
+                    }
+                    if hunters != usize::from(deck.n_cards - 1) || baas != 1 {
+                        return Err(unsupported(
+                            ordinal,
+                            "public pool must preserve N-1 Hunter occurrences and one Baa",
+                        ));
+                    }
+                    state.n_cards = deck.n_cards;
+                    state.n_evil = deck.n_evil;
+                    state.deck.villagers = vec!["Hunter".into(); hunters];
+                    state.deck.demons = vec!["Baa".into()];
+                    state.board_villager_count = deck.header_counts.villagers;
+                    state.board_outcast_count = deck.header_counts.outcasts;
+                    state.board_minion_count = deck.header_counts.minions;
+                    state.board_demon_count = deck.header_counts.demons;
+                    // Current HUD capture does not prove pre-Start provenance.
+                    deck_seen = true;
+                }
+                Observation::PhaseObserved(phase) => {
+                    if phase_checkpoint == Some(Phase::Day)
+                        || phase_checkpoint == Some(event.phase)
+                        || !phase.ability_resets.is_empty()
+                        || phase.reset_rule_version.is_some()
+                    {
+                        return Err(unsupported(
+                            ordinal,
+                            "Hunter/Baa adapter excludes phase reentry and resets",
+                        ));
+                    }
+                    phase_checkpoint = Some(event.phase);
+                    if let Some(hp) = phase.hp {
+                        if hp_seen && hp != state.hp {
+                            return Err(unsupported(
+                                ordinal,
+                                "HP change requires transition model",
+                            ));
+                        }
+                        state.hp = hp;
+                        hp_seen = true;
+                    }
+                    if let Some(cost) = phase.wrong_execution_cost {
+                        if cost < 0 || (cost_seen && cost != state.wrong_exec_cost) {
+                            return Err(unsupported(
+                                ordinal,
+                                "invalid/changed execution cost outside conditional domain",
+                            ));
+                        }
+                        state.wrong_exec_cost = cost;
+                        cost_seen = true;
+                    }
+                    if phase.remaining_evil.is_some_and(|remaining| remaining != 1) {
+                        return Err(unsupported(
+                            ordinal,
+                            "objective change outside conditional domain",
+                        ));
+                    }
+                }
+                Observation::ActionRequested(action) => {
+                    if event.phase != Phase::Day
+                        || action.action != ActionKind::Reveal
+                        || action.actor.is_some()
+                        || action.targets.len() != 1
+                        || action.public_cost.is_some_and(|cost| cost != 0)
+                    {
+                        return Err(unsupported(
+                            ordinal,
+                            "only cost-free single-seat Day reveal requests are projected",
+                        ));
+                    }
+                    pending = ordinal;
+                }
+                Observation::CardRevealed(card) => {
+                    if event.phase != Phase::Day
+                        || card.apparent_role != "Hunter"
+                        || card.rule_version != "public_current"
+                        || state.card_at(card.position).is_some()
+                    {
+                        return Err(unsupported(ordinal, "requires distinct once-revealed Day seats with current apparent Hunter"));
+                    }
+                    if !card.targets.is_empty() {
+                        return Err(unsupported(ordinal, "Hunter speech names no target IDs; native memory-only references are not public targets"));
+                    }
+                    let speech = card
+                        .speech
+                        .as_ref()
+                        .ok_or_else(|| incomplete(ordinal, "missing exact Hunter speech"))?;
+                    let distance = if speech == "I am 1 card away from closest Evil" {
+                        Some(1)
+                    } else {
+                        speech
+                            .strip_prefix("I am ")
+                            .and_then(|text| text.strip_suffix(" cards away from closest Evil"))
+                            .and_then(|number| number.parse::<u8>().ok())
+                            .filter(|distance| {
+                                *distance >= 2
+                                    && speech
+                                        == &format!("I am {distance} cards away from closest Evil")
+                            })
+                    };
+                    let distance = distance
+                        .filter(|distance| {
+                            *distance <= state.n_cards / 2 || *distance == state.n_cards - 1
+                        })
+                        .ok_or_else(|| {
+                            unsupported(
+                                ordinal,
+                                "exact Hunter speech/distance outside conditional native support",
+                            )
+                        })?;
+                    state.cards.push(CardInfo {
+                        position: card.position, apparent_role: "Hunter".into(), info_text: speech.clone(),
+                        info_parsed: serde_json::json!({"hunter_variant": "public_current", "distance": distance})
+                            .as_object().expect("authored object").clone(),
+                    });
+                    state.reveal_order.push(card.position);
+                    pending = None;
+                }
+                _ => {
+                    return Err(unsupported(
+                        ordinal,
+                        "Hunter/Baa adapter excludes abilities/executions/status/terminal events",
+                    ))
+                }
+            }
+        }
+        if pending.is_some() {
+            return Err(incomplete(
+                pending,
+                "reveal request has no observed completion",
+            ));
+        }
+        if !deck_seen || !hp_seen || !cost_seen || phase_checkpoint != Some(Phase::Day) {
+            return Err(incomplete(
+                None,
+                "missing initial public deck, Day, HP or execution cost",
             ));
         }
         Ok(state)

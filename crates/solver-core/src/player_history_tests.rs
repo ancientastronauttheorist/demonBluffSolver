@@ -567,6 +567,331 @@ fn single_day_projection_rejects_phase_reentry_and_unmodeled_public_budget_chang
 }
 
 #[test]
+fn conditional_hunter_baa_projection_preserves_public_pool_and_exact_speech() {
+    for n in [4, 5] {
+        let mut history = hunter_fixture(n);
+        for position in 2..=n {
+            history.events.push(event(
+                u64::from(position) + 2,
+                Phase::Day,
+                None,
+                Observation::CardRevealed(CardRevealed {
+                    position,
+                    apparent_role: "Hunter".into(),
+                    speech: Some(format!("I am {} cards away from closest Evil", n - 1)),
+                    targets: vec![],
+                    parser_version: history.parser_version.clone(),
+                    rule_version: "public_current".into(),
+                }),
+            ));
+        }
+        let state = admitted(&history).project_legacy_snapshot().unwrap();
+        assert_eq!(state.deck.villagers, vec!["Hunter"; usize::from(n - 1)]);
+        assert_eq!(state.deck.demons, vec!["Baa"]);
+        assert_eq!(state.reveal_order, (1..=n).collect::<Vec<_>>());
+        assert_eq!(
+            state.card_at(1).unwrap().info_parsed,
+            json!({"distance": 1, "hunter_variant": "public_current"})
+                .as_object()
+                .unwrap()
+                .clone()
+        );
+        assert_eq!(
+            state.card_at(n).unwrap().info_parsed["distance"],
+            json!(n - 1)
+        );
+        assert_eq!(
+            state.board_count_provenance,
+            crate::types::BoardCountProvenance::LegacyUnknown
+        );
+        assert!(state.pd_corruption_target.is_none());
+        assert!(state.twin_recipient_bluff_context.is_none());
+        assert!(state.twin_recipient_bluff_prefix_context.is_none());
+    }
+}
+
+fn hunter_fixture(n: u8) -> PlayerHistory {
+    let mut history = fixture();
+    history.domain_id = HUNTER_BAA_PROJECTION_DOMAIN.into();
+    history.events.truncate(3);
+    if let Observation::DeckObserved(deck) = &mut history.events[0].observation {
+        deck.n_cards = n;
+        deck.slots = (1..n)
+            .map(|_| DeckSlot::Exposed {
+                role: "Hunter".into(),
+                faction: PublicFaction::Villager,
+            })
+            .collect();
+        deck.slots.push(DeckSlot::Exposed {
+            role: "Baa".into(),
+            faction: PublicFaction::Demon,
+        });
+        deck.header_counts.villagers = Some(n - 1);
+    }
+    if let Observation::CardRevealed(card) = &mut history.events[2].observation {
+        card.apparent_role = "Hunter".into();
+        card.speech = Some("I am 1 card away from closest Evil".into());
+    }
+    history
+}
+
+#[test]
+fn conditional_hunter_baa_rejects_nonempty_native_memory_references() {
+    let mut history = hunter_fixture(4);
+    if let Observation::CardRevealed(card) = &mut history.events[2].observation {
+        card.targets = vec![2, 4];
+    }
+    assert!(matches!(
+        admitted(&history).project_legacy_snapshot(),
+        Err(ProjectionError::Unsupported {
+            ordinal: Some(3),
+            ..
+        })
+    ));
+    // Even the native opposite-seat duplicate is not explicit public speech.
+    if let Observation::CardRevealed(card) = &mut history.events[2].observation {
+        card.speech = Some("I am 2 cards away from closest Evil".into());
+        card.targets = vec![3, 3];
+    }
+    assert!(matches!(
+        admitted(&history).project_legacy_snapshot(),
+        Err(ProjectionError::Unsupported {
+            ordinal: Some(3),
+            ..
+        })
+    ));
+}
+
+#[test]
+fn conditional_hunter_baa_missing_speech_and_header_are_incomplete_but_bad_text_is_unsupported() {
+    let mut history = hunter_fixture(4);
+    if let Observation::CardRevealed(card) = &mut history.events[2].observation {
+        card.speech = None;
+    }
+    assert!(matches!(
+        admitted(&history).project_legacy_snapshot(),
+        Err(ProjectionError::Incomplete {
+            ordinal: Some(3),
+            ..
+        })
+    ));
+    let mut history = hunter_fixture(4);
+    if let Observation::DeckObserved(deck) = &mut history.events[0].observation {
+        deck.header_counts.minions = None;
+    }
+    assert!(matches!(
+        admitted(&history).project_legacy_snapshot(),
+        Err(ProjectionError::Incomplete {
+            ordinal: Some(1),
+            ..
+        })
+    ));
+    for text in [
+        "I am 1 cards away from closest Evil",
+        "I am 2 card away from closest Evil",
+        "I am 02 cards away from closest Evil",
+        "I am 0 cards away from closest Evil",
+        "I am 4 cards away from closest Evil",
+        "i am 1 card away from closest Evil",
+    ] {
+        let mut history = hunter_fixture(4);
+        if let Observation::CardRevealed(card) = &mut history.events[2].observation {
+            card.speech = Some(text.into());
+        }
+        assert!(
+            matches!(
+                admitted(&history).project_legacy_snapshot(),
+                Err(ProjectionError::Unsupported {
+                    ordinal: Some(3),
+                    ..
+                })
+            ),
+            "{text}"
+        );
+    }
+}
+
+#[test]
+fn conditional_hunter_baa_rejects_other_pools_hud_counts_sizes_and_repeated_seats() {
+    let mut impossible_native_output = hunter_fixture(5);
+    if let Observation::CardRevealed(card) = &mut impossible_native_output.events[2].observation {
+        card.speech = Some("I am 3 cards away from closest Evil".into());
+    }
+    assert!(matches!(
+        admitted(&impossible_native_output).project_legacy_snapshot(),
+        Err(ProjectionError::Unsupported {
+            ordinal: Some(3),
+            ..
+        })
+    ));
+    for mutation in 0..6 {
+        let mut history = hunter_fixture(4);
+        if let Observation::DeckObserved(deck) = &mut history.events[0].observation {
+            match mutation {
+                0 => {
+                    deck.slots.remove(0);
+                }
+                1 => {
+                    deck.slots[0] = DeckSlot::Obscured {};
+                }
+                2 => {
+                    deck.header_counts.outcasts = Some(1);
+                }
+                3 => {
+                    deck.slots[0] = DeckSlot::Exposed {
+                        role: "Hunter".into(),
+                        faction: PublicFaction::Outcast,
+                    };
+                }
+                4 => {
+                    deck.n_cards = 6;
+                }
+                _ => {
+                    deck.n_evil = 2;
+                }
+            }
+        }
+        assert!(matches!(
+            admitted(&history).project_legacy_snapshot(),
+            Err(ProjectionError::Unsupported {
+                ordinal: Some(1),
+                ..
+            })
+        ));
+    }
+    let mut history = hunter_fixture(4);
+    let mut repeated = history.events[2].clone();
+    repeated.ordinal = 4;
+    repeated.evidence_id = "second_reveal".into();
+    history.events.push(repeated);
+    assert!(matches!(
+        admitted(&history).project_legacy_snapshot(),
+        Err(ProjectionError::Unsupported {
+            ordinal: Some(4),
+            ..
+        })
+    ));
+}
+
+#[test]
+fn conditional_hunter_baa_projects_serial_reveal_completion_and_rejects_other_actions() {
+    let mut history = hunter_fixture(4);
+    history.events[2].ordinal = 4;
+    history.events[2].evidence_id = "capture_4".into();
+    history.events[2].action_ordinal = Some(3);
+    history.events.insert(
+        2,
+        event(
+            3,
+            Phase::Day,
+            Some(3),
+            Observation::ActionRequested(ActionRequested {
+                action: ActionKind::Reveal,
+                actor: None,
+                targets: vec![1],
+                public_cost: Some(0),
+            }),
+        ),
+    );
+    assert_eq!(
+        admitted(&history)
+            .project_legacy_snapshot()
+            .unwrap()
+            .reveal_order,
+        vec![1]
+    );
+    let mut pending = history.clone();
+    pending.events.pop();
+    assert!(matches!(
+        admitted(&pending).project_legacy_snapshot(),
+        Err(ProjectionError::Incomplete {
+            ordinal: Some(3),
+            ..
+        })
+    ));
+    for action in [ActionKind::Ability, ActionKind::Execution] {
+        let mut history = hunter_fixture(4);
+        history.events.push(event(
+            4,
+            Phase::Day,
+            Some(4),
+            Observation::ActionRequested(ActionRequested {
+                action,
+                actor: Some(1),
+                targets: vec![2],
+                public_cost: None,
+            }),
+        ));
+        assert!(matches!(
+            admitted(&history).project_legacy_snapshot(),
+            Err(ProjectionError::Unsupported {
+                ordinal: Some(4),
+                ..
+            })
+        ));
+    }
+    let mut history = hunter_fixture(4);
+    history.events.push(event(
+        4,
+        Phase::Day,
+        None,
+        Observation::StatusObserved(StatusObserved {
+            status: VisibleStatus::Blocked,
+            positions: vec![2],
+            speech: None,
+        }),
+    ));
+    assert!(matches!(
+        admitted(&history).project_legacy_snapshot(),
+        Err(ProjectionError::Unsupported {
+            ordinal: Some(4),
+            ..
+        })
+    ));
+}
+
+#[test]
+fn conditional_hunter_baa_pair_oracles_and_reveal_order_remain_separate() {
+    let a_hidden_baa = 2;
+    let b_hidden_baa = 4;
+    assert_ne!(a_hidden_baa, b_hidden_baa);
+    let public_a = hunter_fixture(4);
+    let public_b = public_a.clone();
+    assert_eq!(
+        admitted(&public_a).planner_history(),
+        admitted(&public_b).planner_history()
+    );
+    assert_eq!(
+        serde_json::to_value(admitted(&public_a).project_legacy_snapshot().unwrap()).unwrap(),
+        serde_json::to_value(admitted(&public_b).project_legacy_snapshot().unwrap()).unwrap()
+    );
+    let mut history = hunter_fixture(5);
+    if let Observation::CardRevealed(card) = &mut history.events[2].observation {
+        card.position = 5;
+    }
+    history.events.push(event(
+        4,
+        Phase::Day,
+        None,
+        Observation::CardRevealed(CardRevealed {
+            position: 2,
+            apparent_role: "Hunter".into(),
+            speech: Some("I am 2 cards away from closest Evil".into()),
+            targets: vec![],
+            parser_version: history.parser_version.clone(),
+            rule_version: "public_current".into(),
+        }),
+    ));
+    assert_eq!(
+        admitted(&history)
+            .project_legacy_snapshot()
+            .unwrap()
+            .reveal_order,
+        vec![5, 2]
+    );
+}
+
+#[test]
 fn obscured_slot_cannot_smuggle_hidden_identity_and_result_bool_cannot_smuggle_truth() {
     let mut value = serde_json::to_value(fixture()).unwrap();
     value["events"][0]["payload"]["slots"][2] = json!({"visibility": "obscured", "role": "Baa"});

@@ -1,4 +1,4 @@
-# Conditional Hunter/Baa complete-world reference: development v1
+# Conditional Hunter/Baa complete-world reference: development v2
 
 Pinned build `f530404b0f3f_807de4a83df4`, Steam build `23084916`.
 [Independent integration comparison](../../../crates/solver-core/tests/small_world_reference.rs).
@@ -66,6 +66,22 @@ Production Hunter's distance payload has no target field, so the reference
 projection gate validates raw targets/text first. This does not prove the legacy
 solver entry point rejects unsupported histories or malformed capture itself.
 
+Development v2 also sends every family prefix through the production
+[strict player-history boundary](player_history_boundary.md) and its
+`conditional_initial_day_hunter_baa_v1` adapter. Those synthetic public histories
+contain only deck multiplicity, current HUD, initial Day HP/cost, apparent Hunter
+position and exact speech. Public targets are empty. Test-local UI-review
+registrations are explicitly authored availability contracts, not reviewed
+pixels or native scheduling evidence. The projected snapshot preserves
+`LegacyUnknown` HUD provenance and excludes offline Plague Doctor/Twin context.
+
+The production-adapter comparison uses the same complete Scenario equality
+check and independent enumerator. A separate mutation replaces native-only
+ordered references with incoherent duplicates: the raw native validation gate
+rejects them, while the public history, planner input, snapshot and resulting
+world set remain unchanged. Native-only evidence never becomes a public input
+or a prerequisite for planning from the unchanged public sentence.
+
 Two opposite Baa assignments producing the same legal history must project to
 identical solver inputs and retain the same two possible worlds. Privileged
 assignment data is used only to construct/grade the synthetic corpus and is
@@ -82,11 +98,15 @@ Run after shared source freeze:
 cargo test --release -p solver-core --test small_world_reference -- --nocapture
 ```
 
-The root-coordinated corrected run passed all seven tests. Complete-world
-equality held at all 8,160 generated prefixes, with 4,376 ambiguous and 3,784
-unique results. All four coherent contradiction fixtures were empty; unsupported
-inputs, paired-world input equality and residual-state rejection also passed.
-The reference-only mutation differed on exactly 1,104 complete histories.
+The earlier corrected v1 run passed all seven tests. The root-coordinated v2
+run passed all nine integration tests and all twenty strict-history unit tests.
+Complete-world equality held at all 8,160 generated prefixes through both the
+legacy fixture projection and production public-history adapter, with 4,376
+ambiguous and 3,784 unique results in each comparison. All four coherent
+contradiction fixtures were empty through both routes; unsupported inputs,
+paired-world input equality, native-reference independence and residual-state
+rejection also passed. The reference-only mutation differed on exactly 1,104
+complete histories.
 Native generation, acquired-bluff provenance, chronology through actual Reveal,
 independent held-out families, posterior weights, legal action policy,
 calibration, latency/memory and ascension continuations remain separate gates.

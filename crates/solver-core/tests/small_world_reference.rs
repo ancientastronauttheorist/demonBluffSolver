@@ -3,6 +3,7 @@
 //! validators or scenario generation. See the accompanying domain note.
 
 use serde_json::{json, Value};
+use solver_core::player_history as public;
 use solver_core::solver::solve;
 use solver_core::types::{BoardCountProvenance, CardInfo, DeckComposition, GameState, Scenario};
 use std::collections::BTreeSet;
@@ -251,11 +252,15 @@ fn canonical_world(scenario: &Scenario, n: u8) -> World {
 }
 
 fn compare(history: &History) -> BTreeSet<World> {
+    let state = project_legal_history(history).unwrap();
+    compare_snapshot(history, &state)
+}
+
+fn compare_snapshot(history: &History, state: &GameState) -> BTreeSet<World> {
     let ReferenceResult::Complete(expected) = complete_worlds(history) else {
         panic!("comparison family must be admitted: {history:?}");
     };
-    let state = project_legal_history(history).unwrap();
-    let result = solve(&state);
+    let result = solve(state);
     let mut actual = BTreeSet::new();
     for scenario in &result.surviving_scenarios {
         assert!(
@@ -274,6 +279,118 @@ fn compare(history: &History) -> BTreeSet<World> {
     assert_eq!(result.definite_evil, expected_evil);
     assert_eq!(result.definite_good, expected_good);
     expected
+}
+
+// Synthetic UI-review registrations exercise the production admission boundary;
+// they do not certify pixel exposure or native generation. The original solver
+// baseline is metadata, not an assertion about this run's source fingerprint.
+fn public_history(history: &History) -> public::PlayerHistory {
+    let n = history.domain.n;
+    let make_event = |ordinal, phase, observation| public::PlayerEvent {
+        ordinal,
+        phase,
+        action_ordinal: None,
+        evidence_id: format!("synthetic_ui_{n}_{ordinal}"),
+        captured_at_ms: None,
+        observation,
+    };
+    let mut slots = vec![
+        public::DeckSlot::Exposed {
+            role: "Hunter".into(),
+            faction: public::PublicFaction::Villager,
+        };
+        usize::from(history.domain.public_hunter_occurrences)
+    ];
+    slots.push(public::DeckSlot::Exposed {
+        role: "Baa".into(),
+        faction: public::PublicFaction::Demon,
+    });
+    let mut events = vec![
+        make_event(
+            1,
+            public::Phase::Setup,
+            public::Observation::DeckObserved(public::DeckObserved {
+                n_cards: n,
+                n_evil: 1,
+                slots,
+                header_counts: public::HeaderCounts {
+                    villagers: Some(n - 1),
+                    outcasts: Some(0),
+                    minions: Some(0),
+                    demons: Some(1),
+                    source: public::HeaderSource::VisibleHud,
+                },
+            }),
+        ),
+        make_event(
+            2,
+            public::Phase::Day,
+            public::Observation::PhaseObserved(public::PhaseObserved {
+                hp: Some(10),
+                remaining_evil: Some(1),
+                wrong_execution_cost: Some(5),
+                ability_resets: vec![],
+                reset_rule_version: None,
+            }),
+        ),
+    ];
+    for (index, event) in history.events.iter().enumerate() {
+        let Event::Reveal(observation) = event else {
+            panic!("synthetic public family contains a richer event");
+        };
+        events.push(make_event(
+            index as u64 + 3,
+            public::Phase::Day,
+            public::Observation::CardRevealed(public::CardRevealed {
+                position: observation.actor,
+                apparent_role: "Hunter".into(),
+                speech: Some(observation.text.clone()),
+                // Native-only reference ordering is never passed to this API.
+                targets: vec![],
+                parser_version: "reviewed_hunter_public_text_v1".into(),
+                rule_version: "public_current".into(),
+            }),
+        ));
+    }
+    public::PlayerHistory {
+        schema_version: public::SCHEMA_VERSION.into(),
+        build_id: public::BUILD_ID.into(),
+        solver_commit: "810f655f6fe9bccc13afb041b76b84fca37c7918".into(),
+        parser_version: "reviewed_hunter_public_text_v1".into(),
+        corpus_version: "conditional_hunter_baa_development_v2".into(),
+        information_mode: public::InformationMode::Player,
+        domain_id: public::HUNTER_BAA_PROJECTION_DOMAIN.into(),
+        events,
+    }
+}
+
+fn reviewed_public_history(history: &History) -> public::AdmittedPlayerHistory {
+    let history = public_history(history);
+    let mut registry = public::ReviewedEvidenceRegistry::default();
+    for event in &history.events {
+        registry
+            .record_trusted_ui_review(
+                &history,
+                event.ordinal,
+                &format!("synthetic_ui_review/{}", event.ordinal),
+            )
+            .unwrap();
+    }
+    public::admit_history(&history, &registry).unwrap()
+}
+
+fn compare_public(history: &History) -> BTreeSet<World> {
+    let state = reviewed_public_history(history)
+        .project_legacy_snapshot()
+        .unwrap();
+    assert_eq!(
+        state.board_count_provenance,
+        BoardCountProvenance::LegacyUnknown
+    );
+    assert!(state.pd_corruption_target.is_none());
+    assert!(state.twin_recipient_bluff_context.is_none());
+    assert!(state.twin_recipient_bluff_prefix_context.is_none());
+    compare_snapshot(history, &state)
 }
 
 fn permutations(remaining: &mut Vec<u8>, prefix: &mut Vec<u8>, result: &mut Vec<Vec<u8>>) {
@@ -348,6 +465,77 @@ fn complete_conditional_worlds_agree_at_every_finite_family_prefix() {
     assert_eq!(ambiguous, 4376);
     assert_eq!(unique, 3784);
     eprintln!("conditional_hunter_baa_v1 histories={} prefixes={prefixes} ambiguous={ambiguous} unique={unique}", histories.len());
+}
+
+#[test]
+fn reviewed_public_projection_preserves_every_complete_conditional_world() {
+    let mut prefixes = 0;
+    let mut ambiguous = 0;
+    let mut unique = 0;
+    for history in finite_histories() {
+        for length in 0..=history.events.len() {
+            let prefix = History {
+                domain: history.domain.clone(),
+                events: history.events[..length].to_vec(),
+            };
+            let worlds = compare_public(&prefix);
+            assert!(!worlds.is_empty());
+            ambiguous += usize::from(worlds.len() > 1);
+            unique += usize::from(worlds.len() == 1);
+            prefixes += 1;
+        }
+    }
+    assert_eq!((prefixes, ambiguous, unique), (8160, 4376, 3784));
+    eprintln!(
+        "reviewed_public_hunter_baa prefixes={prefixes} ambiguous={ambiguous} unique={unique}"
+    );
+    for n in FAMILY_SIZES {
+        for claimed in [1, n - 1] {
+            let impossible = History {
+                domain: Domain::supplied(n),
+                events: (1..=n)
+                    .map(|actor| Event::Reveal(observation(n, actor, claimed)))
+                    .collect(),
+            };
+            assert!(compare_public(&impossible).is_empty());
+        }
+    }
+}
+
+#[test]
+fn native_only_reference_mutation_does_not_change_public_input() {
+    let a = History {
+        domain: Domain::supplied(5),
+        events: vec![Event::Reveal(observation(5, 1, 2))],
+    };
+    let mut b = a.clone();
+    let Event::Reveal(observation) = &mut b.events[0] else {
+        unreachable!()
+    };
+    observation.targets = [5, 5];
+    assert!(matches!(
+        complete_worlds(&b),
+        ReferenceResult::Unsupported(_)
+    ));
+    assert_eq!(public_history(&a), public_history(&b));
+    assert_eq!(
+        reviewed_public_history(&a).planner_history(),
+        reviewed_public_history(&b).planner_history()
+    );
+    let projected_a = reviewed_public_history(&a)
+        .project_legacy_snapshot()
+        .unwrap();
+    let projected_b = reviewed_public_history(&b)
+        .project_legacy_snapshot()
+        .unwrap();
+    assert_eq!(
+        serde_json::to_value(&projected_a).unwrap(),
+        serde_json::to_value(&projected_b).unwrap()
+    );
+    // The invalid private reference record is a validation failure, not an
+    // observation the production public adapter can use to narrow these worlds.
+    let expected = compare_snapshot(&a, &projected_a);
+    assert_eq!(compare_snapshot(&a, &projected_b), expected);
 }
 
 #[test]
@@ -521,4 +709,11 @@ fn observationally_equivalent_hidden_worlds_have_identical_solver_input() {
     let expected = BTreeSet::from([World { baa_seat: 1 }, World { baa_seat: 3 }]);
     assert_eq!(compare(&a), expected);
     assert_eq!(compare(&b), expected);
+    assert_eq!(public_history(&a), public_history(&b));
+    assert_eq!(
+        reviewed_public_history(&a).planner_history(),
+        reviewed_public_history(&b).planner_history()
+    );
+    assert_eq!(compare_public(&a), expected);
+    assert_eq!(compare_public(&b), expected);
 }
