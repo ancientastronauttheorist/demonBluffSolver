@@ -159,6 +159,8 @@ stop, diagnose, fix, verify, then resume.
     test files and pending review fixes are complete, including filtered test
     runs that compile other integration targets. Reconfirm freeze after a
     failed comparison triggers edits; an earlier freeze no longer applies.
+    Keep compiled sources and embedded fixtures frozen until that Cargo process
+    exits. Queue review edits during a build and verify the final frozen revision.
     Create declared child test files before running rustfmt; it resolves child
     modules even when the new parent has not entered a shared Cargo build.
     Format edited Rust files explicitly instead of running workspace-wide
