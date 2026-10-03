@@ -322,7 +322,7 @@ fn speech_waits(c: &Context) -> bool {
             .picking
 }
 
-fn validate(c: &Context) -> Result<(), LedgerError> {
+fn validate(c: &Context, scheduled: bool) -> Result<(), LedgerError> {
     // Aggregate retained slots, text units and derived work before maps/clones.
     let mut retained = 0usize;
     for count in [
@@ -366,7 +366,13 @@ fn validate(c: &Context) -> Result<(), LedgerError> {
         || !s.ui_and_other_services_inert
         || !s.unity_liveness_verified
         || !s.trailer_lookup_stable_verified
-        || !s.supplied_resume_order_verified
+        || if scheduled {
+            s.supplied_resume_order_verified
+                || !c.result_resume_order.is_empty()
+                || !c.speech_resume_order.is_empty()
+        } else {
+            !s.supplied_resume_order_verified
+        }
         || !s.normal_completion_verified
         || c.actor.data.is_none()
         || c.actor.bluff == Some(0)
@@ -474,8 +480,7 @@ fn validate(c: &Context) -> Result<(), LedgerError> {
     let results: BTreeSet<_> = c.result_iterators.iter().map(|r| r.identity).collect();
     let order: BTreeSet<_> = c.result_resume_order.iter().copied().collect();
     let mut currents = BTreeSet::new();
-    if results != order
-        || order.len() != c.result_resume_order.len()
+    if (!scheduled && (results != order || order.len() != c.result_resume_order.len()))
         || c.result_waits.len() != results.len()
         || c.result_iterators.iter().any(|r| {
             r.actor != c.actor.identity
@@ -560,7 +565,7 @@ fn validate(c: &Context) -> Result<(), LedgerError> {
             }
         }
     }
-    if expected != c.speech_resume_order {
+    if !scheduled && expected != c.speech_resume_order {
         return Err(LedgerError::InvalidContext);
     }
     Ok(())
@@ -597,18 +602,26 @@ pub(super) struct PublicationStepper {
 
 impl PublicationStepper {
     pub(super) fn new(input: &Context) -> Result<Self, LedgerError> {
-        validate(input)?;
-        Ok(Self {
+        validate(input, false)?;
+        Ok(Self::validated(input))
+    }
+
+    pub(super) fn new_scheduled(input: &Context) -> Result<Self, LedgerError> {
+        validate(input, true)?;
+        Ok(Self::validated(input))
+    }
+
+    fn validated(input: &Context) -> Self {
+        Self {
             replay: Replay {
                 context: input.clone(),
                 speech_iterators: Vec::new(),
                 waits: input.result_waits.clone(),
                 events: Vec::new(),
             },
-        })
+        }
     }
 
-    #[cfg(test)]
     pub(super) fn snapshot(&self) -> &Replay {
         &self.replay
     }

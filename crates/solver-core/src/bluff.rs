@@ -60,6 +60,7 @@ pub mod clock;
 pub mod clocked_reveal;
 pub mod wait_queue;
 pub mod scheduled_reveal;
+pub mod scheduled_role_publication;
 
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{
