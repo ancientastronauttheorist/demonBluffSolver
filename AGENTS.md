@@ -52,7 +52,8 @@ stop, diagnose, fix, verify, then resume.
     applies to documentation filename prefixes in multi-command batches.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents, versioned coverage inventories, role/knowledge-base files and Rust module roots, with
-    `rg --files` before reading. Do not
+    `rg --files` before reading or using them as content-search operands. A
+    verified file in a multi-file search does not verify its guessed siblings. Do not
     infer an audit filename from a role name or descriptive note title, expand a
     Rust import alias or `mod` declaration into a guessed basename, or assume a
     module uses `mod.rs`. A confirmed child directory does not establish its
@@ -143,6 +144,9 @@ stop, diagnose, fix, verify, then resume.
     labels from a previous case.
     Check inherited harness preconditions before composing retained native calls;
     derive branch expectations from retained storage rather than fresh-fixture defaults.
+    Emulation can return at a time/instruction budget without completing a call.
+    Verify RIP and the declared stop/completion before applying return ABI checks;
+    a bounded continuation must retain the live CPU, stack and service chronology.
     Qualify callback plans by the invocation that can reach them; do not carry
     a later call's mutation plan onto an earlier setup-only call.
     Bind indexed literal-array expressions before using them in serde_json::json!
@@ -263,6 +267,8 @@ stop, diagnose, fix, verify, then resume.
     not share the pointer representation of parsed or longer strings.
     Resolve exact type declarations, including enums, before extracting dump blocks; prefix matches
     can select another class and modifiers can differ from an assumed declaration.
+    Exact simple names can also collide across namespaces; qualify the namespace
+    or a verified TypeDefIndex before selecting that declaration.
     Bound each block by that declaration's closing brace, not an optional
     Properties marker that can skip into the next type.
     For Dumper RVA/VA/Offset comments, preserve the observed spelling or parse
