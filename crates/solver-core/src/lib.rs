@@ -19,3 +19,4 @@ pub mod score_replay;
 pub mod character_filters;
 pub mod gameplay_startup;
 pub mod character_visuals;
+pub mod player_history;
