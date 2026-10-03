@@ -44,6 +44,9 @@ stop, diagnose, fix, verify, then resume.
     existing rule over appending duplicate guidance.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
     glob). For a filename family use `rg <pattern> <directory> -g 'prefix*.md'`.
+    Restrict source/note content searches to their relevant extensions; use
+    `rg -l` for report discovery and parse allowlisted report metadata rather
+    than printing matching minified corpus lines.
     Do not pass wildcard paths that the shell leaves unexpanded, including
     a trailing `/*` or partial-name wildcard on a directory argument; this also
     applies to documentation filename prefixes in multi-command batches.
@@ -59,6 +62,10 @@ stop, diagnose, fix, verify, then resume.
     Resolve extractor outputs separately from tool installation directories;
     a Dumper version identifies neither its build-specific output directory nor
     a verified copy of script.json, dump.cs or il2cpp.h.
+    A dependency directory does not establish a virtual environment or an
+    interpreter path; resolve the interpreter separately before invoking it.
+    Resolve commit identities with `git rev-parse` before writing provenance;
+    never expand a short revision into an unverified full hash.
     Before creating an audit artifact, verify its assigned full output directory
     and preserve it in the write path. Before freeze, compare each resolved
     script, note and report path with its assigned path.
@@ -81,8 +88,12 @@ stop, diagnose, fix, verify, then resume.
     including earlier inserted prose; use
     its returned lines rather than remembered fragments, and
     keep patch hunks in file order and omit empty placeholder hunks. Do not
-    include no-op context-only hunks; validate each changed file's current
-    context before combining additions and edits in one patch.
+    include no-op context-only hunks; after a failed patch, rebuild its hunks
+    from the fresh read instead of resubmitting the failed patch. Check every
+    hunk contains an addition or deletion, even when its file already has a diff.
+    Validate each changed file's current context before combining additions
+    and edits in one patch.
+    Verify that every file declared changed by a patch has an actual diff.
     For literal source fragments containing regex metacharacters, use `rg -F`
     with separate `-e` arguments; do not prepare a dependent patch after a failed search.
     Re-read relevant lines after formatting before preparing an exact-match patch;
@@ -98,8 +109,9 @@ stop, diagnose, fix, verify, then resume.
     the code executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
-    Check imported report/helper schemas before indexing their fields; a build
-    constant is not necessarily repeated inside a returned layout dictionary.
+    Check imported report/helper and target-manifest schemas before indexing
+    their fields; a build constant is not necessarily repeated inside a returned
+    layout dictionary, and manifest function rows need not use a `targets` key.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Read a family's actual caller
@@ -115,6 +127,9 @@ stop, diagnose, fix, verify, then resume.
     can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;
     a dependency imported locally by a base class need not be an instance field.
+    Reset dynamically added identity/string labels with allocator and object
+    registries before each independent case; reused addresses must not retain
+    labels from a previous case.
     Check inherited harness preconditions before composing retained native calls;
     derive branch expectations from retained storage rather than fresh-fixture defaults.
     Qualify callback plans by the invocation that can reach them; do not carry
@@ -179,6 +194,8 @@ stop, diagnose, fix, verify, then resume.
     necessarily the method's end. Resolve the next verified managed entry.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
+    Derive helper entries from decoded concrete call sites before adding them
+    to diagnostic target lists; a remembered constructor RVA is not evidence.
     Include the entire final instruction when sizing a decode range, exclude
     trailing alignment padding, account for embedded jump tables as data, and
     verify all return paths rather than stopping
@@ -186,6 +203,8 @@ stop, diagnose, fix, verify, then resume.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs and expected call-site counts; do not infer encoding
     from decompiled C or count sites manually.
+    A pinned instruction is not evidence that a fixture executed its branch;
+    verify trigger predicates and retained state before claiming a write occurred.
     Read numeric constants before assigning units or expected magnitudes.
     Resolve the pinned class's exact field declarations before naming offsets
     or asserting publication scope; adjacent saved and current roster fields

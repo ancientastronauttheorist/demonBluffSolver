@@ -63,8 +63,9 @@ The [legacy Rust input type](../crates/solver-core/src/types.rs) mixes public an
 offline fields. The new [strict history boundary](notes/systems/player_history_boundary.md)
 rejects unknown/privileged JSON fields, binds exact events and prefixes to a
 separate trusted UI-review registry, and preserves chronological results. Its
-mechanical legacy projection admits only the named single-Day Judge domain;
-it rejects unmodeled transitions rather than flattening them. The registry's
+mechanical legacy projection admits the named single-Day Judge domain and
+conditional initial-Day Hunter/Baa domain; it rejects unmodeled transitions
+rather than flattening them. The registry's
 caller must actually review captures; the module does not inspect pixels.
 CLI/live capture integration and a certified rules-domain adapter remain open.
 Paired hidden worlds with identical permitted histories must yield identical
@@ -100,10 +101,10 @@ integrated means the relevant solver/player-history path consumes it.
 
 | Subsystem | Accounted / reconstructed / validated domain | Integration and remaining gate |
 | --- | --- | --- |
-| Observation/extraction | [Strict history boundary](notes/systems/player_history_boundary.md): typed history, exact-prefix trusted review, chronological result preservation and paired-oracle development input checks. | Exported Rust module with narrow Judge snapshot projection; trusted capture/CLI/live integration and held-out evaluation remain absent. |
+| Observation/extraction | [Strict history boundary](notes/systems/player_history_boundary.md): typed history, exact-prefix trusted review, chronological result preservation and paired-oracle development input checks. | Exported Rust module with narrow Judge and conditional Hunter/Baa snapshot projections; archived pixel review records admission gaps. Trusted capture/CLI/live integration and held-out evaluation remain absent. |
 | Deck/pool generation | [Actual pool composition](notes/systems/manage_pool_composition.md): caller/builders/getters/filters/predicate with supplied collection/RNG/layout. | [Ledger bridge](notes/systems/manage_pool_ledger_bridge.md) is offline with later-setup provenance required. Generation-to-observation domain and held-out results remain open. |
-| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Engine first-step evidence](notes/systems/unity_coroutine_bridge.md) is independent. | Offline kernels; concrete role bodies, engine queue/resumed Reveal and full Manage-to-observation transaction remain open. |
-| Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). | Development complete-world comparison of supplied four/five-seat finished setup; no generation or cross-role/held-out certificate. |
+| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Engine first-step evidence](notes/systems/unity_coroutine_bridge.md) is independent. | Offline kernels and [conditional concrete Hunter Day publication](notes/systems/hunter_role_publication.md); mixed engine queue/resumed Reveal and full Manage-to-observation transaction remain open. |
+| Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). | Production public-history projection preserves complete worlds at all declared four/five-seat development prefixes; finished setup and availability supplied. No generation or cross-role/held-out certificate. |
 | Legal abilities/actions | [Setup action audit](notes/systems/character_action_setup.md), individual role/picker evidence and guarded writer bridge. | Recommendations/automation exist; target/use/reset/history and policy certificate remain open. ActivatePick drafts stay unvalidated unless needed. |
 | Execution/death/protection | [Execution evidence](notes/systems/gameplay_execution_resolution.md) supplies bounded damage/protection/terminal behavior. | Existing bookkeeping/constraints; cross-role chronology needs original before/action/after comparisons. |
 | Night/phase | Bounded lifecycle, coroutine and role transitions with explicit timing contracts. | Snapshot histories and offline scheduled/clocked replays; complete village chronology/reset certificate absent. |
@@ -128,9 +129,10 @@ fixture; preserve iterator bytes, current actor identity, caller-generated IDs
 and failure prefixes; stop before publication. The new join closes this
 necessary dependency, not S1 or a certified solver-ready gameplay domain.
 
-The distinct publication/action audit now joins generic Act Init/Start over
+The distinct publication/action audit joins generic Act Init/Start over
 retained actors/pools; concrete virtual role bodies remain supplied inert
-services. Continue S1 by binding one concrete supported clue role and establishing
+services in that audit. The Hunter checkpoint below adds one conditional concrete
+producer join. Continue S1 by establishing
 queue/Reveal admission through native engine contracts. Produce chronological
 legal observations for one named role/deck domain and feed the strict adapter.
 The independent Hunter/Baa reference compares conditional complete worlds; it
@@ -179,7 +181,7 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   the named retained-state dependency closed, justifying the next tranche.
 ```
 
-## Current boundary, publication and deduction checkpoint
+## Boundary, publication and deduction checkpoint at 810f655
 
 2026-10-03. Candidate source/reference commit
 `810f655f6fe9bccc13afb041b76b84fca37c7918`; strict history implementation
@@ -266,3 +268,78 @@ mixed DelayReveal/result/speech engine admission differs from the existing
 An archived after-flip capture exposes one Hunter clue and board geometry, but
 does not establish this conditional domain, full public pool, pinned capture
 identity or complete reveal chronology. It cannot promote those missing facts.
+
+## Current Hunter producer, public adapter and capture checkpoint
+
+2026-10-03. Public-adapter commit
+`6240e85eacffcf29f0e84897332bbab8cc659b49`; native producer/reference candidate is
+`bb65844c0d6bc3594bc0cdde54edce1c6246fae1`. The original planning baseline
+remains `92363e756f4faf6fdefc0f59a7a8cba527c5936a`.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Pinned manifests and candidate commits above; Hunter role/publication native
+  development v1, conditional Hunter/Baa development v2, archived pixel-review v1.
+  Oracle/native validation separate from supplied reviewed public inputs.
+  Exact conditional deduction and dependency closure; no policy objective score.
+Named decision blocker and reachable deck/phase/role scenario:
+  Concrete Hunter Day output through captured delegate/history/speech;
+  public sentence interpretation without native-only references;
+  four/five-seat conditional Hunter/Baa deduction, four-seat native producer.
+Before -> after supported behavior:
+  Supplied clue result -> concrete native real/bluff producer and consumer join.
+  Legacy fixture projection -> strict production public-history projection
+  preserving complete worlds, repeated public roles and unknown HUD provenance.
+  Archived clue mention -> hash-bound pixel review with admission gaps explicit.
+Original evidence; supplied runtime/scheduler boundaries:
+  Actual Character.Act(Day), CheckLying, RoleAct, Imp Day return, Tracker real/bluff,
+  distance/register alignment/range/text selection, ActedInfo and result/speech.
+  Finished setup/bluff acquisition, legal Day request, runtime/collections/UI,
+  uniform-index draw contract and explicit coroutine resume schedule supplied.
+  Native prior_info is retention stress, not an initial-Day public history;
+  supplied runtime uses zero wraps to FFFFFFFF; Init is not executed here.
+  Asset abilityUsage zero does not prove the post-initialization runtime count.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Conditional native producer: 20 / 20 / 20 / 0 / 0 completions, 12 truth/8 bluff;
+  2168 exact stopped-service prefixes, 54 selected pins, 13 body fingerprints,
+  1248 executed instruction/service addresses, 20 captured callbacks, 8 draws,
+  8 duplicate-opposite reference completions. Two independent reruns byte-identical.
+  Strict input: all 20 unit tests passed. Independent reference: all 10 tests
+  passed, including native sentences in separate synthetic availability histories.
+  Release build passed. Prior full 34-test legacy simulation result retained;
+  unchanged legacy solver rules did not justify repeating that long suite.
+  Archived captures: 2 reviewed, 0 admitted; review report byte-identical rerun.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Exact complete worlds at all 8160 synthetic family prefixes through production
+  adapter: 4376 ambiguous, 3784 unique; four coherent contradictions empty.
+  All 20 native sentence cases match independently enumerated complete worlds
+  and include actual Baa in the isolated grading lane. Native refs never enter
+  public targets; malformed refs cannot alter unchanged public input/worlds.
+  Missing fields remain incomplete, unmodeled combinations unsupported.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy certificate or uniform-world prior. Conditional bluff draw law
+  does not establish seat-generation priors, path/failure mass or independence.
+  Reference-only linear-distance mutation still differs on 1104 complete histories.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No independent held-out family, fixed-budget outcome comparison or calibration.
+  Local test durations are development checks, not performance certificates.
+New uncertainty, regressions and remaining exclusions:
+  Review corrected premature flag fabrication, static-write reachability prose,
+  allocator label reset, CLR fixture metadata and passive-use provenance.
+  Day30 preserves the start-acted flag; its pinned write is gated by trigger5.
+  Actual engine immediate starts, mixed queue readiness, legal Day invocation,
+  resumed acquisition, public capture/build binding and generation remain open.
+  Ten-card archived mixed-role capture cannot establish this conditional domain,
+  full public deck or reveal chronology. No live control used.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Continue S1: compose actual immediate result/speech coroutine starts and mixed
+  queue draining with retained acquisition/actor state and explicit owner/clock/
+  full-frame/generation evidence. DelayReveal acquires; Day must be a separately
+  established request. Speech text before its wait is not rendered availability.
+  Gate capture admission on pinned complete public deck and real reveal prefixes.
+  Conditional action-policy comparison separately needs retained execution/HP/
+  death-list/terminal transitions and legal UI entry; static anchors alone cannot
+  establish action availability or an optimal reveal-first policy.
+  Necessary concrete producer/input dependencies closed; continue broad goal.
+  S1 end-to-end promotion, held-out S2 and all S3/S4 gates remain incomplete.
+```
