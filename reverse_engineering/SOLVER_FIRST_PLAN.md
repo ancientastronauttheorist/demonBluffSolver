@@ -33,7 +33,7 @@ Correct rules do not guarantee enough information to identify the actual world. 
 
 ## Build, assets and provenance
 
-Initial scope is Steam app `3749960`, **Demon Bluff Playtest**, build `23084916`, Windows x86-64, Unity `2022.3.10f1`, IL2CPP metadata 29, build identity `f530404b0f3f_807de4a83df4`. Use the exact binary/metadata fingerprints in [build manifests](manifests/builds/) and the [toolchain lock](toolchain/toolchain.lock.json).
+Initial scope is Steam app `3749680`, **Demon Bluff Playtest**, build `23084916`, Windows x86-64, Unity `2022.3.10f1`, IL2CPP metadata 29, build identity `f530404b0f3f_807de4a83df4`. Use the exact binary/metadata fingerprints in [build manifests](manifests/builds/) and the [toolchain lock](toolchain/toolchain.lock.json). The app ID corrects the original plan's `3749960` transcription against the build manifest and installed app manifest; the binary scope is unchanged.
 
 Pin GameAssembly, global metadata, relevant Unity assets/serialized role and script data, mode/ascension configuration, parser version and solver commit for each corpus. Asset serialization semantics are evidence, not interchangeable with runtime field layouts. A new build needs an explicit manifest diff and rule triage before prior certificates carry over.
 

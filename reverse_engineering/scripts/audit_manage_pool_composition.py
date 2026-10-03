@@ -17,7 +17,7 @@ ENTRIES = {0x36ce30:'ManageCharacters', 0x36d720:'PickRoundDuplicates',
            0x369eb0: 'FilterAlignmentCharacters'}
 
 
-def audit(game_root, dumper_root):
+def audit(game_root, dumper_root, *, initialization=None):
     import capstone, pefile, unicorn
     from unicorn import x86_const as x
     assert unicorn.__version__ == '2.1.4'
@@ -90,6 +90,10 @@ def audit(game_root, dumper_root):
               0x36cf7a:('mov','rax, qword ptr [r12 + 0x20]'),0x36cfda:('call','0x365a20'),
               0x36d7ca:('call','0x37dc00'),0x36d846:('call','0x369eb0'),0x36d8e0:('call','0x2b6ff0')}
     for a, expected in checks.items(): assert (decoded[a].mnemonic, decoded[a].op_str) == expected
+    # A separate audit can extend this exact retained prefix with actual Init
+    # bodies. The default corpus and its pre-Init stop remain unchanged.
+    if initialization is not None:
+        initialization.decode(meta, dump, pe, cs, decoded)
     uc = unicorn.Uc(unicorn.UC_ARCH_X86, unicorn.UC_MODE_64)
     uc.mem_map(base, (pe.OPTIONAL_HEADER.SizeOfImage+4095)&~4095); uc.mem_write(base, pe.get_memory_mapped_image())
     arena, stack, stop = 0x200000000, 0x300000000, 0x400000000
@@ -106,9 +110,13 @@ def audit(game_root, dumper_root):
         for op in i.operands:
             if op.type==capstone.CS_OP_MEM and op.mem.base==capstone.x86.X86_REG_RIP: refs.add(i.address+i.size+op.mem.disp)
     bindings={}
-    for row in meta['ScriptMetadata']+meta['ScriptMetadataMethod']:
+    metadata_rows = meta['ScriptMetadata']+meta['ScriptMetadataMethod']
+    if initialization is not None:
+        metadata_rows += meta['ScriptString']
+    for row in metadata_rows:
         if row['Address'] in refs:
-            p=arena+0x1000+len(bindings)*0x200; bindings[row['Name']]=p; q(base+row['Address'],p)
+            p=arena+0x1000+len(bindings)*0x200
+            bindings[row.get('Name', row.get('Value'))]=p; q(base+row['Address'],p)
     for name in ['Gameplay_TypeInfo','ProjectContext_TypeInfo','System.Collections.Generic.List<CharacterData>_TypeInfo',
                  'Characters.<>c__DisplayClass22_0_TypeInfo','System.Predicate<CharacterData>_TypeInfo',
                  'Method$Characters.<>c__DisplayClass22_0.<PickRoundBluffs>b__0()',
@@ -183,6 +191,8 @@ def audit(game_root, dumper_root):
         uc.reg_write(x.UC_X86_REG_RIP,base+0x377170)
     def hook(_,a,size,__):
         r=a-base; c,t,m=reg(x.UC_X86_REG_RCX),reg(x.UC_X86_REG_RDX),reg(x.UC_X86_REG_R8)
+        if initialization is not None and initialization.hook(a, r, c, t, m):
+            return
         if a==stop: uc.emu_stop(); return
         if r==0x36d01e: state['boundary']='empty_before_publication'; uc.emu_stop(); return
         if r==0x365a20:
@@ -297,6 +307,11 @@ def audit(game_root, dumper_root):
         else:
             assert r in decoded and decoded[r].size==size,hex(r); visited.add(r)
     uc.hook_add(unicorn.UC_HOOK_CODE,hook)
+    if initialization is not None:
+        initialization.bind(uc=uc, x=x, base=base, arena=arena, stop=stop,
+                            actors=actors, data=data, labels=labels, bindings=bindings,
+                            owner=owner, alternate=alternate, gs=gs, state=state, opt=opt,
+                            q=q, d=d, rq=rq, rd=rd, reg=reg, ret=ret, halt=halt)
     def run(starting,rosters,fallback,options=None):
         opt.clear(); opt.update(options or {}); state.clear()
         state.update(counts={},events=[],entries=[],typed=[],draws=[],callbacks=[],predicate_results=[],pending=None,alloc=0,error=None,fallback=False,builder=None,boundary=None,init_arguments=None)
@@ -333,17 +348,25 @@ def audit(game_root, dumper_root):
             ids=opt.get('inline',[]); q(inline+0x18,len(ids))
             for i,v in enumerate(ids): q(inline+0x20+i*8,scripts[v] if v is not None else 0)
             q(custom+0x18,0); q(p+0x20,inline); q(p+0x18,custom); q(p+0x60,scripts[pi] if opt.get('cached') else 0)
+        if initialization is not None:
+            initialization.prepare()
         initial=snap(); sp=stack+0x8008; q(sp,stop); uc.reg_write(x.UC_X86_REG_RSP,sp)
         uc.reg_write(x.UC_X86_REG_RCX,owner); uc.reg_write(x.UC_X86_REG_RDX,manage_roster if manage_values is not None else 0)
+        for volatile in (x.UC_X86_REG_RAX, x.UC_X86_REG_R8, x.UC_X86_REG_R9, x.UC_X86_REG_R10, x.UC_X86_REG_R11):
+            uc.reg_write(volatile, 0)
         keep=[x.UC_X86_REG_RBX,x.UC_X86_REG_RBP,x.UC_X86_REG_RSI,x.UC_X86_REG_RDI,x.UC_X86_REG_R12,x.UC_X86_REG_R13,x.UC_X86_REG_R14,x.UC_X86_REG_R15]
         for rr in keep: uc.reg_write(rr,0xabc000+rr)
-        uc.emu_start(base+0x36ce30,stop,count=50000)
+        uc.emu_start(base+0x36ce30,stop+0x1000,count=50000)
         assert state['error'] or state['boundary']
         return {'input':{'starting':starting,'rosters':rosters,'fallback':fallback,'options':dict(opt)},'initial':initial,'final':snap(),
                 **{k:state[k][:] for k in ['entries','typed','events','draws','callbacks','predicate_results']},'error':state['error'],
                 'boundary':state['boundary'],'init_arguments':state['init_arguments']}
     cases=[]; starts=[[0,0,1,4],[2,2,5],[3],[6]]; empty=[[],[],[],[]]
     rosters=[[1,7],[5],[3],[6]]; fallback=[[1,7],[5],[3],[6]]
+    if initialization is not None:
+        return initialization.report(run, starts, rosters, fallback,
+                                     metadata=exact, gateways=gateways, checks=checks,
+                                     visited=visited, fields=declarations)
     def support(start,roster,options,family):
         pending=[([],Fraction(1))]; result_cases=[]
         while pending:

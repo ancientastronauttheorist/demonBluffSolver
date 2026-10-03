@@ -79,7 +79,9 @@ stop, diagnose, fix, verify, then resume.
     current read result before preparing an exact-match patch to any changed file,
     including earlier inserted prose; use
     its returned lines rather than remembered fragments, and
-    keep patch hunks in file order and omit empty placeholder hunks.
+    keep patch hunks in file order and omit empty placeholder hunks. Do not
+    include no-op context-only hunks; validate each changed file's current
+    context before combining additions and edits in one patch.
     For literal source fragments containing regex metacharacters, use `rg -F`
     with separate `-e` arguments; do not prepare a dependent patch after a failed search.
     Re-read relevant lines after formatting before preparing an exact-match patch;

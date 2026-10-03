@@ -98,6 +98,17 @@ and unsupplied RNG state remain explicit boundaries.
 
 The [ManageCharacters prefix audit](manage_pool_prefix.md) now verifies caller handoff and first Init arguments across 44 native cases. Its pool builders remain supplied gateways, and it stops before Init or empty-board publication; the complete composition above remains open.
 
+## October 3 retained native join
+
+The [actual Manage-to-Init composition](manage_initialization_join.md) now
+executes both pool builders and subsequent Init occurrences in one retained
+native fixture, through Hidden Refresh and an optional supplied first-yield
+step. Alias, board-replacement and stopped-second-callback cases preserve prior
+iterator bytes and partial actor effects. It stops before publication at
+`36D01E`. This closes the first named join dependency; publication, Act
+Init/Start, queue admission and chronological legal solver observations remain
+open under the [S0 contract](../../SOLVER_CONTRACT.md).
+
 ## September 30 progress
 
 The [complete setup caller](manage_setup_caller.md) now executes every pass and normal return under supplied gateways in 140 native fixtures. [Unique-source composition](unique_source_composition.md) executes the actual starting/fallback/script getters, lazy typed getter, filters and captured predicate in 516 fixtures, preserving one source/pool RNG history. [Initialization](character_initialization.md) executes Init/InitWithNoReset, Hidden RefreshCharacter and first-yield publication in 475 fixtures. Their offline Rust kernels preserve their supported boundaries.

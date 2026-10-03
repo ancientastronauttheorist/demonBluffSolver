@@ -20,7 +20,7 @@ build manifest.
 
 ## Current build
 
-- Steam app: `3749960` (`Demon Bluff Playtest`)
+- Steam app: `3749680` (`Demon Bluff Playtest`)
 - Steam build: `23084916`
 - Unity: `2022.3.10f1`
 - Architecture: Windows x86-64
@@ -38,7 +38,7 @@ From PowerShell at the repository root:
 ```powershell
 python reverse_engineering/scripts/build_manifest.py `
   --game-root 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
-  --steam-manifest 'B:\SteamLibrary\steamapps\appmanifest_3749960.acf'
+  --steam-manifest 'B:\SteamLibrary\steamapps\appmanifest_3749680.acf'
 
 powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_il2cppdumper.ps1 `

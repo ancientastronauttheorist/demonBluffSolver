@@ -143,6 +143,164 @@ fn agrees_with_successful_joined_native_corpus() {
 }
 
 #[test]
+fn retained_manage_pool_init_join_matches_complete_first_yield_projections() {
+    let report: Value = serde_json::from_str(include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../reverse_engineering/reports/f530404b0f3f_807de4a83df4_manage_initialization_join.json"
+    )))
+    .unwrap();
+    assert_eq!(report["schema"], "manage_initialization_join_v1");
+    assert_eq!(report["case_count"], 8);
+    assert_eq!(report["initializer_calls"], 16);
+    assert_eq!(report["completed_initializers"], 12);
+    let mut compared_calls = 0;
+    for case in report["cases"].as_array().unwrap() {
+        // State-zero scheduling and callbacks that stop mid-body are outside
+        // this replay's admitted domain. Native assertions retain those cases.
+        if case["stage"] != "first_yield" || !case["error"].is_null() {
+            continue;
+        }
+        let initial = &case["initial_actors"]["actors"]["character"];
+        let n = |key: &str| initial[key].as_u64().unwrap();
+        let pointer = |key: &str| (n(key) != 0).then_some(n(key));
+        let mut a = context().actor;
+        a.identity = n("actor");
+        a.data = pointer("data_pointer");
+        a.bluff = pointer("bluff");
+        a.register_as = pointer("register_as");
+        a.trailer = pointer("trailer");
+        a.runtime = pointer("runtime");
+        a.role = pointer("role");
+        a.bluff_role = pointer("bluff_role");
+        a.saved_act = pointer("saved_act");
+        a.dead_prefab = None;
+        a.state_callback = pointer("state_callback");
+        a.statuses.target = pointer("status_target");
+        a.alignment = n("alignment") as i32;
+        a.id = n("id") as i32;
+        a.previous = n("previous") as i32;
+        a.state = n("state") as i32;
+        a.info_version = n("info_version") as u32;
+        a.statuses.version = n("status_version") as u32;
+        a.infos = initial["info_values"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| v.as_u64().filter(|p| *p != 0))
+            .collect();
+        a.statuses.active = initial["status_values"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| v.as_i64().unwrap() as i32)
+            .collect();
+        a.statuses.resistances = initial["resistance_values"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| v.as_i64().unwrap() as i32)
+            .collect();
+        a.revealed = n("revealed") != 0;
+        a.started = n("started") != 0;
+        a.killed_hidden = n("killed_hidden") != 0;
+        a.killed_demon = n("killed_demon") != 0;
+        a.uses = n("uses") as i32;
+        let assert_join_actor = |actor: &Actor, native: &Value| {
+            let mut expected = native.clone();
+            expected["data"] = native["data_pointer"].clone();
+            assert_snapshot(actor, &expected);
+            assert_eq!(actor.identity, native["actor"].as_u64().unwrap());
+            assert_eq!(
+                actor.statuses.target.unwrap(),
+                native["status_target"].as_u64().unwrap()
+            );
+            assert_eq!(
+                serde_json::to_value(&actor.statuses.resistances).unwrap(),
+                native["resistance_values"]
+            );
+            assert_eq!(
+                serde_json::to_value(&actor.statuses.active).unwrap(),
+                native["status_values"]
+            );
+            assert_eq!(
+                serde_json::to_value(
+                    actor
+                        .infos
+                        .iter()
+                        .map(|p| p.unwrap_or(0))
+                        .collect::<Vec<_>>()
+                )
+                .unwrap(),
+                native["info_values"]
+            );
+            assert_eq!(
+                actor.state_callback.unwrap_or(0),
+                native["state_callback"].as_u64().unwrap()
+            );
+        };
+        assert_join_actor(&a, initial);
+        let mut continuations = vec![];
+        for (index, call) in case["initializer_calls"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .enumerate()
+        {
+            assert_eq!(call["completed"], true);
+            assert_join_actor(&a, &call["before"]);
+            let result = replay(&Context {
+                version: CHARACTER_INITIALIZATION_NATIVE_V1.into(),
+                method: Method::Init,
+                actor: a,
+                data: call["after"]["data_pointer"].as_u64().unwrap(),
+                // Both authored assets 7 and 1 have startingAlignment=10.
+                starting_alignment: 10,
+                id: call["display_id"].as_i64().unwrap() as i32,
+                required_objects_and_lists_valid: true,
+                callbacks_and_ui_inert: true,
+                clone_result_verified: true,
+                synchronous_first_yield_verified: true,
+                clone_result: Some(call["clone"].as_u64().unwrap()),
+                continuation_identity: call["iterator"].as_u64().unwrap(),
+                wait_identity: case["final_actors"]["continuations"][index]["current"]
+                    .as_u64()
+                    .unwrap(),
+                continuations,
+            })
+            .unwrap();
+            let observed = case["initializer_events"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|event| event["kind"] == "state_callback" && event["init_index"] == index)
+                .unwrap();
+            assert_join_actor(
+                result.callback_observation.as_ref().unwrap(),
+                &observed["snapshot"]["actors"]["character"],
+            );
+            assert_join_actor(&result.actor, &call["after"]);
+            a = result.actor;
+            continuations = result.continuations;
+            compared_calls += 1;
+        }
+        let expected: Vec<_> = case["final_actors"]["continuations"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|c| Continuation {
+                identity: c["identity"].as_u64().unwrap(),
+                actor: a.identity,
+                state: c["state"].as_i64().unwrap() as i32,
+                current: Some(c["current"].as_u64().unwrap()),
+            })
+            .collect();
+        assert_eq!(continuations, expected);
+        assert_join_actor(&a, &case["final_actors"]["actors"]["character"]);
+    }
+    assert_eq!(compared_calls, 4);
+}
+
+#[test]
 fn reset_preserves_resistance_target_copied_role_and_prior_continuations() {
     let mut c = context();
     let prior = Continuation {
