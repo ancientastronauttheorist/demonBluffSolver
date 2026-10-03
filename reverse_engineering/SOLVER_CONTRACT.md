@@ -587,6 +587,11 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   Execute actual five Manage/Init occurrences and their first delayed yields
   without rebuilding pools or replacing actors; compare retained asset/clone,
   status/history/use/ID and continuation state at pre-publication handoff.
+  Continue the live Manage CPU/heap, stopping at36D01E; B's saved pool views
+  retain heap state but not CPU context. Restoring those views and issuing
+  standalone Init calls would not prove this caller continuation.
+  Character.Init is distinct from Act(Init3); concrete role OnInit dispatch
+  occurs after this stop and is a separate next boundary.
   Then compose concrete Init/Start effects, including Confessor OnInit, actual
   acquisition and public deck/clue publication before world-set admission.
   Two dependencies closed with explicit boundaries; continue the original
