@@ -133,6 +133,8 @@ stop, diagnose, fix, verify, then resume.
     from complete storage and future snapshot costs before asserting admission.
     Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
     keys can accidentally print an entire retained or stopped report corpus.
+    Locate report JSON with filename discovery or `rg -l`; do not print matching
+    lines across report corpora, since one line can contain the entire corpus.
     Inspect sequence container shapes before iterating calls; retained sequences
     can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;

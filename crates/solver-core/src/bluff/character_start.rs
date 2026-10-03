@@ -118,7 +118,11 @@ fn dispatch(
         CallbackRole::Scout
         | CallbackRole::Witness
         | CallbackRole::Confessor
-        | CallbackRole::Spy => None,
+        | CallbackRole::Spy
+        | CallbackRole::Minion
+        | CallbackRole::Lover
+        | CallbackRole::Hunter
+        | CallbackRole::Enlightened => None,
         CallbackRole::TwinMinion => unreachable!(),
     };
     path.callbacks.push(callback);

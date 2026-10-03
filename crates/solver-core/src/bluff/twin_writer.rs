@@ -7,7 +7,7 @@
 use super::ledger::{LedgerError, Probability};
 use super::reveal::{
     replay_reveal_callbacks, BluffReference, CallbackRole, DataRole, RevealContext, RoleSlot,
-    REVEAL_CALLBACKS_START_NATIVE_V3,
+    REVEAL_CALLBACKS_START_NATIVE_V3, SETUP_CALLBACKS_NATIVE_V4,
 };
 use crate::knowledge_base::{get_card, Faction};
 use serde::{Deserialize, Serialize};
@@ -34,7 +34,8 @@ pub struct BodyState {
 #[serde(deny_unknown_fields)]
 pub struct TwinWriterContext {
     pub rule_version: String,
-    /// V3 input, with explicit latches and no scheduled resume events.
+    /// V3 input, with explicit latches and no scheduled resume events. Shared
+    /// structural validation also admits setup-only V4, not Twin replacements.
     pub reveal: RevealContext,
     /// Exact global CurrentCharacters order, preserving repeated references.
     pub current_order: Vec<u8>,
@@ -71,6 +72,11 @@ fn clone_role(data: DataRole) -> CallbackRole {
         DataRole::TwinMinion => CallbackRole::TwinMinion,
         DataRole::Drunk => CallbackRole::Drunk,
         DataRole::Spy { .. } => CallbackRole::Spy,
+        DataRole::Minion => CallbackRole::Minion,
+        DataRole::Confessor => CallbackRole::Confessor,
+        DataRole::Lover => CallbackRole::Lover,
+        DataRole::Hunter => CallbackRole::Hunter,
+        DataRole::Enlightened => CallbackRole::Enlightened,
     }
 }
 
@@ -115,7 +121,8 @@ fn replace(
 
 pub(super) fn validate_board(context: &TwinWriterContext) -> Result<(), LedgerError> {
     if context.rule_version != TWIN_WRITER_NATIVE_V1
-        || context.reveal.rule_version != REVEAL_CALLBACKS_START_NATIVE_V3
+        || ![REVEAL_CALLBACKS_START_NATIVE_V3, SETUP_CALLBACKS_NATIVE_V4]
+            .contains(&context.reveal.rule_version.as_str())
         || !context.reveal.resumes.is_empty()
         || context.current_order.len() > 256
         || context
@@ -164,6 +171,9 @@ pub(super) fn retained_entries(context: &TwinWriterContext) -> usize {
 }
 
 pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPath>, LedgerError> {
+    if context.reveal.rule_version != REVEAL_CALLBACKS_START_NATIVE_V3 {
+        return Err(LedgerError::InvalidContext);
+    }
     validate_board(context)?;
     let source = context
         .reveal

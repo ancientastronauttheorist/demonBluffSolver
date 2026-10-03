@@ -11,6 +11,7 @@ use super::{
     reveal::{
         BluffReference, CallbackRole, CallbackTrace, DataRole, Dispatch, RevealActor,
         RevealContext, RoleSlot, StatusState, Trigger, REVEAL_CALLBACKS_START_NATIVE_V3,
+        SETUP_CALLBACKS_NATIVE_V4,
     },
     reveal_writer::{RevealWriterContext, ViewUiState, REVEAL_WRITER_VIEW_NATIVE_V2},
     setup_initialization_batch::{self as initialization, Context as InitializationContext},
@@ -19,6 +20,8 @@ use super::{
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 pub const SETUP_ACTION_BRIDGE_NATIVE_V1: &str = "setup_action_bridge_native_v1";
+/// Includes original N5 data/classes but produces a setup-only registry.
+pub const SETUP_ACTION_BRIDGE_NATIVE_V2: &str = "setup_action_bridge_native_v2";
 const MAX_PATHS: usize = 256;
 const MAX_RETAINED: usize = 1_048_576;
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -70,6 +73,11 @@ fn class(role: DataRole) -> &'static str {
         DataRole::TwinMinion => "Marionette",
         DataRole::Drunk => "Drunk",
         DataRole::Spy { .. } => "Spy",
+        DataRole::Minion => "Minion",
+        DataRole::Confessor => "Confessor",
+        DataRole::Lover => "Empath",
+        DataRole::Hunter => "Tracker",
+        DataRole::Enlightened => "Shugenja",
     }
 }
 fn callback(class: &str) -> Result<CallbackRole, LedgerError> {
@@ -81,6 +89,10 @@ fn callback(class: &str) -> Result<CallbackRole, LedgerError> {
         "Scout" => CallbackRole::Scout,
         "Witness" => CallbackRole::Witness,
         "Confessor" => CallbackRole::Confessor,
+        "Minion" => CallbackRole::Minion,
+        "Empath" => CallbackRole::Lover,
+        "Tracker" => CallbackRole::Hunter,
+        "Shugenja" => CallbackRole::Enlightened,
         _ => return Err(LedgerError::InvalidContext),
     })
 }
@@ -96,7 +108,7 @@ fn physical_positions(c: &initialization::Replay) -> Result<Vec<u8>, LedgerError
         .collect()
 }
 fn project(c: &Context) -> Result<Path, LedgerError> {
-    if c.version != SETUP_ACTION_BRIDGE_NATIVE_V1
+    if ![SETUP_ACTION_BRIDGE_NATIVE_V1, SETUP_ACTION_BRIDGE_NATIVE_V2].contains(&c.version.as_str())
         || !c.action_classes_and_caches_verified
         || !c.on_trigger_absent
         || !c.final_services_inert
@@ -278,7 +290,11 @@ fn project(c: &Context) -> Result<Path, LedgerError> {
     let board = TwinWriterContext {
         rule_version: TWIN_WRITER_NATIVE_V1.into(),
         reveal: RevealContext {
-            rule_version: REVEAL_CALLBACKS_START_NATIVE_V3.into(),
+            rule_version: if c.version == SETUP_ACTION_BRIDGE_NATIVE_V2 {
+                SETUP_CALLBACKS_NATIVE_V4.into()
+            } else {
+                REVEAL_CALLBACKS_START_NATIVE_V3.into()
+            },
             board_size,
             trailer_mode: false,
             pools: c.pools.clone(),
@@ -396,8 +412,7 @@ fn push(paths: &mut Vec<Path>, p: Path, retained: &mut usize) -> Result<(), Ledg
     Ok(())
 }
 pub fn replay(c: &Context) -> Result<Vec<Path>, LedgerError> {
-    let mut initial = project(c)?;
-    init_pass(&mut initial);
+    let initial = replay_init_prefix(c)?;
     let order = c
         .initialization
         .caller
@@ -500,6 +515,15 @@ pub fn replay(c: &Context) -> Result<Vec<Path>, LedgerError> {
         super::continuation_registry::validate_registry(&path.state)?;
     }
     Ok(paths)
+}
+
+/// Complete only the Init action pass. Ordered Start, onSetup, shuffle,
+/// acquisition and public observation admission are outside this boundary.
+pub fn replay_init_prefix(c: &Context) -> Result<Path, LedgerError> {
+    let mut path = project(c)?;
+    init_pass(&mut path);
+    super::continuation_registry::validate_registry(&path.state)?;
+    Ok(path)
 }
 #[cfg(test)]
 #[path = "setup_action_bridge_tests.rs"]

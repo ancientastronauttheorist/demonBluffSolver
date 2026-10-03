@@ -56,11 +56,8 @@ def continuations(snapshot):
     return out
 
 
-def project_report(source):
-    digest = hashlib.sha256(source.read_bytes()).hexdigest()
-    assert SOURCE_SHA256 and digest == SOURCE_SHA256, 'native source needs final pin/review'
-    report = expand_snapshots(json.loads(source.read_text(encoding='utf-8')))
-    assert report['schema_version'] == 'first_village_initialization_v1' and report['build_id'] == BUILD
+def completed_prefix_cases(report):
+    """Project native Init snapshots shared by retained, versioned joins."""
     initial = report['initial']
     rows = initial['actors']
     calls = report['initializers']
@@ -116,10 +113,18 @@ def project_report(source):
         cases.append({'completed_inits': count, 'context': copy.deepcopy(context),
                       'expected_actors': {str(r['identity']): actor(r) for r in snapshot['actors']},
                       'expected_continuations': continuations(snapshot)})
+    return cases
+
+
+def project_report(source):
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    assert SOURCE_SHA256 and digest == SOURCE_SHA256, 'native source needs final pin/review'
+    report = expand_snapshots(json.loads(source.read_text(encoding='utf-8')))
+    assert report['schema_version'] == 'first_village_initialization_v1' and report['build_id'] == BUILD
     return {'schema_version': 1, 'native_report_sha256': digest, 'build_id': BUILD,
             'scope': 'Five successful native Init-return prefixes projected to Actor/Continuation only. Caller failure settings select synthetic boundaries; they do not model original exceptions. Positions are declared native-slot labels, not certified UI positions. No constructor/List/CPU/pool/queue/role-action/pixel/PlayerHistory replay is asserted by Rust.',
             'excluded': ['native failed-service partial mutations', 'native-only act/list/backing/wait-duration/CPU/pool assertions'],
-            'cases': cases}
+            'cases': completed_prefix_cases(report)}
 
 
 if __name__ == '__main__':

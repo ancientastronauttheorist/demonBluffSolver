@@ -97,3 +97,62 @@ concrete unsupported Start writers, RoleAct delegate identity persistence or
 Unity scheduler behavior. The projected roles use only callbacks that do not
 invoke onActed at these phases; native delegate writes remain native-audit
 observations rather than reconstructed persistent delegate objects.
+
+## Original N5 setup-only domain
+
+`setup_action_bridge_native_v2` adds exact original data/class bindings:
+
+| Public DataRole | Managed source/action class |
+| --- | --- |
+| Minion | Minion |
+| Confessor | Confessor |
+| Lover | Empath |
+| Hunter | Tracker |
+| Enlightened | Shugenja |
+
+Its output embeds `bounded_setup_callbacks_native_v4`. This version accepts
+canonical retained pools and explicit Start latches, and rejects every nonempty
+resume vector. Legacy Reveal versions reject the new data and callback types,
+including a copied new callback on an otherwise supported data actor. Shared
+board/registry validation accepts the setup-only state; concrete Twin Start
+still requires V3. No new acquisition, Day or mixed Twin-copying domain is
+established by these enum additions.
+
+`replay_init_prefix` projects the completed initializer state, runs the Init
+action pass and validates retained continuation identities, then returns before
+ordered Start. The existing full `replay` continues from that prefix through its
+ordered Start scan. Thus an Init-only comparison needs no manufactured empty
+Start array. Generic setup truth uses actual lying, with Confessor appearance
+status kept separate. The [concrete role dependency](first_village_role_setup.md)
+verifies Confessor's unique/resisted status application and the other selected
+roles' no-effect Init/Start branches. Separate Start probes preserve status and
+exercise the one-shot latch; they do not claim original ordered scheduling.
+
+This semantic output does not carry native status-list versions, onActed
+delegate/closure identities or physical publication-list storage. Explicit UI
+snapshots and native-slot labels remain adapter inputs, not rendered captures.
+The [retained publication/Init witness](first_village_publication_init.md)
+executes the same generated five-actor caller and all 69 postpublication
+service-prefix stops. Its report SHA-256 is
+`31929f003a87c6e0ae4242ea9dc3eb090fba00bb641eedad0526c1afc651b48e`.
+The [independent Python projection](../../scripts/project_first_village_publication_init.py)
+produces [one semantic checkpoint](../../fixtures/synthetic/first_village_publication_init_v1.json),
+SHA-256 `d6c639806e6d2afda5e22853ca6906eeb067dca7a82e414fe6c9df844b2f0326`.
+It imports no Rust; another reviewer reproduced the fixture bytes exactly.
+
+The Rust test compares all five represented actors, bodies and Init call traces,
+current data/order, canonical pools and five pending identities. Confessor's
+native active-list version advances from Init-produced 1 to 2; the other four
+remain at 1. A separate check derives that delta from initializer version plus
+inserted status effects, rather than claiming the semantic Path stores physical
+versions. All ten setup bridge tests pass, including legacy/direct/copied type
+guards, absent latches, noncanonical pools, acquisition resumes, and separate
+Start/repeated-Start behavior. This evidence cannot promote legal player
+observations, acquisition chronology or world sets by itself.
+
+Final validation passed all 970 library tests (16.44s) and the release build.
+Changing only Confessor's Init insertion from status 25 to 26 made the native
+semantic checkpoint test fail with test exit 101. The mutation helper restored
+the exact original source bytes before the final library run. This establishes
+sensitivity to that represented status rule; it does not validate unrepresented
+delegate identities, physical publication or acquisition scheduling.

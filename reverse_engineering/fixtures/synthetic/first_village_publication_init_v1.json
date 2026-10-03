@@ -1,0 +1,734 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "native_report_sha256": "31929f003a87c6e0ae4242ea9dc3eb090fba00bb641eedad0526c1afc651b48e",
+  "asset_report_sha256": "1a790f521ba8ec6983bb1634333accb7280f0fe93e49efbaec1af25914479d42",
+  "scope": "One retained original N5 publication/ActInit witness. Rust compares semantic actors, bodies, dispatch/status effects, current data/order and retained pending identities. Slot labels/UI booleans are declared adapter inputs. Native-only: shallow-copy physical publication/list/CPU/closure/callback identities and status storage/version. No ordered Start, acquisition, Day, pixels, weights or PlayerHistory admission.",
+  "context": {
+    "version": "setup_action_bridge_native_v2",
+    "initialization": {
+      "version": "setup_initialization_batch_native_v1",
+      "caller": {
+        "version": "manage_setup_caller_native_v1",
+        "pinned_class_hierarchies": true,
+        "stable_occurrence_services": true,
+        "reference_equality": true,
+        "supplied_init_data_write_only": true,
+        "supplied_gateway_effects_only": true,
+        "caller_metadata_initialized": true,
+        "shuffle_metadata_initialized": true,
+        "math_initialized": true,
+        "gameplay_initialized": true,
+        "object_initialized": true,
+        "state": {
+          "board": "board",
+          "order": null,
+          "callback": null,
+          "lists": {
+            "board": {
+              "items": [
+                "actor:0",
+                "actor:1",
+                "actor:2",
+                "actor:3",
+                "actor:4"
+              ],
+              "count": 5
+            }
+          },
+          "arrays": {},
+          "identities": {
+            "actor:0": "data:21596",
+            "actor:1": null,
+            "actor:2": null,
+            "actor:3": null,
+            "actor:4": null
+          },
+          "data_roles": {
+            "data:21596": "source:21596",
+            "data:21614": "source:21614",
+            "data:21618": "source:21618",
+            "data:21621": "source:21621",
+            "data:21626": "source:21626"
+          },
+          "iterator_state": 0
+        },
+        "roster": [
+          "data:21596",
+          "data:21614",
+          "data:21626",
+          "data:21621",
+          "data:21618"
+        ],
+        "roles": {
+          "source:21596": "Minion",
+          "source:21614": "Confessor",
+          "source:21618": "Shugenja",
+          "source:21621": "Tracker",
+          "source:21626": "Empath"
+        },
+        "classes": {
+          "Role": [
+            "Role"
+          ],
+          "Minion": [
+            "Role",
+            "Minion"
+          ],
+          "Confessor": [
+            "Role",
+            "Confessor"
+          ],
+          "Shugenja": [
+            "Role",
+            "Shugenja"
+          ],
+          "Tracker": [
+            "Role",
+            "Tracker"
+          ],
+          "Empath": [
+            "Role",
+            "Empath"
+          ]
+        },
+        "callbacks": [],
+        "failure": null,
+        "after": []
+      },
+      "object_identities": {
+        "actor:0": 12892561408,
+        "actor:1": 12892565504,
+        "actor:2": 12892569600,
+        "actor:3": 12892573696,
+        "actor:4": 12892577792,
+        "data:21596": 12885037056,
+        "source:21596": 12892672000,
+        "data:21614": 12885110784,
+        "source:21614": 12892684288,
+        "data:21618": 12885127168,
+        "source:21618": 12892721152,
+        "data:21621": 12885139456,
+        "source:21621": 12892708864,
+        "data:21626": 12885159936,
+        "source:21626": 12892696576
+      },
+      "actors": {
+        "12892561408": {
+          "data": 12885037056,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892561408,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892565504": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892565504,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892569600": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892569600,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892573696": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892573696,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892577792": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892577792,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        }
+      },
+      "raw_bluff_liveness": {},
+      "positions": {
+        "12892561408": 1,
+        "12892565504": 2,
+        "12892569600": 3,
+        "12892573696": 4,
+        "12892577792": 5
+      },
+      "data": {
+        "12885037056": {
+          "starting_alignment": 20,
+          "source_role": 12892672000
+        },
+        "12885110784": {
+          "starting_alignment": 10,
+          "source_role": 12892684288
+        },
+        "12885127168": {
+          "starting_alignment": 10,
+          "source_role": 12892721152
+        },
+        "12885139456": {
+          "starting_alignment": 10,
+          "source_role": 12892708864
+        },
+        "12885159936": {
+          "starting_alignment": 10,
+          "source_role": 12892696576
+        }
+      },
+      "continuations": [],
+      "allocations": [
+        {
+          "init_index": 0,
+          "clone": {
+            "identity": 12893384704,
+            "source_role": 12892672000,
+            "managed_class": "Minion"
+          },
+          "continuation_identity": 12893380608,
+          "wait_identity": 12893388800
+        },
+        {
+          "init_index": 1,
+          "clone": {
+            "identity": 12893401088,
+            "source_role": 12892684288,
+            "managed_class": "Confessor"
+          },
+          "continuation_identity": 12893396992,
+          "wait_identity": 12893405184
+        },
+        {
+          "init_index": 2,
+          "clone": {
+            "identity": 12893417472,
+            "source_role": 12892696576,
+            "managed_class": "Empath"
+          },
+          "continuation_identity": 12893413376,
+          "wait_identity": 12893421568
+        },
+        {
+          "init_index": 3,
+          "clone": {
+            "identity": 12893433856,
+            "source_role": 12892708864,
+            "managed_class": "Tracker"
+          },
+          "continuation_identity": 12893429760,
+          "wait_identity": 12893437952
+        },
+        {
+          "init_index": 4,
+          "clone": {
+            "identity": 12893450240,
+            "source_role": 12892721152,
+            "managed_class": "Shugenja"
+          },
+          "continuation_identity": 12893446144,
+          "wait_identity": 12893454336
+        }
+      ],
+      "required_objects_and_lists_valid": true,
+      "callbacks_and_ui_inert": true,
+      "clone_results_verified": true,
+      "synchronous_first_yield_verified": true
+    },
+    "data_roles": {
+      "12885037056": "minion",
+      "12885110784": "confessor",
+      "12885127168": "enlightened",
+      "12885139456": "hunter",
+      "12885159936": "lover"
+    },
+    "action_classes": {
+      "12893384704": "Minion",
+      "12893401088": "Confessor",
+      "12893417472": "Empath",
+      "12893433856": "Tracker",
+      "12893450240": "Shugenja"
+    },
+    "action_classes_and_caches_verified": true,
+    "on_trigger_absent": true,
+    "final_services_inert": true,
+    "post_initialization_ui_verified": true,
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "spy_caches": {},
+    "ui": {
+      "1": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "2": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "3": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "4": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "5": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      }
+    },
+    "next_logical_id": 12893446145
+  },
+  "expected": {
+    "actors": [
+      {
+        "position": 1,
+        "data_role": "minion",
+        "action_role": "minion",
+        "runtime_evil": true,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 2,
+        "data_role": "confessor",
+        "action_role": "confessor",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [
+            25
+          ],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 3,
+        "data_role": "lover",
+        "action_role": "lover",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 4,
+        "data_role": "hunter",
+        "action_role": "hunter",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 5,
+        "data_role": "enlightened",
+        "action_role": "enlightened",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      }
+    ],
+    "bodies": {
+      "1": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "2": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "3": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "4": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "5": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      }
+    },
+    "calls": [
+      {
+        "position": 1,
+        "trigger": "init",
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "minion",
+            "dispatch": "bluff_act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": [],
+        "initial_lying": true
+      },
+      {
+        "position": 2,
+        "trigger": "init",
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "confessor",
+            "dispatch": "act",
+            "status_application": {
+              "status": 25,
+              "accepted": true,
+              "inserted": true,
+              "target_after": null
+            }
+          }
+        ],
+        "start_callbacks": [],
+        "initial_lying": false
+      },
+      {
+        "position": 3,
+        "trigger": "init",
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "lover",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": [],
+        "initial_lying": false
+      },
+      {
+        "position": 4,
+        "trigger": "init",
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "hunter",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": [],
+        "initial_lying": false
+      },
+      {
+        "position": 5,
+        "trigger": "init",
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "enlightened",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": [],
+        "initial_lying": false
+      }
+    ],
+    "current_data": {
+      "1": 12885037056,
+      "2": 12885110784,
+      "3": 12885159936,
+      "4": 12885139456,
+      "5": 12885127168
+    },
+    "current_order": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "pending": {
+      "12893380608": 1,
+      "12893396992": 2,
+      "12893413376": 3,
+      "12893429760": 4,
+      "12893446144": 5
+    },
+    "status_versions": {
+      "1": {
+        "before": 1,
+        "after": 1
+      },
+      "2": {
+        "before": 1,
+        "after": 2
+      },
+      "3": {
+        "before": 1,
+        "after": 1
+      },
+      "4": {
+        "before": 1,
+        "after": 1
+      },
+      "5": {
+        "before": 1,
+        "after": 1
+      }
+    }
+  }
+}
