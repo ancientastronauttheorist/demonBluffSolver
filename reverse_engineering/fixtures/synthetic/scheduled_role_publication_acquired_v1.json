@@ -1,0 +1,3024 @@
+{
+  "schema_version": 1,
+  "native_report_sha256": "3603e404ea1a55ff481fe075bfef36bfe5d339b6c9738bba4632bfc7c4f5c9d8",
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "scope": "Six actual acquired post-click result states, same actor/data/runtime clone after native acquisition callback/release; native use one and empty history. Rust executes result/speech publication only, not acquisition, pixel availability or player-history admission.",
+  "excluded": [
+    "three rejected acquisition owners: no click or result to project",
+    "192 native failed-service prefixes: Rust rejects failed-service contracts"
+  ],
+  "cases": [
+    {
+      "name": "acquired_cases_0",
+      "context": {
+        "rule_version": "scheduled_role_publication_native_v1",
+        "publication": {
+          "version": "character_role_publication_native_v1",
+          "actor": {
+            "identity": 1,
+            "data": 20,
+            "bluff": null,
+            "register_as": null,
+            "trailer": null,
+            "runtime": null,
+            "dead_prefab": null,
+            "revealed": false,
+            "uses": 1,
+            "previous": 5,
+            "state": 10,
+            "killed_hidden": false,
+            "killed_demon": false,
+            "alignment": 10,
+            "id": 3,
+            "started": false,
+            "role": 40,
+            "bluff_role": null,
+            "saved_act": 103,
+            "infos": [],
+            "info_version": 10,
+            "statuses": {
+              "active": [],
+              "version": 24,
+              "resistances": [
+                50
+              ],
+              "target": 1
+            },
+            "state_callback": null
+          },
+          "act": true,
+          "raw_bluff": null,
+          "data_assets": [
+            {
+              "identity": 20,
+              "picking": false
+            },
+            {
+              "identity": 30,
+              "picking": false
+            }
+          ],
+          "history": {
+            "identity": 2,
+            "backing_array": 3,
+            "capacity": 4
+          },
+          "strings": [
+            {
+              "identity": 100,
+              "units": [
+                73,
+                32,
+                97,
+                109,
+                32,
+                49,
+                32,
+                99,
+                97,
+                114,
+                100,
+                32,
+                97,
+                119,
+                97,
+                121,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                99,
+                108,
+                111,
+                115,
+                101,
+                115,
+                116,
+                32,
+                69,
+                118,
+                105,
+                108
+              ]
+            },
+            {
+              "identity": 103,
+              "units": [
+                111,
+                108,
+                100,
+                32,
+                115,
+                112,
+                101,
+                101,
+                99,
+                104
+              ]
+            },
+            {
+              "identity": 104,
+              "units": [
+                112,
+                114,
+                105,
+                111,
+                114
+              ]
+            },
+            {
+              "identity": 105,
+              "units": [
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            },
+            {
+              "identity": 106,
+              "units": [
+                67,
+                104,
+                97,
+                114,
+                97,
+                99,
+                116,
+                101,
+                114,
+                58,
+                32,
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            }
+          ],
+          "infos": [
+            {
+              "identity": 200,
+              "description": 100,
+              "references": 300
+            },
+            {
+              "identity": 201,
+              "description": 104,
+              "references": 301
+            }
+          ],
+          "reference_lists": [
+            {
+              "identity": 300,
+              "backing_array": 302,
+              "version": 2,
+              "entries": [
+                1002,
+                1004
+              ]
+            },
+            {
+              "identity": 301,
+              "backing_array": null,
+              "version": 0,
+              "entries": []
+            }
+          ],
+          "result_iterators": [
+            {
+              "identity": 500,
+              "actor": 1,
+              "info": 200,
+              "trigger_bits": 30,
+              "delay_bits": 0,
+              "state": 1,
+              "current": 501
+            }
+          ],
+          "result_waits": [
+            {
+              "identity": 501,
+              "seconds_bits": 0
+            }
+          ],
+          "allocations": [
+            {
+              "result_iterator": 500,
+              "speech_iterator": 600,
+              "speech_wait": 601
+            }
+          ],
+          "preappend_callback": null,
+          "info_revealed_callback": 700,
+          "trailer_mode": false,
+          "trailer_text": null,
+          "ui": {
+            "acted_component": 400,
+            "acted_version": 401,
+            "blank_text": 402,
+            "blank_text_value": 103,
+            "layout_array": 403,
+            "layouts": [
+              404,
+              404
+            ],
+            "first_game_object": 410,
+            "log_game_object": 410,
+            "show_game_object": 410,
+            "name_text": 105,
+            "log_text": 106,
+            "pickable": 411,
+            "objects": [
+              {
+                "identity": 410,
+                "active": false
+              },
+              {
+                "identity": 411,
+                "active": false
+              }
+            ]
+          },
+          "result_resume_order": [],
+          "speech_resume_order": [],
+          "services": {
+            "runtime_and_metadata_verified": true,
+            "callback_captures_and_first_yield_verified": true,
+            "list_storage_and_capacity_verified": true,
+            "preappend_callbacks_inert": true,
+            "global_callbacks_inert": true,
+            "ui_and_other_services_inert": true,
+            "unity_liveness_verified": true,
+            "trailer_lookup_stable_verified": true,
+            "supplied_resume_order_verified": false,
+            "normal_completion_verified": true
+          }
+        },
+        "queue": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 4,
+          "next_id": 2,
+          "entries": [
+            {
+              "logical_id": 1,
+              "release_present": true,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 9,
+                "phase_mask": 10,
+                "insertion_generation": 4
+              }
+            }
+          ]
+        },
+        "result_bindings": {
+          "1": 500
+        },
+        "normal_lifetime_and_stable_services_verified": true,
+        "drains": [
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 8,
+              "phase_mask": 2,
+              "generation_before": 4
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 8
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 9,
+              "phase_mask": 2,
+              "generation_before": 5
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 9
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 9,
+              "phase_mask": 2,
+              "generation_before": 6
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 9
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 10,
+              "phase_mask": 2,
+              "generation_before": 7
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 10
+              }
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 5,
+            "next_id": 2,
+            "entries": [
+              {
+                "logical_id": 1,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.300000011920929,
+                  "frame_threshold": 9,
+                  "phase_mask": 10,
+                  "insertion_generation": 4
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            1
+          ],
+          "history": [],
+          "history_version": 10,
+          "uses_bits": 1,
+          "saved_text": "old speech",
+          "shown": [],
+          "result_states": [
+            1
+          ],
+          "speech_states": []
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 6,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 10,
+                  "phase_mask": 10,
+                  "insertion_generation": 6
+                }
+              }
+            ]
+          },
+          "callbacks": [
+            1
+          ],
+          "visits": [
+            1
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 7,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 10,
+                  "phase_mask": 10,
+                  "insertion_generation": 6
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 8,
+            "next_id": 3,
+            "entries": []
+          },
+          "callbacks": [
+            2
+          ],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [
+            "I am 1 card away from closest Evil"
+          ],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            -1
+          ]
+        }
+      ],
+      "acquisition_proof": {
+        "native_record_before_click": {
+          "iterator": "acquisition0",
+          "kind": "acquisition",
+          "reference_count": 0,
+          "gc_handle": 0,
+          "cached_enumerator_present": true,
+          "owner_linked": false
+        },
+        "click_admission": {
+          "completed_acquisition_iterator": "acquisition0",
+          "queue_empty": true,
+          "native_record_released": true,
+          "same_actor": "actor",
+          "same_runtime_clone": "role"
+        },
+        "source_role": "acquisition_source_role",
+        "runtime_role": "role",
+        "native_history_version_after_clear": 10,
+        "scope": "original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history."
+      }
+    },
+    {
+      "name": "acquired_cases_1",
+      "context": {
+        "rule_version": "scheduled_role_publication_native_v1",
+        "publication": {
+          "version": "character_role_publication_native_v1",
+          "actor": {
+            "identity": 1,
+            "data": 20,
+            "bluff": null,
+            "register_as": null,
+            "trailer": null,
+            "runtime": null,
+            "dead_prefab": null,
+            "revealed": false,
+            "uses": 1,
+            "previous": 5,
+            "state": 10,
+            "killed_hidden": false,
+            "killed_demon": false,
+            "alignment": 10,
+            "id": 3,
+            "started": false,
+            "role": 40,
+            "bluff_role": null,
+            "saved_act": 103,
+            "infos": [],
+            "info_version": 10,
+            "statuses": {
+              "active": [],
+              "version": 24,
+              "resistances": [
+                50
+              ],
+              "target": 1
+            },
+            "state_callback": null
+          },
+          "act": true,
+          "raw_bluff": null,
+          "data_assets": [
+            {
+              "identity": 20,
+              "picking": false
+            },
+            {
+              "identity": 30,
+              "picking": false
+            }
+          ],
+          "history": {
+            "identity": 2,
+            "backing_array": 3,
+            "capacity": 4
+          },
+          "strings": [
+            {
+              "identity": 100,
+              "units": [
+                73,
+                32,
+                97,
+                109,
+                32,
+                49,
+                32,
+                99,
+                97,
+                114,
+                100,
+                32,
+                97,
+                119,
+                97,
+                121,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                99,
+                108,
+                111,
+                115,
+                101,
+                115,
+                116,
+                32,
+                69,
+                118,
+                105,
+                108
+              ]
+            },
+            {
+              "identity": 103,
+              "units": [
+                111,
+                108,
+                100,
+                32,
+                115,
+                112,
+                101,
+                101,
+                99,
+                104
+              ]
+            },
+            {
+              "identity": 104,
+              "units": [
+                112,
+                114,
+                105,
+                111,
+                114
+              ]
+            },
+            {
+              "identity": 105,
+              "units": [
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            },
+            {
+              "identity": 106,
+              "units": [
+                67,
+                104,
+                97,
+                114,
+                97,
+                99,
+                116,
+                101,
+                114,
+                58,
+                32,
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            }
+          ],
+          "infos": [
+            {
+              "identity": 200,
+              "description": 100,
+              "references": 300
+            },
+            {
+              "identity": 201,
+              "description": 104,
+              "references": 301
+            }
+          ],
+          "reference_lists": [
+            {
+              "identity": 300,
+              "backing_array": 302,
+              "version": 2,
+              "entries": [
+                1002,
+                1004
+              ]
+            },
+            {
+              "identity": 301,
+              "backing_array": null,
+              "version": 0,
+              "entries": []
+            }
+          ],
+          "result_iterators": [
+            {
+              "identity": 500,
+              "actor": 1,
+              "info": 200,
+              "trigger_bits": 30,
+              "delay_bits": 0,
+              "state": 1,
+              "current": 501
+            }
+          ],
+          "result_waits": [
+            {
+              "identity": 501,
+              "seconds_bits": 0
+            }
+          ],
+          "allocations": [
+            {
+              "result_iterator": 500,
+              "speech_iterator": 600,
+              "speech_wait": 601
+            }
+          ],
+          "preappend_callback": null,
+          "info_revealed_callback": 700,
+          "trailer_mode": false,
+          "trailer_text": null,
+          "ui": {
+            "acted_component": 400,
+            "acted_version": 401,
+            "blank_text": 402,
+            "blank_text_value": 103,
+            "layout_array": 403,
+            "layouts": [
+              404,
+              404
+            ],
+            "first_game_object": 410,
+            "log_game_object": 410,
+            "show_game_object": 410,
+            "name_text": 105,
+            "log_text": 106,
+            "pickable": 411,
+            "objects": [
+              {
+                "identity": 410,
+                "active": false
+              },
+              {
+                "identity": 411,
+                "active": false
+              }
+            ]
+          },
+          "result_resume_order": [],
+          "speech_resume_order": [],
+          "services": {
+            "runtime_and_metadata_verified": true,
+            "callback_captures_and_first_yield_verified": true,
+            "list_storage_and_capacity_verified": true,
+            "preappend_callbacks_inert": true,
+            "global_callbacks_inert": true,
+            "ui_and_other_services_inert": true,
+            "unity_liveness_verified": true,
+            "trailer_lookup_stable_verified": true,
+            "supplied_resume_order_verified": false,
+            "normal_completion_verified": true
+          }
+        },
+        "queue": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 3,
+          "next_id": 2,
+          "entries": [
+            {
+              "logical_id": 1,
+              "release_present": true,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 9,
+                "phase_mask": 10,
+                "insertion_generation": 3
+              }
+            }
+          ]
+        },
+        "result_bindings": {
+          "1": 500
+        },
+        "normal_lifetime_and_stable_services_verified": true,
+        "drains": [
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 8,
+              "phase_mask": 2,
+              "generation_before": 3
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 8
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 9,
+              "phase_mask": 2,
+              "generation_before": 4
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 9
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 9,
+              "phase_mask": 2,
+              "generation_before": 5
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 9
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 10,
+              "phase_mask": 2,
+              "generation_before": 6
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 10
+              }
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 4,
+            "next_id": 2,
+            "entries": [
+              {
+                "logical_id": 1,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.300000011920929,
+                  "frame_threshold": 9,
+                  "phase_mask": 10,
+                  "insertion_generation": 3
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            1
+          ],
+          "history": [],
+          "history_version": 10,
+          "uses_bits": 1,
+          "saved_text": "old speech",
+          "shown": [],
+          "result_states": [
+            1
+          ],
+          "speech_states": []
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 5,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 10,
+                  "phase_mask": 10,
+                  "insertion_generation": 5
+                }
+              }
+            ]
+          },
+          "callbacks": [
+            1
+          ],
+          "visits": [
+            1
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 6,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 10,
+                  "phase_mask": 10,
+                  "insertion_generation": 5
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 7,
+            "next_id": 3,
+            "entries": []
+          },
+          "callbacks": [
+            2
+          ],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [
+            "I am 1 card away from closest Evil"
+          ],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            -1
+          ]
+        }
+      ],
+      "acquisition_proof": {
+        "native_record_before_click": {
+          "iterator": "acquisition0",
+          "kind": "acquisition",
+          "reference_count": 0,
+          "gc_handle": 0,
+          "cached_enumerator_present": true,
+          "owner_linked": false
+        },
+        "click_admission": {
+          "completed_acquisition_iterator": "acquisition0",
+          "queue_empty": true,
+          "native_record_released": true,
+          "same_actor": "actor",
+          "same_runtime_clone": "role"
+        },
+        "source_role": "acquisition_source_role",
+        "runtime_role": "role",
+        "native_history_version_after_clear": 10,
+        "scope": "original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history."
+      }
+    },
+    {
+      "name": "acquired_cases_2",
+      "context": {
+        "rule_version": "scheduled_role_publication_native_v1",
+        "publication": {
+          "version": "character_role_publication_native_v1",
+          "actor": {
+            "identity": 1,
+            "data": 20,
+            "bluff": null,
+            "register_as": null,
+            "trailer": null,
+            "runtime": null,
+            "dead_prefab": null,
+            "revealed": false,
+            "uses": 1,
+            "previous": 5,
+            "state": 10,
+            "killed_hidden": false,
+            "killed_demon": false,
+            "alignment": 10,
+            "id": 3,
+            "started": false,
+            "role": 40,
+            "bluff_role": null,
+            "saved_act": 103,
+            "infos": [],
+            "info_version": 10,
+            "statuses": {
+              "active": [],
+              "version": 24,
+              "resistances": [
+                50
+              ],
+              "target": 1
+            },
+            "state_callback": null
+          },
+          "act": true,
+          "raw_bluff": null,
+          "data_assets": [
+            {
+              "identity": 20,
+              "picking": false
+            },
+            {
+              "identity": 30,
+              "picking": false
+            }
+          ],
+          "history": {
+            "identity": 2,
+            "backing_array": 3,
+            "capacity": 4
+          },
+          "strings": [
+            {
+              "identity": 100,
+              "units": [
+                73,
+                32,
+                97,
+                109,
+                32,
+                49,
+                32,
+                99,
+                97,
+                114,
+                100,
+                32,
+                97,
+                119,
+                97,
+                121,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                99,
+                108,
+                111,
+                115,
+                101,
+                115,
+                116,
+                32,
+                69,
+                118,
+                105,
+                108
+              ]
+            },
+            {
+              "identity": 103,
+              "units": [
+                111,
+                108,
+                100,
+                32,
+                115,
+                112,
+                101,
+                101,
+                99,
+                104
+              ]
+            },
+            {
+              "identity": 104,
+              "units": [
+                112,
+                114,
+                105,
+                111,
+                114
+              ]
+            },
+            {
+              "identity": 105,
+              "units": [
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            },
+            {
+              "identity": 106,
+              "units": [
+                67,
+                104,
+                97,
+                114,
+                97,
+                99,
+                116,
+                101,
+                114,
+                58,
+                32,
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            }
+          ],
+          "infos": [
+            {
+              "identity": 200,
+              "description": 100,
+              "references": 300
+            },
+            {
+              "identity": 201,
+              "description": 104,
+              "references": 301
+            }
+          ],
+          "reference_lists": [
+            {
+              "identity": 300,
+              "backing_array": 302,
+              "version": 2,
+              "entries": [
+                1002,
+                1004
+              ]
+            },
+            {
+              "identity": 301,
+              "backing_array": null,
+              "version": 0,
+              "entries": []
+            }
+          ],
+          "result_iterators": [
+            {
+              "identity": 500,
+              "actor": 1,
+              "info": 200,
+              "trigger_bits": 30,
+              "delay_bits": 0,
+              "state": 1,
+              "current": 501
+            }
+          ],
+          "result_waits": [
+            {
+              "identity": 501,
+              "seconds_bits": 0
+            }
+          ],
+          "allocations": [
+            {
+              "result_iterator": 500,
+              "speech_iterator": 600,
+              "speech_wait": 601
+            }
+          ],
+          "preappend_callback": null,
+          "info_revealed_callback": 700,
+          "trailer_mode": false,
+          "trailer_text": null,
+          "ui": {
+            "acted_component": 400,
+            "acted_version": 401,
+            "blank_text": 402,
+            "blank_text_value": 103,
+            "layout_array": 403,
+            "layouts": [
+              404,
+              404
+            ],
+            "first_game_object": 410,
+            "log_game_object": 410,
+            "show_game_object": 410,
+            "name_text": 105,
+            "log_text": 106,
+            "pickable": 411,
+            "objects": [
+              {
+                "identity": 410,
+                "active": false
+              },
+              {
+                "identity": 411,
+                "active": false
+              }
+            ]
+          },
+          "result_resume_order": [],
+          "speech_resume_order": [],
+          "services": {
+            "runtime_and_metadata_verified": true,
+            "callback_captures_and_first_yield_verified": true,
+            "list_storage_and_capacity_verified": true,
+            "preappend_callbacks_inert": true,
+            "global_callbacks_inert": true,
+            "ui_and_other_services_inert": true,
+            "unity_liveness_verified": true,
+            "trailer_lookup_stable_verified": true,
+            "supplied_resume_order_verified": false,
+            "normal_completion_verified": true
+          }
+        },
+        "queue": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 4,
+          "next_id": 2,
+          "entries": [
+            {
+              "logical_id": 1,
+              "release_present": true,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 0,
+                "phase_mask": 10,
+                "insertion_generation": 4
+              }
+            }
+          ]
+        },
+        "result_bindings": {
+          "1": 500
+        },
+        "normal_lifetime_and_stable_services_verified": true,
+        "drains": [
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": -1,
+              "phase_mask": 2,
+              "generation_before": 4
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": -1
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 0,
+              "phase_mask": 2,
+              "generation_before": 5
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 0
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 0,
+              "phase_mask": 2,
+              "generation_before": 6
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 0
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 1,
+              "phase_mask": 2,
+              "generation_before": 7
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 1
+              }
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 5,
+            "next_id": 2,
+            "entries": [
+              {
+                "logical_id": 1,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.300000011920929,
+                  "frame_threshold": 0,
+                  "phase_mask": 10,
+                  "insertion_generation": 4
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            1
+          ],
+          "history": [],
+          "history_version": 10,
+          "uses_bits": 1,
+          "saved_text": "old speech",
+          "shown": [],
+          "result_states": [
+            1
+          ],
+          "speech_states": []
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 6,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 1,
+                  "phase_mask": 10,
+                  "insertion_generation": 6
+                }
+              }
+            ]
+          },
+          "callbacks": [
+            1
+          ],
+          "visits": [
+            1
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 7,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 1,
+                  "phase_mask": 10,
+                  "insertion_generation": 6
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 8,
+            "next_id": 3,
+            "entries": []
+          },
+          "callbacks": [
+            2
+          ],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [
+            "I am 1 card away from closest Evil"
+          ],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            -1
+          ]
+        }
+      ],
+      "acquisition_proof": {
+        "native_record_before_click": {
+          "iterator": "acquisition0",
+          "kind": "acquisition",
+          "reference_count": 0,
+          "gc_handle": 0,
+          "cached_enumerator_present": true,
+          "owner_linked": false
+        },
+        "click_admission": {
+          "completed_acquisition_iterator": "acquisition0",
+          "queue_empty": true,
+          "native_record_released": true,
+          "same_actor": "actor",
+          "same_runtime_clone": "role"
+        },
+        "source_role": "acquisition_source_role",
+        "runtime_role": "role",
+        "native_history_version_after_clear": 10,
+        "scope": "original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history."
+      }
+    },
+    {
+      "name": "acquired_cases_3",
+      "context": {
+        "rule_version": "scheduled_role_publication_native_v1",
+        "publication": {
+          "version": "character_role_publication_native_v1",
+          "actor": {
+            "identity": 1,
+            "data": 20,
+            "bluff": null,
+            "register_as": null,
+            "trailer": null,
+            "runtime": null,
+            "dead_prefab": null,
+            "revealed": false,
+            "uses": 1,
+            "previous": 5,
+            "state": 10,
+            "killed_hidden": false,
+            "killed_demon": false,
+            "alignment": 10,
+            "id": 3,
+            "started": false,
+            "role": 40,
+            "bluff_role": null,
+            "saved_act": 103,
+            "infos": [],
+            "info_version": 10,
+            "statuses": {
+              "active": [],
+              "version": 24,
+              "resistances": [
+                50
+              ],
+              "target": 1
+            },
+            "state_callback": null
+          },
+          "act": true,
+          "raw_bluff": null,
+          "data_assets": [
+            {
+              "identity": 20,
+              "picking": false
+            },
+            {
+              "identity": 30,
+              "picking": false
+            }
+          ],
+          "history": {
+            "identity": 2,
+            "backing_array": 3,
+            "capacity": 4
+          },
+          "strings": [
+            {
+              "identity": 100,
+              "units": [
+                73,
+                32,
+                97,
+                109,
+                32,
+                49,
+                32,
+                99,
+                97,
+                114,
+                100,
+                32,
+                97,
+                119,
+                97,
+                121,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                99,
+                108,
+                111,
+                115,
+                101,
+                115,
+                116,
+                32,
+                69,
+                118,
+                105,
+                108
+              ]
+            },
+            {
+              "identity": 103,
+              "units": [
+                111,
+                108,
+                100,
+                32,
+                115,
+                112,
+                101,
+                101,
+                99,
+                104
+              ]
+            },
+            {
+              "identity": 104,
+              "units": [
+                112,
+                114,
+                105,
+                111,
+                114
+              ]
+            },
+            {
+              "identity": 105,
+              "units": [
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            },
+            {
+              "identity": 106,
+              "units": [
+                67,
+                104,
+                97,
+                114,
+                97,
+                99,
+                116,
+                101,
+                114,
+                58,
+                32,
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            }
+          ],
+          "infos": [
+            {
+              "identity": 200,
+              "description": 100,
+              "references": 300
+            },
+            {
+              "identity": 201,
+              "description": 104,
+              "references": 301
+            }
+          ],
+          "reference_lists": [
+            {
+              "identity": 300,
+              "backing_array": 302,
+              "version": 2,
+              "entries": [
+                1002,
+                1004
+              ]
+            },
+            {
+              "identity": 301,
+              "backing_array": null,
+              "version": 0,
+              "entries": []
+            }
+          ],
+          "result_iterators": [
+            {
+              "identity": 500,
+              "actor": 1,
+              "info": 200,
+              "trigger_bits": 30,
+              "delay_bits": 0,
+              "state": 1,
+              "current": 501
+            }
+          ],
+          "result_waits": [
+            {
+              "identity": 501,
+              "seconds_bits": 0
+            }
+          ],
+          "allocations": [
+            {
+              "result_iterator": 500,
+              "speech_iterator": 600,
+              "speech_wait": 601
+            }
+          ],
+          "preappend_callback": null,
+          "info_revealed_callback": 700,
+          "trailer_mode": false,
+          "trailer_text": null,
+          "ui": {
+            "acted_component": 400,
+            "acted_version": 401,
+            "blank_text": 402,
+            "blank_text_value": 103,
+            "layout_array": 403,
+            "layouts": [
+              404,
+              404
+            ],
+            "first_game_object": 410,
+            "log_game_object": 410,
+            "show_game_object": 410,
+            "name_text": 105,
+            "log_text": 106,
+            "pickable": 411,
+            "objects": [
+              {
+                "identity": 410,
+                "active": false
+              },
+              {
+                "identity": 411,
+                "active": false
+              }
+            ]
+          },
+          "result_resume_order": [],
+          "speech_resume_order": [],
+          "services": {
+            "runtime_and_metadata_verified": true,
+            "callback_captures_and_first_yield_verified": true,
+            "list_storage_and_capacity_verified": true,
+            "preappend_callbacks_inert": true,
+            "global_callbacks_inert": true,
+            "ui_and_other_services_inert": true,
+            "unity_liveness_verified": true,
+            "trailer_lookup_stable_verified": true,
+            "supplied_resume_order_verified": false,
+            "normal_completion_verified": true
+          }
+        },
+        "queue": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 3,
+          "next_id": 2,
+          "entries": [
+            {
+              "logical_id": 1,
+              "release_present": true,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 0,
+                "phase_mask": 10,
+                "insertion_generation": 3
+              }
+            }
+          ]
+        },
+        "result_bindings": {
+          "1": 500
+        },
+        "normal_lifetime_and_stable_services_verified": true,
+        "drains": [
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": -1,
+              "phase_mask": 2,
+              "generation_before": 3
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": -1
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 0,
+              "phase_mask": 2,
+              "generation_before": 4
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 0
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 0,
+              "phase_mask": 2,
+              "generation_before": 5
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 0
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 1,
+              "phase_mask": 2,
+              "generation_before": 6
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 1
+              }
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 4,
+            "next_id": 2,
+            "entries": [
+              {
+                "logical_id": 1,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.300000011920929,
+                  "frame_threshold": 0,
+                  "phase_mask": 10,
+                  "insertion_generation": 3
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            1
+          ],
+          "history": [],
+          "history_version": 10,
+          "uses_bits": 1,
+          "saved_text": "old speech",
+          "shown": [],
+          "result_states": [
+            1
+          ],
+          "speech_states": []
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 5,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 1,
+                  "phase_mask": 10,
+                  "insertion_generation": 5
+                }
+              }
+            ]
+          },
+          "callbacks": [
+            1
+          ],
+          "visits": [
+            1
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 6,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 1,
+                  "phase_mask": 10,
+                  "insertion_generation": 5
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 7,
+            "next_id": 3,
+            "entries": []
+          },
+          "callbacks": [
+            2
+          ],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [
+            "I am 1 card away from closest Evil"
+          ],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            -1
+          ]
+        }
+      ],
+      "acquisition_proof": {
+        "native_record_before_click": {
+          "iterator": "acquisition0",
+          "kind": "acquisition",
+          "reference_count": 0,
+          "gc_handle": 0,
+          "cached_enumerator_present": true,
+          "owner_linked": false
+        },
+        "click_admission": {
+          "completed_acquisition_iterator": "acquisition0",
+          "queue_empty": true,
+          "native_record_released": true,
+          "same_actor": "actor",
+          "same_runtime_clone": "role"
+        },
+        "source_role": "acquisition_source_role",
+        "runtime_role": "role",
+        "native_history_version_after_clear": 10,
+        "scope": "original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history."
+      }
+    },
+    {
+      "name": "acquired_cases_4",
+      "context": {
+        "rule_version": "scheduled_role_publication_native_v1",
+        "publication": {
+          "version": "character_role_publication_native_v1",
+          "actor": {
+            "identity": 1,
+            "data": 20,
+            "bluff": null,
+            "register_as": null,
+            "trailer": null,
+            "runtime": null,
+            "dead_prefab": null,
+            "revealed": false,
+            "uses": 1,
+            "previous": 5,
+            "state": 10,
+            "killed_hidden": false,
+            "killed_demon": false,
+            "alignment": 10,
+            "id": 3,
+            "started": false,
+            "role": 40,
+            "bluff_role": null,
+            "saved_act": 103,
+            "infos": [],
+            "info_version": 10,
+            "statuses": {
+              "active": [],
+              "version": 24,
+              "resistances": [
+                50
+              ],
+              "target": 1
+            },
+            "state_callback": null
+          },
+          "act": true,
+          "raw_bluff": null,
+          "data_assets": [
+            {
+              "identity": 20,
+              "picking": false
+            },
+            {
+              "identity": 30,
+              "picking": false
+            }
+          ],
+          "history": {
+            "identity": 2,
+            "backing_array": 3,
+            "capacity": 4
+          },
+          "strings": [
+            {
+              "identity": 100,
+              "units": [
+                73,
+                32,
+                97,
+                109,
+                32,
+                49,
+                32,
+                99,
+                97,
+                114,
+                100,
+                32,
+                97,
+                119,
+                97,
+                121,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                99,
+                108,
+                111,
+                115,
+                101,
+                115,
+                116,
+                32,
+                69,
+                118,
+                105,
+                108
+              ]
+            },
+            {
+              "identity": 103,
+              "units": [
+                111,
+                108,
+                100,
+                32,
+                115,
+                112,
+                101,
+                101,
+                99,
+                104
+              ]
+            },
+            {
+              "identity": 104,
+              "units": [
+                112,
+                114,
+                105,
+                111,
+                114
+              ]
+            },
+            {
+              "identity": 105,
+              "units": [
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            },
+            {
+              "identity": 106,
+              "units": [
+                67,
+                104,
+                97,
+                114,
+                97,
+                99,
+                116,
+                101,
+                114,
+                58,
+                32,
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            }
+          ],
+          "infos": [
+            {
+              "identity": 200,
+              "description": 100,
+              "references": 300
+            },
+            {
+              "identity": 201,
+              "description": 104,
+              "references": 301
+            }
+          ],
+          "reference_lists": [
+            {
+              "identity": 300,
+              "backing_array": 302,
+              "version": 2,
+              "entries": [
+                1002,
+                1004
+              ]
+            },
+            {
+              "identity": 301,
+              "backing_array": null,
+              "version": 0,
+              "entries": []
+            }
+          ],
+          "result_iterators": [
+            {
+              "identity": 500,
+              "actor": 1,
+              "info": 200,
+              "trigger_bits": 30,
+              "delay_bits": 0,
+              "state": 1,
+              "current": 501
+            }
+          ],
+          "result_waits": [
+            {
+              "identity": 501,
+              "seconds_bits": 0
+            }
+          ],
+          "allocations": [
+            {
+              "result_iterator": 500,
+              "speech_iterator": 600,
+              "speech_wait": 601
+            }
+          ],
+          "preappend_callback": null,
+          "info_revealed_callback": 700,
+          "trailer_mode": false,
+          "trailer_text": null,
+          "ui": {
+            "acted_component": 400,
+            "acted_version": 401,
+            "blank_text": 402,
+            "blank_text_value": 103,
+            "layout_array": 403,
+            "layouts": [
+              404,
+              404
+            ],
+            "first_game_object": 410,
+            "log_game_object": 410,
+            "show_game_object": 410,
+            "name_text": 105,
+            "log_text": 106,
+            "pickable": 411,
+            "objects": [
+              {
+                "identity": 410,
+                "active": false
+              },
+              {
+                "identity": 411,
+                "active": false
+              }
+            ]
+          },
+          "result_resume_order": [],
+          "speech_resume_order": [],
+          "services": {
+            "runtime_and_metadata_verified": true,
+            "callback_captures_and_first_yield_verified": true,
+            "list_storage_and_capacity_verified": true,
+            "preappend_callbacks_inert": true,
+            "global_callbacks_inert": true,
+            "ui_and_other_services_inert": true,
+            "unity_liveness_verified": true,
+            "trailer_lookup_stable_verified": true,
+            "supplied_resume_order_verified": false,
+            "normal_completion_verified": true
+          }
+        },
+        "queue": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 4,
+          "next_id": 2,
+          "entries": [
+            {
+              "logical_id": 1,
+              "release_present": true,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 4294967305,
+                "phase_mask": 10,
+                "insertion_generation": 4
+              }
+            }
+          ]
+        },
+        "result_bindings": {
+          "1": 500
+        },
+        "normal_lifetime_and_stable_services_verified": true,
+        "drains": [
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 4294967304,
+              "phase_mask": 2,
+              "generation_before": 4
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 4294967304
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 4294967305,
+              "phase_mask": 2,
+              "generation_before": 5
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 4294967305
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 4294967305,
+              "phase_mask": 2,
+              "generation_before": 6
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 4294967305
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 4294967306,
+              "phase_mask": 2,
+              "generation_before": 7
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 4294967306
+              }
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 5,
+            "next_id": 2,
+            "entries": [
+              {
+                "logical_id": 1,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.300000011920929,
+                  "frame_threshold": 4294967305,
+                  "phase_mask": 10,
+                  "insertion_generation": 4
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            1
+          ],
+          "history": [],
+          "history_version": 10,
+          "uses_bits": 1,
+          "saved_text": "old speech",
+          "shown": [],
+          "result_states": [
+            1
+          ],
+          "speech_states": []
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 6,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 4294967306,
+                  "phase_mask": 10,
+                  "insertion_generation": 6
+                }
+              }
+            ]
+          },
+          "callbacks": [
+            1
+          ],
+          "visits": [
+            1
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 7,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 4294967306,
+                  "phase_mask": 10,
+                  "insertion_generation": 6
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 8,
+            "next_id": 3,
+            "entries": []
+          },
+          "callbacks": [
+            2
+          ],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [
+            "I am 1 card away from closest Evil"
+          ],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            -1
+          ]
+        }
+      ],
+      "acquisition_proof": {
+        "native_record_before_click": {
+          "iterator": "acquisition0",
+          "kind": "acquisition",
+          "reference_count": 0,
+          "gc_handle": 0,
+          "cached_enumerator_present": true,
+          "owner_linked": false
+        },
+        "click_admission": {
+          "completed_acquisition_iterator": "acquisition0",
+          "queue_empty": true,
+          "native_record_released": true,
+          "same_actor": "actor",
+          "same_runtime_clone": "role"
+        },
+        "source_role": "acquisition_source_role",
+        "runtime_role": "role",
+        "native_history_version_after_clear": 10,
+        "scope": "original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history."
+      }
+    },
+    {
+      "name": "acquired_cases_5",
+      "context": {
+        "rule_version": "scheduled_role_publication_native_v1",
+        "publication": {
+          "version": "character_role_publication_native_v1",
+          "actor": {
+            "identity": 1,
+            "data": 20,
+            "bluff": null,
+            "register_as": null,
+            "trailer": null,
+            "runtime": null,
+            "dead_prefab": null,
+            "revealed": false,
+            "uses": 1,
+            "previous": 5,
+            "state": 10,
+            "killed_hidden": false,
+            "killed_demon": false,
+            "alignment": 10,
+            "id": 3,
+            "started": false,
+            "role": 40,
+            "bluff_role": null,
+            "saved_act": 103,
+            "infos": [],
+            "info_version": 10,
+            "statuses": {
+              "active": [],
+              "version": 24,
+              "resistances": [
+                50
+              ],
+              "target": 1
+            },
+            "state_callback": null
+          },
+          "act": true,
+          "raw_bluff": null,
+          "data_assets": [
+            {
+              "identity": 20,
+              "picking": false
+            },
+            {
+              "identity": 30,
+              "picking": false
+            }
+          ],
+          "history": {
+            "identity": 2,
+            "backing_array": 3,
+            "capacity": 4
+          },
+          "strings": [
+            {
+              "identity": 100,
+              "units": [
+                73,
+                32,
+                97,
+                109,
+                32,
+                49,
+                32,
+                99,
+                97,
+                114,
+                100,
+                32,
+                97,
+                119,
+                97,
+                121,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                99,
+                108,
+                111,
+                115,
+                101,
+                115,
+                116,
+                32,
+                69,
+                118,
+                105,
+                108
+              ]
+            },
+            {
+              "identity": 103,
+              "units": [
+                111,
+                108,
+                100,
+                32,
+                115,
+                112,
+                101,
+                101,
+                99,
+                104
+              ]
+            },
+            {
+              "identity": 104,
+              "units": [
+                112,
+                114,
+                105,
+                111,
+                114
+              ]
+            },
+            {
+              "identity": 105,
+              "units": [
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            },
+            {
+              "identity": 106,
+              "units": [
+                67,
+                104,
+                97,
+                114,
+                97,
+                99,
+                116,
+                101,
+                114,
+                58,
+                32,
+                70,
+                105,
+                120,
+                116,
+                117,
+                114,
+                101
+              ]
+            }
+          ],
+          "infos": [
+            {
+              "identity": 200,
+              "description": 100,
+              "references": 300
+            },
+            {
+              "identity": 201,
+              "description": 104,
+              "references": 301
+            }
+          ],
+          "reference_lists": [
+            {
+              "identity": 300,
+              "backing_array": 302,
+              "version": 2,
+              "entries": [
+                1002,
+                1004
+              ]
+            },
+            {
+              "identity": 301,
+              "backing_array": null,
+              "version": 0,
+              "entries": []
+            }
+          ],
+          "result_iterators": [
+            {
+              "identity": 500,
+              "actor": 1,
+              "info": 200,
+              "trigger_bits": 30,
+              "delay_bits": 0,
+              "state": 1,
+              "current": 501
+            }
+          ],
+          "result_waits": [
+            {
+              "identity": 501,
+              "seconds_bits": 0
+            }
+          ],
+          "allocations": [
+            {
+              "result_iterator": 500,
+              "speech_iterator": 600,
+              "speech_wait": 601
+            }
+          ],
+          "preappend_callback": null,
+          "info_revealed_callback": 700,
+          "trailer_mode": false,
+          "trailer_text": null,
+          "ui": {
+            "acted_component": 400,
+            "acted_version": 401,
+            "blank_text": 402,
+            "blank_text_value": 103,
+            "layout_array": 403,
+            "layouts": [
+              404,
+              404
+            ],
+            "first_game_object": 410,
+            "log_game_object": 410,
+            "show_game_object": 410,
+            "name_text": 105,
+            "log_text": 106,
+            "pickable": 411,
+            "objects": [
+              {
+                "identity": 410,
+                "active": false
+              },
+              {
+                "identity": 411,
+                "active": false
+              }
+            ]
+          },
+          "result_resume_order": [],
+          "speech_resume_order": [],
+          "services": {
+            "runtime_and_metadata_verified": true,
+            "callback_captures_and_first_yield_verified": true,
+            "list_storage_and_capacity_verified": true,
+            "preappend_callbacks_inert": true,
+            "global_callbacks_inert": true,
+            "ui_and_other_services_inert": true,
+            "unity_liveness_verified": true,
+            "trailer_lookup_stable_verified": true,
+            "supplied_resume_order_verified": false,
+            "normal_completion_verified": true
+          }
+        },
+        "queue": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 3,
+          "next_id": 2,
+          "entries": [
+            {
+              "logical_id": 1,
+              "release_present": true,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 4294967305,
+                "phase_mask": 10,
+                "insertion_generation": 3
+              }
+            }
+          ]
+        },
+        "result_bindings": {
+          "1": 500
+        },
+        "normal_lifetime_and_stable_services_verified": true,
+        "drains": [
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 4294967304,
+              "phase_mask": 2,
+              "generation_before": 3
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 4294967304
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.300000011920929,
+              "sampled_frame_counter": 4294967305,
+              "phase_mask": 2,
+              "generation_before": 4
+            },
+            "owners": {
+              "1": {
+                "owner": "matched",
+                "producer_time": 1.300000011920929,
+                "producer_frame_counter": 4294967305
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 4294967305,
+              "phase_mask": 2,
+              "generation_before": 5
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 4294967305
+              }
+            }
+          },
+          {
+            "dispatch": {
+              "rule_version": "unity_wait_eligibility_native_v1",
+              "sampled_time": 1.7000000178813934,
+              "sampled_frame_counter": 4294967306,
+              "phase_mask": 2,
+              "generation_before": 6
+            },
+            "owners": {
+              "2": {
+                "owner": "matched",
+                "producer_time": 1.7000000178813934,
+                "producer_frame_counter": 4294967306
+              }
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 4,
+            "next_id": 2,
+            "entries": [
+              {
+                "logical_id": 1,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.300000011920929,
+                  "frame_threshold": 4294967305,
+                  "phase_mask": 10,
+                  "insertion_generation": 3
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            1
+          ],
+          "history": [],
+          "history_version": 10,
+          "uses_bits": 1,
+          "saved_text": "old speech",
+          "shown": [],
+          "result_states": [
+            1
+          ],
+          "speech_states": []
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 5,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 4294967306,
+                  "phase_mask": 10,
+                  "insertion_generation": 5
+                }
+              }
+            ]
+          },
+          "callbacks": [
+            1
+          ],
+          "visits": [
+            1
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 6,
+            "next_id": 3,
+            "entries": [
+              {
+                "logical_id": 2,
+                "release_present": true,
+                "timing": {
+                  "deadline": 1.7000000178813934,
+                  "frame_threshold": 4294967306,
+                  "phase_mask": 10,
+                  "insertion_generation": 5
+                }
+              }
+            ]
+          },
+          "callbacks": [],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            1
+          ]
+        },
+        {
+          "queue": {
+            "rule_version": "unity_wait_queue_native_v1",
+            "generation": 7,
+            "next_id": 3,
+            "entries": []
+          },
+          "callbacks": [
+            2
+          ],
+          "visits": [
+            2
+          ],
+          "history": [
+            200
+          ],
+          "history_version": 11,
+          "uses_bits": 0,
+          "saved_text": "I am 1 card away from closest Evil",
+          "shown": [
+            "I am 1 card away from closest Evil"
+          ],
+          "result_states": [
+            -1
+          ],
+          "speech_states": [
+            -1
+          ]
+        }
+      ],
+      "acquisition_proof": {
+        "native_record_before_click": {
+          "iterator": "acquisition0",
+          "kind": "acquisition",
+          "reference_count": 0,
+          "gc_handle": 0,
+          "cached_enumerator_present": true,
+          "owner_linked": false
+        },
+        "click_admission": {
+          "completed_acquisition_iterator": "acquisition0",
+          "queue_empty": true,
+          "native_record_released": true,
+          "same_actor": "actor",
+          "same_runtime_clone": "role"
+        },
+        "source_role": "acquisition_source_role",
+        "runtime_role": "role",
+        "native_history_version_after_clear": 10,
+        "scope": "original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history."
+      }
+    }
+  ]
+}

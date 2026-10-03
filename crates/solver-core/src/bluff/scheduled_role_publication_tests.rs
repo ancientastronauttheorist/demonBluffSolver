@@ -40,6 +40,13 @@ fn fixture() -> Fixture {
     .unwrap()
 }
 
+fn acquired_fixture() -> Fixture {
+    serde_json::from_str(include_str!(
+        "../../../../reverse_engineering/fixtures/synthetic/scheduled_role_publication_acquired_v1.json"
+    ))
+    .unwrap()
+}
+
 fn initial() -> ScheduledPublicationContext {
     fixture().cases.remove(2).context
 }
@@ -88,6 +95,22 @@ fn matches_all_29_native_cases_at_all_161_drain_checkpoints() {
         "e8182a5a51353941b4d6e07d6564dc2c78f7c9e30c7e8de7366eb37aca62efcf"
     );
     assert_eq!(fixture.cases.len(), 29);
+    assert_eq!(check_native_fixture(fixture), 161);
+}
+
+#[test]
+fn matches_all_six_acquired_native_cases_at_all_24_drain_checkpoints() {
+    let fixture = acquired_fixture();
+    assert_eq!(fixture.schema_version, 1);
+    assert_eq!(
+        fixture.native_report_sha256,
+        "3603e404ea1a55ff481fe075bfef36bfe5d339b6c9738bba4632bfc7c4f5c9d8"
+    );
+    assert_eq!(fixture.cases.len(), 6);
+    assert_eq!(check_native_fixture(fixture), 24);
+}
+
+fn check_native_fixture(fixture: Fixture) -> usize {
     let mut checkpoints = 0;
     for case in fixture.cases {
         let output = replay_scheduled_publication(&case.context)
@@ -167,7 +190,68 @@ fn matches_all_29_native_cases_at_all_161_drain_checkpoints() {
             );
         }
     }
-    assert_eq!(checkpoints, 161);
+    checkpoints
+}
+
+#[test]
+fn acquired_use_is_consumed_after_clear_and_hides_picker_before_return() {
+    let context = acquired_fixture().cases.remove(0).context;
+    assert_eq!(context.publication.actor.uses, 1);
+    assert!(context.publication.actor.infos.is_empty());
+    assert_eq!(context.publication.actor.info_version, 10);
+    assert!(context.publication.actor.statuses.active.is_empty());
+    assert_eq!(context.publication.actor.statuses.version, 24);
+    assert_eq!(context.publication.actor.statuses.resistances, vec![50]);
+    assert_eq!(context.publication.actor.statuses.target, Some(1));
+    assert_eq!(context.queue.next_id, 2);
+    assert_eq!(context.result_bindings, BTreeMap::from([(1, 500)]));
+    let output = replay_scheduled_publication(&context).unwrap();
+    let skipped = &output.drains[0].publication;
+    assert_eq!(skipped.context.actor.uses, 1);
+    assert!(skipped.context.actor.infos.is_empty());
+    assert!(skipped.events.is_empty());
+    let published = &output.drains[1].publication;
+    assert_eq!(published.context.actor.uses, 0);
+    assert_eq!(published.context.actor.infos, vec![Some(200)]);
+    assert_eq!(published.context.actor.info_version, 11);
+    let save = published
+        .events
+        .iter()
+        .position(|e| matches!(e, Event::SaveSpeech { .. }))
+        .unwrap();
+    let hide = published
+        .events
+        .iter()
+        .position(|e| {
+            matches!(
+                e,
+                Event::SetActive {
+                    object: 411,
+                    active: false
+                }
+            )
+        })
+        .unwrap();
+    let done = published
+        .events
+        .iter()
+        .position(|e| {
+            matches!(
+                e,
+                Event::Return {
+                    iterator: 500,
+                    value: false
+                }
+            )
+        })
+        .unwrap();
+    assert!(save < hide && hide < done);
+    assert!(shown(published).is_empty());
+    assert!(shown(&output.drains[2].publication).is_empty());
+    assert_eq!(
+        shown(&output.drains[3].publication),
+        vec!["I am 1 card away from closest Evil"]
+    );
 }
 
 #[test]

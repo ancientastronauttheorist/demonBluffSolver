@@ -14,6 +14,7 @@ from audit_report_snapshots import expand_snapshots
 
 
 SOURCE_SHA256 = 'e8182a5a51353941b4d6e07d6564dc2c78f7c9e30c7e8de7366eb37aca62efcf'
+ACQUISITION_SHA256 = '3603e404ea1a55ff481fe075bfef36bfe5d339b6c9738bba4632bfc7c4f5c9d8'
 RULE = 'scheduled_role_publication_native_v1'
 
 
@@ -37,10 +38,12 @@ def queue(value):
                         for row in value['entries']]}
 
 
-def project(case, name):
+def project(case, name, acquired=False):
     initial = case['initial']
+    history_prefix = [] if acquired else ['prior_info']
+    initial_uses = 1 if acquired else 0
     assert len(initial['iterators']) == 1 and not initial['speech_iterators']
-    assert initial['history'] == ['prior_info'] and initial['uses_bits'] == 0
+    assert initial['history'] == history_prefix and initial['uses_bits'] == initial_uses
     assert initial['actor_state'] == 10 and initial['actor_previous_state'] == 5
     assert initial['saved_text'] == 'old speech' and not initial['shown']
     assert initial['reveal_order'] == 1
@@ -63,16 +66,27 @@ def project(case, name):
     refs = [ids[label] for label in native_refs['values']]
     assert [next(row['display_id'] for row in initial['board'] if row['id'] == label)
             for label in native_refs['values']] == initial['generated'][0]['ordered_reference_ids']
+    statuses = {'active': [], 'version': 0, 'resistances': [], 'target': None}
+    if acquired:
+        acq = initial['acquisition']
+        assert acq['active_status_count'] == 0 and acq['active_status_version'] == 24
+        assert acq['resistance_count'] == len(acq['resistance_values']) == 1
+        assert acq['resistance_values'] == [50] and acq['status_target'] == 'actor'
+        assert acq['revealed_byte'] == acq['start_acted_byte'] == acq['killed_while_hidden_byte'] == acq['killed_by_demon_byte'] == 0
+        assert acq['register_as'] is None and acq['raw_bluff'] is None
+        assert acq['trailer'] is None and acq['runtime'] is None
+        statuses = {'active': [], 'version': acq['active_status_version'],
+                    'resistances': acq['resistance_values'], 'target': ids[acq['status_target']]}
     publication = {
         'version': 'character_role_publication_native_v1',
         'actor': {'identity': 1, 'data': 30 if bluff else 20, 'bluff': 20 if bluff else None,
                   'register_as': None, 'trailer': None, 'runtime': None, 'dead_prefab': None,
-                  'revealed': False, 'uses': 0, 'previous': 5, 'state': 10,
+                  'revealed': False, 'uses': initial_uses, 'previous': 5, 'state': 10,
                   'killed_hidden': False, 'killed_demon': False, 'alignment': actor['alignment'],
                   'id': actor['display_id'], 'started': False,
                   'role': 41 if bluff else 40, 'bluff_role': 40 if bluff else None,
-                  'saved_act': 103, 'infos': [201], 'info_version': initial['history_version'],
-                  'statuses': {'active': [], 'version': 0, 'resistances': [], 'target': None},
+                  'saved_act': 103, 'infos': [] if acquired else [201], 'info_version': initial['history_version'],
+                  'statuses': statuses,
                   'state_callback': None},
         'act': True, 'raw_bluff': {'identity': 20, 'live': True} if bluff else None,
         'data_assets': [{'identity': 20, 'picking': False}, {'identity': 30, 'picking': False}],
@@ -116,19 +130,20 @@ def project(case, name):
                        'owners': {str(entry['id']): owner for entry in row['before']['entries']}})
         state = row['managed']
         assert state['actor_state'] == 10 and state['actor_previous_state'] == 5
-        assert state['history'] in (['prior_info'], ['prior_info', 'info0'])
+        assert state['history'] in (history_prefix, history_prefix + ['info0'])
         assert state['saved_text'] in ('old speech', initial['info']['description'])
         expected.append({'queue': queue(row['after']),
                          'callbacks': row['expected_callback_ids'],
                          'visits': [e['id'] for e in row['events'] if e['kind'] == 'native_wait_visit'],
-                         'history': [201] + ([200] if len(state['history']) == 2 else []),
+                         'history': ([] if acquired else [201]) + ([200] if state['history'] == history_prefix + ['info0'] else []),
                          'history_version': state['history_version'], 'uses_bits': state['uses_bits'],
                          'saved_text': state['saved_text'], 'shown': state['shown'],
                          'result_states': [signed32(it['state']) for it in state['iterators']],
                          'speech_states': [signed32(it['state']) for it in state['speech_iterators']]})
-    assert case['initial_queue']['entries'][0]['id'] == 0
+    result_id = case['initial_queue']['entries'][0]['id']
+    assert result_id == (1 if acquired else 0)
     return {'name': name, 'context': {'rule_version': RULE, 'publication': publication,
-                                    'queue': queue(case['initial_queue']), 'result_bindings': {'0': 500},
+                                    'queue': queue(case['initial_queue']), 'result_bindings': {str(result_id): 500},
                                     'normal_lifetime_and_stable_services_verified': True, 'drains': drains},
             'expected': expected}
 
@@ -151,12 +166,62 @@ def project_report(source):
             'cases': cases}
 
 
+def project_acquisition_report(source):
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    assert digest == ACQUISITION_SHA256, 'acquisition report changed: re-review before projection'
+    report = expand_snapshots(json.loads(source.read_text(encoding='utf-8')))
+    assert report['schema'] == 'hunter_acquisition_publication_v1'
+    assert report['build'] == 'f530404b0f3f_807de4a83df4'
+    cases = []
+    for index, case in enumerate(report['cases']):
+        assert case['completed'] and case['click_invoked'] and case['error'] is None
+        assert len(case['drains']) == 8 and len(case['after_acquisition_native_records']) == 1
+        record = case['after_acquisition_native_records'][0]
+        assert record['kind'] == 'acquisition' and record['iterator'] == 'acquisition0'
+        assert record['reference_count'] == record['gc_handle'] == 0 and not record['owner_linked']
+        assert record['cached_enumerator_present']
+        assert case['drains'][3]['after']['entries'] == []
+        assert case['click_admission'] == {'completed_acquisition_iterator': 'acquisition0',
+            'queue_empty': True, 'native_record_released': True,
+            'same_actor': 'actor', 'same_runtime_clone': 'role'}
+        before = case['after_acquisition_drain']
+        initial = case['after_click']
+        assert before['history'] == [] and before['uses_bits'] == 1
+        assert before['actor_state'] == 5 and before['actor_previous_state'] == 20
+        assert before['reveal_card_init_reveal_byte'] == before['reveal_card_state_raw'] == before['gameplay_current_reveal'] == 0
+        assert before['acquisition']['runtime_role'] == initial['acquisition']['runtime_role'] == 'role'
+        assert before['acquisition']['data_source_role'] == initial['acquisition']['data_source_role'] == 'acquisition_source_role'
+        assert before['acquisition']['current_data'] == initial['acquisition']['current_data'] == 'data'
+        assert before['acquisition']['data_source_role'] != before['acquisition']['runtime_role']
+        assert [p['trigger'] for p in before['acquisition']['phase_calls']] == [3, 7]
+        assert [p['trigger'] for p in initial['acquisition']['phase_calls']] == [3, 7, 30]
+        assert initial['uses_bits'] == 1 and initial['history'] == [] and initial['history_version'] == 10
+        post_click = dict(case, initial=initial, initial_queue=case['drains'][4]['before'], drains=case['drains'][4:])
+        assert post_click['initial_queue']['next_id'] == 2
+        assert post_click['initial_queue']['entries'][0]['kind'] == 'result'
+        projected = project(post_click, f'acquired_cases_{index}', acquired=True)
+        projected['acquisition_proof'] = {'native_record_before_click': record,
+            'click_admission': case['click_admission'],
+            'source_role': before['acquisition']['data_source_role'],
+            'runtime_role': before['acquisition']['runtime_role'],
+            'native_history_version_after_clear': initial['history_version'],
+            'scope': 'original conditional native Init/acquisition handoff; supplied old speech, clone/CLR/runtime/UI and other actors. No constructor, generated board or rendered public history.'}
+        cases.append(projected)
+    assert len(cases) == 6 and sum(len(c['expected']) for c in cases) == 24
+    return {'schema_version': 1, 'native_report_sha256': digest, 'build_id': report['build'],
+            'scope': 'Six actual acquired post-click result states, same actor/data/runtime clone after native acquisition callback/release; native use one and empty history. Rust executes result/speech publication only, not acquisition, pixel availability or player-history admission.',
+            'excluded': ['three rejected acquisition owners: no click or result to project',
+                         '192 native failed-service prefixes: Rust rejects failed-service contracts'],
+            'cases': cases}
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('source', type=Path)
     parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('--acquisition', action='store_true')
     args = parser.parse_args()
-    projected = project_report(args.source)
+    projected = project_acquisition_report(args.source) if args.acquisition else project_report(args.source)
     assert args.output.parent.is_dir()
     args.output.write_text(json.dumps(projected, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'cases': len(projected['cases']),

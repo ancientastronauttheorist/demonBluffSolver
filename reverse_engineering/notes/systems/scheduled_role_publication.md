@@ -76,11 +76,41 @@ speech visits and generation suppression against the already native-tested
 kernel. The old native fixture's initial runtime uses zero remains a declared
 stress input; asset abilityUsage zero is not evidence that native Init sets it.
 
+The separate [acquisition composition](hunter_acquisition_publication.md)
+executes native Init, delayed acquisition, callback release and first click
+before reaching this API's input boundary. Its
+[acquired fixture](../../fixtures/synthetic/scheduled_role_publication_acquired_v1.json)
+projects six completed cases and 24 result/speech drain checkpoints. Initial
+history is empty at version 10, runtime uses is one, and cleared status count
+does not revive stale backing slots. The actual post-click queue retains result
+record 1, next ID 2, and the generation after all four acquisition drains;
+neither queue identity nor generation is reset for Rust replay. Native result
+publication appends one clue, increments history version to 11, decrements
+uses to zero and hides the picker after immediate speech storage but before
+result return. Show still waits for its later timing gate.
+
+Projection verifies the same actor/data/runtime clone across acquisition and
+click, an empty acquisition queue and a released/unlinked acquisition record
+with zero reference count and GC handle. Allocator-retained cached-pointer
+bytes are inspection-only. Native clone/CLR/UI services and the old saved
+speech remain supplied; this evidence does not certify constructor-fresh
+setup, a generated board or rendered PlayerHistory. Three rejected acquisition
+owners have no first click to project, and 192 stopped-service prefixes remain
+excluded from the Rust normal-service contract.
+
 ```powershell
 python reverse_engineering/scripts/project_scheduled_role_publication.py `
   reverse_engineering/reports/f530404b0f3f_807de4a83df4_hunter_scheduled_publication.json `
   --output reverse_engineering/fixtures/synthetic/scheduled_role_publication_v1.json
 cargo test --release -p solver-core --lib scheduled_role_publication
+```
+
+For the acquired boundary, run the same generator with `--acquisition`:
+
+```powershell
+python reverse_engineering/scripts/project_scheduled_role_publication.py `
+  reverse_engineering/reports/f530404b0f3f_807de4a83df4_hunter_acquisition_publication.json `
+  --acquisition --output reverse_engineering/fixtures/synthetic/scheduled_role_publication_acquired_v1.json
 ```
 
 The primitive bounds initial retained slots/text to 65,536 and result instances
@@ -89,6 +119,11 @@ roughly one million initial retained slots plus the bounded publication traces;
 the adapter does not search or branch over schedules. Invalid later evidence
 rejects the complete batch rather than returning a valid-looking prefix.
 Independent review reproduced the fixture values and physical bytes exactly.
-All six adapter tests and all 963 library tests passed; the release build passed.
+The original six adapter tests and all 963 library tests passed; the release
+build passed. The acquired extension adds two tests; all eight adapter tests
+and all 965 library tests passed. The acquired fixture SHA-256 is
+`049c2823349832e94fe771c37b75092f50f79cd86130bc99bc5a6451dfeffdbd`.
+This extension changes tests and fixture generation only; production Rust
+behavior and the existing release binary are unchanged.
 The existing 34 simulation results are retained: deduction/action rules were
 unchanged by this offline adapter, so that long suite was not repeated.
