@@ -244,6 +244,10 @@ stop, diagnose, fix, verify, then resume.
     volatile entry registers explicitly so preceding fixtures cannot supply
     accidental diagnostic bits. Capture raw service arguments and caller sites
     at entry, including stopped services, rather than only after completion.
+    Derive release assertions from exact writes and lifetime effects; logical
+    free does not imply zeroed storage. A supplied allocator can retain cached
+    pointer bytes after handles are cleared and owner links are removed; those
+    bytes are inspection evidence, not a live reference.
     Author failed API output
     effects explicitly; a failure status alone does not specify changes to
     input capacity/type fields that a retry may consume. Gate callbacks and snapshots by
