@@ -29,7 +29,7 @@ bijective, and each successful occurrence has exactly one explicit allocation
 binding. Unsupported callbacks, null dependencies and ambiguous provenance
 reject the entire join. Registration is not readiness or resume order.
 
-Eight batch tests cover alias retention, caller failure prefixes, allocation and
+Nine batch tests cover alias retention, caller failure prefixes, allocation and
 type collisions, explicit clone provenance and capacity guards. Six initializer
 tests validate the underlying primitive, including retained identity checks.
 The separate native sequence audit executes four two-call sequences and four
@@ -44,3 +44,37 @@ Evidence: [initializer and first yield](character_initialization.md),
 producer tests. [Setup action dispatch](character_action_setup.md) consumes the
 supported completed producer state. Actual engine queue registration, scheduler
 admission, subsequent Reveal and general scene callbacks remain open.
+
+## Original generated five-actor prefix comparison
+
+The [retained original N5 audit](first_village_initialization.md) executes actual
+generation row zero and pool row zero, five native constructors, and five Init
+returns in one live Manage caller. Native report SHA-256 is
+`855f8976081da9541161bcdf15e0a130cbd6f0115f2351c027708b6c3fb08eb1`.
+Its source-owned expectations are projected by
+[the independent Python adapter](../../scripts/project_first_village_initialization.py)
+to [five offline contexts](../../fixtures/synthetic/first_village_initialization_v1.json).
+The adapter imports no Rust. Fixture SHA-256 is
+`0efc7e616901c64415101721266e9c0e471c946aa5bd10676806b1d82ad2d223`.
+
+The Rust comparison checks all 25 complete represented Actor snapshots and 15
+retained Continuation snapshots across the five successful return prefixes.
+Initial actor:0 retains its supplied Minion data through native construction;
+the other four data references are null before Init. Exact generated data,
+source/clone identity, status/history versions, one use, Hidden state, descending
+IDs and earlier waits survive the comparison. Positions are explicit native-slot
+labels, not certified UI positions or displayed IDs.
+
+Synthetic Init occurrence failures delimit the first four completed prefixes.
+A synthetic Publish failure selects the fifth, before any publication effect.
+Those selectors do not represent original native exceptions or replay failed
+service partial mutations. The Rust caller reaches its modeled Publish gateway;
+the native caller stops earlier at instruction `0x36D01E` before board reload.
+Only Actor/Continuation projections are compared, not full caller equivalence.
+
+Physical list identities/backings, constructor-produced act/text state, wait
+duration, nonvolatile CPU/stack state and retained pools remain native-only
+assertions. This adapter does not execute constructors, collection providers,
+engine scheduling, role Init, pixels or public-history admission. The separate
+[concrete role audit](first_village_role_setup.md) supplies post-Init state and
+verifies Confessor's status-25 effect; it is not a continuation of this witness.

@@ -422,3 +422,44 @@ fn actual_native_repeated_body_sequences_match_primitive_and_batch() {
         assert_eq!(result.continuations, continuations);
     }
 }
+
+#[test]
+fn original_generated_n5_completed_init_prefixes_match_native_actors_and_waits() {
+    // These selectors delimit successful native prefixes. They do not replay
+    // failed native service mutations or prove publication/action completion.
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../reverse_engineering/fixtures/synthetic/first_village_initialization_v1.json"
+    )))
+    .unwrap();
+    assert_eq!(fixture["schema_version"], 1);
+    assert_eq!(fixture["build_id"], "f530404b0f3f_807de4a83df4");
+    assert_eq!(
+        fixture["native_report_sha256"],
+        "855f8976081da9541161bcdf15e0a130cbd6f0115f2351c027708b6c3fb08eb1"
+    );
+    let cases = fixture["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 5);
+    for (index, case) in cases.iter().enumerate() {
+        let completed = index + 1;
+        assert_eq!(case["completed_inits"], completed);
+        let c: Context = serde_json::from_value(case["context"].clone()).unwrap();
+        let expected_actors: BTreeMap<Identity, Actor> =
+            serde_json::from_value(case["expected_actors"].clone()).unwrap();
+        let expected_continuations: Vec<Continuation> =
+            serde_json::from_value(case["expected_continuations"].clone()).unwrap();
+        let r = replay(&c).unwrap();
+        assert_eq!(r.actors, expected_actors, "prefix {completed}");
+        assert_eq!(
+            r.continuations, expected_continuations,
+            "prefix {completed}"
+        );
+        assert_eq!(r.publications.len(), completed);
+        assert_eq!(r.initialization_complete, completed == 5);
+        assert_eq!(r.prefix_error.as_deref(), (completed < 5).then_some("init"));
+        assert_eq!(r.positions, c.positions);
+        for (i, publication) in r.publications.iter().enumerate() {
+            assert_eq!(publication.clone, c.allocations[i].clone);
+        }
+    }
+}
