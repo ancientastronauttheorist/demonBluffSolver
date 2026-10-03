@@ -103,8 +103,8 @@ integrated means the relevant solver/player-history path consumes it.
 | --- | --- | --- |
 | Observation/extraction | [Strict history boundary](notes/systems/player_history_boundary.md): typed history, exact-prefix trusted review, chronological result preservation and paired-oracle development input checks. | Exported Rust module with narrow Judge and conditional Hunter/Baa snapshot projections; archived pixel review records admission gaps. Trusted capture/CLI/live integration and held-out evaluation remain absent. |
 | Deck/pool generation | [Actual pool composition](notes/systems/manage_pool_composition.md): caller/builders/getters/filters/predicate with supplied collection/RNG/layout. [Original N5 factors](notes/systems/first_village_bluff_generation.md) preserve native roster/pools and separately invoked Minion catalogue support. | [Ledger bridge](notes/systems/manage_pool_ledger_bridge.md) is offline with later-setup provenance required. N5 factors are uncombined and unweighted; actual acquisition caller, generation-to-observation domain and held-out results remain open. |
-| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Engine first-step evidence](notes/systems/unity_coroutine_bridge.md) is independent. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) retains one actor through native delayed acquisition, release, click and publication. | [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches post-click native checkpoints including acquired use/history state. Other actors, constructor/UI services and click request remain supplied; full generated Manage-to-observation transaction and rendered admission remain open. |
-| Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). | Production public-history projection preserves complete worlds at all declared four/five-seat development prefixes; finished setup and availability supplied. No generation or cross-role/held-out certificate. |
+| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Original N5 initialization](notes/systems/first_village_initialization.md) retains actual generation through five constructors and live caller Init returns before publication. [Engine first-step evidence](notes/systems/unity_coroutine_bridge.md) is independent. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) retains one actor through native delayed acquisition, release, click and publication. | [Rust initialization batch](notes/systems/setup_initialization_batch.md) compares five original completed Actor/Continuation prefixes; full physical/CPU/pool assertions remain native-only. [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches conditional post-click checkpoints. Scene/UI services and click request remain supplied; full generated Manage-to-observation transaction and rendered admission remain open. |
+| Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). [Concrete original N5 Init/Start dependencies](notes/systems/first_village_role_setup.md) verify Confessor status 25 separately from actual lying under supplied post-Init state. | Production public-history projection preserves complete worlds at all declared four/five-seat development prefixes; finished setup and availability supplied. Original N5 setup action classes remain unsupported by the narrower bridge. No generation or cross-role/held-out certificate. |
 | Legal abilities/actions | [Setup action audit](notes/systems/character_action_setup.md), individual role/picker evidence and guarded writer bridge. | Recommendations/automation exist; target/use/reset/history and policy certificate remain open. ActivatePick drafts stay unvalidated unless needed. |
 | Execution/death/protection | [Execution evidence](notes/systems/gameplay_execution_resolution.md) supplies bounded damage/protection/terminal behavior. | Existing bookkeeping/constraints; cross-role chronology needs original before/action/after comparisons. |
 | Night/phase | Bounded lifecycle, coroutine and role transitions with explicit timing contracts. | Snapshot histories and offline scheduled/clocked replays; complete village chronology/reset certificate absent. |
@@ -596,4 +596,79 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   acquisition and public deck/clue publication before world-set admission.
   Two dependencies closed with explicit boundaries; continue the original
   active goal. S1 promotion, independent held-out S2 and S3/S4 remain open.
+```
+
+## Original N5 retained initialization checkpoint
+
+2026-10-03. Native initializer commit
+`64ad44867f5158ebe0b5c7ed0ecaa838a5e6e8b5`; concrete role dependency commit
+`218d58d020dea3f9a2b216a7e484b40adec2b792`; Rust comparison commit
+`16d67d2897f4b15d26a32f347d9a924a5d5ab82b`. Original planning baseline remains
+`92363e756f4faf6fdefc0f59a7a8cba527c5936a`.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; commits above. first_village_initialization_v1,
+  first_village_role_setup_v1, five-prefix offline Rust fixture version1.
+  Native actor/source/status/continuation identities are oracle validation
+  evidence, never legitimate player observations or planner input.
+Named decision blocker and reachable deck/phase/role scenario:
+  Can original profile21674 generation row0/poolrow0 reach five actual Init
+  returns in the same Manage frame before publication, preserving earlier
+  actors, clones and waits? Sorted N5 roster is Minion, Confessor, Lover,
+  Hunter, Enlightened. Does later concrete Confessor Init change actual truth?
+Before -> after supported behavior:
+  Pre-first-Init catalogue witness -> native constructors and five retained
+  caller Init returns, with descending IDs5..1 and distinct first-yield waits.
+  Primitive post-Init effects -> five source-derived Actor/Continuation prefix
+  comparisons in Rust. Separate supplied-state concrete role audit establishes
+  Confessor AppearTruthfull25 without repairing Corrupted/Evil actual lying.
+Original evidence; supplied runtime/scheduler boundaries:
+  Actual generation/Standard, pool builders, constructor, Init, Hidden refresh,
+  RefreshView and DelayReveal state0 execute. One live CPU/heap continues to
+  36D01E before publication; integer/XMM nonvolatiles, caller SP/root sentinel,
+  earlier actors/lists/backings/iterators/waits/clones and source/pool graphs
+  are asserted. CLR/base constructor, scene/status/UI hydration, raw scene
+  state20, role clone and synchronous first-step entry are supplied services.
+  Concrete role audit independently supplies post-Init actors and virtual
+  slots; it is not a retained continuation of the generated initializer audit.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Native original initialization:5ctors/5Init/5firstyields,583Manage services,
+  115new-service exact stopped prefixes,2071instruction addresses/13pins.
+  Concrete role audit:38completed calls/320exact stops,17memberships at13RVAs;
+  2143visited addresses include generation/pool provenance, not full branches.
+  Independent full native producers exited0 and matched frozen report bytes:
+  SHA855f8976081da9541161bcdf15e0a130cbd6f0115f2351c027708b6c3fb08eb1;
+  SHAc1985696bd79303bc71293e90441bc8dc4ba6108e22570dc71450876a176e1b7.
+  Rust:25whole Actor and15Continuation checkpoints across5successful prefixes;
+  all9batch tests and all966library tests passed. No production Rust change.
+  Fixture independently reproduced bytes/values, SHA0efc7e616901c64415101721266e9c0e471c946aa5bd10676806b1d82ad2d223.
+  Privacy, source/prior/target hashes and relative links passed. Failed native
+  service partial mutations, physical list/CPU/wait-duration/pool equivalence
+  are not compared by this Rust adapter; native assertions retain their scope.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No world-set or PlayerHistory promotion. Synthetic Init/Publish failures only
+  delimit successful prefixes; they do not claim native exceptions or actual
+  publication. Slot labels are supplied positions, not certified UI ordering.
+  Existing setup action bridge rejects original N5 classes outside its enum;
+  no accepted-world solver counterexample found in this concrete dependency.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy, recovered PRNG law, joint generation/path weights or uniform prior.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No independently frozen held-out outcome or budgeted baseline comparison.
+  Library validation finished20.75s; prior release build and34simulation pass
+  retained for unchanged production deduction/action rules. No new mutation
+  campaign or optimality/perfection claim is justified by these comparisons.
+New uncertainty, regressions and remaining exclusions:
+  No full SetupDelay/engine acquisition drain, native UI Init/deck/HUD/pixels,
+  all24copied-role behavior, legal Day request/public capture or S1 admission.
+  Separate concrete Start probes do not establish original ordered-Start calls.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Continue the same five-Init caller through actual publication and concrete
+  Confessor ActInit/status writer, retaining original source/runtime roles,
+  status backing and first waits. Then connect each correct acquisition owner
+  through actual resume and mixed queue chronology; never substitute prepared
+  post-Init actors while claiming original generated acquisition.
+  Necessary dependency and exact Rust prefix comparison closed. Continue the
+  full active goal; all eight gates, S1 promotion, held-out S2 and S3/S4 remain.
 ```
