@@ -113,6 +113,19 @@ supplied inert callbacks. Queue admission, resumed Reveal and chronological
 legal solver observations remain open under the
 [S0 contract](../../SOLVER_CONTRACT.md).
 
+The later [original N5 publication/Init witness](first_village_publication_init.md)
+retains generation row0/pool row0 through five constructors, Init returns,
+first yields, actual publication and concrete Init dispatch. Its Confessor
+status writer and retained first waits are compared with the
+[setup-only Rust bridge](character_action_setup.md); native storage, callback
+identity and CPU assertions remain separate. This closes the earlier concrete
+Init gap for Minion, Confessor, Lover, Hunter and Enlightened, not the original
+ordered Start or engine admission gap. The current next boundary is the genuine
+serialized Start array and five distinct engine owners sharing one queue,
+stopping before the unresolved runtime `onSetup` read. Existing already-yielded
+iterators must not be restarted to manufacture admission. Acquisition resumes,
+legal public chronology and all wider-domain obligations remain open.
+
 ## September 30 progress
 
 The [complete setup caller](manage_setup_caller.md) now executes every pass and normal return under supplied gateways in 140 native fixtures. [Unique-source composition](unique_source_composition.md) executes the actual starting/fallback/script getters, lazy typed getter, filters and captured predicate in 516 fixtures, preserving one source/pool RNG history. [Initialization](character_initialization.md) executes Init/InitWithNoReset, Hidden RefreshCharacter and first-yield publication in 475 fixtures. Their offline Rust kernels preserve their supported boundaries.
