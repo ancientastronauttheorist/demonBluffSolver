@@ -197,11 +197,37 @@ now closes its important composition. Shaman does not synthesize
 `I am the original Baker` and can create a descendant. Preserved
 `BakerRuntimeData` supplies its saved name, while a non-null incompatible
 subtype such as `AlchemistRuntimeData` or `EnlightenedRuntimeData` reaches the
-ordinary Baker invalid-cast path before output or conversion. A Corrupted
+truthful Baker invalid-cast path before output or conversion. The lying path's
+cast additionally depends on an earlier non-Hidden apparent Baker, as detailed
+in the linked audit. A Corrupted
 destination dispatches the lying Baker path and does not extend the chain in
 current setup because no audited producer gives it `WorkingAbility`.
 Later Baker-created descendants, rather than Shaman itself, write the real
 identity they replace into fresh Baker runtime data.
+
+For the shipped fresh Start pass, prior Alchemist or Enlightened data does not
+establish an incompatible runtime object. Ordinary Init clears `runtimeData`
+(`0x365B10`/`0x365B16`); Alchemist's Init adds Corrupted resistance, truthful
+Start creates no runtime object, bluff Start creates one, and its ordinary slot
+follows Shaman. Enlightened creates its runtime object at Day. Chancellor's
+full Init replacements and Puppeteer's full Init conversion clear runtime;
+Twin's no-reset replacements do not immediately dispatch the copied Start.
+Pending DelayReveal continuations cannot resume inside the synchronous Start
+pass. A fresh Shaman-copied Baker therefore starts with null runtime in this
+writer chain, while an erased Alchemist's separately initialized resistance
+still survives. This does not classify arbitrary later no-reset histories.
+
+An authored roster can support this interaction: RoguelikeStandard zero-based
+group 2, village 1, profile path ID `21689` (`Ascension_14`) has one inline
+script whose count alternatives include 5 Villagers, 1 Outcast, 1 Minion and
+1 Demon, and forces Shaman. Its other count alternative is 5/1/2/0. Its
+candidate pools contain Baker `21611`, Alchemist `21609`, Plague Doctor
+`21606`, Baa `21590`, and Hunter/Scout/Judge as neutral Villager alternatives.
+Select those five Villagers, Plague Doctor, Shaman and Baa; let PD corrupt the
+Baker source and Shaman copy it onto the resistant Alchemist. Revealing the
+destination first supports original-Baker text and a conversion back onto the
+still-hidden source. This is authored roster support plus audited local
+transitions, not an executed complete generation trace or a reviewed capture.
 
 A solver trace should preserve Shaman's ordered source, destination, copied
 data, viable erased-role identity class, and destination runtime/status

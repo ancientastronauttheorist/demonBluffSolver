@@ -35,12 +35,13 @@ pub enum Alignment {
     Evil,
 }
 
-/// Runtime-data shape preserved when Shaman overwrites a Villager with Baker.
+/// Conservative erased-identity classes for Shaman trace grouping.
 ///
-/// Most roles leave `Character.runtimeData` null. Alchemist and Enlightened
-/// install distinct managed runtime objects, and Baker's Day action cannot cast
-/// either object to `BakerRuntimeData`. Keep those identities in separate
-/// Shaman trace classes because Alchemist also preserves corruption resistance.
+/// Alchemist and Enlightened can install distinct managed runtime objects at
+/// their respective bluff Start/Day actions. These asset classes do not prove
+/// that such an object exists at Shaman's earlier fresh Start slot. Keep the
+/// classes separate conservatively; Alchemist's initialized corruption
+/// resistance remains consequential even while runtimeData is null.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum BakerPreservedRuntimeClass {
     Null,
@@ -58,8 +59,8 @@ pub fn baker_preserved_runtime_class(role: &str) -> BakerPreservedRuntimeClass {
 
 /// Solver-visible equivalence for a Shaman destination's erased identity.
 /// Alchemist resistance is visible for every copied role. Enlightened's
-/// preserved runtime object matters only when the copied role is Baker and
-/// later tries to cast that object as `BakerRuntimeData`.
+/// potential runtime class stays separate for copied Baker. Fresh Start's
+/// actual null runtime is established separately by the Baker history model.
 pub fn shaman_erased_role_class(
     copied_role: &str,
     erased_role: &str,

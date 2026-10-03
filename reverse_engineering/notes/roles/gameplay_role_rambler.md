@@ -211,9 +211,10 @@ captured closure instead.
 
 ## User reveal and the constraint-free Day quote
 
-On an ordinary allowed user click, `Character.OnClick` first changes the
-character from Hidden to Alive and invokes its state callback. The resulting
-`RevealCard.Reveal` call dispatches `Character.Act(Day)`
+On an ordinary allowed user click, `Character.OnClick` invokes its `onClick`
+delegate before the later Hidden-to-Alive stores. `RevealCard.OnEnable`
+subscribes `RevealCard.Reveal` to that delegate. The callback dispatches
+`Character.Act(Day)` while the actor remains Hidden
 (`ETriggerPhase == 30`) before `Character.OnReveal`. `Rambler2.Act(30)` and
 `Rambler2.BluffAct(30)` are identical: both choose one of 34 fixed flavor
 quotes uniformly, store it in the misspelled `savedQote` field, and pass it to
@@ -224,7 +225,7 @@ quotes uniformly, store it in the misspelled `savedQote` field, and pass it to
 invokes the registered acted delegate regardless of character state, using a
 previously saved `ActedInfo` when one exists and otherwise the current record.
 Only the `OnPicked`-or-killed branch checks for Hidden and defers the current
-record into `savedActInfo`. An ordinary Rambler reveal is already Alive, has no
+record into `savedActInfo`. An ordinary Rambler Day action is still Hidden, has no
 prior saved role record, and has neither killed flag, so its newly chosen Day
 quote is emitted before `Character.OnReveal` performs reveal accounting.
 

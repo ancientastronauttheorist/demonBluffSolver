@@ -87,21 +87,34 @@ its own distinct RVA, and all 36 target RVAs are distinct from one another.
 An ordinary allowed click is the only normal public path that starts a Baker
 conversion. The relevant calls and callbacks are synchronous:
 
-1. `Character.OnClick` verifies the reveal quota and exact Hidden state.
-2. It writes `prevState = Hidden` and `state = Alive` directly.
-3. It invokes the card's state-change delegate before returning.
-4. The registered `RevealCard.Reveal` callback calls
-   `Character.Act(Day)` (`ETriggerPhase == 30`).
-5. Only after that action returns does it call `Character.OnReveal`.
-6. It then starts the 0.2-second reveal tween; the two captured closures only
+1. `Character.OnClick` invokes `onClick` before its later quota/state branches.
+2. `RevealCard.OnEnable` has subscribed `RevealCard.Reveal` to that delegate,
+   separately from its `onReveal` subscription.
+3. `RevealCard.Reveal` checks its own reveal gate and calls
+   `Character.Act(Day)` (`ETriggerPhase == 30`) while the actor is still Hidden.
+4. Only after that action returns does it call `Character.OnReveal`.
+5. It then starts the 0.2-second reveal tween; the two captured closures only
    advance the presentation from Revealing to Revealed and complete the
    animation.
+6. After the synchronous `onClick` callback returns, `Character.OnClick`
+   checks the remaining quota/state branches and writes `prevState = Hidden`
+   and `state = Alive` for an admitted ordinary click.
 
 Thus the entire Baker clue, target draw, runtime-data write, and replacement
 occur before `Character.OnReveal`, before the animation delay, and before a
 subsequent serialized automation click. `Gameplay.OnCharacterReveal` performs
-reveal accounting after the Baker action. The source is already Alive while
-its Day action runs.
+reveal accounting after the Baker action. The source remains Hidden while
+its Day action runs. The reveal gate additionally needs positive native mana;
+the public health resource alone does not establish that condition.
+
+Selected native operands bind this order: `RevealCard.OnEnable` loads
+`Character.onClick + 0x100` at `0x386715`, constructs the Reveal delegate at
+`0x386737`, and stores the combined delegate at `0x38676D`.
+`Character.OnClick` invokes it at `0x366306`; the Hidden/Alive stores occur
+later at `0x36645A`/`0x366464`. The callback calls Day at `0x386BA4` and
+OnReveal at `0x386BC2`. These assertions correct the former state-change
+subscription and already-Alive chronology; complete instruction exports stay
+in the private artifact workspace.
 
 This also settles the historical reveal-order ambiguity. Baker is not seeded
 at board Start. Old observations recorded before the verified-first-click fix
@@ -176,8 +189,10 @@ skips only entries whose exact current state is Hidden, asks every other entry
 for `GetCharacterBluffIfAble()`, and records only whether at least one returned
 apparent role has exact runtime type `Baker`. It does not retain that card or
 use it as a random candidate. On an ordinary user reveal, the acting Baker
-surface is already Alive and sees itself as an apparent Baker, so this Boolean
-is true.
+surface remains Hidden and is skipped. The Boolean therefore depends on an
+earlier non-Hidden apparent Baker, rather than the actor itself. The Hidden
+comparison and skip are at `0x3B2CF6`/`0x3B2CFD`, before the apparent-role
+lookup at `0x3B2D01`.
 
 When that Boolean is true **or** the actor's runtime data is null, the method:
 
@@ -198,13 +213,17 @@ If the saved name is an Outcast, Minion, Demon, absent asset, or mismatched
 string, nothing is removed. If a matching removal empties the pool, the later
 random/index operation fails rather than returning a clean no-info result.
 
-The unusual branch in which no non-Hidden apparent Baker exists while runtime
+The branch in which no non-Hidden apparent Baker exists while runtime
 data is non-null skips both the cast and random pool and formats the empty name,
-thereby saying `I am the original Baker`. This is a native off-surface edge;
-the already-Alive ordinary user-reveal actor makes it unreachable in the
-normal Day path. An incompatible non-null runtime record on the ordinary path
-fails at the cast before output and, because of BluffAct ordering, before its
-achievement append.
+thereby saying `I am the original Baker`. The native branch is selected by the
+found-Baker test at `0x3B2DA4`, followed by the runtime-pointer test at
+`0x3B2DAE`. An ordinary hidden actor does not rule this branch out. Its reachable
+setup/history must supply the non-null runtime and absence of any earlier
+visible apparent Baker; a fresh null-runtime Baker still takes the random path.
+An incompatible non-null runtime record fails at the cast only when the random
+path is selected, before output and, because of BluffAct ordering, before its
+achievement append. Production history validation for this branch remains a
+separate solver-integration obligation.
 
 `GetBluffInfo` is the same empty-description, null-reference shell as
 `GetInfo`. The exact random rule lives in `ShowMyPreviousRoleLying`, not in
@@ -240,8 +259,11 @@ This distinction closes several tempting false inclusions in current setup:
 The filtered lists are fresh lists that preserve source order, duplicate
 occurrences, and malformed-entry failure behavior. Removing the source happens
 after all three filters and removes at most its first exact occurrence. On an
-ordinary reveal the source is already Alive and therefore absent before that
-removal; the step matters only on programmatic/off-surface calls.
+ordinary reveal the source remains Hidden and can pass those filters; removal
+excludes it from conversion on a board of distinct physical actors. Native
+`CreateNewBaker` calls the Hidden filter at `0x3B29B0`, passes the source to
+`List.Remove` at `0x3B29C8`/`0x3B29CE`, then checks the resulting size at
+`0x3B29D3`.
 
 An empty pool is a clean no-op. Otherwise Baker draws exactly one uniform
 `Random.Range(0, count)` index with no reroll. There is no role-identity
@@ -291,13 +313,13 @@ Applied to reachable Baker surfaces:
 | Baker surface | Day clue and conversion |
 | --- | --- |
 | Clean real public or converted Good Baker | Real clue; converts unless Broken |
-| Corrupted real/descendant Good Baker | Random lying clue; no conversion without WorkingAbility |
+| Corrupted real/descendant Good Baker | Lying branch depends on prior visible Baker and runtime; no conversion without WorkingAbility |
 | Drunk or corrupted Doppelganger with Baker bluff | Random lying clue; no conversion without WorkingAbility |
 | Ordinary Evil with Baker bluff | Bluff Baker lies; no conversion without WorkingAbility |
 | Clean HealthyBluff Doppelganger with Baker bluff | Real Baker path; null runtime says original; can convert |
 | Puppeteer-created Puppet whose saved bluff is Baker | Real Baker path; null runtime plus AlteredCharacter says previous Baker; BrokenAbility blocks conversion |
 | Shaman-copied Baker on a clean, null-runtime Good destination | Real clue says original; can convert |
-| Shaman-copied Baker preserving incompatible non-null runtime data | Normal Day cast fails before clue/conversion |
+| Shaman-copied Baker preserving incompatible non-null runtime data | Truthful Day cast fails; lying Day may bypass cast when no prior visible Baker exists |
 
 The current core CharacterData assets author no additional status 38, and the
 audited current setup/status producers do not add `WorkingAbility`. Therefore
@@ -315,7 +337,11 @@ only MessedUpByEvil around its role overwrite and `InitWithNoReset` itself adds
 no status. A Shaman-copied Baker thus normally says original when its preserved
 runtime data is null. If its prior data is already `BakerRuntimeData`, that
 history works; preserved `AlchemistRuntimeData`, `EnlightenedRuntimeData`, or
-another incompatible subtype fails the cast.
+another incompatible subtype fails a reached cast. The prior asset identity
+alone does not establish that runtime object: truthful Alchemist Start does
+not create one, bluff Alchemist Start does, and Enlightened creates it at Day.
+Initial Shaman precedes the ordinary Alchemist Start slot. Earlier identity
+writers and actual dispatch chronology therefore require separate evidence.
 
 Puppeteer can convert a real Baker neighbour into Puppet and preserve the old
 Baker as its displayed bluff. This is how an AlteredCharacter Baker surface is
@@ -325,10 +351,8 @@ its mere bluff. The resulting truthful bluff action synthesizes previous name
 
 ## Small boards, duplicates, and deterministic order
 
-- With one physical card, an ordinary source reveal leaves no Hidden target,
-  so conversion is a clean no-op.
-- If an off-surface one-card source were still Hidden when conversion ran, the
-  post-filter source removal also leaves an empty pool.
+- With one physical card, the ordinary Hidden source is removed from the
+  filtered pool, so conversion is a clean no-op.
 - With two or more cards, every independently eligible exact list occurrence
   participates; there is no adjacency rule.
 - Physical list order is preserved through filtering and only the final random
@@ -364,9 +388,10 @@ beyond list bookkeeping and achievement unlock requests.
   moment that physical card was converted. It does not identify a displayed
   bluff or register-as role.
 - `I am the original Baker` means no usable saved name on the reached clue
-  path; it is also the off-surface lying fallback when no visible apparent
-  Baker exists. Normal lying user reveals instead randomize from the script
-  Villager pool.
+  path; it is also the lying fallback when runtime is non-null and no earlier
+  non-Hidden apparent Baker exists. The current hidden actor does not count
+  itself. Null-runtime lying reveals and converted descendants with an earlier
+  visible Baker instead randomize from the script Villager pool.
 - A lying clue is not constrained to differ from the actor's real role. With
   non-null Baker history, only the first matching saved Villager asset is
   excluded; with null history, nothing is excluded.
@@ -379,6 +404,27 @@ beyond list bookkeeping and achievement unlock requests.
 - Native `actedInfos` stores a fresh record with null character references for
   each successful clue. `savedAct` should be corroborated against the latest
   current-initialization history; replacement clears acted history.
+
+## Fresh Shaman solver correction
+
+The Rust Baker history validator now distinguishes an erased role's asset
+identity from runtime data actually initialized before Shaman. In the shipped
+fresh Start pass, initial Alchemist and Enlightened targets still have null
+runtime data; Alchemist's separately initialized Corrupted resistance survives
+the no-reset overwrite. Previously the validator fabricated an incompatible
+runtime object from either asset name and rejected a legitimate first original-
+Baker clue. The authored eight-card support and local chronology are recorded
+in the [Shaman audit](gameplay_role_shaman.md).
+
+The regression
+`fresh_shaman_baker_on_alchemist_can_reveal_original_before_its_source` failed
+against the previous implementation. It checks the first truthful original
+clue, conversion onto the still-hidden corrupted source, and its later lying
+Alchemist claim; changing the first clue to a named Alchemist is rejected.
+This is a shared local Baker-history witness, not a complete generation,
+other-role clue or public-capture certificate. Arbitrary later no-reset runtime
+objects, including the non-null lying fallback without a prior visible Baker,
+remain outside that fresh-Start solver model.
 
 ## Bounded unknowns
 

@@ -7,9 +7,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use crate::knowledge_base::{
-    baker_preserved_runtime_class, get_card, normalize_role, BakerPreservedRuntimeClass, Faction,
-};
+use crate::knowledge_base::{get_card, normalize_role, Faction};
 use crate::types::{BoardCountProvenance, CardInfo, GameState, Scenario};
 
 use super::{
@@ -23,7 +21,6 @@ enum RuntimeState {
     NotBaker,
     Null,
     Baker(u8),
-    Incompatible,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -281,7 +278,7 @@ impl<'a> Problem<'a> {
                 RuntimeState::Null if puppet => self.baker_role.map(Observation::Named),
                 RuntimeState::Null => Some(Observation::Original),
                 RuntimeState::Baker(role) => Some(Observation::Named(role)),
-                RuntimeState::Incompatible | RuntimeState::NotBaker => None,
+                RuntimeState::NotBaker => None,
             };
             return match observation {
                 Observation::Interrupted => expected.is_some(),
@@ -298,9 +295,13 @@ impl<'a> Problem<'a> {
         let remaining_pool = |claimed: Option<u8>| -> bool {
             let is_villager_asset = |role: u8| usize::from(role) < self.villager_role_count;
             match runtime {
-                RuntimeState::Incompatible | RuntimeState::NotBaker => false,
+                RuntimeState::NotBaker => false,
                 RuntimeState::Null => claimed.map_or_else(
-                    || self.role_caps[..self.villager_role_count].iter().any(|count| *count > 0),
+                    || {
+                        self.role_caps[..self.villager_role_count]
+                            .iter()
+                            .any(|count| *count > 0)
+                    },
                     |role| is_villager_asset(role) && self.role_caps[usize::from(role)] > 0,
                 ),
                 RuntimeState::Baker(original) => claimed.map_or_else(
@@ -459,11 +460,12 @@ fn initialize_for_shaman_previous(
             let previous = target_previous?;
             let copied = copied_role?;
             let runtime = if Some(copied) == problem.baker_role {
-                match baker_preserved_runtime_class(&problem.role_names[usize::from(previous)]) {
-                    BakerPreservedRuntimeClass::Null => RuntimeState::Null,
-                    BakerPreservedRuntimeClass::Alchemist
-                    | BakerPreservedRuntimeClass::Enlightened => RuntimeState::Incompatible,
-                }
+                // This trace is the shipped fresh Start pass. Init clears
+                // runtimeData; Alchemist Init only adds resistance, its bluff
+                // Start follows Shaman, and Enlightened writes runtime at Day.
+                // An erased asset name does not establish an existing runtime
+                // object. Arbitrary later no-reset histories are not represented.
+                RuntimeState::Null
             } else {
                 RuntimeState::NotBaker
             };
@@ -691,7 +693,7 @@ fn process_baker(
 
     let working_conversion = (truth == TruthStatus::Truthful || stable_spy_real_action)
         && !puppet
-        && !matches!(runtime, RuntimeState::Incompatible | RuntimeState::NotBaker);
+        && runtime != RuntimeState::NotBaker;
     if !working_conversion {
         return vec![ready];
     }
@@ -773,9 +775,7 @@ fn process_reveal(
     match normalize_role(&card.apparent_role).as_str() {
         "baker" => process_baker(problem, &revealed, card, event_index),
         "medium" => process_medium(problem, &revealed, card),
-        "poet" if is_current_poet_medium(card) => {
-            process_medium(problem, &revealed, card)
-        }
+        "poet" if is_current_poet_medium(card) => process_medium(problem, &revealed, card),
         _ => vec![revealed],
     }
 }
@@ -1595,7 +1595,47 @@ mod tests {
     }
 
     #[test]
-    fn shaman_null_runtime_can_speak_but_incompatible_runtime_must_be_overwritten() {
+    fn fresh_shaman_baker_on_alchemist_can_reveal_original_before_its_source() {
+        let mut state = state(
+            &["Baker", "Alchemist", "Hunter", "Scout", "Judge"],
+            vec![
+                card(1, "Baker", json!({"original_role": "Alchemist"})),
+                card(2, "Baker", json!({"original_role": "original"})),
+                card(3, "Hunter", json!({})),
+                card(4, "Scout", json!({})),
+                card(5, "Judge", json!({})),
+                card(6, "Plague Doctor", json!({})),
+                card(7, "Hunter", json!({})),
+                card(8, "Scout", json!({})),
+            ],
+            &[2, 1, 3, 4, 5, 6, 7, 8],
+        );
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.deck.demons = vec!["Baa".to_string()];
+        let mut scenario = Scenario::default();
+        scenario.corrupted.insert(1);
+        scenario.evil_positions.insert(7, "Shaman".to_string());
+        scenario.evil_positions.insert(8, "Baa".to_string());
+        scenario.shaman_trace = Some(ShamanTrace {
+            source_position: 1,
+            target_position: 2,
+            copied_role: "Baker".to_string(),
+            target_previous_roles: vec!["Alchemist".to_string()],
+        });
+        // Init clears runtime; Alchemist Init adds resistance, not runtime.
+        // Shaman precedes Alchemist Start. Target 2 can therefore say original,
+        // convert hidden corrupted source 1, then source 1 can lie Alchemist.
+        assert!(validate_baker_history(&scenario, &state));
+
+        state.cards[1]
+            .info_parsed
+            .insert("original_role".into(), json!("Alchemist"));
+        assert!(!validate_baker_history(&scenario, &state));
+    }
+
+    #[test]
+    fn fresh_shaman_targets_keep_null_runtime_until_baker_conversion() {
         let cards = vec![
             card(1, "Baker", json!({"original_role": "Baker"})),
             card(2, "Baker", json!({"original_role": "original"})),
@@ -1613,7 +1653,7 @@ mod tests {
         });
         assert!(validate_baker_history(&null, &null_state));
 
-        let mut incompatible_state = state(
+        let mut fresh_state = state(
             &["Baker", "Alchemist", "Scout"],
             vec![
                 card(1, "Baker", json!({"original_role": "original"})),
@@ -1622,27 +1662,36 @@ mod tests {
             ],
             &[2, 1, 3],
         );
-        incompatible_state.deck.minions = vec!["Shaman".to_string()];
-        let mut incompatible = Scenario::default();
-        incompatible.evil_positions.insert(3, "Shaman".to_string());
-        incompatible.shaman_trace = Some(ShamanTrace {
+        fresh_state.deck.minions = vec!["Shaman".to_string()];
+        let mut fresh = Scenario::default();
+        fresh.evil_positions.insert(3, "Shaman".to_string());
+        fresh.shaman_trace = Some(ShamanTrace {
             source_position: 1,
             target_position: 2,
             copied_role: "Baker".to_string(),
             target_previous_roles: vec!["Alchemist".to_string()],
         });
-        assert!(!validate_baker_history(&incompatible, &incompatible_state));
+        assert!(!validate_baker_history(&fresh, &fresh_state));
 
-        incompatible_state.reveal_order = vec![1, 2, 3];
-        assert!(validate_baker_history(&incompatible, &incompatible_state));
+        fresh_state.reveal_order = vec![1, 2, 3];
+        assert!(validate_baker_history(&fresh, &fresh_state));
 
-        incompatible_state.deck.villagers[1] = "Enlightened".to_string();
-        incompatible
+        fresh_state.reveal_order = vec![2, 1, 3];
+        fresh_state.cards[0]
+            .info_parsed
+            .insert("original_role".into(), json!("Baker"));
+        fresh_state.cards[1]
+            .info_parsed
+            .insert("original_role".into(), json!("original"));
+        assert!(validate_baker_history(&fresh, &fresh_state));
+
+        fresh_state.deck.villagers[1] = "Enlightened".to_string();
+        fresh
             .shaman_trace
             .as_mut()
             .unwrap()
             .target_previous_roles = vec!["Enlightened".to_string()];
-        assert!(validate_baker_history(&incompatible, &incompatible_state));
+        assert!(validate_baker_history(&fresh, &fresh_state));
     }
 
     #[test]
