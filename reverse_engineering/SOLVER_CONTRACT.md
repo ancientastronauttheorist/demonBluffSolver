@@ -343,3 +343,97 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   Necessary concrete producer/input dependencies closed; continue broad goal.
   S1 end-to-end promotion, held-out S2 and all S3/S4 gates remain incomplete.
 ```
+
+## Fresh Baker runtime, generation and scheduled Hunter checkpoint
+
+2026-10-03. Generation evidence commit
+`acf7f5fc03543237de2b13a8f45f76a559a3c7ab`; Baker correction commit
+`7374437e7c2910d7b3889b18b003f3d7046996c9`; scheduled-publication and
+candidate Rust commit `2c84588a0b1f190736602fee696bdc612db0cab0`.
+The original full goal remains the plan at
+`92363e756f4faf6fdefc0f59a7a8cba527c5936a`.
+
+Sources: [first-village generation](notes/systems/first_village_profile_generation.md),
+[scheduled Hunter publication](notes/systems/hunter_scheduled_publication.md),
+[Baker](notes/roles/gameplay_role_baker.md) and
+[Shaman](notes/roles/gameplay_role_shaman.md).
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; source and candidate commits above.
+  first_village_profile_generation and hunter_scheduled_publication development
+  corpora; native/oracle checks separate from public history. Close generation,
+  chronology and clue-model dependencies; no village-policy evaluation.
+Named decision blocker and reachable deck/phase/role scenario:
+  Can a fresh Shaman-copied Baker on Alchemist speak original before its source?
+  Profile 21689 (Standard group 2/village 1) supports the authored N8 roster:
+  five Villagers, Plague Doctor, Shaman and Baa, with forced Shaman. This is
+  asset/count support, not a composed generation-to-capture certificate.
+  Does Hunter speech startup precede result return, and do native waits retain
+  the actor/history through owner, clock, full-frame and generation gates?
+Before -> after supported behavior:
+  Erased Alchemist/Enlightened identity incorrectly implied nonnull runtime ->
+  fresh Shaman Start preserves actual null runtime. Init clears runtime;
+  Alchemist Init adds resistance, its bluff Start follows Shaman, and
+  Enlightened writes runtime at Day. The N8 regression failed before the fix.
+  Reveal chronology corrected: onClick invokes Reveal/Day while Hidden, then
+  OnReveal records order; OnClick changes actor to Alive afterward.
+  Authored resume order -> actual immediate result/speech starts and native
+  queue drains under explicit engine/runtime services. Internal Rust stepper
+  preserves synchronous speech startup before picker hide/result return;
+  the original explicit replay contract remains supported.
+Original evidence; supplied runtime/scheduler boundaries:
+  Actual profile selection/materialization/reset/Standard roster bodies;
+  CopyData engine class conversion and collection/random services supplied.
+  Actual Hunter producers, click/Reveal/Day/result/speech bodies, managed bridge,
+  native dispatcher, wait insertion/drain, callback and reference release.
+  Finished acquisition, record creation, CLR/virtual dispatch services,
+  owner responses, engine clock/frame/phase availability and UI services supplied.
+  Initial raw UI state zero is supplied, not native UI Init. Retained snapshots
+  now include initReveal, raw reveal state and global reveal count independently.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Generation: 6 retained cases, 2 copy/lifetime sensitivity cases, 960 ordered
+  rosters (120 original five-role pool; 840 failed-accumulation seven-role pool),
+  61 stopped prefixes; 16 body fingerprints, 1077 executed instructions.
+  Scheduled publication: 34 compositions, 39 Day requests, 31 completed
+  publication compositions, 173 drains and 254 exact managed stopped prefixes;
+  20 managed/21 engine fingerprints, 1621 managed/690 engine addresses,
+  54 inherited/16 selected/60 bridge checks and 1493 lossless pooled snapshots.
+  Both final native reports independently rerun byte-identically; scheduled
+  report reproduced by both root and reviewer after final snapshot repair.
+  Rust: all 957 library tests, 10 small-world reference tests and 34 simulation
+  tests passed; release build passed. Snapshot codec: all 4 tests passed.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Earlier exact 8160 conditional public-history prefix comparisons retained.
+  Baker regression checks the shared history predicate, not full N8 world-set
+  completeness or other-role clues. No new generation-to-public-history
+  admission: repeated-Hunter N4 fixtures remain conditional supplied setup.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy certificate, selected budget or justified world prior. Ordered
+  roster enumeration under a declared draw contract is not path probability.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No frozen independent held-out outcome, calibration or fixed-budget baseline
+  comparison. Test runtimes and report compression are development checks.
+New uncertainty, regressions and remaining exclusions:
+  Original first Standard profile 21674 selects four of five starting
+  Villagers plus ordinary Minion. The seven-role pool follows a supplied
+  all-profile accumulation that fails natively; it is not normal startup.
+  Minion bluff acquisition may use the wider profile Villager catalogue;
+  initial five-role physical pool does not bound its public clue identities.
+  Later arbitrary no-reset/non-null Baker runtime histories are unmodeled.
+  Actual acquisition completion before click, full SetupDelay, native UI Init,
+  rendered availability and complete public capture remain open. Same-actor
+  direct double-Day cases are retention stress, not legal player chronology.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Continue S1 with one original truthful Hunter's actual DelayReveal first
+  step and 0.3-second resume on the same native owner/queue. Admit its first
+  click only after acquisition callback completion/release, then retain the
+  existing result/speech path. This closes a mixed acquisition/publication
+  dependency while other actors' acquisition stays explicitly supplied.
+  For an original generated domain, compose profile 21674 GetRandomCharacters
+  once through its actual Standard call, retained Manage pool prefix and both
+  Minion acquisition branches. Do not silently rerun roster generation or
+  restrict bluff candidates to the five starting Villagers.
+  Necessary dependencies and a solver contradiction resolved; continue the
+  active full goal. S1 promotion, held-out S2 and all S3/S4 gates remain open.
+```

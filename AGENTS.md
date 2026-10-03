@@ -55,7 +55,8 @@ stop, diagnose, fix, verify, then resume.
     `rg --files` before reading. Do not
     infer an audit filename from a role name or descriptive note title, expand a
     Rust import alias or `mod` declaration into a guessed basename, or assume a
-    module uses `mod.rs`.
+    module uses `mod.rs`. A confirmed child directory does not establish its
+    module root; resolve the sibling `.rs` file or `mod.rs` before opening either.
     Follow an audit's exact linked script path after verifying it exists.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
@@ -109,9 +110,17 @@ stop, diagnose, fix, verify, then resume.
     the code executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
+    Match diagnostic availability when comparing normal and stopped reports:
+    preceding snapshots may be omitted on failure runs. Compare common prefix
+    fields and require the selected stop snapshot and final state to match exactly.
     Check imported report/helper and target-manifest schemas before indexing
     their fields; a build constant is not necessarily repeated inside a returned
     layout dictionary, and manifest function rows need not use a `targets` key.
+    Inspect exact returned report keys rather than substituting a similar
+    semantic description for a helper's field name.
+    Distinguish absent/null row fields before indexing reference pairs; verify
+    their container type and required length. Set PowerShell diagnostic scans
+    to stop on errors so partial counters cannot be mistaken for valid totals.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Read a family's actual caller
@@ -127,6 +136,8 @@ stop, diagnose, fix, verify, then resume.
     can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;
     a dependency imported locally by a base class need not be an instance field.
+    Inspect inherited identity normalization before using it for service arguments;
+    stack addresses, immediates and metadata tokens need not be managed objects.
     Reset dynamically added identity/string labels with allocator and object
     registries before each independent case; reused addresses must not retain
     labels from a previous case.
@@ -148,6 +159,10 @@ stop, diagnose, fix, verify, then resume.
     modules even when the new parent has not entered a shared Cargo build.
     Format edited Rust files explicitly instead of running workspace-wide
     `cargo fmt --all`; it can rewrite unrelated legacy source and test files.
+    Inspect the diff afterward and restore unrelated formatting within an
+    edited file, especially large legacy tables touched only by a comment edit.
+    A whitespace-only comparison can still differ on formatter-added trailing
+    commas; inspect those punctuation changes before treating it as a source edit.
     If spawning hits the agent thread limit, reuse available workers only when
     their model matches the current user preference; otherwise continue in the
     primary agent. Completed tasks may still retain their thread slots, and
