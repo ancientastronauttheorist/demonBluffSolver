@@ -437,3 +437,75 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   Necessary dependencies and a solver contradiction resolved; continue the
   active full goal. S1 promotion, held-out S2 and all S3/S4 gates remain open.
 ```
+
+## Native checkpoint projection into scheduled Rust publication
+
+2026-10-03. Candidate and projection commit
+`abe6035b8f17ba6b1f7e6ee9502b278db93d89d9`; planning baseline remains
+`92363e756f4faf6fdefc0f59a7a8cba527c5936a`.
+See [scheduled role publication](notes/systems/scheduled_role_publication.md).
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; candidate above; scheduled_role_publication_v1.
+  Opaque captured publication storage and original native checkpoints remain
+  offline validation inputs. No native hidden identity enters player history.
+  Objective: preserve synchronous speech storage and native queue readiness
+  through retained Rust transitions, not optimize a village policy yet.
+Named decision blocker and reachable deck/phase/role scenario:
+  The old explicit replay can reach the same final state while flattening
+  immediate speech startup and later Show. Conditional post-click one-result
+  real/bluff Hunter cases, signed frames/generations and rejected owners.
+Before -> after supported behavior:
+  Manual result-then-speech order -> complete result/speech-only queue with
+  explicit drains, exact pending bindings, immediate nested speech start,
+  owner suppression and per-drain retained managed/queue state.
+  Legacy explicit replay remains guarded by its original ordering contract;
+  scheduled construction requires empty legacy orders and a false order flag.
+Original evidence; supplied runtime/scheduler boundaries:
+  Projection uses the expanded native scheduled Hunter report, SHA-256
+  e8182a5a51353941b4d6e07d6564dc2c78f7c9e30c7e8de7366eb37aca62efcf.
+  Expected states derive from its native checkpoints, with no Rust import.
+  Initial typed/UI storage, first result yield, owner responses, producer
+  clocks and normal lifetime/inert services remain explicit supplied contracts.
+  Actual first-yield producer/acquisition/Day legality and pixels are not
+  reconstructed by this Rust adapter. Initial uses zero is the old stress
+  context, not a claimed native Init value or abilityUsage projection.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  All 29 projected native cases and 161 drain checkpoints passed exact queue,
+  callback/visit order, history/use/saved-text/Show/iterator-state comparisons.
+  Excludes the five double-Day stress compositions and 254 failed-service
+  prefixes; failed services are rejected, not emulated in this Rust version.
+  Six adapter tests passed, including synthetic two-result generation
+  suppression, owner discard, inconsistent late evidence and the 16/17-drain
+  boundary. All 963 Rust library tests and the release build passed.
+  Fixture values and physical bytes independently reproduced by review;
+  fixture SHA-256 ade513d51eaef007c64714894c26daac9d8c7e43dd88f63e9c02d3ec1f747498.
+  Privacy, relative links, schema and projection reproducibility passed.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new world-set promotion. Earlier 8160 conditional public-history prefixes
+  and complete reference sets retained; this transition adapter has no live,
+  CLI or PlayerHistory admission caller. Owner-discarded waits remain explicitly
+  distinguished from completed managed iterators. Invalid later evidence
+  rejects the entire bounded batch without a valid-looking explored prefix.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy certificate, schedule probability or assumed uniform-world prior.
+  Schedules are explicit conditional inputs, not chosen or weighted by policy.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No independent held-out outcome or fixed-budget comparison. The recent
+  34-test simulation pass remains applicable to unchanged deduction/action
+  rules; this offline adapter did not justify repeating the long suite.
+New uncertainty, regressions and remaining exclusions:
+  Original Init-derived use count, acquisition-to-first-click admission and
+  original first-village bluff catalogue are being composed separately; their
+  unfinished sources are not published or promoted by this checkpoint.
+  Full SetupDelay/startup, native UI Init, rendered availability, complete
+  public capture, correlated generation/path weights and policy remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Complete and independently verify the same-owner Hunter acquisition/click
+  join and bounded original N5 catalogue support, then connect the acquired
+  first-result state to this queue adapter. Native constructor/Init use
+  chronology must replace the old stress count in that new domain.
+  Necessary solver transition dependency closed; continue the original goal.
+  S1 end-to-end promotion, held-out S2 and all S3/S4 gates remain incomplete.
+```

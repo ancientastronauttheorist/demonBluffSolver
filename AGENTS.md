@@ -217,7 +217,8 @@ stop, diagnose, fix, verify, then resume.
     at the first `ret`. Assert requested addresses decoded before indexing them.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs and expected call-site counts; do not infer encoding
-    from decompiled C or count sites manually.
+    from decompiled C or count sites manually. Retain instruction mnemonics in
+    target inventories; a tail jump must not become a call assertion.
     A pinned instruction is not evidence that a fixture executed its branch;
     verify trigger predicates and retained state before claiming a write occurred.
     Read numeric constants before assigning units or expected magnitudes.
