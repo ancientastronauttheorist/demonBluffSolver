@@ -51,7 +51,8 @@ stop, diagnose, fix, verify, then resume.
     documents, versioned coverage inventories, role/knowledge-base files and Rust module roots, with
     `rg --files` before reading. Do not
     infer an audit filename from a role name or descriptive note title, expand a
-    Rust import alias into a guessed basename, or assume a module uses `mod.rs`.
+    Rust import alias or `mod` declaration into a guessed basename, or assume a
+    module uses `mod.rs`.
     Follow an audit's exact linked script path after verifying it exists.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
@@ -103,6 +104,9 @@ stop, diagnose, fix, verify, then resume.
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Read a family's actual caller
     sentinel and native base before adapting another family's Rust fixtures.
+    Before interpreting a world-set disagreement, verify the reference
+    projection preserves the admitted public role multiset; one role name
+    does not represent repeated roster occurrences.
     Calculate capacity boundaries
     from complete storage and future snapshot costs before asserting admission.
     Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
@@ -122,8 +126,9 @@ stop, diagnose, fix, verify, then resume.
     Match borrowed serde_json::Value operands in fixture assertions; a borrowed
     input needs a borrowed expected Value rather than an owned macro result.
     Coordinate shared Rust builds after agents confirm all declared module and
-    test files and pending review fixes are complete; an in-progress module can
-    break unrelated tests even after an earlier freeze was announced.
+    test files and pending review fixes are complete, including filtered test
+    runs that compile other integration targets. Reconfirm freeze after a
+    failed comparison triggers edits; an earlier freeze no longer applies.
     Create declared child test files before running rustfmt; it resolves child
     modules even when the new parent has not entered a shared Cargo build.
     Format edited Rust files explicitly instead of running workspace-wide
@@ -182,8 +187,9 @@ stop, diagnose, fix, verify, then resume.
     on folded return stubs and expected call-site counts; do not infer encoding
     from decompiled C or count sites manually.
     Read numeric constants before assigning units or expected magnitudes.
-    Bind offsets to the pinned class's exact field declarations before naming
-    them; adjacent saved and current roster fields are distinct state.
+    Resolve the pinned class's exact field declarations before naming offsets
+    or asserting publication scope; adjacent saved and current roster fields
+    are distinct state.
     Derive RIP-relative literal slots from decoded operands and resolve their
     exact strings before writing executable probes; do not leave unresolved
     numeric placeholders. Property names do not establish serialized preference keys.
