@@ -233,6 +233,8 @@ stop, diagnose, fix, verify, then resume.
     A pinned instruction is not evidence that a fixture executed its branch;
     verify trigger predicates and retained state before claiming a write occurred.
     Read numeric constants before assigning units or expected magnitudes.
+    Derive native wait output fields from the reviewed producer and live record,
+    including signed frame increments; do not copy input timing into assertions.
     Resolve the pinned class's exact field declarations before naming offsets
     or asserting publication scope; adjacent saved and current roster fields
     are distinct state.
@@ -267,6 +269,8 @@ stop, diagnose, fix, verify, then resume.
     or decoded return site so a parent call cannot trigger a callee-only effect.
     Separate per-invocation service ordinals from retained chronological logs;
     a prior call's count must not suppress the next call's authored callback.
+    Pause/reentry retries must consume inherited diagnostic counters and labels
+    only once, as well as consuming service effects and ledger entries once.
     Bind snapshot decoders to native storage flags; short inline strings need
     not share the pointer representation of parsed or longer strings.
     Resolve exact type declarations, including enums, before extracting dump blocks; prefix matches
