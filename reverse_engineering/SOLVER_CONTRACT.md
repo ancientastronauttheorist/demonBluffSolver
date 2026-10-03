@@ -102,8 +102,8 @@ integrated means the relevant solver/player-history path consumes it.
 | Subsystem | Accounted / reconstructed / validated domain | Integration and remaining gate |
 | --- | --- | --- |
 | Observation/extraction | [Strict history boundary](notes/systems/player_history_boundary.md): typed history, exact-prefix trusted review, chronological result preservation and paired-oracle development input checks. | Exported Rust module with narrow Judge and conditional Hunter/Baa snapshot projections; archived pixel review records admission gaps. Trusted capture/CLI/live integration and held-out evaluation remain absent. |
-| Deck/pool generation | [Actual pool composition](notes/systems/manage_pool_composition.md): caller/builders/getters/filters/predicate with supplied collection/RNG/layout. | [Ledger bridge](notes/systems/manage_pool_ledger_bridge.md) is offline with later-setup provenance required. Generation-to-observation domain and held-out results remain open. |
-| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Engine first-step evidence](notes/systems/unity_coroutine_bridge.md) is independent. | Offline kernels and [conditional concrete Hunter Day publication](notes/systems/hunter_role_publication.md); mixed engine queue/resumed Reveal and full Manage-to-observation transaction remain open. |
+| Deck/pool generation | [Actual pool composition](notes/systems/manage_pool_composition.md): caller/builders/getters/filters/predicate with supplied collection/RNG/layout. [Original N5 factors](notes/systems/first_village_bluff_generation.md) preserve native roster/pools and separately invoked Minion catalogue support. | [Ledger bridge](notes/systems/manage_pool_ledger_bridge.md) is offline with later-setup provenance required. N5 factors are uncombined and unweighted; actual acquisition caller, generation-to-observation domain and held-out results remain open. |
+| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Engine first-step evidence](notes/systems/unity_coroutine_bridge.md) is independent. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) retains one actor through native delayed acquisition, release, click and publication. | [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches post-click native checkpoints including acquired use/history state. Other actors, constructor/UI services and click request remain supplied; full generated Manage-to-observation transaction and rendered admission remain open. |
 | Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). | Production public-history projection preserves complete worlds at all declared four/five-seat development prefixes; finished setup and availability supplied. No generation or cross-role/held-out certificate. |
 | Legal abilities/actions | [Setup action audit](notes/systems/character_action_setup.md), individual role/picker evidence and guarded writer bridge. | Recommendations/automation exist; target/use/reset/history and policy certificate remain open. ActivatePick drafts stay unvalidated unless needed. |
 | Execution/death/protection | [Execution evidence](notes/systems/gameplay_execution_resolution.md) supplies bounded damage/protection/terminal behavior. | Existing bookkeeping/constraints; cross-role chronology needs original before/action/after comparisons. |
@@ -508,4 +508,87 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   chronology must replace the old stress count in that new domain.
   Necessary solver transition dependency closed; continue the original goal.
   S1 end-to-end promotion, held-out S2 and all S3/S4 gates remain incomplete.
+```
+
+## Acquired publication and original N5 catalogue checkpoint
+
+2026-10-03. Acquisition evidence commit
+`30ba3766597de55eaac6bbc3d60b0ac00f5f3389`; original N5 evidence commit
+`f04068dd8332a226afed8eba7a7002603596cd5e`; acquired Rust checkpoint commit
+`4320af73f0b363baf9bf657bf9b53fb3112ec1ae`. Planning baseline remains
+`92363e756f4faf6fdefc0f59a7a8cba527c5936a`.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; commits above. hunter_acquisition_publication_v1,
+  first_village_bluff_generation schema1, scheduled_role_publication_acquired_v1.
+  Native identities/statuses/queues remain offline validation artifacts.
+  Objective: close acquired initial-use/history provenance and identify the
+  original Minion bluff catalogue before composing generation-to-observation.
+Named decision blocker and reachable deck/phase/role scenario:
+  Does delayed acquisition complete on the same actor/clone before first click,
+  and does native Init leave use/history state matching scheduled publication?
+  Conditional four-actor Hunter/Baa reset stress domain; other actors supplied.
+  Separately, original Standard profile21674 N5, four Villagers/one Minion:
+  are Minion bluff candidates confined to its five starting Villagers?
+Before -> after supported behavior:
+  Supplied standalone post-click uses0/prior history -> six acquired native
+  first-result inputs with uses1/empty history, preserved record ID/generation.
+  Actual Init/acquisition/result chronology is 1 -> 1 -> 0; speech storage
+  precedes final picker hide/result return and later timed Show.
+  N5 actual generation/pool factors witness 24 Villager selector outputs,
+  including identities outside the five starting Villagers.
+Original evidence; supplied runtime/scheduler boundaries:
+  Actual Init/Hidden refresh/DelayReveal first step and resume/Reveal/click/
+  Hunter Day/result/speech execute with one retained engine queue and owner.
+  CLR, distinct clone implementation, native record creation, UI, clocks and
+  other actors remain supplied; no constructor-fresh history or N4 generation.
+  Actual original N5 GetRandomCharacters/Standard call/Manage pool prefix and
+  separately invoked Minion selector execute. CurrentScript publication,
+  Random.value, stable deferred sort and collection adapters are supplied.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Acquisition: 9 compositions, 60 drains, 192 exact stopped managed prefixes;
+  6 publications and 3 rejected owners. Independent final native reproduction
+  matched physical bytes SHA3603e404ea1a55ff481fe075bfef36bfe5d339b6c9738bba4632bfc7c4f5c9d8.
+  N5 separate factors: 2880 generation-index histories, 120 ordered rosters,
+  5 subsets, 1125 pool rows, 8960 selector rows and 573 stopped prefixes.
+  24 complete catalogue witnesses; 48 fallback occurrences, each asset twice.
+  Independent native rerun matched physical bytes SHAd4aa00d6b99df42b8140beb7b725305a5520dd32dddc639754315cc4ca6c0c47.
+  Rust acquired projection: all6cases/24drain checkpoints match. Old29/161
+  fixture remains byte-identical. All8 adapter tests and all965 library tests
+  passed; no production Rust change, prior release build retained.
+  Both fixture projections independently reproduced values/physical bytes;
+  privacy, source/prior hashes and 44 relative links passed across 12 files.
+  Rust excludes 3 rejected acquisition owners (no first click) and 192 failed
+  services. N5 factors exclude their uncombined Cartesian histories.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new world-set or PlayerHistory admission. Acquired Rust context starts
+  after the native result first yield; it does not replay acquisition itself.
+  Rejected-owner release stays distinct from managed completion. Existing
+  conditional complete-world reference guarantees remain unchanged.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy certificate, recovered PRNG law, joint weights or assumed uniform
+  prior. Separate catalogue support factors are not weighted full histories.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No independent held-out outcome or fixed-budget comparison. Existing34
+  simulation results retained for unchanged deduction/action rules; new965
+  library pass and native reproduction are development validation only.
+New uncertainty, regressions and remaining exclusions:
+  N5 selector invocation stops outside actual Init/Reveal caller composition;
+  all24 copied-role behaviors remain future mixed-role obligations.
+  Full SetupDelay, actor construction, concrete ordered writers, original UI
+  Init, deck-list/HUD publication, rendered availability and reviewed public
+  chronology are not established by these joins. All eight global gates remain.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Retain generation row0 -> pool row0 with current Villagers
+  [Confessor21614,Lover21626,Hunter21621,Enlightened21618], Minion21596 and
+  sorted return[21596,21614,21626,21621,21618]. Duplicate die1/index2 selects
+  Hunter21621 without script registration. This is an exact existing witness.
+  Execute actual five Manage/Init occurrences and their first delayed yields
+  without rebuilding pools or replacing actors; compare retained asset/clone,
+  status/history/use/ID and continuation state at pre-publication handoff.
+  Then compose concrete Init/Start effects, including Confessor OnInit, actual
+  acquisition and public deck/clue publication before world-set admission.
+  Two dependencies closed with explicit boundaries; continue the original
+  active goal. S1 promotion, independent held-out S2 and S3/S4 remain open.
 ```
