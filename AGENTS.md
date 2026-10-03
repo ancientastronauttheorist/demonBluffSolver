@@ -176,6 +176,9 @@ stop, diagnose, fix, verify, then resume.
     to source-edit or integration helper commands before their dependent steps.
     Wait for report-producing processes to finish successfully before opening
     their output paths; a yielded session does not establish that a report exists.
+    Have the originating agent resume its yielded shell session. A session ID
+    returned by another agent need not be accessible here; an unknown-session
+    response is not evidence that its producer stopped or should be restarted.
     Compile edited Python audit syntax before launching report producers; bind
     or parenthesize Boolean expressions following equality comparisons.
 11. Serialize Ghidra headless commands that open the same saved project.
