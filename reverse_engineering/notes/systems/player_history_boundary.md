@@ -159,11 +159,16 @@ is covered by an explicit regression.
 
 The independent [small-world integration](../../../crates/solver-core/tests/small_world_reference.rs)
 now routes authored public histories through the production admission and
-Hunter/Baa projection. Root-coordinated execution passed all nine integration
+Hunter/Baa projection. Root-coordinated execution passed all ten integration
 tests, with complete canonical world equality at 8,160 prefixes (4,376 ambiguous
 and 3,784 unique) and four coherent contradiction histories empty. Its trusted
 availability review is a supplied synthetic development service, not an
 original UI capture, native-generation proof or independently held-out family.
+The tenth comparison uses twenty native-generated Hunter sentences under
+supplied runtime/scheduling services and constructs separate synthetic
+availability histories. It excludes native-only references and the native
+retention fixture's prior history entry; no complete native/public timeline
+is certified by that comparison.
 
 Legacy/offline `GameState` callers and CLI behavior are preserved. No trusted
 capture pipeline, CLI player-history solving mode, live automation admission,

@@ -503,6 +503,63 @@ fn reviewed_public_projection_preserves_every_complete_conditional_world() {
 }
 
 #[test]
+fn native_hunter_sentences_preserve_complete_conditional_worlds() {
+    // These are native-generated sentences under supplied runtime/scheduling
+    // services. The public history is a separate synthetic availability fixture,
+    // not the complete native history: its retained `prior_info` stress record
+    // is not an initial-Day public observation. Generation and pixels stay open.
+    let report_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(
+        "../../reverse_engineering/reports/f530404b0f3f_807de4a83df4_hunter_role_publication.json",
+    );
+    let report: Value = serde_json::from_slice(&std::fs::read(report_path).unwrap()).unwrap();
+    assert_eq!(report["build_id"], public::BUILD_ID);
+    assert_eq!(report["schema_version"], 1);
+    assert_eq!(report["display_id_by_native_seat"], json!([4, 3, 2, 1]));
+    let cases = report["cases"].as_array().unwrap();
+    assert_eq!(report["case_count"], 20);
+    assert_eq!(cases.len(), 20);
+    let mut truths = 0;
+    let mut bluffs = 0;
+    for case in cases {
+        assert_eq!(case["returned"], true);
+        let native_actor = u8::try_from(case["options"]["actor_seat"].as_u64().unwrap()).unwrap();
+        let native_baa = u8::try_from(case["options"]["baa_seat"].as_u64().unwrap()).unwrap();
+        assert!(native_actor < 4 && native_baa < 4);
+        // Native board order is the reverse of this reference circle. Reversal
+        // preserves nearest circular distance; native ordered refs are not input.
+        let actor = 4 - native_actor;
+        let actual_world = World {
+            baa_seat: 4 - native_baa,
+        };
+        let distance = u8::try_from(case["expected"]["distance"].as_u64().unwrap()).unwrap();
+        let generated = case["final"]["generated"].as_array().unwrap();
+        assert_eq!(generated.len(), 1);
+        let text = generated[0]["description"].as_str().unwrap();
+        assert_eq!(case["final"]["saved_speech"], text);
+        assert_eq!(case["final"]["text"], text);
+        assert_eq!(text, native_text(distance));
+        let mut observed = observation(4, actor, distance);
+        observed.text = text.to_owned();
+        let history = History {
+            domain: Domain::supplied(4),
+            events: vec![Event::Reveal(observed)],
+        };
+        let public = public_history(&history);
+        let public::Observation::CardRevealed(reveal) = &public.events[2].observation else {
+            unreachable!()
+        };
+        assert_eq!(reveal.speech.as_deref(), Some(text));
+        assert!(reveal.targets.is_empty());
+        // Hidden seats grade inclusion only; production construction/admission
+        // receives the public sentence/position and supplied public setup.
+        assert!(compare_public(&history).contains(&actual_world));
+        truths += usize::from(native_actor != native_baa);
+        bluffs += usize::from(native_actor == native_baa);
+    }
+    assert_eq!((truths, bluffs), (12, 8));
+}
+
+#[test]
 fn native_only_reference_mutation_does_not_change_public_input() {
     let a = History {
         domain: Domain::supplied(5),

@@ -82,6 +82,18 @@ rejects them, while the public history, planner input, snapshot and resulting
 world set remain unchanged. Native-only evidence never becomes a public input
 or a prerequisite for planning from the unchanged public sentence.
 
+An additional integration consumes the twenty native-generated sentences from
+the [Hunter producer/publication audit](hunter_role_publication.md), covering
+twelve truthful actors and eight Baa bluff draws. It constructs separate
+conditional synthetic public histories from the generated position/text and
+supplied public setup, then compares complete worlds and grades actual Baa
+inclusion only in the oracle lane. Native seat order `[4,3,2,1]` reverses this
+reference circle; nearest circular distances are preserved, while native
+ordered references are excluded from the public payload. The producer's
+retained `prior_info` stress record is not relabeled as an initial-Day public
+observation. This closes the sentence-to-adapter semantic comparison, not a
+complete native/public chronological trace or capture-availability certificate.
+
 Two opposite Baa assignments producing the same legal history must project to
 identical solver inputs and retain the same two possible worlds. Privileged
 assignment data is used only to construct/grade the synthetic corpus and is
@@ -100,6 +112,7 @@ cargo test --release -p solver-core --test small_world_reference -- --nocapture
 
 The earlier corrected v1 run passed all seven tests. The root-coordinated v2
 run passed all nine integration tests and all twenty strict-history unit tests.
+After adding the native-sentence comparison, all ten integration tests passed.
 Complete-world equality held at all 8,160 generated prefixes through both the
 legacy fixture projection and production public-history adapter, with 4,376
 ambiguous and 3,784 unique results in each comparison. All four coherent
