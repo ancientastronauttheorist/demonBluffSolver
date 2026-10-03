@@ -182,6 +182,10 @@ class InitializationJoin:
             self.native_seen.add(rva)
             return True  # Continue the actual native entry.
         if self.active is None: return False
+        if rva == 0x365d2f:
+            # The native folded constructor preserves RAX; synthetic ret(0)
+            # would silently clear it while leaving actor projections unchanged.
+            assert self.reg(x.UC_X86_REG_RAX) == self.iterator
         if address == self.callback_code:
             assert c == self.actor and dx == self.actor + 0xa00
             self.emit('state_callback')
@@ -205,7 +209,7 @@ class InitializationJoin:
             return True  # Hidden RefreshCharacter is actual native code in both stages.
         if rva == 0x33ed50:
             self.native_seen.add(rva)
-            return False  # Execute the verified folded no-op.
+            return True  # Prevent the base synthetic gateway; execute the decoded ret.
         if rva not in self.services:
             self.native_seen.add(rva)
             return False

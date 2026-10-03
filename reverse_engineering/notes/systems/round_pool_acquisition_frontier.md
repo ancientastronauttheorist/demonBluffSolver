@@ -105,9 +105,13 @@ executes both pool builders and subsequent Init occurrences in one retained
 native fixture, through Hidden Refresh and an optional supplied first-yield
 step. Alias, board-replacement and stopped-second-callback cases preserve prior
 iterator bytes and partial actor effects. It stops before publication at
-`36D01E`. This closes the first named join dependency; publication, Act
-Init/Start, queue admission and chronological legal solver observations remain
-open under the [S0 contract](../../SOLVER_CONTRACT.md).
+`36D01E`. The distinct [publication/action join](manage_publication_action_join.md)
+continues the retained transaction through actual UpdateCharacters and generic
+Act Init/Start dispatch. It preserves the published shallow alias copy, fresh
+board rereads, Start latch and stopped prefixes. Concrete role bodies remain
+supplied inert callbacks. Queue admission, resumed Reveal and chronological
+legal solver observations remain open under the
+[S0 contract](../../SOLVER_CONTRACT.md).
 
 ## September 30 progress
 

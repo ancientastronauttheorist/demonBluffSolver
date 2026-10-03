@@ -18541,10 +18541,6 @@
           "snapshot_index": 56
         },
         {
-          "kind": "dispose",
-          "snapshot_index": 56
-        },
-        {
           "kind": "move_next",
           "source": "board",
           "snapshot_index": 56
@@ -18552,10 +18548,6 @@
         {
           "kind": "get_item",
           "index": 1,
-          "snapshot_index": 56
-        },
-        {
-          "kind": "dispose",
           "snapshot_index": 56
         },
         {
@@ -24319,10 +24311,6 @@
           "snapshot_index": 56
         },
         {
-          "kind": "dispose",
-          "snapshot_index": 57
-        },
-        {
           "kind": "move_next",
           "source": "board",
           "snapshot_index": 57
@@ -24330,10 +24318,6 @@
         {
           "kind": "get_item",
           "index": 1,
-          "snapshot_index": 57
-        },
-        {
-          "kind": "dispose",
           "snapshot_index": 57
         },
         {
@@ -30097,10 +30081,6 @@
           "snapshot_index": 56
         },
         {
-          "kind": "dispose",
-          "snapshot_index": 56
-        },
-        {
           "kind": "move_next",
           "source": "board",
           "snapshot_index": 56
@@ -35270,10 +35250,6 @@
           "kind": "get_item",
           "index": 0,
           "snapshot_index": 56
-        },
-        {
-          "kind": "dispose",
-          "snapshot_index": 57
         },
         {
           "kind": "move_next",
@@ -40445,10 +40421,6 @@
           "snapshot_index": 56
         },
         {
-          "kind": "dispose",
-          "snapshot_index": 56
-        },
-        {
           "kind": "move_next",
           "source": "board",
           "snapshot_index": 56
@@ -40456,10 +40428,6 @@
         {
           "kind": "get_item",
           "index": 1,
-          "snapshot_index": 56
-        },
-        {
-          "kind": "dispose",
           "snapshot_index": 56
         },
         {
@@ -47296,10 +47264,6 @@
           "snapshot_index": 56
         },
         {
-          "kind": "dispose",
-          "snapshot_index": 57
-        },
-        {
           "kind": "move_next",
           "source": "board",
           "snapshot_index": 57
@@ -47307,10 +47271,6 @@
         {
           "kind": "get_item",
           "index": 1,
-          "snapshot_index": 57
-        },
-        {
-          "kind": "dispose",
           "snapshot_index": 57
         },
         {
@@ -54147,10 +54107,6 @@
           "snapshot_index": 56
         },
         {
-          "kind": "dispose",
-          "snapshot_index": 56
-        },
-        {
           "kind": "move_next",
           "source": "board",
           "snapshot_index": 56
@@ -59836,10 +59792,6 @@
           "kind": "get_item",
           "index": 0,
           "snapshot_index": 56
-        },
-        {
-          "kind": "dispose",
-          "snapshot_index": 57
         },
         {
           "kind": "move_next",

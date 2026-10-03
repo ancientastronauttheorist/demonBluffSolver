@@ -12,6 +12,14 @@ instruction assertions. Binaries/Dumper sources and fields are pinned;
 initializer body hashes contain no native bytes. Completed Init calls restore
 the entry stack and all eight nonvolatile integer registers.
 
+The corrected harness executes the folded constructor's native `ret 0` instead
+of falling through to the pool harness's supplied disposal gateway. Its caller
+regression checks that RAX still contains the new iterator at `365D2F`; a
+synthetic `ret(0)` fails that check. Report compatibility preserves all eight
+families, actor/continuation projections and counters, but removes the spurious
+pool disposal event from each completed iterator construction. This correction
+does not change the default 760-case pool corpus or claim a new admitted domain.
+
 ## Retained aliases and callback prefixes
 
 Each fixture captures board `[A,A]` and roster `[D0,D1]`. D0/D1 are authored
@@ -69,7 +77,9 @@ python -m py_compile reverse_engineering/scripts/audit_manage_pool_composition.p
 python reverse_engineering/scripts/audit_manage_initialization_join.py GAME_ROOT DUMPER_ROOT --output reverse_engineering/reports/f530404b0f3f_807de4a83df4_manage_initialization_join.json
 ```
 
-Next: retain this actor/pool/continuation state through publication and supported
-Act Init/Start, then queue/Reveal admission. The
+The distinct [publication/action join](manage_publication_action_join.md) now
+retains this actor/pool/continuation state through publication and generic
+Act Init/Start. Concrete role bodies, queue admission and resumed Reveal remain
+open. The
 [S0 contract](../../SOLVER_CONTRACT.md) distinguishes native dependency closure
 from a solver-integrated supported domain.
