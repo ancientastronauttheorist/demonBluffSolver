@@ -546,6 +546,96 @@ fn rejects_callback_layout_identity_collisions_but_preserves_layout_occurrences(
 }
 
 #[test]
+fn immediate_speech_start_precedes_result_completion_but_defers_show() {
+    let c = context();
+    let mut stepper = PublicationStepper::new(&c).unwrap();
+    assert_eq!(
+        stepper.resume_result(500, true).unwrap(),
+        Some(WaitObject {
+            identity: 601,
+            seconds_bits: SPEECH_WAIT_BITS,
+        })
+    );
+    let pending = stepper.snapshot();
+    assert_eq!(pending.context.actor.saved_act, Some(100));
+    assert_eq!(pending.speech_iterators[0].state, 1);
+    assert!(!pending
+        .events
+        .iter()
+        .any(|e| matches!(e, Event::Show { .. })));
+    let save = pending
+        .events
+        .iter()
+        .position(|e| matches!(e, Event::SaveSpeech { current: 100, .. }))
+        .unwrap();
+    let yield_at = pending
+        .events
+        .iter()
+        .position(|e| {
+            matches!(
+                e,
+                Event::Return {
+                    iterator: 600,
+                    value: true
+                }
+            )
+        })
+        .unwrap();
+    let hide = pending
+        .events
+        .iter()
+        .position(|e| {
+            matches!(
+                e,
+                Event::SetActive {
+                    object: 411,
+                    active: false
+                }
+            )
+        })
+        .unwrap();
+    let done = pending
+        .events
+        .iter()
+        .position(|e| {
+            matches!(
+                e,
+                Event::Return {
+                    iterator: 500,
+                    value: false
+                }
+            )
+        })
+        .unwrap();
+    assert!(save < yield_at && yield_at < hide && hide < done);
+
+    assert_eq!(stepper.resume_speech(600).unwrap(), None);
+    let complete = stepper.into_replay();
+    assert!(complete
+        .events
+        .iter()
+        .any(|e| matches!(e, Event::Show { text: 100, .. })));
+    assert_eq!(complete.context, replay(&c).unwrap().context);
+}
+
+#[test]
+fn completed_or_unknown_steps_preserve_the_retained_prefix() {
+    let mut stepper = PublicationStepper::new(&context()).unwrap();
+    stepper.resume_result(500, true).unwrap();
+    let before = stepper.snapshot().clone();
+    assert_eq!(
+        stepper.resume_result(500, true),
+        Err(LedgerError::InvalidContext)
+    );
+    assert_eq!(stepper.resume_speech(999), Err(LedgerError::InvalidContext));
+    assert_eq!(stepper.snapshot(), &before);
+    stepper.resume_speech(600).unwrap();
+    let before = stepper.snapshot().clone();
+    assert_eq!(stepper.resume_speech(600), Err(LedgerError::InvalidContext));
+    assert_eq!(stepper.snapshot(), &before);
+}
+
+#[test]
 fn rejects_unverified_and_unsupported_contexts_atomically() {
     let base = context();
     for key in [

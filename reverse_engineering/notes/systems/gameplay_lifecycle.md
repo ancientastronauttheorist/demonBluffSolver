@@ -40,9 +40,12 @@ points are separate later boundaries.
 3. It allocates a `SetupDelay` iterator and starts that coroutine.
 4. It invokes `OnStartNewLevel` after `StartCoroutine` returns.
 
-The iterator cannot run to its first yield until Unity schedules it, but the
-exact scheduling relationship between the coroutine body and the final event is
-not proven statically.
+The later [native coroutine bridge audit](unity_coroutine_bridge.md) establishes
+that StartCoroutine synchronously invokes the iterator's first MoveNext before
+returning. This supersedes the original lifecycle audit's deferred-first-yield
+assumption. The complete retained HandOut/SetupDelay join and its effects before
+the final event remain a separate composition boundary; later resumes still
+require established engine timing and owner resolution.
 
 ## Setup coroutine
 

@@ -9,7 +9,7 @@
 use super::character_initialization::{Actor, Identity, ObjectReference};
 use super::ledger::LedgerError;
 use serde::{Deserialize, Serialize};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 pub const CHARACTER_ROLE_PUBLICATION_NATIVE_V1: &str = "character_role_publication_native_v1";
 pub const RESULT_WAIT_BITS: u32 = 0;
@@ -586,20 +586,52 @@ fn active(c: &mut Context, events: &mut Vec<Event>, object: Identity, value: boo
     });
 }
 
-pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
-    validate(input)?;
-    let mut c = input.clone();
-    let mut events = Vec::new();
-    let mut speeches = Vec::new();
-    let mut waits = c.result_waits.clone();
-    let indices: BTreeMap<_, _> = c
-        .result_iterators
-        .iter()
-        .enumerate()
-        .map(|(i, r)| (r.identity, i))
-        .collect();
-    for id in c.result_resume_order.clone() {
-        let index = indices[&id];
+/// Internal retained stepper for explicit replay and separately scheduled steps.
+/// Construction checks the original complete object/allocation contract. The
+/// caller supplies timing/ownership separately; stepping does not establish UI
+/// observation availability or legal gameplay requests.
+#[derive(Debug, Clone)]
+pub(super) struct PublicationStepper {
+    replay: Replay,
+}
+
+impl PublicationStepper {
+    pub(super) fn new(input: &Context) -> Result<Self, LedgerError> {
+        validate(input)?;
+        Ok(Self {
+            replay: Replay {
+                context: input.clone(),
+                speech_iterators: Vec::new(),
+                waits: input.result_waits.clone(),
+                events: Vec::new(),
+            },
+        })
+    }
+
+    #[cfg(test)]
+    pub(super) fn snapshot(&self) -> &Replay {
+        &self.replay
+    }
+
+    pub(super) fn into_replay(self) -> Replay {
+        self.replay
+    }
+
+    fn result_prefix(&mut self, id: Identity) -> Result<Option<Identity>, LedgerError> {
+        let Replay {
+            context: c,
+            speech_iterators: speeches,
+            events,
+            ..
+        } = &mut self.replay;
+        let index = c
+            .result_iterators
+            .iter()
+            .position(|r| r.identity == id)
+            .ok_or(LedgerError::InvalidContext)?;
+        if c.result_iterators[index].state != 1 {
+            return Err(LedgerError::InvalidContext);
+        }
         let r = c.result_iterators[index].clone();
         c.result_iterators[index].state = -1;
         events.push(Event::State {
@@ -611,7 +643,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                 iterator: id,
                 value: false,
             });
-            continue;
+            return Ok(None);
         }
         let info = c
             .infos
@@ -621,7 +653,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
             .clone();
         let empty = info
             .description
-            .is_none_or(|text| string(&c, text).unwrap().units.is_empty());
+            .is_none_or(|text| string(c, text).unwrap().units.is_empty());
         events.push(Event::StringEmpty {
             text: info.description,
             empty,
@@ -631,7 +663,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                 iterator: id,
                 value: false,
             });
-            continue;
+            return Ok(None);
         }
         let description = info.description.unwrap();
         if let Some(callback) = c.preappend_callback {
@@ -653,12 +685,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
             info: info.identity,
             slot,
         });
-        barrier(
-            &mut events,
-            c.history.backing_array,
-            "element",
-            info.identity,
-        );
+        barrier(events, c.history.backing_array, "element", info.identity);
         if r.trigger_bits == 30 {
             let previous_bits = c.actor.uses as u32;
             let current_bits = previous_bits.wrapping_sub(1);
@@ -692,12 +719,12 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
             iterator: speech,
             state: 0,
         });
-        barrier(&mut events, speech, "actor", c.actor.identity);
+        barrier(events, speech, "actor", c.actor.identity);
         events.push(Event::CaptureDescription {
             iterator: speech,
             text: description,
         });
-        barrier(&mut events, speech, "description", description);
+        barrier(events, speech, "description", description);
         speeches.push(SpeechIterator {
             identity: speech,
             actor: c.actor.identity,
@@ -709,17 +736,59 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
             actor: c.actor.identity,
             iterator: speech,
         });
+        Ok(Some(speech))
+    }
+
+    fn result_tail(&mut self, id: Identity) {
+        let Replay {
+            context: c, events, ..
+        } = &mut self.replay;
         if c.actor.uses == 0 {
             let pickable = c.ui.pickable;
-            active(&mut c, &mut events, pickable, false);
+            active(c, events, pickable, false);
         }
         events.push(Event::Return {
             iterator: id,
             value: false,
         });
     }
-    for id in c.speech_resume_order.clone() {
-        let index = speeches.iter().position(|s| s.identity == id).unwrap();
+
+    pub(super) fn resume_result(
+        &mut self,
+        id: Identity,
+        immediate_speech_start: bool,
+    ) -> Result<Option<WaitObject>, LedgerError> {
+        let Some(speech) = self.result_prefix(id)? else {
+            return Ok(None);
+        };
+        let wait = if immediate_speech_start {
+            self.resume_speech(speech)?
+        } else {
+            None
+        };
+        // Native StartCoroutine is synchronous: its nested first step completes
+        // before the result's picker-hide and final return.
+        self.result_tail(id);
+        Ok(wait)
+    }
+
+    pub(super) fn resume_speech(
+        &mut self,
+        id: Identity,
+    ) -> Result<Option<WaitObject>, LedgerError> {
+        let Replay {
+            context: c,
+            speech_iterators: speeches,
+            waits,
+            events,
+        } = &mut self.replay;
+        let index = speeches
+            .iter()
+            .position(|s| s.identity == id)
+            .ok_or(LedgerError::InvalidContext)?;
+        if !matches!(speeches[index].state, 0 | 1) {
+            return Err(LedgerError::InvalidContext);
+        }
         let first = speeches[index].state == 0;
         speeches[index].state = -1;
         events.push(Event::State {
@@ -734,7 +803,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                 });
                 let empty = c
                     .trailer_text
-                    .is_none_or(|text| string(&c, text).unwrap().units.is_empty());
+                    .is_none_or(|text| string(c, text).unwrap().units.is_empty());
                 events.push(Event::StringEmpty {
                     text: c.trailer_text,
                     empty,
@@ -749,7 +818,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                         iterator: id,
                         text: speeches[index].description,
                     });
-                    barrier(&mut events, id, "description", speeches[index].description);
+                    barrier(events, id, "description", speeches[index].description);
                 }
             }
             let text = speeches[index].description;
@@ -783,7 +852,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                 previous,
                 current: text,
             });
-            barrier(&mut events, c.actor.identity, "saved_act", text);
+            barrier(events, c.actor.identity, "saved_act", text);
             if !matches!(c.actor.state, 20 | 30) && !c.actor.revealed {
                 events.push(Event::UnityNull {
                     object: c.actor.bluff,
@@ -791,9 +860,9 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                 });
             }
             events.push(Event::SelectData {
-                asset: selected_data(&c),
+                asset: selected_data(c),
             });
-            if speech_waits(&c) {
+            if speech_waits(c) {
                 let wait = c
                     .allocations
                     .iter()
@@ -812,7 +881,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                 });
                 speeches[index].current = Some(wait);
                 events.push(Event::Current { iterator: id, wait });
-                barrier(&mut events, id, "current", wait);
+                barrier(events, id, "current", wait);
                 speeches[index].state = 1;
                 events.push(Event::State {
                     iterator: id,
@@ -822,7 +891,10 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
                     iterator: id,
                     value: true,
                 });
-                continue;
+                return Ok(Some(WaitObject {
+                    identity: wait,
+                    seconds_bits: SPEECH_WAIT_BITS,
+                }));
             }
         }
         let text = speeches[index].description;
@@ -831,7 +903,7 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
             result: Some(c.ui.show_game_object),
         });
         let game = c.ui.show_game_object;
-        active(&mut c, &mut events, game, true);
+        active(c, events, game, true);
         events.push(Event::Show {
             version: c.ui.acted_version,
             text,
@@ -843,13 +915,19 @@ pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
             iterator: id,
             value: false,
         });
+        Ok(None)
     }
-    Ok(Replay {
-        context: c,
-        speech_iterators: speeches,
-        waits,
-        events,
-    })
+}
+
+pub fn replay(input: &Context) -> Result<Replay, LedgerError> {
+    let mut stepper = PublicationStepper::new(input)?;
+    for id in &input.result_resume_order {
+        stepper.resume_result(*id, false)?;
+    }
+    for id in &input.speech_resume_order {
+        stepper.resume_speech(*id)?;
+    }
+    Ok(stepper.into_replay())
 }
 
 #[cfg(test)]
