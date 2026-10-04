@@ -58,6 +58,8 @@ stop, diagnose, fix, verify, then resume.
     Rust import alias or `mod` declaration into a guessed basename, or assume a
     module uses `mod.rs`. A confirmed child directory does not establish its
     module root; resolve the sibling `.rs` file or `mod.rs` before opening either.
+    Follow Python re-exports to their actual declarations or `inspect.getfile`
+    results; an imported class name does not establish its defining module path.
     Follow an audit's exact linked script path after verifying it exists.
     Retain the returned directory when opening a resolved basename; do not
     reconstruct a sibling path after discovery. A script name mentioned in
@@ -129,6 +131,8 @@ stop, diagnose, fix, verify, then resume.
     Check imported report/helper and target-manifest schemas before indexing
     their fields; a build constant is not necessarily repeated inside a returned
     layout dictionary, and manifest function rows need not use a `targets` key.
+    Validate each report's actual build-identity field; older schemas can use
+    `build` where another family uses `build_id`.
     Parse complete JSON documents; a first-line sample can be only an opening brace.
     Resolve Rust type names from their actual declarations before authoring
     imports or fixtures, including nested field container shapes before comparing
@@ -160,6 +164,8 @@ stop, diagnose, fix, verify, then resume.
     from complete storage and future snapshot costs before asserting admission.
     Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
     keys can accidentally print an entire retained or stopped report corpus.
+    Apply the allowlist within selected service entries too; a last-service
+    record can contain a complete snapshot.
     Filter service ledgers to the selected invocation before printing diagnostics.
     Locate report JSON with filename discovery or `rg -l`; do not print matching
     lines across report corpora, since one line can contain the entire corpus.
@@ -172,11 +178,19 @@ stop, diagnose, fix, verify, then resume.
     Include Win64 home slots in child-call writable spans when checking retained stacks.
     Inspect inherited identity normalization before using it for service arguments;
     stack addresses, immediates and metadata tokens need not be managed objects.
+    Compare raw pointers with raw pointers; normalized labels are separate report
+    fields and do not establish numeric identity.
+    Bind supplied runtime classes to their declared metadata identities; separately
+    allocated TypeInfo records do not become equal because their names agree.
     Reset dynamically added identity/string labels with allocator and object
     registries before each independent case; reused addresses must not retain
     labels from a previous case.
     Check inherited harness preconditions before composing retained native calls;
     derive branch expectations from retained storage rather than fresh-fixture defaults.
+    Check every read static field against its exact declaration and initialized
+    storage; supplied instance lists do not establish distinct static lists.
+    Derive final static-field assertions from executed writers; an entry zero
+    need not remain zero after a native collection publication.
     An Init-only fixture can omit an order that full replay requires; supply
     an explicit valid order for authored replay rather than unwrapping an absent one.
     Derive iterator transitions from native loops and actual enumerator multiplicity;
@@ -184,9 +198,16 @@ stop, diagnose, fix, verify, then resume.
     Emulation can return at a time/instruction budget without completing a call.
     Verify RIP and the declared stop/completion before applying return ABI checks;
     a bounded continuation must retain the live CPU, stack and service chronology.
+    Record actual timeout-query flags on returned emulator calls and failure
+    diagnostics; a live return PC alone does not identify which budget ended.
+    Distinguish host-time limits from supplied game clock/frame deadlines and
+    retain explicit instruction limits when changing a host-time cutoff.
     Preserve failed native probes in private diagnostics before process exit;
     record actual CPU, mapped stack and active owner without normalizing them,
     and keep the original exception when diagnostic fields are unavailable.
+    Preserve an inherited native failure label before wrapping it in AbortedPrefix.
+    Verify payload and frame identities before popping retained guards or
+    decrementing driver depth; latch cleanup failures while live evidence remains.
     Bind the active emulator to the actual managed or engine caller before
     capturing service-entry ABI; stopped callbacks retain that live context
     rather than applying successful-return assertions or restoring the parent.
@@ -254,7 +275,9 @@ stop, diagnose, fix, verify, then resume.
     When present, strip the complete comment header; some export formats have
     no header. Fixed line-count skipping is unreliable.
     Unity type trees can omit custom MonoBehaviour fields; check consumed size
-    and treat partial reads as headers, not complete serialized objects.
+    and treat partial reads as headers, not complete serialized objects. Read a
+    needed header reference from its verified raw offset when the type tree rejects
+    the incomplete object; preserve the separate complete custom-field parse.
     Serialized Boolean fields may align individually; do not apply contiguous
     IL2CPP runtime offsets to asset bytes. Validate following reference IDs.
     For native PE inspection, distinguish zero-filled virtual data from file-
@@ -284,6 +307,8 @@ stop, diagnose, fix, verify, then resume.
     on folded return stubs and expected call-site counts; do not infer encoding
     from decompiled C or count sites manually. Retain instruction mnemonics in
     target inventories; a tail jump must not become a call assertion.
+    For a tail-dispatched service, qualify the inherited caller return address;
+    an earlier constructor's return site is not the service caller.
     A pinned instruction is not evidence that a fixture executed its branch;
     verify trigger predicates and retained state before claiming a write occurred.
     Track the tested register's producer before classifying a branch; a nonnull
@@ -334,8 +359,11 @@ stop, diagnose, fix, verify, then resume.
     phase, since base constructors can invoke overrides before derived state exists.
     Qualify callback mutations and UI service expectations at shared gateways
     by the verified native caller or decoded return site so a parent call cannot
-    trigger a callee-only effect. At shared collection gateways, also qualify
-    protected-list plans by the retained destination identity; temporary producer
+    trigger a callee-only effect; an active parent does not identify a nested
+    service. Place exact caller guards before generic fallback dispatch; a
+    fallback that returns can make later guards unreachable. At shared collection
+    gateways, also qualify protected-list plans by the retained destination
+    identity; temporary producer
     lists can enter the same native body. Shared sprite setters can target background
     images as well as card art; do not impose one caller's asset expectation on both.
     Map each shared UI gateway to its decoded direct call and return site;

@@ -1594,3 +1594,57 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   wait/resume, Intro5->Day10/Prev5, fresh Init/Manage returns and terminal false,
   preserving all pending child waits. Keep Pinned/modal outside this first witness.
 ```
+
+## Original setup terminal join checkpoint
+
+2026-10-04. The [executed original setup join](notes/systems/first_village_original_day_frontier.md#executed-original-setup-terminal-join)
+completes one conditional native outer chronology. Its pending child waits and
+supplied entry/runtime boundaries remain explicit.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parentc055a5f00cce65673e0106f232ccf4f62399ec46.
+  One original setup normal v3; offline validation, no planner input.
+Named decision blocker and reachable deck/phase/role scenario:
+  Row-zero N5 Confessor/Lover/Hunter/Enlightened/Minion: actual outer setup and
+  Day transition must precede a legal Hunter observation and belief comparison.
+Before -> after supported behavior:
+  Actual SameHandOut->SetupDelay0->.1f wait->same SetupDelay1 now reaches native
+  Intro5->Day10/Prev5, fresh factory/Init/Manage and terminal false, preserving
+  the generated list and old Current while retaining eight child waits.
+Original evidence; supplied runtime/scheduler boundaries:
+  Eleven body fingerprints and forty selected pins; five fresh actors, five
+  empty native GetRules calls, eighteen recorded integer draws and two native
+  DeadCharacters stores. Native UpdateCharacters publishes a distinct copy
+  of the same ordered board actors through a supplied list-copy constructor.
+  Supplied entry day/mode, empty relics/rules, null event channels, prefab fields,
+  allocation/runtime and producer/consumer clocks do not certify first-start.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Three failed native normal attempts preserved, then one normal exit passed.
+  Fixes bind static DeadCharacters and the actual Init tail-dispatch caller;
+  an unmeasured budget return prompted removal of the host timer while retaining
+  instruction limits/completion guards and adding actual timeout diagnostics.
+  Report124,972,481 bytes; SHA
+  ec16c76242ab97bcf72b153f1f700675c6bd4c0f6274f49ab4ca7a8fcae7c0f8.
+  Independent readers authenticate519 snapshot blobs/45 inputs, ten managed
+  bridges/nine iterators, nineteen engine completions, fifty returned emulator
+  calls with timeout flags zero, exact parent stacks/storage and wait ownership.
+  Only Setup is logically released; eight children remain pending. Fresh failure
+  output is absent. No selected-stop, pause/reentry or mutation case is run.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new complete worlds, legal history or supported public-domain promotion.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy/prior/likelihood. Recorded original draws remain validation inputs.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out, outcome or performance evaluation. Production Rust unchanged;
+  prior1002 release library/34simulation checks are not rerun.
+New uncertainty, regressions and remaining exclusions:
+  Child waits use their actual1.125/frame8 producer, distinct from outer1.0/frame7.
+  Original lifecycle, Unity clone/render/input, resources, nonempty callback
+  effects, trusted public capture and PlayerHistory admission remain open.
+  Private producer/corpora remain unpublished. All eight full-plan gates open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Outer chronology dependency closed. Resume the same acquisition/animation
+  waits, complete deck publication and trusted Hunter public prefix before
+  mixed N5 admission, independent S2 worlds, legal S3 policy and broader S4.
+```

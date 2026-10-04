@@ -277,3 +277,77 @@ The original setup producer is still an unpublished, unexecuted draft. Null
 event channels, empty relic inventory, concrete mode publication, engine
 ownership/timing, prefab hydration and trusted public capture remain separate
 contracts. All eight full-plan acceptance gates remain open.
+
+## Executed original setup terminal join
+
+2026-10-04. One normal original setup composition now completes under its
+declared entry and runtime providers. This replaces the supplied outer
+generation/Day sequence for the recorded row-zero N5 case with actual
+SameHandOut, SetupDelay state zero, the first wait, and the same iterator's
+state-one continuation through fresh Characters.Init/Manage.
+
+The original first wait stores `.1f` and is admitted at supplied producer time
+`1.0`, frame `7`. The engine resumes it at `1.125`, frame `8`, after its exact
+deadline. Native transitions produce Intro `5`, then Day `10` / PrevState `5`.
+Five empty base Role.GetRules calls, the selected CharactersCount copy, eighteen
+recorded draws and the two-pass pool creator execute before five actual
+Character.Init occurrences. SetupDelay returns terminal false with state
+`FFFFFFFF`, retaining its generated-list and old Current identities.
+
+Ten completed managed bridges are ordered Setup0, five acquisition first
+waits, Audio, Animation, Shuffle and Setup1. Nine distinct iterators are
+registered. Nineteen engine native calls complete with preserved parent
+windows and outside-child stack hashes; all managed bridges satisfy their
+return SP, nonvolatile-register and storage checks. Fifty emulator returns
+record actual timeout flags of zero. Host timeout is disabled while the
+instruction cap remains `500000` per call, with managed/engine handoff caps
+`4096`/`1024`; supplied game time is separate.
+
+Only the outer Setup payload is logically released. Eight child waits remain
+pending with their actual owners, producer `1.125` / frame `8` and native
+duration/deadline/frame fields. No child continuation is resumed in this case.
+No borrowed payload, suspended parent, live native frame or managed driver
+frame remains at normal exit. Pending records are part of the finite result.
+
+The supplied fresh typed static DeadCharacters list receives only the native
+version increment and zero-count store, preserving its other bytes. The
+separate static CurrentCharacters field starts at zero and is subsequently
+published by native Gameplay.UpdateCharacters from Manage. Its fresh list
+identity differs from the working board, while both contain the same five
+fresh actor pointers in order. The list-copy constructor remains a supplied
+provider. This publication establishes neither modal deck nor pixel visibility.
+
+Three failed native normal attempts preceded this result and remain private:
+a missing DeadCharacters entry binding; an acquisition guard using the
+iterator-constructor return rather than the inherited tail-dispatch caller;
+and an undeclared emulator budget return whose timeout cause was not measured.
+The corrected acquisition guard binds actual Manage return `36CFDF`, the live
+incomplete Init record, actor, iterator, state and entry SP. Removing the host
+timer and recording actual timeout queries did not weaken completion guards.
+A review assertion also incorrectly froze CurrentCharacters at entry zero;
+the corrected reader follows its actual native publication instead.
+
+The private normal report is 124,972,481 bytes, SHA-256
+`ec16c76242ab97bcf72b153f1f700675c6bd4c0f6274f49ab4ca7a8fcae7c0f8`.
+The reviewed 91,003-byte source has SHA-256
+`fede8a925c9e587673d36f9f41f406c542ace59d151c03b7563fcfe2dad541cd`.
+Static preflight verifies forty-five inputs, eleven complete body fingerprints,
+forty selected operands, seven pools and eighteen draw entries. Independent
+normal readers authenticate 519 declared snapshot blobs and all input hashes,
+then check chronology, bridge/frame ABI, collection publication and retained
+wait ownership. Fresh failure output is absent on success. No fresh stopped,
+pause/reentry, mutation, held-out or outcome campaign accompanies this case.
+
+The entry day, mode, empty relics/rules and null event channels remain explicit
+supplied contracts. Gameplay.Init, full first-start lifecycle, Unity cloning,
+rendering/input, concrete nonempty callbacks and resources are excluded. No
+legal public observation history, complete possible-world set, generation
+weights or policy certificate is promoted. Production Rust is unchanged and
+its earlier suites were not rerun. Proprietary bytes, full CPU/storage, reports
+and producer sources remain private; all eight full-plan gates remain open.
+
+The next end-to-end boundary is to resume these same pending acquisition and
+animation continuations, complete deck publication and bind a trusted public
+Hunter prefix. Preserve their new producer clocks rather than reuse timings
+from a separately supplied acquired checkpoint. Mixed N5 history admission,
+independent S2 worlds and legal S3 policy still require their own evidence.
