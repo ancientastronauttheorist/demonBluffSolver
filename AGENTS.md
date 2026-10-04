@@ -71,7 +71,9 @@ stop, diagnose, fix, verify, then resume.
     never expand a short revision into an unverified full hash.
     Before creating an audit artifact, verify its assigned full output directory
     and preserve it in the write path. Before freeze, compare each resolved
-    script, note and report path with its assigned path.
+    script, note and report path with its assigned path. Validate public
+    documentation links against the tracked or staged publication set, not only
+    local file existence; unpublished drafts do not establish published links.
     Normalize repository-relative paths with as_posix() when comparing against
     Git's forward-slash path output on Windows.
     Inspect filename-discovery results before issuing dependent reads; do not
@@ -267,7 +269,8 @@ stop, diagnose, fix, verify, then resume.
     Include the entire final instruction when sizing a decode range, exclude
     trailing alignment padding, account for embedded jump tables as data, and
     verify all return paths rather than stopping
-    at the first `ret`. Assert requested addresses decoded before indexing them.
+    at the first `ret`. Verify a folded method's complete body before treating it
+    as a one-byte return stub. Assert requested addresses decoded before indexing them.
     Derive exact instruction assertions from that decode, including register
     or memory operand forms, not a semantic guess about the stored state, and operands
     on folded return stubs and expected call-site counts; do not infer encoding

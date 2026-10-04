@@ -57,6 +57,15 @@ three. A complete modal roster therefore needs an explicit deck-state boundary,
 subscriber delivery and new-generation child identity; it cannot be inferred
 from the Pinned strip. The retained modal publication has not yet executed.
 
+The [original Day frontier](first_village_original_day_frontier.md) resolves a
+separate chronology gap. SetupDelay requests Intro `5`, then Day `10` before
+Characters.Init, ordinarily recording PrevState `5`; the conditional Hunter
+checkpoint supplies PrevState `1`. Its other five supplied fields also retain
+producer obligations. The verified phase subscriber refreshes controls, while
+the first Hidden-card role Day action comes through the installed click/reveal
+delegate. The next original join must retain setup's first yield and actual
+resume, with original phase, resource, subscriber and queue effects.
+
 Across the original profile, the same public deck can correspond to other
 omitted-base-role histories. For example, observing all five original Villager
 names does not identify which four were physical Good cards before acquisition.
