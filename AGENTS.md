@@ -117,8 +117,11 @@ stop, diagnose, fix, verify, then resume.
     Check imported report/helper and target-manifest schemas before indexing
     their fields; a build constant is not necessarily repeated inside a returned
     layout dictionary, and manifest function rows need not use a `targets` key.
+    Expand snapshot pooling only when the report declares `snapshot_encoding`;
+    an imported report corpus can contain both pooled and ordinary reports.
     Inspect exact returned report keys rather than substituting a similar
-    semantic description for a helper's field name.
+    semantic description for a helper's field name; metadata arrays such as
+    `script.json`'s `Addresses` can contain integers rather than row dictionaries.
     Distinguish absent/null row fields before indexing reference pairs; verify
     their container type and required length. Set PowerShell diagnostic scans
     to stop on errors so partial counters cannot be mistaken for valid totals.
