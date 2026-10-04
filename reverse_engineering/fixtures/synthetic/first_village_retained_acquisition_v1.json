@@ -1,0 +1,4502 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "native_report_sha256": "f74f10f6f9eccd5ae1af512871dc01e5c173e590290a414b59a11b74122ce9f3",
+  "native_source_sha256": "cdcc5ef15c2d36a1b961263c483b27c264e520a495f97985ad640d68df4c68cd",
+  "asset_report_sha256": "1a790f521ba8ec6983bb1634333accb7280f0fe93e49efbaec1af25914479d42",
+  "source_hashes": {
+    "reverse_engineering/scripts/audit_character_assets.py": "b8edf7daf59655b95fb09daebd1eb2941693355dc65cd6cf0fa651f8f5f03e5f",
+    "reverse_engineering/scripts/audit_first_village_bluff_generation.py": "54214b47ff16336a6a564fbf62a4b0a9697b6cd24fd188ca1b19f7d48cc0dff7",
+    "reverse_engineering/scripts/audit_first_village_initialization.py": "f45903fab5562f6bea0e1663b224a66e78f1feb970032c5935fc6c1ed80f3062",
+    "reverse_engineering/scripts/audit_first_village_on_setup_binding.py": "5132f7bd14dc4ff7da0c3ea7145421b632ef6d63a6fea155b04ba44d15dcf0fd",
+    "reverse_engineering/scripts/audit_first_village_profile_generation.py": "a3cab60ada4e3b9a7308d2bb72d10e96b8ae030290dd9fa171e713cc6d3af38e",
+    "reverse_engineering/scripts/audit_first_village_publication_init.py": "e72b492f79d887634862730e410175672b4b8714879923dde38d6cb2ed2d18eb",
+    "reverse_engineering/scripts/audit_first_village_retained_acquisition.py": "cdcc5ef15c2d36a1b961263c483b27c264e520a495f97985ad640d68df4c68cd",
+    "reverse_engineering/scripts/audit_first_village_shuffle_admission.py": "f1a4c5bf5b14da269f0dd55b62349bb16e078ecf6cf1a0dbe179550fc416c4c5",
+    "reverse_engineering/scripts/audit_first_village_start_queue.py": "35ca4b6b4df2c55eab5da437d0639245353a9e878f399c091f9cd6bf8db3e39a",
+    "reverse_engineering/scripts/audit_first_village_subscriber_admission.py": "6076f9cd31eb6edd65a5c31c29b3b32e816cb9a50205a73ad52b2dd804165fbc",
+    "reverse_engineering/scripts/audit_hunter_scheduled_publication.py": "afd48ef5345f4621b20e7e3cf7d9cbe3ea4f9fc66859e00580c554388d1170ac",
+    "reverse_engineering/scripts/audit_report_snapshots.py": "ee9311117d05f4a38f1f2c4d0b2cf51cf32ccbe4ff5bd0b12c8d5c752177fde9",
+    "reverse_engineering/scripts/audit_unityplayer_cancellation.py": "507c6310e633899ace42c208345d96d7acc14ff99a3b13baa18bd0cd1d808147",
+    "reverse_engineering/scripts/audit_unityplayer_completion.py": "03f125f80520b520fb38e28023894ce454cc6b844a1d4e3465cb8352e62522c8",
+    "reverse_engineering/scripts/audit_unityplayer_coroutine_release.py": "30e4d8b2e0902221752e70e6a831b278f424a4eedcd3ec99b6277b391de20a8f",
+    "reverse_engineering/scripts/audit_unityplayer_wait.py": "c49926e99a009f8843b985c35efcd335c5ce3e2345db82628019036b0135f0e4",
+    "reverse_engineering/scripts/audit_unityplayer_wait_consumer.py": "bd5b88b57a08ab94e369154b8033892943507eb4061381f83d46002245218c20",
+    "reverse_engineering/scripts/audit_unityplayer_wait_tree.py": "3b33a4d24c9d9475869533add98850a4d1588eae11dc7a39ca292b1f42bcde97"
+  },
+  "prior_report_hashes": {
+    "ascension_assets_audit": "6bed679ae21d08cb0c738085d34c717d49aa4fb6afb27e94bf9289b0905e8872",
+    "character_assets_audit": "1a790f521ba8ec6983bb1634333accb7280f0fe93e49efbaec1af25914479d42",
+    "character_init": "5028d6ca3d57dcef5a7bf164d0267911755392124d262ee50d9b1443ff6dd113",
+    "first_village_bluff_generation": "d4aa00d6b99df42b8140beb7b725305a5520dd32dddc639754315cc4ca6c0c47",
+    "first_village_on_setup_binding": "d7fbd2a7160f2d1f8a8c5a89bd2f35e84952bd94dca60593c8c258b9b0b69dd0",
+    "first_village_publication_init": "31929f003a87c6e0ae4242ea9dc3eb090fba00bb641eedad0526c1afc651b48e",
+    "first_village_role_setup": "c1985696bd79303bc71293e90441bc8dc4ba6108e22570dc71450876a176e1b7",
+    "first_village_shuffle_admission": "512c221a8362d0fcb1f43cfb0f553d2dd3f63f86a9b7ae8105180b50aeac1565",
+    "first_village_start_queue": "7439fd1370909aa79bf2575b101ff8e943941fa148bb75e15254f822a14b3a60",
+    "first_village_subscriber_admission": "70ade0e711d803735a8076d26e0030a9f61fc4458834a28884e375b6423b3f06",
+    "hunter_scheduled_publication": "e8182a5a51353941b4d6e07d6564dc2c78f7c9e30c7e8de7366eb37aca62efcf"
+  },
+  "scope": "Privileged offline differential for one original generated N5 recorded Confessor acquisition. Preceding drain queue effects are explicit callback responses; actual Animate bodies/tweens remain native-only. Dispatch result1 is release-derived under the pinned exact-one consumer rule, separate from managed MoveNext. Native wait IDs label the complete registry/queue via an explicit bijection. Scene slots and pickable/rip/disguise UI flags are supplied adapter contracts, not captured pixels. Native name/sprite/color routing is excluded from the Rust view-tail comparison. Selected roll1/index0 has no certified probability; six Rust conditional selector outcomes remain distinct. The caller starts inside Characters, so Gameplay startup/Day/readiness provenance is not proved. Queue phase2 is an engine mask, not Gameplay phase. Audio/Shuffle remain unresumed. No PlayerHistory, legal observations, complete world sets, policy, rendering or S1 promotion.",
+  "setup_context": {
+    "version": "setup_action_bridge_native_v2",
+    "initialization": {
+      "version": "setup_initialization_batch_native_v1",
+      "caller": {
+        "version": "manage_setup_caller_native_v1",
+        "pinned_class_hierarchies": true,
+        "stable_occurrence_services": true,
+        "reference_equality": true,
+        "supplied_init_data_write_only": true,
+        "supplied_gateway_effects_only": true,
+        "caller_metadata_initialized": true,
+        "shuffle_metadata_initialized": true,
+        "math_initialized": true,
+        "gameplay_initialized": true,
+        "object_initialized": true,
+        "state": {
+          "board": "board",
+          "order": "original_start_order",
+          "callback": "onSetup:12893843456",
+          "lists": {
+            "board": {
+              "items": [
+                "actor:0",
+                "actor:1",
+                "actor:2",
+                "actor:3",
+                "actor:4"
+              ],
+              "count": 5
+            }
+          },
+          "arrays": {
+            "original_start_order": {
+              "items": [
+                "data:21594",
+                "data:21593",
+                "data:21597",
+                "data:21605",
+                "data:21602",
+                "data:21595",
+                "data:21599",
+                "data:21590",
+                "data:21606",
+                "data:21600",
+                "data:21609",
+                "data:21634",
+                "data:21598",
+                "data:21607",
+                "data:21591"
+              ],
+              "length": 15
+            }
+          },
+          "identities": {
+            "actor:0": "data:21596",
+            "actor:1": null,
+            "actor:2": null,
+            "actor:3": null,
+            "actor:4": null
+          },
+          "data_roles": {
+            "data:21590": "source:21590",
+            "data:21591": "source:21591",
+            "data:21593": "source:21593",
+            "data:21594": "source:21594",
+            "data:21595": "source:21595",
+            "data:21596": "source:21596",
+            "data:21597": "source:21597",
+            "data:21598": "source:21598",
+            "data:21599": "source:21599",
+            "data:21600": "source:21600",
+            "data:21602": "source:21602",
+            "data:21605": "source:21605",
+            "data:21606": "source:21606",
+            "data:21607": "source:21607",
+            "data:21609": "source:21609",
+            "data:21614": "source:21614",
+            "data:21618": "source:21618",
+            "data:21621": "source:21621",
+            "data:21626": "source:21626",
+            "data:21634": "source:21634"
+          },
+          "iterator_state": 0
+        },
+        "roster": [
+          "data:21596",
+          "data:21614",
+          "data:21626",
+          "data:21621",
+          "data:21618"
+        ],
+        "roles": {
+          "source:21590": "Imp",
+          "source:21591": "Striga",
+          "source:21593": "Pooka",
+          "source:21594": "Baron",
+          "source:21595": "Marionette",
+          "source:21596": "Minion",
+          "source:21597": "Poisoner",
+          "source:21598": "Puppet",
+          "source:21599": "Mezepheles",
+          "source:21600": "Illuzionist",
+          "source:21602": "Cipher",
+          "source:21605": "Drunk",
+          "source:21606": "Puzzlemaster",
+          "source:21607": "Rambler2",
+          "source:21609": "Alchemist",
+          "source:21614": "Confessor",
+          "source:21618": "Shugenja",
+          "source:21621": "Tracker",
+          "source:21626": "Empath",
+          "source:21634": "BountyHunter"
+        },
+        "classes": {
+          "Role": [
+            "Role"
+          ],
+          "Demon": [
+            "Role",
+            "Demon"
+          ],
+          "Imp": [
+            "Role",
+            "Demon",
+            "Imp"
+          ],
+          "Striga": [
+            "Role",
+            "Demon",
+            "Striga"
+          ],
+          "Pooka": [
+            "Role",
+            "Demon",
+            "Pooka"
+          ],
+          "Minion": [
+            "Role",
+            "Minion"
+          ],
+          "Baron": [
+            "Role",
+            "Minion",
+            "Baron"
+          ],
+          "Marionette": [
+            "Role",
+            "Minion",
+            "Marionette"
+          ],
+          "Poisoner": [
+            "Role",
+            "Minion",
+            "Poisoner"
+          ],
+          "Puppet": [
+            "Role",
+            "Minion",
+            "Puppet"
+          ],
+          "Mezepheles": [
+            "Role",
+            "Minion",
+            "Mezepheles"
+          ],
+          "Illuzionist": [
+            "Role",
+            "Minion",
+            "Illuzionist"
+          ],
+          "Cipher": [
+            "Role",
+            "Minion",
+            "Cipher"
+          ],
+          "Drunk": [
+            "Role",
+            "Drunk"
+          ],
+          "Puzzlemaster": [
+            "Role",
+            "Puzzlemaster"
+          ],
+          "Rambler2": [
+            "Role",
+            "Rambler2"
+          ],
+          "Alchemist": [
+            "Role",
+            "Alchemist"
+          ],
+          "Confessor": [
+            "Role",
+            "Confessor"
+          ],
+          "Shugenja": [
+            "Role",
+            "Shugenja"
+          ],
+          "Tracker": [
+            "Role",
+            "Tracker"
+          ],
+          "Empath": [
+            "Role",
+            "Empath"
+          ],
+          "BountyHunter": [
+            "Role",
+            "BountyHunter"
+          ]
+        },
+        "callbacks": [
+          "onSetup:12893843456"
+        ],
+        "failure": null,
+        "after": []
+      },
+      "object_identities": {
+        "actor:0": 12892561408,
+        "actor:1": 12892565504,
+        "actor:2": 12892569600,
+        "actor:3": 12892573696,
+        "actor:4": 12892577792,
+        "data:21590": 12885012480,
+        "source:21590": 12893102080,
+        "data:21591": 12885016576,
+        "source:21591": 12893159424,
+        "data:21593": 12885024768,
+        "source:21593": 12893052928,
+        "data:21594": 12885028864,
+        "source:21594": 12893044736,
+        "data:21595": 12885032960,
+        "source:21595": 12893085696,
+        "data:21596": 12885037056,
+        "source:21596": 12892672000,
+        "data:21597": 12885041152,
+        "source:21597": 12893061120,
+        "data:21598": 12885045248,
+        "source:21598": 12893143040,
+        "data:21599": 12885049344,
+        "source:21599": 12893093888,
+        "data:21600": 12885053440,
+        "source:21600": 12893118464,
+        "data:21602": 12885061632,
+        "source:21602": 12893077504,
+        "data:21605": 12885073920,
+        "source:21605": 12893069312,
+        "data:21606": 12885078016,
+        "source:21606": 12893110272,
+        "data:21607": 12885082112,
+        "source:21607": 12893151232,
+        "data:21609": 12885090304,
+        "source:21609": 12893126656,
+        "data:21614": 12885110784,
+        "source:21614": 12892684288,
+        "data:21618": 12885127168,
+        "source:21618": 12892721152,
+        "data:21621": 12885139456,
+        "source:21621": 12892708864,
+        "data:21626": 12885159936,
+        "source:21626": 12892696576,
+        "data:21634": 12885192704,
+        "source:21634": 12893134848
+      },
+      "actors": {
+        "12892561408": {
+          "data": 12885037056,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892561408,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892565504": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892565504,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892569600": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892569600,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892573696": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892573696,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892577792": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892577792,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        }
+      },
+      "raw_bluff_liveness": {},
+      "positions": {
+        "12892561408": 1,
+        "12892565504": 2,
+        "12892569600": 3,
+        "12892573696": 4,
+        "12892577792": 5
+      },
+      "data": {
+        "12885012480": {
+          "starting_alignment": 20,
+          "source_role": 12893102080
+        },
+        "12885016576": {
+          "starting_alignment": 20,
+          "source_role": 12893159424
+        },
+        "12885024768": {
+          "starting_alignment": 20,
+          "source_role": 12893052928
+        },
+        "12885028864": {
+          "starting_alignment": 20,
+          "source_role": 12893044736
+        },
+        "12885032960": {
+          "starting_alignment": 20,
+          "source_role": 12893085696
+        },
+        "12885037056": {
+          "starting_alignment": 20,
+          "source_role": 12892672000
+        },
+        "12885041152": {
+          "starting_alignment": 20,
+          "source_role": 12893061120
+        },
+        "12885045248": {
+          "starting_alignment": 20,
+          "source_role": 12893143040
+        },
+        "12885049344": {
+          "starting_alignment": 20,
+          "source_role": 12893093888
+        },
+        "12885053440": {
+          "starting_alignment": 20,
+          "source_role": 12893118464
+        },
+        "12885061632": {
+          "starting_alignment": 20,
+          "source_role": 12893077504
+        },
+        "12885073920": {
+          "starting_alignment": 10,
+          "source_role": 12893069312
+        },
+        "12885078016": {
+          "starting_alignment": 10,
+          "source_role": 12893110272
+        },
+        "12885082112": {
+          "starting_alignment": 10,
+          "source_role": 12893151232
+        },
+        "12885090304": {
+          "starting_alignment": 10,
+          "source_role": 12893126656
+        },
+        "12885110784": {
+          "starting_alignment": 10,
+          "source_role": 12892684288
+        },
+        "12885127168": {
+          "starting_alignment": 10,
+          "source_role": 12892721152
+        },
+        "12885139456": {
+          "starting_alignment": 10,
+          "source_role": 12892708864
+        },
+        "12885159936": {
+          "starting_alignment": 10,
+          "source_role": 12892696576
+        },
+        "12885192704": {
+          "starting_alignment": 10,
+          "source_role": 12893134848
+        }
+      },
+      "continuations": [],
+      "allocations": [
+        {
+          "init_index": 0,
+          "clone": {
+            "identity": 12893945856,
+            "source_role": 12892672000,
+            "managed_class": "Minion"
+          },
+          "continuation_identity": 12893941760,
+          "wait_identity": 12893949952
+        },
+        {
+          "init_index": 1,
+          "clone": {
+            "identity": 12893962240,
+            "source_role": 12892684288,
+            "managed_class": "Confessor"
+          },
+          "continuation_identity": 12893958144,
+          "wait_identity": 12893966336
+        },
+        {
+          "init_index": 2,
+          "clone": {
+            "identity": 12893978624,
+            "source_role": 12892696576,
+            "managed_class": "Empath"
+          },
+          "continuation_identity": 12893974528,
+          "wait_identity": 12893982720
+        },
+        {
+          "init_index": 3,
+          "clone": {
+            "identity": 12893995008,
+            "source_role": 12892708864,
+            "managed_class": "Tracker"
+          },
+          "continuation_identity": 12893990912,
+          "wait_identity": 12893999104
+        },
+        {
+          "init_index": 4,
+          "clone": {
+            "identity": 12894011392,
+            "source_role": 12892721152,
+            "managed_class": "Shugenja"
+          },
+          "continuation_identity": 12894007296,
+          "wait_identity": 12894015488
+        }
+      ],
+      "required_objects_and_lists_valid": true,
+      "callbacks_and_ui_inert": true,
+      "clone_results_verified": true,
+      "synchronous_first_yield_verified": true
+    },
+    "data_roles": {
+      "12885037056": "minion",
+      "12885110784": "confessor",
+      "12885159936": "lover",
+      "12885139456": "hunter",
+      "12885127168": "enlightened"
+    },
+    "action_classes": {
+      "12893945856": "Minion",
+      "12893962240": "Confessor",
+      "12893978624": "Empath",
+      "12893995008": "Tracker",
+      "12894011392": "Shugenja"
+    },
+    "action_classes_and_caches_verified": true,
+    "on_trigger_absent": true,
+    "final_services_inert": true,
+    "post_initialization_ui_verified": true,
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "spy_caches": {},
+    "ui": {
+      "1": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "2": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "3": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "4": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "5": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      }
+    },
+    "next_logical_id": 12894007297
+  },
+  "expected_setup": {
+    "actors": [
+      {
+        "position": 1,
+        "data_role": "minion",
+        "action_role": "minion",
+        "runtime_evil": true,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 2,
+        "data_role": "confessor",
+        "action_role": "confessor",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [
+            25
+          ],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 3,
+        "data_role": "lover",
+        "action_role": "lover",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 4,
+        "data_role": "hunter",
+        "action_role": "hunter",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 5,
+        "data_role": "enlightened",
+        "action_role": "enlightened",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      }
+    ],
+    "bodies": {
+      "1": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "2": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "3": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "4": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "5": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      }
+    },
+    "calls": [
+      {
+        "position": 1,
+        "trigger": "init",
+        "initial_lying": true,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "minion",
+            "dispatch": "bluff_act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 2,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "confessor",
+            "dispatch": "act",
+            "status_application": {
+              "status": 25,
+              "accepted": true,
+              "inserted": true,
+              "target_after": null
+            }
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 3,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "lover",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 4,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "hunter",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 5,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "enlightened",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      }
+    ],
+    "current_data": {
+      "1": 12885037056,
+      "2": 12885110784,
+      "3": 12885159936,
+      "4": 12885139456,
+      "5": 12885127168
+    },
+    "current_order": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "pending": {
+      "12893941760": 1,
+      "12893958144": 2,
+      "12893974528": 3,
+      "12893990912": 4,
+      "12894007296": 5
+    },
+    "status_versions": {
+      "1": {
+        "before": 1,
+        "after": 1
+      },
+      "2": {
+        "before": 1,
+        "after": 2
+      },
+      "3": {
+        "before": 1,
+        "after": 1
+      },
+      "4": {
+        "before": 1,
+        "after": 1
+      },
+      "5": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    "ordered_comparisons": [
+      {
+        "left": "data:21594",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21618"
+      }
+    ]
+  },
+  "context": {
+    "rule_version": "scheduled_setup_reveal_native_v2",
+    "initial": {
+      "rule_version": "scheduled_setup_reveal_native_v2",
+      "continuations": {
+        "rule_version": "logical_continuation_registry_native_v1",
+        "initial": {
+          "rule_version": "ordered_reveal_writer_view_native_v2",
+          "board": {
+            "rule_version": "twin_start_writer_native_v1",
+            "reveal": {
+              "rule_version": "bounded_setup_reveal_callbacks_native_v5",
+              "board_size": 5,
+              "trailer_mode": false,
+              "pools": {
+                "unique": [
+                  "Gemcrafter",
+                  "Alchemist"
+                ],
+                "duplicate": [
+                  "Confessor",
+                  "Lover",
+                  "Hunter",
+                  "Enlightened"
+                ],
+                "must_include": [],
+                "script": {
+                  "villagers": [
+                    "Confessor",
+                    "Lover",
+                    "Hunter",
+                    "Enlightened"
+                  ],
+                  "outcasts": [],
+                  "minions": [
+                    "Minion"
+                  ],
+                  "demons": []
+                }
+              },
+              "actors": [
+                {
+                  "position": 1,
+                  "data_role": "minion",
+                  "action_role": "minion",
+                  "runtime_evil": true,
+                  "bluff": {
+                    "kind": "null"
+                  },
+                  "bluff_role": null,
+                  "register_as": null,
+                  "statuses": {
+                    "values": [],
+                    "resistance": [],
+                    "target_position": null
+                  },
+                  "remaining_continuations": 1,
+                  "on_trigger_subscribed": false,
+                  "character_start_acted": false
+                },
+                {
+                  "position": 2,
+                  "data_role": "confessor",
+                  "action_role": "confessor",
+                  "runtime_evil": false,
+                  "bluff": {
+                    "kind": "null"
+                  },
+                  "bluff_role": null,
+                  "register_as": null,
+                  "statuses": {
+                    "values": [
+                      25
+                    ],
+                    "resistance": [],
+                    "target_position": null
+                  },
+                  "remaining_continuations": 1,
+                  "on_trigger_subscribed": false,
+                  "character_start_acted": false
+                },
+                {
+                  "position": 3,
+                  "data_role": "lover",
+                  "action_role": "lover",
+                  "runtime_evil": false,
+                  "bluff": {
+                    "kind": "null"
+                  },
+                  "bluff_role": null,
+                  "register_as": null,
+                  "statuses": {
+                    "values": [],
+                    "resistance": [],
+                    "target_position": null
+                  },
+                  "remaining_continuations": 1,
+                  "on_trigger_subscribed": false,
+                  "character_start_acted": false
+                },
+                {
+                  "position": 4,
+                  "data_role": "hunter",
+                  "action_role": "hunter",
+                  "runtime_evil": false,
+                  "bluff": {
+                    "kind": "null"
+                  },
+                  "bluff_role": null,
+                  "register_as": null,
+                  "statuses": {
+                    "values": [],
+                    "resistance": [],
+                    "target_position": null
+                  },
+                  "remaining_continuations": 1,
+                  "on_trigger_subscribed": false,
+                  "character_start_acted": false
+                },
+                {
+                  "position": 5,
+                  "data_role": "enlightened",
+                  "action_role": "enlightened",
+                  "runtime_evil": false,
+                  "bluff": {
+                    "kind": "null"
+                  },
+                  "bluff_role": null,
+                  "register_as": null,
+                  "statuses": {
+                    "values": [],
+                    "resistance": [],
+                    "target_position": null
+                  },
+                  "remaining_continuations": 1,
+                  "on_trigger_subscribed": false,
+                  "character_start_acted": false
+                }
+              ],
+              "resumes": [],
+              "spy_caches": {}
+            },
+            "current_order": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "position": 1,
+            "copied_slot": false,
+            "bodies": {
+              "1": {
+                "state": 5,
+                "previous_state": 20,
+                "revealed": false,
+                "killed_by_demon": false,
+                "pickable_uses": 1,
+                "acted_info_count": 0,
+                "created_dead_presentation": false,
+                "on_state_change_subscribed": false
+              },
+              "2": {
+                "state": 5,
+                "previous_state": 20,
+                "revealed": false,
+                "killed_by_demon": false,
+                "pickable_uses": 1,
+                "acted_info_count": 0,
+                "created_dead_presentation": false,
+                "on_state_change_subscribed": false
+              },
+              "3": {
+                "state": 5,
+                "previous_state": 20,
+                "revealed": false,
+                "killed_by_demon": false,
+                "pickable_uses": 1,
+                "acted_info_count": 0,
+                "created_dead_presentation": false,
+                "on_state_change_subscribed": false
+              },
+              "4": {
+                "state": 5,
+                "previous_state": 20,
+                "revealed": false,
+                "killed_by_demon": false,
+                "pickable_uses": 1,
+                "acted_info_count": 0,
+                "created_dead_presentation": false,
+                "on_state_change_subscribed": false
+              },
+              "5": {
+                "state": 5,
+                "previous_state": 20,
+                "revealed": false,
+                "killed_by_demon": false,
+                "pickable_uses": 1,
+                "acted_info_count": 0,
+                "created_dead_presentation": false,
+                "on_state_change_subscribed": false
+              }
+            }
+          },
+          "resumes": [],
+          "ui": {
+            "1": {
+              "pickable_active": false,
+              "rip_active": false,
+              "disguise_icon_active": null
+            },
+            "2": {
+              "pickable_active": false,
+              "rip_active": false,
+              "disguise_icon_active": null
+            },
+            "3": {
+              "pickable_active": false,
+              "rip_active": false,
+              "disguise_icon_active": null
+            },
+            "4": {
+              "pickable_active": false,
+              "rip_active": false,
+              "disguise_icon_active": null
+            },
+            "5": {
+              "pickable_active": false,
+              "rip_active": false,
+              "disguise_icon_active": null
+            }
+          }
+        },
+        "pending": {
+          "0": 1,
+          "1": 2,
+          "2": 3,
+          "3": 4,
+          "4": 5
+        },
+        "next_id": 12,
+        "batch_ordinal": 0
+      },
+      "queue": {
+        "rule_version": "unity_wait_queue_native_v1",
+        "generation": 8,
+        "next_id": 12,
+        "entries": [
+          {
+            "logical_id": 0,
+            "timing": {
+              "deadline": 1.300000011920929,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          },
+          {
+            "logical_id": 1,
+            "timing": {
+              "deadline": 1.300000011920929,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          },
+          {
+            "logical_id": 2,
+            "timing": {
+              "deadline": 1.300000011920929,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          },
+          {
+            "logical_id": 3,
+            "timing": {
+              "deadline": 1.300000011920929,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          },
+          {
+            "logical_id": 4,
+            "timing": {
+              "deadline": 1.300000011920929,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          },
+          {
+            "logical_id": 5,
+            "timing": {
+              "deadline": 1.4000000059604645,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          },
+          {
+            "logical_id": 7,
+            "timing": {
+              "deadline": 1.5,
+              "frame_threshold": 8,
+              "phase_mask": 10,
+              "insertion_generation": 0
+            },
+            "release_present": true
+          }
+        ]
+      },
+      "deferred_waits": {
+        "5": "audio",
+        "7": "shuffle"
+      }
+    },
+    "dispatch": {
+      "rule_version": "unity_wait_eligibility_native_v1",
+      "sampled_time": 1.300000011920929,
+      "sampled_frame_counter": 13,
+      "phase_mask": 2,
+      "generation_before": 8
+    },
+    "callbacks": {
+      "0": {
+        "same_live_owner": true,
+        "callback_result": 1,
+        "producer_time": 1.300000011920929,
+        "producer_frame_counter": 13
+      },
+      "1": {
+        "same_live_owner": true,
+        "callback_result": 1,
+        "producer_time": 1.300000011920929,
+        "producer_frame_counter": 13
+      },
+      "2": {
+        "same_live_owner": true,
+        "callback_result": 1,
+        "producer_time": 1.300000011920929,
+        "producer_frame_counter": 13
+      },
+      "3": {
+        "same_live_owner": true,
+        "callback_result": 1,
+        "producer_time": 1.300000011920929,
+        "producer_frame_counter": 13
+      },
+      "4": {
+        "same_live_owner": true,
+        "callback_result": 1,
+        "producer_time": 1.300000011920929,
+        "producer_frame_counter": 13
+      }
+    }
+  },
+  "expected": {
+    "actors": [
+      {
+        "position": 1,
+        "data_role": "minion",
+        "action_role": "minion",
+        "runtime_evil": true,
+        "bluff": {
+          "kind": "live",
+          "role": "confessor"
+        },
+        "bluff_role": "confessor",
+        "register_as": null,
+        "statuses": {
+          "values": [
+            25
+          ],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 0,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 2,
+        "data_role": "confessor",
+        "action_role": "confessor",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [
+            25
+          ],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 0,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 3,
+        "data_role": "lover",
+        "action_role": "lover",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 0,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 4,
+        "data_role": "hunter",
+        "action_role": "hunter",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 0,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 5,
+        "data_role": "enlightened",
+        "action_role": "enlightened",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 0,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      }
+    ],
+    "bodies": {
+      "1": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "2": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "3": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "4": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "5": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      }
+    },
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "current_order": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "current_data": {
+      "1": 12885037056,
+      "2": 12885110784,
+      "3": 12885159936,
+      "4": 12885139456,
+      "5": 12885127168
+    },
+    "pending": {},
+    "status_versions": {
+      "1": {
+        "before": 1,
+        "after": 2
+      },
+      "2": {
+        "before": 2,
+        "after": 2
+      },
+      "3": {
+        "before": 1,
+        "after": 1
+      },
+      "4": {
+        "before": 1,
+        "after": 1
+      },
+      "5": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    "callbacks": [
+      {
+        "logical_id": 0,
+        "position": 1,
+        "callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "minion",
+            "dispatch": "act",
+            "status_application": null
+          },
+          {
+            "trigger": "init",
+            "slot": "bluff",
+            "role": "confessor",
+            "dispatch": "bluff_act",
+            "status_application": {
+              "status": 25,
+              "accepted": true,
+              "inserted": true,
+              "target_after": null
+            }
+          },
+          {
+            "trigger": "after_round_start",
+            "slot": "real",
+            "role": "minion",
+            "dispatch": "act",
+            "status_application": null
+          },
+          {
+            "trigger": "after_round_start",
+            "slot": "bluff",
+            "role": "confessor",
+            "dispatch": "bluff_act",
+            "status_application": null
+          }
+        ]
+      },
+      {
+        "logical_id": 1,
+        "position": 2,
+        "callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "confessor",
+            "dispatch": "act",
+            "status_application": {
+              "status": 25,
+              "accepted": true,
+              "inserted": false,
+              "target_after": null
+            }
+          },
+          {
+            "trigger": "after_round_start",
+            "slot": "real",
+            "role": "confessor",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ]
+      },
+      {
+        "logical_id": 2,
+        "position": 3,
+        "callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "lover",
+            "dispatch": "act",
+            "status_application": null
+          },
+          {
+            "trigger": "after_round_start",
+            "slot": "real",
+            "role": "lover",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ]
+      },
+      {
+        "logical_id": 3,
+        "position": 4,
+        "callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "hunter",
+            "dispatch": "act",
+            "status_application": null
+          },
+          {
+            "trigger": "after_round_start",
+            "slot": "real",
+            "role": "hunter",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ]
+      },
+      {
+        "logical_id": 4,
+        "position": 5,
+        "callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "enlightened",
+            "dispatch": "act",
+            "status_application": null
+          },
+          {
+            "trigger": "after_round_start",
+            "slot": "real",
+            "role": "enlightened",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ]
+      }
+    ],
+    "ui": {
+      "1": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "2": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "3": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "4": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "5": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      }
+    },
+    "queue": {
+      "rule_version": "unity_wait_queue_native_v1",
+      "generation": 9,
+      "next_id": 12,
+      "entries": [
+        {
+          "logical_id": 5,
+          "timing": {
+            "deadline": 1.4000000059604645,
+            "frame_threshold": 8,
+            "phase_mask": 10,
+            "insertion_generation": 0
+          },
+          "release_present": true
+        },
+        {
+          "logical_id": 7,
+          "timing": {
+            "deadline": 1.5,
+            "frame_threshold": 8,
+            "phase_mask": 10,
+            "insertion_generation": 0
+          },
+          "release_present": true
+        }
+      ]
+    },
+    "deferred_waits": {
+      "5": "audio",
+      "7": "shuffle"
+    },
+    "next_id": 12,
+    "batch_ordinal": 5,
+    "callback_order": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "queue_visit_order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "queue_erase_order": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "native_logical_map": [
+    {
+      "logical_id": 0,
+      "native_iterator": 12893941760,
+      "native_actor": 12892561408,
+      "position": 1,
+      "native_display_id": 5,
+      "payload": 8591704064,
+      "native_owner": 8591507456,
+      "owner_key": 101
+    },
+    {
+      "logical_id": 1,
+      "native_iterator": 12893958144,
+      "native_actor": 12892565504,
+      "position": 2,
+      "native_display_id": 4,
+      "payload": 8591704320,
+      "native_owner": 8591511552,
+      "owner_key": 102
+    },
+    {
+      "logical_id": 2,
+      "native_iterator": 12893974528,
+      "native_actor": 12892569600,
+      "position": 3,
+      "native_display_id": 3,
+      "payload": 8591704576,
+      "native_owner": 8591515648,
+      "owner_key": 103
+    },
+    {
+      "logical_id": 3,
+      "native_iterator": 12893990912,
+      "native_actor": 12892573696,
+      "position": 4,
+      "native_display_id": 2,
+      "payload": 8591704832,
+      "native_owner": 8591519744,
+      "owner_key": 104
+    },
+    {
+      "logical_id": 4,
+      "native_iterator": 12894007296,
+      "native_actor": 12892577792,
+      "position": 5,
+      "native_display_id": 1,
+      "payload": 8591705088,
+      "native_owner": 8591523840,
+      "owner_key": 105
+    }
+  ],
+  "native_only": {
+    "preceding_drains": [
+      {
+        "input": {
+          "frame": 8,
+          "generation_before": 0,
+          "phase": 2,
+          "time": 1.0500000007450578
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 0,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 1,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [],
+        "inserted_ids": [],
+        "visited_ids": [
+          6
+        ],
+        "erased_ids": [],
+        "released_ids": [],
+        "responses": {},
+        "managed_move_next_results": {},
+        "native_release_evidence": []
+      },
+      {
+        "input": {
+          "frame": 8,
+          "generation_before": 1,
+          "phase": 1,
+          "time": 1.050000000745058
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 1,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 2,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [],
+        "inserted_ids": [],
+        "visited_ids": [
+          6,
+          0
+        ],
+        "erased_ids": [],
+        "released_ids": [],
+        "responses": {},
+        "managed_move_next_results": {},
+        "native_release_evidence": []
+      },
+      {
+        "input": {
+          "frame": 7,
+          "generation_before": 2,
+          "phase": 2,
+          "time": 1.050000000745058
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 2,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 3,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [],
+        "inserted_ids": [],
+        "visited_ids": [
+          6,
+          0
+        ],
+        "erased_ids": [],
+        "released_ids": [],
+        "responses": {},
+        "managed_move_next_results": {},
+        "native_release_evidence": []
+      },
+      {
+        "input": {
+          "frame": 8,
+          "generation_before": 3,
+          "phase": 2,
+          "time": 1.050000000745058
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 3,
+          "next_id": 8,
+          "entries": [
+            {
+              "logical_id": 6,
+              "timing": {
+                "deadline": 1.050000000745058,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 4,
+          "next_id": 9,
+          "entries": [
+            {
+              "logical_id": 8,
+              "timing": {
+                "deadline": 1.1000000014901161,
+                "frame_threshold": 9,
+                "phase_mask": 10,
+                "insertion_generation": 4
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [
+          6
+        ],
+        "inserted_ids": [
+          8
+        ],
+        "visited_ids": [
+          6,
+          0
+        ],
+        "erased_ids": [
+          6
+        ],
+        "released_ids": [
+          6
+        ],
+        "responses": {
+          "6": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": [
+              {
+                "operation": "insert",
+                "duration": 0.05000000074505806,
+                "producer_time": 1.050000000745058,
+                "producer_frame_counter": 8,
+                "release_present": true
+              }
+            ]
+          }
+        },
+        "managed_move_next_results": {
+          "6": 1
+        },
+        "native_release_evidence": [
+          {
+            "logical_id": 6,
+            "iterator": "CharacterShuffleAnimation.<Animate>d__6_TypeInfo:subscriber:9207808",
+            "reference_counts_before": [
+              2,
+              2
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          }
+        ]
+      },
+      {
+        "input": {
+          "frame": 9,
+          "generation_before": 4,
+          "phase": 2,
+          "time": 1.1000000014901161
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 4,
+          "next_id": 9,
+          "entries": [
+            {
+              "logical_id": 8,
+              "timing": {
+                "deadline": 1.1000000014901161,
+                "frame_threshold": 9,
+                "phase_mask": 10,
+                "insertion_generation": 4
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 5,
+          "next_id": 10,
+          "entries": [
+            {
+              "logical_id": 9,
+              "timing": {
+                "deadline": 1.1500000022351742,
+                "frame_threshold": 10,
+                "phase_mask": 10,
+                "insertion_generation": 5
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [
+          8
+        ],
+        "inserted_ids": [
+          9
+        ],
+        "visited_ids": [
+          8,
+          0
+        ],
+        "erased_ids": [
+          8
+        ],
+        "released_ids": [
+          8
+        ],
+        "responses": {
+          "8": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": [
+              {
+                "operation": "insert",
+                "duration": 0.05000000074505806,
+                "producer_time": 1.1000000014901161,
+                "producer_frame_counter": 9,
+                "release_present": true
+              }
+            ]
+          }
+        },
+        "managed_move_next_results": {
+          "8": 1
+        },
+        "native_release_evidence": [
+          {
+            "logical_id": 8,
+            "iterator": "CharacterShuffleAnimation.<Animate>d__6_TypeInfo:subscriber:9207808",
+            "reference_counts_before": [
+              2,
+              2
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          }
+        ]
+      },
+      {
+        "input": {
+          "frame": 10,
+          "generation_before": 5,
+          "phase": 2,
+          "time": 1.1500000022351742
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 5,
+          "next_id": 10,
+          "entries": [
+            {
+              "logical_id": 9,
+              "timing": {
+                "deadline": 1.1500000022351742,
+                "frame_threshold": 10,
+                "phase_mask": 10,
+                "insertion_generation": 5
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 6,
+          "next_id": 11,
+          "entries": [
+            {
+              "logical_id": 10,
+              "timing": {
+                "deadline": 1.2000000029802322,
+                "frame_threshold": 11,
+                "phase_mask": 10,
+                "insertion_generation": 6
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [
+          9
+        ],
+        "inserted_ids": [
+          10
+        ],
+        "visited_ids": [
+          9,
+          0
+        ],
+        "erased_ids": [
+          9
+        ],
+        "released_ids": [
+          9
+        ],
+        "responses": {
+          "9": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": [
+              {
+                "operation": "insert",
+                "duration": 0.05000000074505806,
+                "producer_time": 1.1500000022351742,
+                "producer_frame_counter": 10,
+                "release_present": true
+              }
+            ]
+          }
+        },
+        "managed_move_next_results": {
+          "9": 1
+        },
+        "native_release_evidence": [
+          {
+            "logical_id": 9,
+            "iterator": "CharacterShuffleAnimation.<Animate>d__6_TypeInfo:subscriber:9207808",
+            "reference_counts_before": [
+              2,
+              2
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          }
+        ]
+      },
+      {
+        "input": {
+          "frame": 11,
+          "generation_before": 6,
+          "phase": 2,
+          "time": 1.2000000029802322
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 6,
+          "next_id": 11,
+          "entries": [
+            {
+              "logical_id": 10,
+              "timing": {
+                "deadline": 1.2000000029802322,
+                "frame_threshold": 11,
+                "phase_mask": 10,
+                "insertion_generation": 6
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 7,
+          "next_id": 12,
+          "entries": [
+            {
+              "logical_id": 11,
+              "timing": {
+                "deadline": 1.2500000037252903,
+                "frame_threshold": 12,
+                "phase_mask": 10,
+                "insertion_generation": 7
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [
+          10
+        ],
+        "inserted_ids": [
+          11
+        ],
+        "visited_ids": [
+          10,
+          0
+        ],
+        "erased_ids": [
+          10
+        ],
+        "released_ids": [
+          10
+        ],
+        "responses": {
+          "10": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": [
+              {
+                "operation": "insert",
+                "duration": 0.05000000074505806,
+                "producer_time": 1.2000000029802322,
+                "producer_frame_counter": 11,
+                "release_present": true
+              }
+            ]
+          }
+        },
+        "managed_move_next_results": {
+          "10": 1
+        },
+        "native_release_evidence": [
+          {
+            "logical_id": 10,
+            "iterator": "CharacterShuffleAnimation.<Animate>d__6_TypeInfo:subscriber:9207808",
+            "reference_counts_before": [
+              2,
+              2
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          }
+        ]
+      },
+      {
+        "input": {
+          "frame": 12,
+          "generation_before": 7,
+          "phase": 2,
+          "time": 1.2500000037252903
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 7,
+          "next_id": 12,
+          "entries": [
+            {
+              "logical_id": 11,
+              "timing": {
+                "deadline": 1.2500000037252903,
+                "frame_threshold": 12,
+                "phase_mask": 10,
+                "insertion_generation": 7
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 8,
+          "next_id": 12,
+          "entries": [
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [
+          11
+        ],
+        "inserted_ids": [],
+        "visited_ids": [
+          11,
+          0
+        ],
+        "erased_ids": [
+          11
+        ],
+        "released_ids": [
+          11
+        ],
+        "responses": {
+          "11": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": []
+          }
+        },
+        "managed_move_next_results": {
+          "11": 0
+        },
+        "native_release_evidence": [
+          {
+            "logical_id": 11,
+            "iterator": "CharacterShuffleAnimation.<Animate>d__6_TypeInfo:subscriber:9207808",
+            "reference_counts_before": [
+              2,
+              2,
+              1
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          }
+        ]
+      },
+      {
+        "input": {
+          "frame": 13,
+          "generation_before": 8,
+          "phase": 2,
+          "time": 1.300000011920929
+        },
+        "before": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 8,
+          "next_id": 12,
+          "entries": [
+            {
+              "logical_id": 0,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 1,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 2,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 3,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 4,
+              "timing": {
+                "deadline": 1.300000011920929,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "after": {
+          "rule_version": "unity_wait_queue_native_v1",
+          "generation": 9,
+          "next_id": 12,
+          "entries": [
+            {
+              "logical_id": 5,
+              "timing": {
+                "deadline": 1.4000000059604645,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            },
+            {
+              "logical_id": 7,
+              "timing": {
+                "deadline": 1.5,
+                "frame_threshold": 8,
+                "phase_mask": 10,
+                "insertion_generation": 0
+              },
+              "release_present": true
+            }
+          ]
+        },
+        "callback_ids": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "inserted_ids": [],
+        "visited_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "erased_ids": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "released_ids": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "responses": {
+          "0": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": []
+          },
+          "1": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": []
+          },
+          "2": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": []
+          },
+          "3": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": []
+          },
+          "4": {
+            "owner": "resolved",
+            "callback_result": 1,
+            "mutations": []
+          }
+        },
+        "managed_move_next_results": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0
+        },
+        "native_release_evidence": [
+          {
+            "logical_id": 0,
+            "iterator": "Character.<DelayReveal>d__84_TypeInfo:55",
+            "reference_counts_before": [
+              2,
+              2,
+              1
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          },
+          {
+            "logical_id": 1,
+            "iterator": "Character.<DelayReveal>d__84_TypeInfo:77",
+            "reference_counts_before": [
+              2,
+              2,
+              1
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          },
+          {
+            "logical_id": 2,
+            "iterator": "Character.<DelayReveal>d__84_TypeInfo:98",
+            "reference_counts_before": [
+              2,
+              2,
+              1
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          },
+          {
+            "logical_id": 3,
+            "iterator": "Character.<DelayReveal>d__84_TypeInfo:119",
+            "reference_counts_before": [
+              2,
+              2,
+              1
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          },
+          {
+            "logical_id": 4,
+            "iterator": "Character.<DelayReveal>d__84_TypeInfo:140",
+            "reference_counts_before": [
+              2,
+              2,
+              1
+            ],
+            "dispatch_result_basis": "valid_owner_native_post_dispatch_release_exact_one"
+          }
+        ]
+      }
+    ],
+    "selector_draws": [
+      {
+        "caller_return_rva": "0x3e4a2b",
+        "index": 1,
+        "maximum_exclusive": 11,
+        "minimum": 1,
+        "width": 10
+      },
+      {
+        "caller_return_rva": "0x36c7e7",
+        "index": 0,
+        "maximum_exclusive": 4,
+        "minimum": 0,
+        "width": 4
+      }
+    ],
+    "selector_calls": [
+      {
+        "actor": 12892561408,
+        "caller_return_rva": "0x368472",
+        "context": 12893364224,
+        "receiver": 12892672000,
+        "rva": "0x3712b0",
+        "source_asset": 21596
+      },
+      {
+        "actor": 12892561408,
+        "caller_return_rva": "0x368536",
+        "context": 12893368320,
+        "receiver": 12892672000,
+        "rva": "0x3e49f0",
+        "source_asset": 21596
+      },
+      {
+        "actor": 12892565504,
+        "caller_return_rva": "0x368472",
+        "context": 12893372416,
+        "receiver": 12892684288,
+        "rva": "0x3712b0",
+        "source_asset": 21614
+      },
+      {
+        "actor": 12892565504,
+        "caller_return_rva": "0x368536",
+        "context": 12893376512,
+        "receiver": 12892684288,
+        "rva": "0x3712b0",
+        "source_asset": 21614
+      },
+      {
+        "actor": 12892569600,
+        "caller_return_rva": "0x368472",
+        "context": 12893380608,
+        "receiver": 12892696576,
+        "rva": "0x3712b0",
+        "source_asset": 21626
+      },
+      {
+        "actor": 12892569600,
+        "caller_return_rva": "0x368536",
+        "context": 12893384704,
+        "receiver": 12892696576,
+        "rva": "0x3712b0",
+        "source_asset": 21626
+      },
+      {
+        "actor": 12892573696,
+        "caller_return_rva": "0x368472",
+        "context": 12893388800,
+        "receiver": 12892708864,
+        "rva": "0x3712b0",
+        "source_asset": 21621
+      },
+      {
+        "actor": 12892573696,
+        "caller_return_rva": "0x368536",
+        "context": 12893392896,
+        "receiver": 12892708864,
+        "rva": "0x3712b0",
+        "source_asset": 21621
+      },
+      {
+        "actor": 12892577792,
+        "caller_return_rva": "0x368472",
+        "context": 12893396992,
+        "receiver": 12892721152,
+        "rva": "0x3712b0",
+        "source_asset": 21618
+      },
+      {
+        "actor": 12892577792,
+        "caller_return_rva": "0x368536",
+        "context": 12893401088,
+        "receiver": 12892721152,
+        "rva": "0x3712b0",
+        "source_asset": 21618
+      }
+    ],
+    "clone_calls": [
+      {
+        "actor": 12892561408,
+        "copied_bytes_sha256": "cbe5090c571a4eae394030967c13e5cdf6afeceb5c8bde4b8c23ca40fb4abb5e",
+        "result": 12894183424,
+        "source": 12892684288
+      }
+    ],
+    "source_confessor_binding": {
+      "abilityUsage": 0,
+      "ancestors": [
+        {
+          "identity": 12893036544,
+          "managed_role": "Role"
+        },
+        {
+          "identity": 12892680192,
+          "managed_role": "Confessor"
+        }
+      ],
+      "characterName": "Confessor",
+      "hierarchy_identity": 12893167616,
+      "identity": 12885110784,
+      "name": "Confessor",
+      "name_identity": 12892688384,
+      "picking": false,
+      "role_rid": 4394761635072573445,
+      "role_type": "Confessor",
+      "source_class": 12892680192,
+      "source_role": 12892684288,
+      "startingAlignment": 10,
+      "type": 10
+    },
+    "runtime_roles": [
+      {
+        "actor_identity": 12892561408,
+        "class_identity": 12892667904,
+        "identity": 12893945856,
+        "on_acted": 12894224384,
+        "saved_fields": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "actor_identity": 12892565504,
+        "class_identity": 12892680192,
+        "identity": 12893962240,
+        "on_acted": 12894269440,
+        "saved_fields": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "actor_identity": 12892569600,
+        "class_identity": 12892692480,
+        "identity": 12893978624,
+        "on_acted": 12894306304,
+        "saved_fields": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "actor_identity": 12892573696,
+        "class_identity": 12892704768,
+        "identity": 12893995008,
+        "on_acted": 12894343168,
+        "saved_fields": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "actor_identity": 12892577792,
+        "class_identity": 12892717056,
+        "identity": 12894011392,
+        "on_acted": 12894380032,
+        "saved_fields": [
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "released_payloads": [
+      8591704064,
+      8591704320,
+      8591704576,
+      8591704832,
+      8591705088,
+      8591705344
+    ],
+    "physical_owners": [
+      {
+        "key": 101,
+        "list_head": 8591507568,
+        "managed_actor": 12892561408,
+        "native_owner": 8591507456,
+        "payloads": []
+      },
+      {
+        "key": 102,
+        "list_head": 8591511664,
+        "managed_actor": 12892565504,
+        "native_owner": 8591511552,
+        "payloads": []
+      },
+      {
+        "key": 103,
+        "list_head": 8591515760,
+        "managed_actor": 12892569600,
+        "native_owner": 8591515648,
+        "payloads": []
+      },
+      {
+        "key": 104,
+        "list_head": 8591519856,
+        "managed_actor": 12892573696,
+        "native_owner": 8591519744,
+        "payloads": []
+      },
+      {
+        "key": 105,
+        "list_head": 8591523952,
+        "managed_actor": 12892577792,
+        "native_owner": 8591523840,
+        "payloads": []
+      },
+      {
+        "key": 106,
+        "list_head": 8591528048,
+        "managed_actor": 12892540928,
+        "native_owner": 8591527936,
+        "payloads": [
+          8591705856
+        ]
+      },
+      {
+        "key": 107,
+        "list_head": 8591532144,
+        "managed_actor": 12893274112,
+        "native_owner": 8591532032,
+        "payloads": [
+          8591705600
+        ]
+      }
+    ],
+    "native_records": [
+      {
+        "cached_enumerator": 12893941760,
+        "gc_handle": 0,
+        "iterator": 12893941760,
+        "managed_actor": 12892561408,
+        "native_owner": 8591507456,
+        "owner_key": 101,
+        "owner_linked": false,
+        "payload": 8591704064,
+        "reference_count": 0
+      },
+      {
+        "cached_enumerator": 12893958144,
+        "gc_handle": 0,
+        "iterator": 12893958144,
+        "managed_actor": 12892565504,
+        "native_owner": 8591511552,
+        "owner_key": 102,
+        "owner_linked": false,
+        "payload": 8591704320,
+        "reference_count": 0
+      },
+      {
+        "cached_enumerator": 12893974528,
+        "gc_handle": 0,
+        "iterator": 12893974528,
+        "managed_actor": 12892569600,
+        "native_owner": 8591515648,
+        "owner_key": 103,
+        "owner_linked": false,
+        "payload": 8591704576,
+        "reference_count": 0
+      },
+      {
+        "cached_enumerator": 12893990912,
+        "gc_handle": 0,
+        "iterator": 12893990912,
+        "managed_actor": 12892573696,
+        "native_owner": 8591519744,
+        "owner_key": 104,
+        "owner_linked": false,
+        "payload": 8591704832,
+        "reference_count": 0
+      },
+      {
+        "cached_enumerator": 12894007296,
+        "gc_handle": 0,
+        "iterator": 12894007296,
+        "managed_actor": 12892577792,
+        "native_owner": 8591523840,
+        "owner_key": 105,
+        "owner_linked": false,
+        "payload": 8591705088,
+        "reference_count": 0
+      },
+      {
+        "cached_enumerator": 12894109696,
+        "gc_handle": 0,
+        "iterator": 12894109696,
+        "managed_actor": 12893274112,
+        "native_owner": 8591532032,
+        "owner_key": 107,
+        "owner_linked": false,
+        "payload": 8591705344,
+        "reference_count": 0
+      },
+      {
+        "cached_enumerator": 12894113792,
+        "gc_handle": 24,
+        "iterator": 12894113792,
+        "managed_actor": 12893274112,
+        "native_owner": 8591532032,
+        "owner_key": 107,
+        "owner_linked": true,
+        "payload": 8591705600,
+        "reference_count": 1
+      },
+      {
+        "cached_enumerator": 12894138368,
+        "gc_handle": 25,
+        "iterator": 12894138368,
+        "managed_actor": 12892540928,
+        "native_owner": 8591527936,
+        "owner_key": 106,
+        "owner_linked": true,
+        "payload": 8591705856,
+        "reference_count": 1
+      }
+    ],
+    "recorded_counter_contract": {
+      "acquisition_clones": 1,
+      "acquisition_resumes": 5,
+      "acquisition_services": 458,
+      "animation_resumes": 5,
+      "animation_reyields": 4,
+      "coroutine_registrations": 8,
+      "drains": 9,
+      "engine_native_addresses": 752,
+      "gate_drains": 3,
+      "managed_native_addresses": 3476,
+      "native_wait_insertions": 12,
+      "paused_reentered_prefixes": 1476,
+      "physical_owners": 7,
+      "python_source_hashes": 18,
+      "queue_records_at_exit": 2,
+      "queue_records_at_setup": 8,
+      "reentry_tokens_consumed": 1476,
+      "released_payloads": 6,
+      "restart_aborted_prefixes": 7,
+      "selector_draws": 2
+    },
+    "registered_coroutines": [
+      {
+        "iterator": 12893941760,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:55",
+        "kind": "acquisition",
+        "managed_owner": 12892561408,
+        "native_owner": 8591507456,
+        "owner_key": 101,
+        "payload": 8591704064,
+        "registration_ordinal": 1
+      },
+      {
+        "iterator": 12893958144,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:77",
+        "kind": "acquisition",
+        "managed_owner": 12892565504,
+        "native_owner": 8591511552,
+        "owner_key": 102,
+        "payload": 8591704320,
+        "registration_ordinal": 2
+      },
+      {
+        "iterator": 12893974528,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:98",
+        "kind": "acquisition",
+        "managed_owner": 12892569600,
+        "native_owner": 8591515648,
+        "owner_key": 103,
+        "payload": 8591704576,
+        "registration_ordinal": 3
+      },
+      {
+        "iterator": 12893990912,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:119",
+        "kind": "acquisition",
+        "managed_owner": 12892573696,
+        "native_owner": 8591519744,
+        "owner_key": 104,
+        "payload": 8591704832,
+        "registration_ordinal": 4
+      },
+      {
+        "iterator": 12894007296,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:140",
+        "kind": "acquisition",
+        "managed_owner": 12892577792,
+        "native_owner": 8591523840,
+        "owner_key": 105,
+        "payload": 8591705088,
+        "registration_ordinal": 5
+      },
+      {
+        "iterator": 12894109696,
+        "iterator_label": "CharacterShuffleAnimation.<Animate>d__6_TypeInfo:subscriber:9207808",
+        "kind": "animation",
+        "managed_owner": 12893274112,
+        "native_owner": 8591532032,
+        "owner_key": 107,
+        "payload": 8591705344,
+        "registration_ordinal": 6
+      },
+      {
+        "iterator": 12894113792,
+        "iterator_label": "CharacterShuffleAnimation.<PlayAudioDelay>d__9_TypeInfo:subscriber:9211904",
+        "kind": "audio",
+        "managed_owner": 12893274112,
+        "native_owner": 8591532032,
+        "owner_key": 107,
+        "payload": 8591705600,
+        "registration_ordinal": 7
+      },
+      {
+        "iterator": 12894138368,
+        "iterator_label": "Characters.<ShuffleDeck>d__16_TypeInfo:shuffle",
+        "kind": "shuffle",
+        "managed_owner": 12892540928,
+        "native_owner": 8591527936,
+        "owner_key": 106,
+        "payload": 8591705856,
+        "registration_ordinal": 8
+      }
+    ]
+  }
+}

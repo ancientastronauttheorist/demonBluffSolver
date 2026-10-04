@@ -298,3 +298,354 @@ fn shuffle_reached_while_audio_is_frame_skipped_still_rejects_the_whole_drain() 
     );
     assert_eq!(context, before);
 }
+
+#[test]
+fn retained_original_n5_acquisition_matches_independent_native_projection() {
+    use crate::bluff::reveal::BluffReference;
+    use crate::bluff::setup_action_bridge;
+    use crate::bluff::wait_queue::{replay_wait_queue, WaitQueueContext};
+    use crate::types::BluffAcquisitionSource;
+
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../reverse_engineering/fixtures/synthetic/first_village_retained_acquisition_v1.json"
+    )))
+    .unwrap();
+    assert_eq!(fixture["schema_version"], 1);
+    assert_eq!(fixture["build_id"], "f530404b0f3f_807de4a83df4");
+    assert_eq!(
+        fixture["native_report_sha256"],
+        "f74f10f6f9eccd5ae1af512871dc01e5c173e590290a414b59a11b74122ce9f3"
+    );
+    assert_eq!(
+        fixture["native_source_sha256"],
+        "cdcc5ef15c2d36a1b961263c483b27c264e520a495f97985ad640d68df4c68cd"
+    );
+
+    let setup: setup_action_bridge::Context =
+        serde_json::from_value(fixture["setup_context"].clone()).unwrap();
+    let setup_paths = setup_action_bridge::replay(&setup).unwrap();
+    assert_eq!(setup_paths.len(), 1);
+    let setup_path = &setup_paths[0];
+    let setup_board = &setup_path.state.initial.board;
+    let expected_setup = &fixture["expected_setup"];
+    for (actual, field) in [
+        (
+            serde_json::to_value(&setup_board.reveal.actors).unwrap(),
+            "actors",
+        ),
+        (serde_json::to_value(&setup_board.bodies).unwrap(), "bodies"),
+        (
+            serde_json::to_value(&setup_board.reveal.pools).unwrap(),
+            "pools",
+        ),
+        (
+            serde_json::to_value(&setup_board.current_order).unwrap(),
+            "current_order",
+        ),
+        (
+            serde_json::to_value(&setup_path.current_data).unwrap(),
+            "current_data",
+        ),
+        (
+            serde_json::to_value(&setup_path.state.pending).unwrap(),
+            "pending",
+        ),
+    ] {
+        assert_eq!(&actual, &expected_setup[field], "native setup {field}");
+    }
+
+    let context: ScheduledRevealContext =
+        serde_json::from_value(fixture["context"].clone()).unwrap();
+    let registry = &context.initial.continuations;
+    let board = &registry.initial.board;
+    assert_eq!(board.reveal.actors, setup_board.reveal.actors);
+    assert_eq!(board.reveal.pools, setup_board.reveal.pools);
+    assert_eq!(board.bodies, setup_board.bodies);
+    assert_eq!(board.current_order, setup_board.current_order);
+    assert_eq!(registry.initial.ui, setup_path.state.initial.ui);
+    assert_eq!(board.reveal.rule_version, SETUP_REVEAL_CALLBACKS_NATIVE_V5);
+    assert_eq!(context.initial.queue.generation, 8);
+    assert_eq!(context.initial.queue.next_id, 12);
+    assert_eq!(registry.next_id, 12);
+    assert_eq!(registry.batch_ordinal, 0);
+    let mapping = fixture["native_logical_map"].as_array().unwrap();
+    assert_eq!(mapping.len(), 5);
+    let initialized =
+        crate::bluff::setup_initialization_batch::replay(&setup.initialization).unwrap();
+    for row in mapping {
+        let id = row["logical_id"].as_u64().unwrap();
+        let position = row["position"].as_u64().unwrap() as u8;
+        let native_iterator = row["native_iterator"].as_u64().unwrap();
+        assert_eq!(registry.pending[&id], position);
+        assert_eq!(setup_path.state.pending[&native_iterator], position);
+        let publication = initialized
+            .publications
+            .iter()
+            .find(|publication| publication.continuation_identity == native_iterator)
+            .unwrap();
+        assert_eq!(publication.position, position);
+        assert_eq!(row["native_display_id"], publication.display_id);
+    }
+
+    // The callback effects here are supplied native-derived queue responses.
+    // The full animation/tween graph remains the native witness's domain.
+    let drains = fixture["native_only"]["preceding_drains"]
+        .as_array()
+        .unwrap();
+    assert_eq!(drains.len(), 9);
+    let mut previous = None;
+    for drain in &drains[..8] {
+        let initial: WaitQueueState = serde_json::from_value(drain["before"].clone()).unwrap();
+        if let Some(after) = previous.take() {
+            assert_eq!(initial, after);
+        }
+        let dispatch = WaitDispatchContext {
+            rule_version: UNITY_WAIT_ELIGIBILITY_NATIVE_V1.into(),
+            sampled_time: drain["input"]["time"].as_f64().unwrap(),
+            sampled_frame_counter: drain["input"]["frame"].as_i64().unwrap(),
+            phase_mask: drain["input"]["phase"].as_u64().unwrap() as u32,
+            generation_before: drain["input"]["generation_before"].as_u64().unwrap() as u32,
+        };
+        let result = replay_wait_queue(&WaitQueueContext {
+            rule_version: UNITY_WAIT_QUEUE_NATIVE_V1.into(),
+            initial,
+            dispatch,
+            responses: serde_json::from_value(drain["responses"].clone()).unwrap(),
+        })
+        .unwrap();
+        assert_eq!(serde_json::to_value(&result.state).unwrap(), drain["after"]);
+        for (actual, field) in [
+            (
+                result
+                    .trace
+                    .iter()
+                    .filter_map(|e| match e {
+                        WaitQueueEvent::Visit { logical_id, .. } => Some(*logical_id),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>(),
+                "visited_ids",
+            ),
+            (
+                result
+                    .trace
+                    .iter()
+                    .filter_map(|e| match e {
+                        WaitQueueEvent::Callback { logical_id } => Some(*logical_id),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>(),
+                "callback_ids",
+            ),
+            (
+                result
+                    .trace
+                    .iter()
+                    .filter_map(|e| match e {
+                        WaitQueueEvent::Insert { entry } => Some(entry.logical_id),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>(),
+                "inserted_ids",
+            ),
+            (
+                result
+                    .trace
+                    .iter()
+                    .filter_map(|e| match e {
+                        WaitQueueEvent::Release { logical_id } => Some(*logical_id),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>(),
+                "released_ids",
+            ),
+        ] {
+            assert_eq!(
+                serde_json::to_value(actual).unwrap(),
+                drain[field],
+                "native animation {field}"
+            );
+        }
+        previous = Some(result.state);
+    }
+    assert_eq!(previous.unwrap(), context.initial.queue);
+
+    let paths = replay_scheduled_reveal(&context).unwrap();
+    assert_eq!(paths.len(), 6);
+    let support: BTreeMap<_, _> = paths
+        .iter()
+        .map(|path| {
+            let role = &path.callbacks[0].replay.trace[0]
+                .acquisition
+                .acquisition
+                .as_ref()
+                .unwrap()
+                .bluff_role;
+            (
+                role.clone(),
+                (path.probability.numerator, path.probability.denominator),
+            )
+        })
+        .collect();
+    assert_eq!(
+        support,
+        BTreeMap::from([
+            ("Confessor".into(), (1, 10)),
+            ("Lover".into(), (1, 10)),
+            ("Hunter".into(), (1, 10)),
+            ("Enlightened".into(), (1, 10)),
+            ("Gemcrafter".into(), (3, 10)),
+            ("Alchemist".into(), (3, 10)),
+        ])
+    );
+    let path = paths
+        .iter()
+        .find(|path| {
+            path.state.continuations.initial.board.reveal.actors[0].bluff
+                == (BluffReference::Live {
+                    role: crate::bluff::reveal::BluffRole::Confessor,
+                })
+        })
+        .unwrap();
+    let expected = &fixture["expected"];
+    let final_board = &path.state.continuations.initial.board;
+    for (actual, field) in [
+        (
+            serde_json::to_value(&final_board.reveal.actors).unwrap(),
+            "actors",
+        ),
+        (serde_json::to_value(&final_board.bodies).unwrap(), "bodies"),
+        (
+            serde_json::to_value(&final_board.reveal.pools).unwrap(),
+            "pools",
+        ),
+        (
+            serde_json::to_value(&final_board.current_order).unwrap(),
+            "current_order",
+        ),
+        (
+            serde_json::to_value(&path.state.continuations.initial.ui).unwrap(),
+            "ui",
+        ),
+        (
+            serde_json::to_value(&path.state.continuations.pending).unwrap(),
+            "pending",
+        ),
+        (serde_json::to_value(&path.state.queue).unwrap(), "queue"),
+        (
+            serde_json::to_value(&path.state.deferred_waits).unwrap(),
+            "deferred_waits",
+        ),
+    ] {
+        assert_eq!(&actual, &expected[field], "native acquisition {field}");
+    }
+    assert_eq!(expected["next_id"], path.state.continuations.next_id);
+    assert_eq!(
+        expected["batch_ordinal"],
+        path.state.continuations.batch_ordinal
+    );
+    let callback_order: Vec<_> = path.callbacks.iter().map(|c| c.logical_id).collect();
+    assert_eq!(
+        serde_json::to_value(&callback_order).unwrap(),
+        expected["callback_order"]
+    );
+    for (index, callback) in path.callbacks.iter().enumerate() {
+        assert_eq!(callback.replay.trace.len(), 1);
+        assert!(callback.replay.created.is_empty());
+        let trace = &callback.replay.trace[0];
+        let native = &expected["callbacks"][index];
+        assert!(trace.start.is_none());
+        assert_eq!(native["logical_id"], callback.logical_id);
+        assert_eq!(native["position"], trace.acquisition.event.position);
+        assert_eq!(
+            serde_json::to_value(&trace.callbacks).unwrap(),
+            native["callbacks"]
+        );
+        assert_eq!(trace.acquisition.event.acquisition_ordinal, Some(0));
+        if index == 0 {
+            let draw = trace.acquisition.acquisition.as_ref().unwrap();
+            assert_eq!(draw.rng_draw_count, 2);
+            assert_eq!(
+                draw.source,
+                BluffAcquisitionSource::DuplicatePool {
+                    occurrence_index: 0
+                }
+            );
+            assert!(!draw.script_added);
+        } else {
+            assert!(trace.acquisition.acquisition.is_none());
+        }
+        let position = trace.acquisition.event.position;
+        let versions = &expected["status_versions"][position.to_string()];
+        let (identity, _) = initialized
+            .positions
+            .iter()
+            .find(|(_, p)| **p == position)
+            .unwrap();
+        let setup_inserted = setup_path
+            .calls
+            .iter()
+            .filter(|call| call.position == position)
+            .flat_map(|call| &call.init_callbacks)
+            .filter(|call| {
+                call.status_application
+                    .as_ref()
+                    .is_some_and(|effect| effect.inserted)
+            })
+            .count() as u64;
+        let before_version =
+            u64::from(initialized.actors[identity].statuses.version) + setup_inserted;
+        assert_eq!(versions["before"], before_version);
+        assert_eq!(
+            expected_setup["status_versions"][position.to_string()]["after"],
+            before_version
+        );
+        let inserted = trace
+            .callbacks
+            .iter()
+            .filter(|c| {
+                c.status_application
+                    .as_ref()
+                    .is_some_and(|effect| effect.inserted)
+            })
+            .count() as u64;
+        assert_eq!(
+            versions["after"].as_u64().unwrap(),
+            versions["before"].as_u64().unwrap() + inserted
+        );
+    }
+    for (actual, field) in [
+        (
+            path.queue_trace
+                .iter()
+                .filter_map(|e| match e {
+                    WaitQueueEvent::Visit { logical_id, .. } => Some(*logical_id),
+                    _ => None,
+                })
+                .collect::<Vec<_>>(),
+            "queue_visit_order",
+        ),
+        (
+            path.queue_trace
+                .iter()
+                .filter_map(|e| match e {
+                    WaitQueueEvent::Erase { logical_id } => Some(*logical_id),
+                    _ => None,
+                })
+                .collect::<Vec<_>>(),
+            "queue_erase_order",
+        ),
+    ] {
+        assert_eq!(serde_json::to_value(actual).unwrap(), expected[field]);
+    }
+    let released: Vec<_> = path
+        .queue_trace
+        .iter()
+        .filter_map(|e| match e {
+            WaitQueueEvent::Release { logical_id } => Some(*logical_id),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(released, callback_order);
+}

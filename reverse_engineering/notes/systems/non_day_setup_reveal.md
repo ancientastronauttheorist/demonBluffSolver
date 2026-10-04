@@ -132,3 +132,8 @@ suite took1392.17s. Local evidence links, scoped Rust formatting, privacy,
 diff checks and the prior installed-subscriber script/note/report hashes passed.
 These engineering results do not promote an independent held-out corpus,
 original path weights, new native retained execution or legal player history.
+
+The subsequent [retained-native comparison](first_village_retained_acquisition_projection.md)
+matches the recorded original Confessor path and actual animation/acquisition
+queue chronology through an independent fixture. Its separate scope preserves
+the six positive Rust outcomes and leaves legal observations/readiness open.
