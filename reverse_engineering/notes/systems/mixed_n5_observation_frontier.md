@@ -133,6 +133,16 @@ status `25` and a Minion copying Confessor's status `25` do not make that Minion
 truthful; copied Alchemist does not receive real Alchemist's Init resistance.
 Hidden values belong only to reference hypotheses and the oracle comparison.
 
+Status `25` is `AppearTruthfull`. The
+[native Confessor contract](../roles/gameplay_role_confessor.md) separates this
+appearance from registered alignment: `GetRegisterAlignment` uses a Unity-live
+register-as record's starting alignment, otherwise the actor's stored alignment,
+without reading statuses. All five retained row-zero actors have null register-as.
+Real Confessor therefore remains registered Good, and its Minion copy remains
+registered Evil. Under this declared boundary Hunter still sees only the Minion
+as registered Evil; other register-as records or intervening writers require
+their own transition model.
+
 Fresh status assumptions must be declared. Ordinary
 [Character.Init](../../../crates/solver-core/src/bluff/character_initialization.rs) clears the
 active status list and runtime pointer, but preserves resistance and the shared
