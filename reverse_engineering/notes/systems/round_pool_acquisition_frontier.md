@@ -134,14 +134,38 @@ its original first yield through the engine into one five-owner queue. The
 state, ordered comparisons and five native timing records. Native storage and
 owner identities remain oracle-only; no acquisition history is promoted.
 
-The next smallest exit is a conditional continuation past `36D2DB` through the
+The next selected exit was a conditional continuation past `36D2DB` through the
 actual Shuffle state-zero first step, sixth owner/queue admission and normal
-Manage return. Runtime `onSetup` has no established installer/clearer here.
+Manage return. Runtime `onSetup` then had no established installer/clearer here.
 Explicitly supplying null would delimit a conditional runtime contract, not
 prove the original subscriber absent. Preserve the same generation, caller CPU,
 actors and five prior waits; add the manager's distinct Shuffle owner. Later
 Shuffle state1, events, acquisition resumes and legal history require their own
 contracts and original evidence.
+
+The [conditional Shuffle witness](first_village_shuffle_admission.md) now
+executes that return with six retained native records and six supplied owners.
+The independent [Rust checkpoint](character_action_setup.md) compares its
+semantic prefix, conditional generic-caller return and all six timings, while
+rejecting the mixed queue at the five-acquisition-only boundary.
+
+The separate [original subscriber audit](first_village_on_setup_binding.md)
+changes the next action: scene component `137027` is enabled, references the
+same manager `137026`, and has an active authored ancestor chain. Its native
+OnEnable/OnDisable combine/remove an Action targeting `Animates`. The first-state
+static trace starts nested audio `.4f` and outer animation `.05f` waits before
+manager Shuffle. This is configuration/static evidence with zero executed
+native bodies; it proves no runtime lifecycle, eight-record queue or visibility.
+
+Next execute the original installer under a named lifecycle/identity contract,
+retain its target/method delegate, then join actual Manage subscriber dispatch
+and synchronous audio/animation first steps to the same queue and manager
+Shuffle admission. Two records share the animation owner; do not presume their
+final count/order before native execution. Keep GetComponent/pivot, tween and
+audio providers explicit and preserve the original five card waits and semantic
+state. Under the same producer clock, the `.05f` animation wait can precede
+acquisition, so the following native drain must honor actual consumer selection
+and animation continuation. Day readiness and legal public history remain open.
 
 ## September 30 progress
 
