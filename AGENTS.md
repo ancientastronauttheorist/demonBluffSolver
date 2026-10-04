@@ -59,8 +59,9 @@ stop, diagnose, fix, verify, then resume.
     module uses `mod.rs`. A confirmed child directory does not establish its
     module root; resolve the sibling `.rs` file or `mod.rs` before opening either.
     Follow an audit's exact linked script path after verifying it exists.
-    Retain the returned directory when opening a resolved basename; a script
-    name mentioned in notes is not necessarily relative to the repository root.
+    Retain the returned directory when opening a resolved basename; do not
+    reconstruct a sibling path after discovery. A script name mentioned in
+    notes is not necessarily relative to the repository root.
     Resolve extractor outputs separately from tool installation directories;
     a Dumper version identifies neither its build-specific output directory nor
     a verified copy of script.json, dump.cs or il2cpp.h.
