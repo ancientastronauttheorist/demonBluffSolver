@@ -1408,3 +1408,61 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   publication and original Day/capture join before admitting mixedN5 history;
   preserve independent S2 held-out worlds, legal S3 policy and broader S4 gates.
 ```
+
+## Private conditional Hunter pause and first-stop checkpoint
+
+2026-10-04. This supersedes the pending Hunter verification in the earlier
+continuation checkpoint. Native sources and full reports remain private drafts.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent7766e25ebd8b16a485b6c4e569c0a6e027ef921a.
+  Conditional Hunter verification draftv0, corrected wrapper source SHA
+  0749cc2003994d9cbff973f671d442f613281cfb67083b803a6dec79b4f32c51.
+  Native/oracle dependency validation; no new player inputs or live control.
+Named decision blocker and reachable deck/phase/role scenario:
+  Retained row-zero Confessor-acquisition graph, conditional supplied Day,
+  one real Hunter click, native result/speech and interleaved Pinned waits.
+  Verify physical pause/reentry and a genuine pre-publication stopped prefix.
+Before -> after supported behavior:
+  All524 one-shot service boundaries match complete normal state after reentry.
+  First physical UI gateway fresh stop preserves exact pre-entry state/prefix;
+  Hunter remains Hidden with use1/history0 and no new publication or iterator.
+Original evidence; supplied runtime/scheduler boundaries:
+  Frozen Hunter/readiness bodies and supplied Day/input/Current-mirror profile
+  unchanged. Corrected diagnostic window clamps within each actual mapped
+  stack and records the entire mapping; no native map or state is changed.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Initial diagnostic failed on an unmapped centered stack read before pause.
+  Corrected normal/all524 pause report passes; SHA
+  dfd3bba283c716111f561aa32c065c38e99966d09b6d5d356eabe244229c4284.
+  One selected fresh stop passes, ordinal1/UI entry1C7DC50/caller386B42;
+  report SHA d611364a1cc1352ab107e16c0c3140b0bb3cd792c4f52d81cb89347653e241c1.
+  Root independently compares all524 ledger digests, normal exit and41 input
+  hashes across pause/stop reports; expanded selected/actual states and prefix
+  digest agree. Both complete0x2000 windows match their full mapped stacks.
+  Measured engine RSP0x30000F010/window[0x30000E000,0x300010000);
+  its raw RSP was only inferred for the earlier failed diagnostic.
+  Other295 physical candidate fresh stops are unrun; arbitrary plans excluded.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new world-set or public-domain promotion. Native hidden state, target
+  references and stack/CPU bytes remain validation-only private evidence.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy, likelihood, generation prior or probability certificate.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No new held-out/outcome comparison. Solver checks remain1002release library
+  passes from the preceding fixed-input reference checkpoint.
+New uncertainty, regressions and remaining exclusions:
+  Pending UI record29/generation18/cursor30 survives normal/pause completion;
+  stopped prefix retains record18/generation9/cursor19. New two-child Pinned
+  final exhaustion, complete modal roster, original Day and capture remain open.
+  Static modal review identifies DeckState-dependent faction suppression and
+  actual Shuffle UI channel delivery; retained modal composition is unexecuted.
+  Full CPU/storage reports and unpublished source-containment work stay private.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Bounded Hunter verification closes this dependency. Next compose actual modal
+  OnEnable after acquisition, then retained Audio/Shuffle delivery with explicit
+  DeckState and child-generation boundaries; preserve original Day/capture as
+  separate gates before mixedN5 admission, independent S2, legal S3 and broader S4.
+```

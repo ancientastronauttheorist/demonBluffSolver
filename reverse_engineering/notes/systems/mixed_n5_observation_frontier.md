@@ -49,6 +49,14 @@ remain open. This is not a readiness or legal-history certificate. Existing
 [DeckCharacter registration](deck_character_registration.md) audits establish
 bounded callers under supplied services, not this complete publication.
 
+The conditional Hunter verifier now matches all 524 one-shot pause/reentry
+boundaries and one fresh stop at the first UI gateway. A private static modal
+review also identifies a completeness condition: `DeckState=Remove` suppresses
+Outcast, Minion and Demon publication when the corresponding count is below
+three. A complete modal roster therefore needs an explicit deck-state boundary,
+subscriber delivery and new-generation child identity; it cannot be inferred
+from the Pinned strip. The retained modal publication has not yet executed.
+
 Across the original profile, the same public deck can correspond to other
 omitted-base-role histories. For example, observing all five original Villager
 names does not identify which four were physical Good cards before acquisition.
