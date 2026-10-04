@@ -77,6 +77,8 @@ stop, diagnose, fix, verify, then resume.
     batch discovery with reads against guessed paths, even for a previously
     discussed family whose exact note basename is not recorded. A worker's source-ready
     notice does not establish that its planned note or report already exists.
+    Resolve private diagnostic outputs by filename and format too; a verified
+    JSON decode does not establish a separate per-method text export.
     Verify a documented directory exists before searching it, including optional
     tool configuration directories such as `.cargo`, since directory maps can
     describe intended layout. Start with repository-root `rg --files`
