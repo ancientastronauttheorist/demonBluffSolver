@@ -1235,3 +1235,49 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   legal Hunter reveal. Keep mixedN5 public-deck/latent-world proposal separate
   from the development Hunter/Baa model; then independent held-out S2/S3/S4.
 ```
+
+## Guarded real Gemcrafter setup checkpoint
+
+2026-10-04. Evidence and exclusions are in the
+[Gemcrafter note](notes/systems/non_day_gemcrafter_setup.md).
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent69b1802800b75a319cda98851caeffd20ea483e0.
+  RevealV6/setup bridgeV3/scheduledV3, authored offline input-conditioned model.
+Named decision blocker and reachable deck/phase/role scenario:
+  Four of the five original Standard subsets contain real Gemcrafter; older
+  domains admit only its copied bluff and reject the real data/class binding.
+Before -> after supported behavior:
+  Opt-in real Archivist source/clone binding, inherited null selectors, no
+  selector draws and state-preserving Init/After callbacks with truth routing.
+  Complete card/Audio/Shuffle queue guards and no-Start boundary retained.
+Original evidence; supplied runtime/scheduler boundaries:
+  Exact managed inheritance, slots20/21 folded null body, shared Day-only
+  Act/BluffAct native bodies and original Start-order absence. Authored roster,
+  source/clone, empty Start order and queue inputs; no new retained Gem run.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Seven new authored regressions; all12focused and1000library tests pass,
+  full library20.97s; release build passes. Initial two fixture failures fixed
+  by explicit order,
+  without weakening production missing-order rejection. Scoped format/diff
+  and23note-link checks pass. No native full-history comparison claimed.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No public-domain or complete world-set promotion. Older versions still
+  reject real Gemcrafter; malformed bindings and deferred callbacks reject
+  atomically. Real Alchemist and18other fallback callbacks remain unsupported.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy, native generation/path weights or probability promotion.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out outcome/budget comparison. Prior34simulation passes retained
+  for unchanged live behavior; this opt-in model has no live bridge consumer.
+New uncertainty, regressions and remaining exclusions:
+  Original retained Gem histories, full fallback, deck publication, global
+  Day and legal PlayerHistory remain open. Native readiness/Hunter prototypes
+  are private and unvalidated; a service-pause mismatch prevents certification.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Continue exact retained continuation/pause closure and one original Hunter
+  publication. Remove only the supported class gap from the mixedN5 proposal;
+  preserve the public-deck/latent-world/held-out and legal-policy prerequisites.
+```

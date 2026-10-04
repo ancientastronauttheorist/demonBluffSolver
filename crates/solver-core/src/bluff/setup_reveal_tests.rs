@@ -266,3 +266,159 @@ fn old_data_roles_cannot_admit_new_bluffs_in_v1_through_v3() {
         );
     }
 }
+
+/// Authored asset substitution, supported by Archivist inheritance/shared bodies.
+/// This does not extend the original generation witness to another roster.
+pub(crate) fn gemcrafter_context() -> RevealContext {
+    let mut input = context();
+    input.rule_version = SETUP_REVEAL_CALLBACKS_NATIVE_V6.into();
+    input.actors[4].data_role = DataRole::Gemcrafter;
+    input.actors[4].action_role = CallbackRole::Gemcrafter;
+    for pool in [
+        &mut input.pools.unique,
+        &mut input.pools.duplicate,
+        &mut input.pools.script.villagers,
+    ] {
+        for role in pool {
+            if role == "Gemcrafter" {
+                *role = "Enlightened".into();
+            } else if role == "Enlightened" {
+                *role = "Gemcrafter".into();
+            }
+        }
+    }
+    input
+}
+
+#[test]
+fn gemcrafter_v6_null_selectors_preserve_non_day_state_and_truth_routing() {
+    for corrupted in [false, true] {
+        let mut input = gemcrafter_context();
+        let mut actor = input.actors.pop().unwrap();
+        actor.remaining_continuations = 2;
+        actor.statuses.values = if corrupted { vec![10, 25] } else { vec![26] };
+        actor.statuses.resistance = vec![26];
+        actor.statuses.target_position = Some(3);
+        input.actors = vec![actor.clone()];
+        input.resumes = vec![
+            ResumeEvent {
+                position: 5,
+                resume_ordinal: 7,
+                acquisition_ordinal: Some(11),
+            },
+            ResumeEvent {
+                position: 5,
+                resume_ordinal: 9,
+                acquisition_ordinal: Some(12),
+            },
+        ];
+        let paths = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(paths.len(), 1);
+        let path = &paths[0];
+        assert_eq!(
+            path.probability,
+            Probability {
+                numerator: 1,
+                denominator: 1
+            }
+        );
+        assert_eq!(path.pools, input.pools);
+        assert_eq!(path.trace.len(), 2);
+        let mut expected = actor.clone();
+        expected.register_as = None;
+        expected.remaining_continuations = 0;
+        assert_eq!(path.actors, [expected]);
+        for (i, trace) in path.trace.iter().enumerate() {
+            assert_eq!(trace.event, input.resumes[i]);
+            assert_eq!(
+                trace.previous_register_as,
+                if i == 0 {
+                    actor.register_as.clone()
+                } else {
+                    None
+                }
+            );
+            assert!(trace.acquisition.is_none() && trace.selector_status.is_none());
+            assert!(trace.spy_register_as.is_none() && trace.spy_acquisition.is_none());
+            assert_eq!(trace.callbacks.len(), 2);
+            for (callback, trigger) in trace
+                .callbacks
+                .iter()
+                .zip([Trigger::Init, Trigger::AfterRoundStart])
+            {
+                assert_eq!(callback.trigger, trigger);
+                assert_eq!(callback.slot, RoleSlot::Real);
+                assert_eq!(callback.role, CallbackRole::Gemcrafter);
+                assert_eq!(
+                    callback.dispatch,
+                    if corrupted {
+                        Dispatch::BluffAct
+                    } else {
+                        Dispatch::Act
+                    }
+                );
+                assert!(callback.status_application.is_none());
+            }
+        }
+    }
+}
+
+#[test]
+fn gemcrafter_requires_v6_and_exact_real_good_binding() {
+    let baseline = gemcrafter_context();
+    for version in [
+        REVEAL_CALLBACKS_NATIVE_V1,
+        REVEAL_CALLBACKS_SPY_NATIVE_V2,
+        REVEAL_CALLBACKS_START_NATIVE_V3,
+        SETUP_CALLBACKS_NATIVE_V4,
+        SETUP_REVEAL_CALLBACKS_NATIVE_V5,
+    ] {
+        let mut input = baseline.clone();
+        input.rule_version = version.into();
+        input.actors = vec![input.actors.pop().unwrap()];
+        input.resumes.clear();
+        input.pools.unique = vec!["Confessor".into()];
+        input.pools.duplicate = vec!["Confessor".into()];
+        input.actors[0].character_start_acted =
+            (![REVEAL_CALLBACKS_NATIVE_V1, REVEAL_CALLBACKS_SPY_NATIVE_V2].contains(&version))
+                .then_some(false);
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+    for mutation in 0..7 {
+        let mut input = baseline.clone();
+        match mutation {
+            0 => input.actors[4].action_role = CallbackRole::Hunter,
+            1 => input.actors[4].runtime_evil = true,
+            2 => {
+                input.actors[4].bluff = BluffReference::Live {
+                    role: BluffRole::Gemcrafter,
+                };
+                input.actors[4].bluff_role = Some(CallbackRole::Gemcrafter);
+            }
+            3 => input.actors[4].statuses.values.push(30),
+            4 => input.actors[4].character_start_acted = None,
+            5 => input.actors[4].on_trigger_subscribed = true,
+            6 => input.actors[4].action_role = CallbackRole::Alchemist,
+            _ => unreachable!(),
+        }
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+    let mut unsupported = serde_json::to_value(baseline).unwrap();
+    unsupported["actors"][4]["data_role"] = serde_json::json!("alchemist");
+    assert!(serde_json::from_value::<RevealContext>(unsupported).is_err());
+}
+
+#[test]
+fn v6_preserves_all_v5_outcomes_without_a_real_gemcrafter() {
+    let input = context();
+    let expected = replay_reveal_callbacks(&input).unwrap();
+    let mut v6 = input;
+    v6.rule_version = SETUP_REVEAL_CALLBACKS_NATIVE_V6.into();
+    assert_eq!(replay_reveal_callbacks(&v6).unwrap(), expected);
+}

@@ -9,6 +9,8 @@
 //! V5 admits caller-proven acquisition for those five data roles, without
 //! HealthyBluff Start. Its six bluff outcomes have bounded Init/AfterRoundStart
 //! support; Alchemist is admitted only as a lying Minion's copied role.
+//! V6 additionally admits real Gemcrafter's inherited null selectors and
+//! Day-only callbacks at Init/AfterRoundStart, under the same no-Start guard.
 //! The caller establishes phase/Hidden state; this callback kernel has no body.
 //! It does not reconstruct coroutine order, native object graphs, view updates,
 //! or subscribers. The caller must exclude intervening mutations, including
@@ -29,6 +31,15 @@ pub const REVEAL_CALLBACKS_START_NATIVE_V3: &str = "bounded_reveal_callbacks_sta
 pub const SETUP_CALLBACKS_NATIVE_V4: &str = "bounded_setup_callbacks_native_v4";
 /// Non-Day original-role acquisition, with no HealthyBluff Start dispatch.
 pub const SETUP_REVEAL_CALLBACKS_NATIVE_V5: &str = "bounded_setup_reveal_callbacks_native_v5";
+pub const SETUP_REVEAL_CALLBACKS_NATIVE_V6: &str = "bounded_setup_reveal_callbacks_native_v6";
+
+pub(super) fn setup_acquisition_version(version: &str) -> bool {
+    [
+        SETUP_REVEAL_CALLBACKS_NATIVE_V5,
+        SETUP_REVEAL_CALLBACKS_NATIVE_V6,
+    ]
+    .contains(&version)
+}
 const MAX_RESUMES: usize = 16;
 const MAX_PATHS: usize = 65_536;
 const MAX_ENTRIES: usize = 1_048_576;
@@ -52,13 +63,19 @@ pub enum DataRole {
     Lover,
     Hunter,
     Enlightened,
+    Gemcrafter,
 }
 
 impl DataRole {
     pub(super) fn setup_only(self) -> bool {
         matches!(
             self,
-            Self::Minion | Self::Confessor | Self::Lover | Self::Hunter | Self::Enlightened
+            Self::Minion
+                | Self::Confessor
+                | Self::Lover
+                | Self::Hunter
+                | Self::Enlightened
+                | Self::Gemcrafter
         )
     }
 }
@@ -358,7 +375,8 @@ fn selector_ledger(pools: SelectorPools, events: Vec<SelectorEvent>) -> Selector
 
 fn validate(context: &RevealContext) -> Result<(), LedgerError> {
     let setup_only = context.rule_version == SETUP_CALLBACKS_NATIVE_V4;
-    let setup_reveal = context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5;
+    let setup_reveal = setup_acquisition_version(&context.rule_version);
+    let real_gemcrafter = context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V6;
     let start_latches =
         setup_only || setup_reveal || context.rule_version == REVEAL_CALLBACKS_START_NATIVE_V3;
     if ![
@@ -367,6 +385,7 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
         REVEAL_CALLBACKS_START_NATIVE_V3,
         SETUP_CALLBACKS_NATIVE_V4,
         SETUP_REVEAL_CALLBACKS_NATIVE_V5,
+        SETUP_REVEAL_CALLBACKS_NATIVE_V6,
     ]
     .contains(&context.rule_version.as_str())
         || context.board_size == 0
@@ -423,6 +442,7 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
             || actor.position > context.board_size
             || seen[usize::from(actor.position)]
             || actor.on_trigger_subscribed
+            || (actor.data_role == DataRole::Gemcrafter && !real_gemcrafter)
             || (!setup_only
                 && !setup_reveal
                 && (actor.data_role.setup_only()
@@ -491,6 +511,7 @@ fn valid_setup_reveal_actor(actor: &RevealActor) -> bool {
         DataRole::Lover => CallbackRole::Lover,
         DataRole::Hunter => CallbackRole::Hunter,
         DataRole::Enlightened => CallbackRole::Enlightened,
+        DataRole::Gemcrafter => CallbackRole::Gemcrafter,
         _ => return false,
     };
     if actor.action_role != expected
@@ -758,10 +779,10 @@ fn replay_phase(
                 continue;
             }
             if let Some(acquisition_ordinal) = event.acquisition_ordinal {
-                // The four Good source classes use the folded base-null selector.
+                // Admitted Good source classes use the folded base-null selector.
                 // They still enter acquisition, clear registerAs, and execute
                 // callbacks, but consume no RNG draw and install no copied role.
-                if context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5
+                if setup_acquisition_version(&context.rule_version)
                     && actor.data_role != DataRole::Minion
                 {
                     let callbacks = if include_callbacks {
@@ -788,9 +809,7 @@ fn replay_phase(
                         corruption_resistant: actor.statuses.resistance.contains(&CORRUPTED),
                     },
                     DataRole::Spy { .. } => unreachable!("Spy register-as handled above"),
-                    DataRole::Minion
-                        if context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5 =>
-                    {
+                    DataRole::Minion if setup_acquisition_version(&context.rule_version) => {
                         Selector::Minion
                     }
                     // V4 rejects all resume events before entering this loop.
@@ -798,7 +817,8 @@ fn replay_phase(
                     | DataRole::Confessor
                     | DataRole::Lover
                     | DataRole::Hunter
-                    | DataRole::Enlightened => return Err(LedgerError::InvalidContext),
+                    | DataRole::Enlightened
+                    | DataRole::Gemcrafter => return Err(LedgerError::InvalidContext),
                 };
                 let selector_status = if actor.data_role == DataRole::Drunk {
                     Some(actor.statuses.apply(CORRUPTED, Some(actor.position)))
@@ -895,6 +915,7 @@ mod tests {
                 DataRole::Lover => CallbackRole::Lover,
                 DataRole::Hunter => CallbackRole::Hunter,
                 DataRole::Enlightened => CallbackRole::Enlightened,
+                DataRole::Gemcrafter => CallbackRole::Gemcrafter,
             },
             runtime_evil: data_role == DataRole::Lilis,
             bluff: BluffReference::Null,

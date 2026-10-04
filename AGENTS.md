@@ -133,6 +133,8 @@ stop, diagnose, fix, verify, then resume.
     Distinguish absent/null row fields before indexing reference pairs; verify
     their container type and required length. Set PowerShell diagnostic scans
     to stop on errors so partial counters cannot be mistaken for valid totals.
+    Count PowerShell property collections explicitly with `@(...).Count`;
+    member enumeration can return one count per property instead of a total.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Distinguish resume-call totals
@@ -161,9 +163,16 @@ stop, diagnose, fix, verify, then resume.
     labels from a previous case.
     Check inherited harness preconditions before composing retained native calls;
     derive branch expectations from retained storage rather than fresh-fixture defaults.
+    An Init-only fixture can omit an order that full replay requires; supply
+    an explicit valid order for authored replay rather than unwrapping an absent one.
     Emulation can return at a time/instruction budget without completing a call.
     Verify RIP and the declared stop/completion before applying return ABI checks;
     a bounded continuation must retain the live CPU, stack and service chronology.
+    Bind the active emulator to the actual managed or engine caller before
+    capturing service-entry ABI; stopped callbacks retain that live context
+    rather than applying successful-return assertions or restoring the parent.
+    Verify outer unwind handlers preserve the stopped active-machine marker,
+    and include that marker when comparing complete stopped states.
     Qualify callback plans by the invocation that can reach them; do not carry
     a later call's mutation plan onto an earlier setup-only call.
     Bind indexed literal-array expressions before using them in serde_json::json!
@@ -190,6 +199,9 @@ stop, diagnose, fix, verify, then resume.
     edited file, especially large legacy tables touched only by a comment edit.
     A whitespace-only comparison can still differ on formatter-added trailing
     commas; inspect those punctuation changes before treating it as a source edit.
+    Resolve current agent names with `list_agents` after goal continuations;
+    earlier context can name a prior agent tree. Relay through the primary if
+    messaging an unavailable target hits a thread limit rather than retrying it.
     If spawning hits the agent thread limit, reuse available workers only when
     their model matches the current user preference; otherwise continue in the
     primary agent. Completed tasks may still retain their thread slots, and
@@ -292,8 +304,12 @@ stop, diagnose, fix, verify, then resume.
     phase, since base constructors can invoke overrides before derived state exists.
     Qualify callback mutations and UI service expectations at shared gateways
     by the verified native caller or decoded return site so a parent call cannot
-    trigger a callee-only effect. Shared sprite setters can target background
+    trigger a callee-only effect. At shared collection gateways, also qualify
+    protected-list plans by the retained destination identity; temporary producer
+    lists can enter the same native body. Shared sprite setters can target background
     images as well as card art; do not impose one caller's asset expectation on both.
+    Map each shared UI gateway to its decoded direct call and return site;
+    a combined caller allowlist does not identify which call reaches a constructor.
     Separate per-invocation service ordinals from retained chronological logs;
     a prior call's count must not suppress the next call's authored callback.
     Pause/reentry retries must consume inherited diagnostic counters and labels

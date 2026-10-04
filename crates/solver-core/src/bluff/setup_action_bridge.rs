@@ -13,7 +13,7 @@ use super::{
     reveal::{
         BluffReference, CallbackRole, CallbackTrace, DataRole, Dispatch, RevealActor,
         RevealContext, RoleSlot, StatusState, Trigger, REVEAL_CALLBACKS_START_NATIVE_V3,
-        SETUP_CALLBACKS_NATIVE_V4,
+        SETUP_CALLBACKS_NATIVE_V4, SETUP_REVEAL_CALLBACKS_NATIVE_V6,
     },
     reveal_writer::{RevealWriterContext, ViewUiState, REVEAL_WRITER_VIEW_NATIVE_V2},
     setup_initialization_batch::{self as initialization, Context as InitializationContext},
@@ -24,6 +24,8 @@ use std::collections::{BTreeMap, BTreeSet};
 pub const SETUP_ACTION_BRIDGE_NATIVE_V1: &str = "setup_action_bridge_native_v1";
 /// Includes original N5 data/classes but produces a setup-only registry.
 pub const SETUP_ACTION_BRIDGE_NATIVE_V2: &str = "setup_action_bridge_native_v2";
+/// Adds source/real Archivist under V6's guarded no-Start acquisition domain.
+pub const SETUP_ACTION_BRIDGE_NATIVE_V3: &str = "setup_action_bridge_native_v3";
 const MAX_PATHS: usize = 256;
 const MAX_RETAINED: usize = 1_048_576;
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -80,6 +82,7 @@ fn class(role: DataRole) -> &'static str {
         DataRole::Lover => "Empath",
         DataRole::Hunter => "Tracker",
         DataRole::Enlightened => "Shugenja",
+        DataRole::Gemcrafter => "Archivist",
     }
 }
 fn callback(class: &str) -> Result<CallbackRole, LedgerError> {
@@ -95,6 +98,7 @@ fn callback(class: &str) -> Result<CallbackRole, LedgerError> {
         "Empath" => CallbackRole::Lover,
         "Tracker" => CallbackRole::Hunter,
         "Shugenja" => CallbackRole::Enlightened,
+        "Archivist" => CallbackRole::Gemcrafter,
         _ => return Err(LedgerError::InvalidContext),
     })
 }
@@ -110,7 +114,12 @@ fn physical_positions(c: &initialization::Replay) -> Result<Vec<u8>, LedgerError
         .collect()
 }
 fn project(c: &Context) -> Result<Path, LedgerError> {
-    if ![SETUP_ACTION_BRIDGE_NATIVE_V1, SETUP_ACTION_BRIDGE_NATIVE_V2].contains(&c.version.as_str())
+    if ![
+        SETUP_ACTION_BRIDGE_NATIVE_V1,
+        SETUP_ACTION_BRIDGE_NATIVE_V2,
+        SETUP_ACTION_BRIDGE_NATIVE_V3,
+    ]
+    .contains(&c.version.as_str())
         || !c.action_classes_and_caches_verified
         || !c.on_trigger_absent
         || !c.final_services_inert
@@ -175,6 +184,9 @@ fn project(c: &Context) -> Result<Path, LedgerError> {
     let mut cache_sources = BTreeMap::new();
     let mut source_keys = BTreeMap::new();
     for (identity, role) in &c.data_roles {
+        if *role == DataRole::Gemcrafter && c.version != SETUP_ACTION_BRIDGE_NATIVE_V3 {
+            return Err(LedgerError::InvalidContext);
+        }
         if roles_seen.contains(role) {
             return Err(LedgerError::InvalidContext);
         }
@@ -292,7 +304,9 @@ fn project(c: &Context) -> Result<Path, LedgerError> {
     let board = TwinWriterContext {
         rule_version: TWIN_WRITER_NATIVE_V1.into(),
         reveal: RevealContext {
-            rule_version: if c.version == SETUP_ACTION_BRIDGE_NATIVE_V2 {
+            rule_version: if c.version == SETUP_ACTION_BRIDGE_NATIVE_V3 {
+                SETUP_REVEAL_CALLBACKS_NATIVE_V6.into()
+            } else if c.version == SETUP_ACTION_BRIDGE_NATIVE_V2 {
                 SETUP_CALLBACKS_NATIVE_V4.into()
             } else {
                 REVEAL_CALLBACKS_START_NATIVE_V3.into()

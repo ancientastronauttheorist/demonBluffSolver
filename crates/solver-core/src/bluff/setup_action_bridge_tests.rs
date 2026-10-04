@@ -1261,3 +1261,205 @@ fn original_subscriber_first_waits_match_conditional_native_checkpoint() {
         Err(LedgerError::InvalidContext)
     );
 }
+
+/// Authored substitution in an initialization-shaped fixture. Archivist's
+/// exact source/clone binding is supplied; this is not a new generation trace.
+fn gemcrafter_setup_context() -> Context {
+    let mut input = original_n5_context();
+    input.version = SETUP_ACTION_BRIDGE_NATIVE_V3.into();
+    // The inherited fixture stops before Start and supplies no order. A full
+    // no-Start replay requires this explicit authored empty array instead.
+    assert!(input.initialization.caller.state.order.is_none());
+    let order = "gemcrafter_no_start_order".to_owned();
+    assert!(!input
+        .initialization
+        .caller
+        .state
+        .arrays
+        .contains_key(&order));
+    input.initialization.caller.state.order = Some(order.clone());
+    input.initialization.caller.state.arrays.insert(
+        order,
+        caller::Array {
+            items: vec![],
+            length: 0,
+        },
+    );
+    let data = *input
+        .data_roles
+        .iter()
+        .find(|(_, role)| **role == DataRole::Enlightened)
+        .unwrap()
+        .0;
+    input.data_roles.insert(data, DataRole::Gemcrafter);
+    let source = input.initialization.data[&data].source_role.unwrap();
+    let source_alias = input
+        .initialization
+        .object_identities
+        .iter()
+        .find(|(_, id)| **id == source)
+        .unwrap()
+        .0
+        .clone();
+    input
+        .initialization
+        .caller
+        .roles
+        .insert(source_alias, "Archivist".into());
+    let mut hierarchy = input
+        .initialization
+        .caller
+        .classes
+        .remove("Shugenja")
+        .unwrap();
+    assert_eq!(hierarchy.last().unwrap(), "Shugenja");
+    *hierarchy.last_mut().unwrap() = "Archivist".into();
+    input
+        .initialization
+        .caller
+        .classes
+        .insert("Archivist".into(), hierarchy);
+    for allocation in &mut input.initialization.allocations {
+        let clone = allocation.clone.as_mut().unwrap();
+        if clone.source_role == source {
+            clone.managed_class = "Archivist".into();
+            input
+                .action_classes
+                .insert(clone.identity, "Archivist".into());
+        }
+    }
+    let pools = super::super::reveal::setup_reveal_tests::gemcrafter_context().pools;
+    input.pools = pools;
+    input
+}
+
+#[test]
+fn gemcrafter_setup_v3_binds_source_clone_and_preserves_no_start_prefix() {
+    let input = gemcrafter_setup_context();
+    let order = input.initialization.caller.state.order.as_ref().unwrap();
+    assert!(input.initialization.caller.state.arrays[order]
+        .items
+        .is_empty());
+    assert_eq!(input.initialization.caller.state.arrays[order].length, 0);
+    let prefix = replay_init_prefix(&input).unwrap();
+    assert_eq!(
+        prefix.state.initial.board.reveal.rule_version,
+        SETUP_REVEAL_CALLBACKS_NATIVE_V6
+    );
+    assert_eq!(prefix.state.pending.len(), 5);
+    assert!(prefix.created.is_empty());
+    let actor = prefix
+        .state
+        .initial
+        .board
+        .reveal
+        .actors
+        .iter()
+        .find(|a| a.data_role == DataRole::Gemcrafter)
+        .unwrap();
+    assert_eq!(actor.action_role, CallbackRole::Gemcrafter);
+    assert!(!actor.runtime_evil && actor.bluff_role.is_none());
+    assert_eq!(actor.character_start_acted, Some(false));
+    assert_eq!(actor.remaining_continuations, 1);
+    assert!(actor.statuses.values.is_empty());
+    let call = prefix
+        .calls
+        .iter()
+        .find(|c| c.position == actor.position)
+        .unwrap();
+    assert_eq!(call.trigger, Trigger::Init);
+    assert_eq!(call.init_callbacks.len(), 1);
+    assert_eq!(call.init_callbacks[0].role, CallbackRole::Gemcrafter);
+    assert_eq!(call.init_callbacks[0].dispatch, Dispatch::Act);
+    assert!(call.init_callbacks[0].status_application.is_none());
+    let paths = replay(&input).unwrap();
+    assert_eq!(paths, [prefix]);
+}
+
+#[test]
+fn gemcrafter_setup_v3_rejects_old_versions_misbindings_and_requested_start() {
+    for version in [SETUP_ACTION_BRIDGE_NATIVE_V1, SETUP_ACTION_BRIDGE_NATIVE_V2] {
+        let mut input = gemcrafter_setup_context();
+        input.version = version.into();
+        assert_eq!(replay_init_prefix(&input), Err(LedgerError::InvalidContext));
+    }
+    for mutation in 0..5 {
+        let mut input = gemcrafter_setup_context();
+        let data = *input
+            .data_roles
+            .iter()
+            .find(|(_, role)| **role == DataRole::Gemcrafter)
+            .unwrap()
+            .0;
+        let source = input.initialization.data[&data].source_role.unwrap();
+        let clone = input
+            .initialization
+            .allocations
+            .iter()
+            .find(|a| a.clone.as_ref().unwrap().source_role == source)
+            .unwrap()
+            .clone
+            .as_ref()
+            .unwrap()
+            .identity;
+        match mutation {
+            0 => {
+                input.action_classes.insert(clone, "Tracker".into());
+            }
+            1 => {
+                input
+                    .initialization
+                    .allocations
+                    .iter_mut()
+                    .find(|a| a.clone.as_ref().unwrap().identity == clone)
+                    .unwrap()
+                    .clone
+                    .as_mut()
+                    .unwrap()
+                    .managed_class = "Tracker".into();
+            }
+            2 => {
+                input
+                    .initialization
+                    .data
+                    .get_mut(&data)
+                    .unwrap()
+                    .starting_alignment = 20
+            }
+            3 => {
+                let alias = input
+                    .initialization
+                    .object_identities
+                    .iter()
+                    .find(|(_, id)| **id == data)
+                    .unwrap()
+                    .0
+                    .clone();
+                let order = input.initialization.caller.state.order.clone().unwrap();
+                input.initialization.caller.state.arrays.insert(
+                    order,
+                    caller::Array {
+                        items: vec![Some(alias)],
+                        length: 1,
+                    },
+                );
+                let prefix = replay_init_prefix(&input).unwrap();
+                let gem = prefix
+                    .state
+                    .initial
+                    .board
+                    .reveal
+                    .actors
+                    .iter()
+                    .find(|a| a.data_role == DataRole::Gemcrafter)
+                    .unwrap();
+                assert_eq!(prefix.current_data[&gem.position], data);
+            }
+            4 => input.initialization.caller.state.order = None,
+            _ => unreachable!(),
+        }
+        let before = input.clone();
+        assert_eq!(replay(&input), Err(LedgerError::InvalidContext));
+        assert_eq!(input, before);
+    }
+}

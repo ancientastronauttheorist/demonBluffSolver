@@ -1,15 +1,18 @@
 //! Weighted DelayReveal completions driven by an explicitly supplied native
-//! one-shot queue. V1 requires a complete DelayReveal-only queue. Both versions
+//! one-shot queue. V1 requires a complete DelayReveal-only queue. All versions
 //! require matching live owners, inert release bodies and producer snapshots.
 //! V2 admits guarded original-role Hidden acquisition with typed Audio/Shuffle
 //! waits preserved in the complete queue. Reaching either deferred callback is
 //! unsupported and rejects the whole drain, including earlier callback effects.
+//! V3 adds V6 real Gemcrafter under the same complete-queue and deferred guards.
 
 use super::continuation_registry::{
     advance_ready_batch, validate_registry, ContinuationPath, ContinuationState,
 };
 use super::ledger::{LedgerError, Probability};
-use super::reveal::SETUP_REVEAL_CALLBACKS_NATIVE_V5;
+use super::reveal::{
+    setup_acquisition_version, SETUP_REVEAL_CALLBACKS_NATIVE_V5, SETUP_REVEAL_CALLBACKS_NATIVE_V6,
+};
 use super::twin_writer::retained_entries;
 use super::wait_eligibility::WaitDispatchContext;
 use super::wait_queue::{
@@ -20,6 +23,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub const SCHEDULED_REVEAL_NATIVE_V1: &str = "scheduled_delay_reveal_native_v1";
 pub const SCHEDULED_SETUP_REVEAL_NATIVE_V2: &str = "scheduled_setup_reveal_native_v2";
+/// V6 real Gemcrafter acquisition; deferred Audio/Shuffle remain guarded.
+pub const SCHEDULED_SETUP_REVEAL_NATIVE_V3: &str = "scheduled_setup_reveal_native_v3";
 
 /// Caller-proven coroutine identity; no execution/effects are modeled here.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -86,15 +91,28 @@ pub struct ScheduledRevealPath {
 }
 
 fn validate_join(state: &ScheduledRevealState) -> Result<(), LedgerError> {
-    let setup = state.rule_version == SCHEDULED_SETUP_REVEAL_NATIVE_V2;
-    if ![SCHEDULED_REVEAL_NATIVE_V1, SCHEDULED_SETUP_REVEAL_NATIVE_V2]
-        .contains(&state.rule_version.as_str())
+    let setup = [
+        SCHEDULED_SETUP_REVEAL_NATIVE_V2,
+        SCHEDULED_SETUP_REVEAL_NATIVE_V3,
+    ]
+    .contains(&state.rule_version.as_str());
+    if ![
+        SCHEDULED_REVEAL_NATIVE_V1,
+        SCHEDULED_SETUP_REVEAL_NATIVE_V2,
+        SCHEDULED_SETUP_REVEAL_NATIVE_V3,
+    ]
+    .contains(&state.rule_version.as_str())
     {
         return Err(LedgerError::InvalidContext);
     }
     validate_registry(&state.continuations)?;
     if setup {
-        if state.continuations.initial.board.reveal.rule_version != SETUP_REVEAL_CALLBACKS_NATIVE_V5
+        let expected_reveal = if state.rule_version == SCHEDULED_SETUP_REVEAL_NATIVE_V3 {
+            SETUP_REVEAL_CALLBACKS_NATIVE_V6
+        } else {
+            SETUP_REVEAL_CALLBACKS_NATIVE_V5
+        };
+        if state.continuations.initial.board.reveal.rule_version != expected_reveal
             || state
                 .continuations
                 .initial
@@ -113,7 +131,7 @@ fn validate_join(state: &ScheduledRevealState) -> Result<(), LedgerError> {
             return Err(LedgerError::InvalidContext);
         }
     } else if !state.deferred_waits.is_empty()
-        || state.continuations.initial.board.reveal.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5
+        || setup_acquisition_version(&state.continuations.initial.board.reveal.rule_version)
     {
         return Err(LedgerError::InvalidContext);
     }
@@ -256,7 +274,11 @@ pub fn replay_scheduled_reveal(
                 .ok_or(LedgerError::InvalidContext)?;
             if !boundary.same_live_owner
                 || !boundary.producer_time.is_finite()
-                || (context.rule_version == SCHEDULED_SETUP_REVEAL_NATIVE_V2
+                || ([
+                    SCHEDULED_SETUP_REVEAL_NATIVE_V2,
+                    SCHEDULED_SETUP_REVEAL_NATIVE_V3,
+                ]
+                .contains(&context.rule_version.as_str())
                     && boundary.callback_result != 1)
             {
                 return Err(LedgerError::InvalidContext);

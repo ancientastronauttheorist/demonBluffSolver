@@ -649,3 +649,96 @@ fn retained_original_n5_acquisition_matches_independent_native_projection() {
         .collect();
     assert_eq!(released, callback_order);
 }
+
+fn gemcrafter_input() -> ScheduledRevealContext {
+    let mut context = input();
+    context.rule_version = SCHEDULED_SETUP_REVEAL_NATIVE_V3.into();
+    context.initial.rule_version = SCHEDULED_SETUP_REVEAL_NATIVE_V3.into();
+    let mut reveal = setup_reveal_tests::gemcrafter_context();
+    reveal.resumes.clear();
+    context.initial.continuations.initial.board.reveal = reveal;
+    context
+}
+
+#[test]
+fn gemcrafter_v3_mixed_queue_preserves_all_cards_and_deferred_records() {
+    let context = gemcrafter_input();
+    let paths = replay_scheduled_reveal(&context).unwrap();
+    assert_eq!(paths.len(), 6);
+    for path in paths {
+        assert_eq!(path.state.rule_version, SCHEDULED_SETUP_REVEAL_NATIVE_V3);
+        assert_eq!(
+            path.callbacks
+                .iter()
+                .map(|c| c.logical_id)
+                .collect::<Vec<_>>(),
+            [1, 2, 3, 4, 5]
+        );
+        assert!(path.state.continuations.pending.is_empty());
+        assert_eq!(path.state.continuations.next_id, 8);
+        assert_eq!(path.state.continuations.batch_ordinal, 5);
+        assert_eq!(path.state.queue.entries, context.initial.queue.entries[5..]);
+        assert_eq!(path.state.deferred_waits, context.initial.deferred_waits);
+        assert_eq!(
+            path.state.continuations.initial.board.bodies,
+            context.initial.continuations.initial.board.bodies
+        );
+        let gem = &path.state.continuations.initial.board.reveal.actors[4];
+        assert_eq!(gem.data_role, crate::bluff::reveal::DataRole::Gemcrafter);
+        assert_eq!(gem.remaining_continuations, 0);
+        assert!(gem.register_as.is_none());
+        assert_eq!(
+            gem.statuses,
+            context.initial.continuations.initial.board.reveal.actors[4].statuses
+        );
+        assert_eq!(gem.character_start_acted, Some(false));
+        assert!(path
+            .queue_trace
+            .iter()
+            .all(|e| !matches!(e, WaitQueueEvent::Callback { logical_id: 6 | 7 })));
+    }
+}
+
+#[test]
+fn gemcrafter_v3_rejects_version_mismatch_and_complete_queue_gaps_atomically() {
+    for mutation in 0..8 {
+        let mut context = gemcrafter_input();
+        match mutation {
+            0 => {
+                context.rule_version = SCHEDULED_SETUP_REVEAL_NATIVE_V2.into();
+                context.initial.rule_version = SCHEDULED_SETUP_REVEAL_NATIVE_V2.into();
+            }
+            1 => {
+                context
+                    .initial
+                    .continuations
+                    .initial
+                    .board
+                    .reveal
+                    .rule_version = SETUP_REVEAL_CALLBACKS_NATIVE_V5.into()
+            }
+            2 => {
+                context.initial.queue.entries.pop();
+            }
+            3 => {
+                context.initial.deferred_waits.remove(&7);
+            }
+            4 => {
+                context
+                    .initial
+                    .deferred_waits
+                    .insert(7, DeferredSetupWait::Audio);
+            }
+            5 => context.callbacks.get_mut(&5).unwrap().callback_result = 0,
+            6 => context.dispatch.sampled_time = context.initial.queue.entries[5].timing.deadline,
+            7 => context.dispatch.sampled_time = context.initial.queue.entries[6].timing.deadline,
+            _ => unreachable!(),
+        }
+        let before = context.clone();
+        assert_eq!(
+            replay_scheduled_reveal(&context),
+            Err(LedgerError::InvalidContext)
+        );
+        assert_eq!(context, before);
+    }
+}

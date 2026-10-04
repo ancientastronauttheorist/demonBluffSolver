@@ -49,15 +49,17 @@ The wider fallback catalogue has 24 candidates. An implementation must retain
 every alternative admitted by its declared public family, or reject that
 family explicitly; it cannot quietly reuse row zero or prune to six candidates.
 
-Two current production boundaries prevent a whole-profile comparison. The five
-native Standard subsets are the five choices of an omitted starting Villager;
-four contain a real Gemcrafter. [Setup-action V2](../../../crates/solver-core/src/bluff/setup_action_bridge.rs)
-and acquisition V5 have no real
-Gemcrafter `DataRole`, despite admitting Gemcrafter as a Minion's copied role.
-Those four subsets remain unsupported. V5 also rejects an entire selector pool
-containing any of the other 18 fallback catalogue roles, even when a particular
-selected duplicate role is supported. Its six-role allowlist is a callback
-boundary, not a replacement for the native 24-role catalogue.
+The five native Standard subsets are the five choices of an omitted starting
+Villager; four contain a real Gemcrafter. The older setup-action V2 and
+acquisition V5 lack that real data binding. The opt-in
+[Gemcrafter boundary](non_day_gemcrafter_setup.md) adds setup-action V3,
+acquisition V6 and scheduled acquisition V3, using exact inherited selectors
+and shared non-Day callback bodies. This removes that class-binding gap under
+declared authored inputs; it does not certify the other four original retained
+generation histories. Both acquisition versions still reject an entire selector
+pool containing any of the other 18 fallback catalogue roles, even when a
+particular selected duplicate role is supported. Their six-role allowlist is
+a callback boundary, not a replacement for the native 24-role catalogue.
 
 A public four-entry deck does not eliminate unobserved fallback choices.
 Duplicate acquisition leaves that deck unchanged for every fallback candidate;
@@ -164,8 +166,9 @@ native-history certificate or admitting a public belief domain. A first-Hunter
 reference may subsequently filter that explicitly conditional support using the
 exact circle/text rule, but global Day, click legality and public publication
 remain additional prerequisites. Whole-profile or whole-fallback full-world
-equality remains unsupported until real Gemcrafter setup and the remaining
-copied callbacks, retained state and reachable caller contracts are represented.
+equality remains unsupported until the remaining copied callbacks, original
+retained Gemcrafter histories, retained state and reachable caller contracts
+are represented and independently compared.
 Their opaque effects must not be replaced with inert callbacks. No new combined
 world count or generation prior is established by this proposal.
 

@@ -137,7 +137,7 @@ pub fn replay_character_start(
 ) -> Result<Vec<CharacterStartPath>, LedgerError> {
     if context.rule_version != CHARACTER_START_NATIVE_V1
         || context.board.copied_slot
-        || context.board.reveal.rule_version == super::reveal::SETUP_REVEAL_CALLBACKS_NATIVE_V5
+        || super::reveal::setup_acquisition_version(&context.board.reveal.rule_version)
     {
         return Err(LedgerError::InvalidContext);
     }

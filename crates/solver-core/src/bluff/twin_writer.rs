@@ -8,6 +8,7 @@ use super::ledger::{LedgerError, Probability};
 use super::reveal::{
     replay_reveal_callbacks, BluffReference, CallbackRole, DataRole, RevealContext, RoleSlot,
     REVEAL_CALLBACKS_START_NATIVE_V3, SETUP_CALLBACKS_NATIVE_V4, SETUP_REVEAL_CALLBACKS_NATIVE_V5,
+    SETUP_REVEAL_CALLBACKS_NATIVE_V6,
 };
 use crate::knowledge_base::{get_card, Faction};
 use serde::{Deserialize, Serialize};
@@ -77,6 +78,7 @@ fn clone_role(data: DataRole) -> CallbackRole {
         DataRole::Lover => CallbackRole::Lover,
         DataRole::Hunter => CallbackRole::Hunter,
         DataRole::Enlightened => CallbackRole::Enlightened,
+        DataRole::Gemcrafter => CallbackRole::Gemcrafter,
     }
 }
 
@@ -125,6 +127,7 @@ pub(super) fn validate_board(context: &TwinWriterContext) -> Result<(), LedgerEr
             REVEAL_CALLBACKS_START_NATIVE_V3,
             SETUP_CALLBACKS_NATIVE_V4,
             SETUP_REVEAL_CALLBACKS_NATIVE_V5,
+            SETUP_REVEAL_CALLBACKS_NATIVE_V6,
         ]
         .contains(&context.reveal.rule_version.as_str())
         || !context.reveal.resumes.is_empty()
