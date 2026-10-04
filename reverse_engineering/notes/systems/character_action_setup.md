@@ -203,3 +203,49 @@ comparison and restoring the frame mutation, all 971 library tests passed
 (51.66s). Independent native reproduction matched the complete report bytes;
 projection, source hashes, retained-prefix checks, links and privacy checks also
 passed. Production deduction/action rules were unchanged in this integration.
+
+## Conditional Manage return and heterogeneous admission
+
+The [Shuffle admission witness](first_village_shuffle_admission.md) continues
+the same generated N5 transaction through normal Manage return, under an
+explicitly supplied runtime `onSetup=null`. Actual Shuffle state zero creates
+its `.5f` wait and reaches state one; the manager has a separate supplied native
+owner. The five prior actors, clones, statuses, publication and acquisition waits
+remain unchanged. Native report SHA-256:
+`512c221a8362d0fcb1f43cfb0f553d2dd3f63f86a9b7ae8105180b50aeac1565`.
+
+The [no-Rust projector](../../scripts/project_first_village_shuffle_admission.py)
+produces [one conditional checkpoint](../../fixtures/synthetic/first_village_shuffle_admission_v1.json),
+SHA-256 `edad333793ab1c70d1bba35856445b2e4cd0c582413114e3032287f7bf5c3bf2`.
+It derives the semantic prefix from the actual pre-callback native snapshot and
+checks its retained fields against the native final snapshot. Raw node, payload,
+owner and GC fields independently bind six admissions to their exact producer
+timings and occurrence order. Five existing registry labels remain unchanged;
+Shuffle receives a fresh queue-local label and advances that cursor by one.
+Native owner keys and coroutine handles remain separate validation identities.
+
+The Rust test compares all represented actor fields, Init traces, status
+insertion deltas and 75 ordered comparisons. It separately compares the generic
+caller's normal return under the supplied null binding: its registration state
+zero precedes native nested Shuffle's state-one first yield. The full action
+bridge still ends after modeled Start. The six timings match native records,
+including Shuffle deadline 1.5 at producer time 1.0 and full signed frame 7.
+The synthetic predeadline queue probe preserves all six records. With cursors
+aligned, the five-acquisition scheduled-Reveal adapter rejects this mixed queue;
+the test cannot silently discard Shuffle to manufacture acquisition support.
+
+Independent native and projection reproductions matched exact bytes; reviewer,
+source/prior hashes, raw-prefix, link and privacy checks passed. All twelve
+focused bridge tests and all 972 library tests passed (20.56s). Production
+deduction/action kernels were unchanged; earlier status/frame mutation evidence
+retains its stated scope. No new live game or outcome evaluation was performed.
+
+The [original subscriber binding](first_village_on_setup_binding.md) identifies
+an enabled scene animation component linked to this manager. Its native-static
+installer/clearer and handler evidence shows nested audio `.4f` and outer
+animation `.05f` waits under synchronous first-step services, before manager
+Shuffle. It executes zero native bodies and proves no runtime lifecycle or
+eight-record queue. Therefore the six-record witness is a conditional null case,
+not the configured scene's complete queue certificate. Actual subscriber
+invocation, intervening animation resumes, acquisition, Day readiness and legal
+observations remain the next composition.

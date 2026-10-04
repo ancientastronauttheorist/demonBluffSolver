@@ -1,0 +1,1573 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "native_report_sha256": "512c221a8362d0fcb1f43cfb0f553d2dd3f63f86a9b7ae8105180b50aeac1565",
+  "native_source_sha256": "f1a4c5bf5b14da269f0dd55b62349bb16e078ecf6cf1a0dbe179550fc416c4c5",
+  "asset_report_sha256": "1a790f521ba8ec6983bb1634333accb7280f0fe93e49efbaec1af25914479d42",
+  "scope": "Conditional original row0/poolrow0 N5 retained Manage return with explicitly supplied runtime onSetup=null. This does not establish original subscriber absence or enabled-component lifetime. Compare five semantic actors and ordered Start matching, plus six heterogeneous first-wait admission timings/order. Full setup-action replay still ends after modeled Start; generic caller registration state0 is distinct from native Shuffle first-yield state1. A fresh queue-local label represents Shuffle, independently of native handles; the five DelayReveal registry labels are retained. Native owners/tree/payload/GC/CPU/storage remain oracle validation only. Scene slots/UI booleans are supplied adapter inputs. No acquisition resume, Shuffle state1/events, Day, rendered public capture, PlayerHistory, world sets or prior weights.",
+  "context": {
+    "version": "setup_action_bridge_native_v2",
+    "initialization": {
+      "version": "setup_initialization_batch_native_v1",
+      "caller": {
+        "version": "manage_setup_caller_native_v1",
+        "pinned_class_hierarchies": true,
+        "stable_occurrence_services": true,
+        "reference_equality": true,
+        "supplied_init_data_write_only": true,
+        "supplied_gateway_effects_only": true,
+        "caller_metadata_initialized": true,
+        "shuffle_metadata_initialized": true,
+        "math_initialized": true,
+        "gameplay_initialized": true,
+        "object_initialized": true,
+        "state": {
+          "board": "board",
+          "order": "original_start_order",
+          "callback": null,
+          "lists": {
+            "board": {
+              "items": [
+                "actor:0",
+                "actor:1",
+                "actor:2",
+                "actor:3",
+                "actor:4"
+              ],
+              "count": 5
+            }
+          },
+          "arrays": {
+            "original_start_order": {
+              "items": [
+                "data:21594",
+                "data:21593",
+                "data:21597",
+                "data:21605",
+                "data:21602",
+                "data:21595",
+                "data:21599",
+                "data:21590",
+                "data:21606",
+                "data:21600",
+                "data:21609",
+                "data:21634",
+                "data:21598",
+                "data:21607",
+                "data:21591"
+              ],
+              "length": 15
+            }
+          },
+          "identities": {
+            "actor:0": "data:21596",
+            "actor:1": null,
+            "actor:2": null,
+            "actor:3": null,
+            "actor:4": null
+          },
+          "data_roles": {
+            "data:21590": "source:21590",
+            "data:21591": "source:21591",
+            "data:21593": "source:21593",
+            "data:21594": "source:21594",
+            "data:21595": "source:21595",
+            "data:21596": "source:21596",
+            "data:21597": "source:21597",
+            "data:21598": "source:21598",
+            "data:21599": "source:21599",
+            "data:21600": "source:21600",
+            "data:21602": "source:21602",
+            "data:21605": "source:21605",
+            "data:21606": "source:21606",
+            "data:21607": "source:21607",
+            "data:21609": "source:21609",
+            "data:21614": "source:21614",
+            "data:21618": "source:21618",
+            "data:21621": "source:21621",
+            "data:21626": "source:21626",
+            "data:21634": "source:21634"
+          },
+          "iterator_state": 0
+        },
+        "roster": [
+          "data:21596",
+          "data:21614",
+          "data:21626",
+          "data:21621",
+          "data:21618"
+        ],
+        "roles": {
+          "source:21590": "Imp",
+          "source:21591": "Striga",
+          "source:21593": "Pooka",
+          "source:21594": "Baron",
+          "source:21595": "Marionette",
+          "source:21596": "Minion",
+          "source:21597": "Poisoner",
+          "source:21598": "Puppet",
+          "source:21599": "Mezepheles",
+          "source:21600": "Illuzionist",
+          "source:21602": "Cipher",
+          "source:21605": "Drunk",
+          "source:21606": "Puzzlemaster",
+          "source:21607": "Rambler2",
+          "source:21609": "Alchemist",
+          "source:21614": "Confessor",
+          "source:21618": "Shugenja",
+          "source:21621": "Tracker",
+          "source:21626": "Empath",
+          "source:21634": "BountyHunter"
+        },
+        "classes": {
+          "Role": [
+            "Role"
+          ],
+          "Demon": [
+            "Role",
+            "Demon"
+          ],
+          "Imp": [
+            "Role",
+            "Demon",
+            "Imp"
+          ],
+          "Striga": [
+            "Role",
+            "Demon",
+            "Striga"
+          ],
+          "Pooka": [
+            "Role",
+            "Demon",
+            "Pooka"
+          ],
+          "Minion": [
+            "Role",
+            "Minion"
+          ],
+          "Baron": [
+            "Role",
+            "Minion",
+            "Baron"
+          ],
+          "Marionette": [
+            "Role",
+            "Minion",
+            "Marionette"
+          ],
+          "Poisoner": [
+            "Role",
+            "Minion",
+            "Poisoner"
+          ],
+          "Puppet": [
+            "Role",
+            "Minion",
+            "Puppet"
+          ],
+          "Mezepheles": [
+            "Role",
+            "Minion",
+            "Mezepheles"
+          ],
+          "Illuzionist": [
+            "Role",
+            "Minion",
+            "Illuzionist"
+          ],
+          "Cipher": [
+            "Role",
+            "Minion",
+            "Cipher"
+          ],
+          "Drunk": [
+            "Role",
+            "Drunk"
+          ],
+          "Puzzlemaster": [
+            "Role",
+            "Puzzlemaster"
+          ],
+          "Rambler2": [
+            "Role",
+            "Rambler2"
+          ],
+          "Alchemist": [
+            "Role",
+            "Alchemist"
+          ],
+          "Confessor": [
+            "Role",
+            "Confessor"
+          ],
+          "Shugenja": [
+            "Role",
+            "Shugenja"
+          ],
+          "Tracker": [
+            "Role",
+            "Tracker"
+          ],
+          "Empath": [
+            "Role",
+            "Empath"
+          ],
+          "BountyHunter": [
+            "Role",
+            "BountyHunter"
+          ]
+        },
+        "callbacks": [],
+        "failure": null,
+        "after": []
+      },
+      "object_identities": {
+        "actor:0": 12892561408,
+        "actor:1": 12892565504,
+        "actor:2": 12892569600,
+        "actor:3": 12892573696,
+        "actor:4": 12892577792,
+        "data:21590": 12885012480,
+        "source:21590": 12893102080,
+        "data:21591": 12885016576,
+        "source:21591": 12893159424,
+        "data:21593": 12885024768,
+        "source:21593": 12893052928,
+        "data:21594": 12885028864,
+        "source:21594": 12893044736,
+        "data:21595": 12885032960,
+        "source:21595": 12893085696,
+        "data:21596": 12885037056,
+        "source:21596": 12892672000,
+        "data:21597": 12885041152,
+        "source:21597": 12893061120,
+        "data:21598": 12885045248,
+        "source:21598": 12893143040,
+        "data:21599": 12885049344,
+        "source:21599": 12893093888,
+        "data:21600": 12885053440,
+        "source:21600": 12893118464,
+        "data:21602": 12885061632,
+        "source:21602": 12893077504,
+        "data:21605": 12885073920,
+        "source:21605": 12893069312,
+        "data:21606": 12885078016,
+        "source:21606": 12893110272,
+        "data:21607": 12885082112,
+        "source:21607": 12893151232,
+        "data:21609": 12885090304,
+        "source:21609": 12893126656,
+        "data:21614": 12885110784,
+        "source:21614": 12892684288,
+        "data:21618": 12885127168,
+        "source:21618": 12892721152,
+        "data:21621": 12885139456,
+        "source:21621": 12892708864,
+        "data:21626": 12885159936,
+        "source:21626": 12892696576,
+        "data:21634": 12885192704,
+        "source:21634": 12893134848
+      },
+      "actors": {
+        "12892561408": {
+          "data": 12885037056,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892561408,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892565504": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892565504,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892569600": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892569600,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892573696": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892573696,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892577792": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892577792,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        }
+      },
+      "raw_bluff_liveness": {},
+      "positions": {
+        "12892561408": 1,
+        "12892565504": 2,
+        "12892569600": 3,
+        "12892573696": 4,
+        "12892577792": 5
+      },
+      "data": {
+        "12885012480": {
+          "starting_alignment": 20,
+          "source_role": 12893102080
+        },
+        "12885016576": {
+          "starting_alignment": 20,
+          "source_role": 12893159424
+        },
+        "12885024768": {
+          "starting_alignment": 20,
+          "source_role": 12893052928
+        },
+        "12885028864": {
+          "starting_alignment": 20,
+          "source_role": 12893044736
+        },
+        "12885032960": {
+          "starting_alignment": 20,
+          "source_role": 12893085696
+        },
+        "12885037056": {
+          "starting_alignment": 20,
+          "source_role": 12892672000
+        },
+        "12885041152": {
+          "starting_alignment": 20,
+          "source_role": 12893061120
+        },
+        "12885045248": {
+          "starting_alignment": 20,
+          "source_role": 12893143040
+        },
+        "12885049344": {
+          "starting_alignment": 20,
+          "source_role": 12893093888
+        },
+        "12885053440": {
+          "starting_alignment": 20,
+          "source_role": 12893118464
+        },
+        "12885061632": {
+          "starting_alignment": 20,
+          "source_role": 12893077504
+        },
+        "12885073920": {
+          "starting_alignment": 10,
+          "source_role": 12893069312
+        },
+        "12885078016": {
+          "starting_alignment": 10,
+          "source_role": 12893110272
+        },
+        "12885082112": {
+          "starting_alignment": 10,
+          "source_role": 12893151232
+        },
+        "12885090304": {
+          "starting_alignment": 10,
+          "source_role": 12893126656
+        },
+        "12885110784": {
+          "starting_alignment": 10,
+          "source_role": 12892684288
+        },
+        "12885127168": {
+          "starting_alignment": 10,
+          "source_role": 12892721152
+        },
+        "12885139456": {
+          "starting_alignment": 10,
+          "source_role": 12892708864
+        },
+        "12885159936": {
+          "starting_alignment": 10,
+          "source_role": 12892696576
+        },
+        "12885192704": {
+          "starting_alignment": 10,
+          "source_role": 12893134848
+        }
+      },
+      "continuations": [],
+      "allocations": [
+        {
+          "init_index": 0,
+          "clone": {
+            "identity": 12893622272,
+            "source_role": 12892672000,
+            "managed_class": "Minion"
+          },
+          "continuation_identity": 12893618176,
+          "wait_identity": 12893626368
+        },
+        {
+          "init_index": 1,
+          "clone": {
+            "identity": 12893638656,
+            "source_role": 12892684288,
+            "managed_class": "Confessor"
+          },
+          "continuation_identity": 12893634560,
+          "wait_identity": 12893642752
+        },
+        {
+          "init_index": 2,
+          "clone": {
+            "identity": 12893655040,
+            "source_role": 12892696576,
+            "managed_class": "Empath"
+          },
+          "continuation_identity": 12893650944,
+          "wait_identity": 12893659136
+        },
+        {
+          "init_index": 3,
+          "clone": {
+            "identity": 12893671424,
+            "source_role": 12892708864,
+            "managed_class": "Tracker"
+          },
+          "continuation_identity": 12893667328,
+          "wait_identity": 12893675520
+        },
+        {
+          "init_index": 4,
+          "clone": {
+            "identity": 12893687808,
+            "source_role": 12892721152,
+            "managed_class": "Shugenja"
+          },
+          "continuation_identity": 12893683712,
+          "wait_identity": 12893691904
+        }
+      ],
+      "required_objects_and_lists_valid": true,
+      "callbacks_and_ui_inert": true,
+      "clone_results_verified": true,
+      "synchronous_first_yield_verified": true
+    },
+    "data_roles": {
+      "12885037056": "minion",
+      "12885110784": "confessor",
+      "12885159936": "lover",
+      "12885139456": "hunter",
+      "12885127168": "enlightened"
+    },
+    "action_classes": {
+      "12893622272": "Minion",
+      "12893638656": "Confessor",
+      "12893655040": "Empath",
+      "12893671424": "Tracker",
+      "12893687808": "Shugenja"
+    },
+    "action_classes_and_caches_verified": true,
+    "on_trigger_absent": true,
+    "final_services_inert": true,
+    "post_initialization_ui_verified": true,
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "spy_caches": {},
+    "ui": {
+      "1": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "2": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "3": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "4": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "5": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      }
+    },
+    "next_logical_id": 12893683713
+  },
+  "expected": {
+    "actors": [
+      {
+        "position": 1,
+        "data_role": "minion",
+        "action_role": "minion",
+        "runtime_evil": true,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 2,
+        "data_role": "confessor",
+        "action_role": "confessor",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [
+            25
+          ],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 3,
+        "data_role": "lover",
+        "action_role": "lover",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 4,
+        "data_role": "hunter",
+        "action_role": "hunter",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 5,
+        "data_role": "enlightened",
+        "action_role": "enlightened",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      }
+    ],
+    "bodies": {
+      "1": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "2": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "3": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "4": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "5": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      }
+    },
+    "calls": [
+      {
+        "position": 1,
+        "trigger": "init",
+        "initial_lying": true,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "minion",
+            "dispatch": "bluff_act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 2,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "confessor",
+            "dispatch": "act",
+            "status_application": {
+              "status": 25,
+              "accepted": true,
+              "inserted": true,
+              "target_after": null
+            }
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 3,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "lover",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 4,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "hunter",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 5,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "enlightened",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      }
+    ],
+    "current_data": {
+      "1": 12885037056,
+      "2": 12885110784,
+      "3": 12885159936,
+      "4": 12885139456,
+      "5": 12885127168
+    },
+    "current_order": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "pending": {
+      "12893618176": 1,
+      "12893634560": 2,
+      "12893650944": 3,
+      "12893667328": 4,
+      "12893683712": 5
+    },
+    "status_versions": {
+      "1": {
+        "before": 1,
+        "after": 1
+      },
+      "2": {
+        "before": 1,
+        "after": 2
+      },
+      "3": {
+        "before": 1,
+        "after": 1
+      },
+      "4": {
+        "before": 1,
+        "after": 1
+      },
+      "5": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    "ordered_comparisons": [
+      {
+        "left": "data:21594",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21618"
+      }
+    ]
+  },
+  "queue": {
+    "rule_version": "unity_wait_queue_native_v1",
+    "generation": 0,
+    "next_id": 12893683714,
+    "entries": [
+      {
+        "logical_id": 12893618176,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893634560,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893650944,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893667328,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893683712,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893683713,
+        "timing": {
+          "deadline": 1.5,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      }
+    ]
+  },
+  "admission_producers": [
+    {
+      "logical_id": 12893618176,
+      "position": 1,
+      "kind": "acquisition",
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893634560,
+      "position": 2,
+      "kind": "acquisition",
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893650944,
+      "position": 3,
+      "kind": "acquisition",
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893667328,
+      "position": 4,
+      "kind": "acquisition",
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893683712,
+      "position": 5,
+      "kind": "acquisition",
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893683713,
+      "position": null,
+      "kind": "shuffle",
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.5,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.5,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    }
+  ],
+  "expected_caller": {
+    "returned": true,
+    "callback_calls": 0,
+    "registration_state": 0,
+    "start_coroutine_calls": 1
+  },
+  "native_only": {
+    "conditional_on_setup": {
+      "contract": "supplied runtime null; original binding unestablished",
+      "identity": 0,
+      "owner": 12892540928
+    },
+    "shuffle_first_yield": {
+      "identity": 12893786112,
+      "state": 1,
+      "duration_bits": 1056964608
+    },
+    "admission_links": [
+      {
+        "id": 0,
+        "kind": "acquisition",
+        "iterator": 12893618176,
+        "actor": 12892561408,
+        "payload": 8591704064,
+        "native_owner": 8591507456,
+        "owner_key": 101,
+        "logical_id": 12893618176
+      },
+      {
+        "id": 1,
+        "kind": "acquisition",
+        "iterator": 12893634560,
+        "actor": 12892565504,
+        "payload": 8591704320,
+        "native_owner": 8591511552,
+        "owner_key": 102,
+        "logical_id": 12893634560
+      },
+      {
+        "id": 2,
+        "kind": "acquisition",
+        "iterator": 12893650944,
+        "actor": 12892569600,
+        "payload": 8591704576,
+        "native_owner": 8591515648,
+        "owner_key": 103,
+        "logical_id": 12893650944
+      },
+      {
+        "id": 3,
+        "kind": "acquisition",
+        "iterator": 12893667328,
+        "actor": 12892573696,
+        "payload": 8591704832,
+        "native_owner": 8591519744,
+        "owner_key": 104,
+        "logical_id": 12893667328
+      },
+      {
+        "id": 4,
+        "kind": "acquisition",
+        "iterator": 12893683712,
+        "actor": 12892577792,
+        "payload": 8591705088,
+        "native_owner": 8591523840,
+        "owner_key": 105,
+        "logical_id": 12893683712
+      },
+      {
+        "id": 5,
+        "kind": "shuffle",
+        "iterator": 12893786112,
+        "actor": 12892540928,
+        "payload": 8591705344,
+        "native_owner": 8591527936,
+        "owner_key": 106,
+        "logical_id": 12893683713
+      }
+    ],
+    "native_queue_record_order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "physical_owners": [
+      {
+        "key": 101,
+        "list_head": 8591507568,
+        "managed_actor": 12892561408,
+        "native_owner": 8591507456,
+        "payloads": [
+          8591704064
+        ]
+      },
+      {
+        "key": 102,
+        "list_head": 8591511664,
+        "managed_actor": 12892565504,
+        "native_owner": 8591511552,
+        "payloads": [
+          8591704320
+        ]
+      },
+      {
+        "key": 103,
+        "list_head": 8591515760,
+        "managed_actor": 12892569600,
+        "native_owner": 8591515648,
+        "payloads": [
+          8591704576
+        ]
+      },
+      {
+        "key": 104,
+        "list_head": 8591519856,
+        "managed_actor": 12892573696,
+        "native_owner": 8591519744,
+        "payloads": [
+          8591704832
+        ]
+      },
+      {
+        "key": 105,
+        "list_head": 8591523952,
+        "managed_actor": 12892577792,
+        "native_owner": 8591523840,
+        "payloads": [
+          8591705088
+        ]
+      },
+      {
+        "key": 106,
+        "list_head": 8591528048,
+        "managed_actor": 12892540928,
+        "native_owner": 8591527936,
+        "payloads": [
+          8591705344
+        ]
+      }
+    ]
+  }
+}

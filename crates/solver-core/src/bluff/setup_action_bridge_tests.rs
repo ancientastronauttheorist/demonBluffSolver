@@ -853,3 +853,199 @@ fn retained_original_n5_start_and_queue_match_native_checkpoint() {
         Err(LedgerError::InvalidContext)
     );
 }
+
+#[test]
+fn conditional_original_n5_shuffle_admission_matches_native_checkpoint() {
+    use super::super::scheduled_reveal::{
+        replay_scheduled_reveal, ScheduledRevealContext, ScheduledRevealState,
+        SCHEDULED_REVEAL_NATIVE_V1,
+    };
+    use super::super::wait_eligibility::{
+        make_wait_for_seconds, WaitDispatchContext, WaitForSecondsContext,
+        UNITY_WAIT_ELIGIBILITY_NATIVE_V1,
+    };
+    use super::super::wait_queue::{
+        replay_wait_queue, WaitQueueContext, WaitQueueState, UNITY_WAIT_QUEUE_NATIVE_V1,
+    };
+
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../reverse_engineering/fixtures/synthetic/first_village_shuffle_admission_v1.json"
+    )))
+    .unwrap();
+    assert_eq!(fixture["schema_version"], 1);
+    assert_eq!(fixture["build_id"], "f530404b0f3f_807de4a83df4");
+    assert_eq!(
+        fixture["native_report_sha256"],
+        "512c221a8362d0fcb1f43cfb0f553d2dd3f63f86a9b7ae8105180b50aeac1565"
+    );
+    let c: Context = serde_json::from_value(fixture["context"].clone()).unwrap();
+    let expected = &fixture["expected"];
+    let paths = replay(&c).unwrap();
+    assert_eq!(paths.len(), 1);
+    let r = &paths[0];
+    assert_eq!(*r, replay_init_prefix(&c).unwrap());
+    let board = &r.state.initial.board;
+    for (actual, field) in [
+        (
+            serde_json::to_value(&board.reveal.actors).unwrap(),
+            "actors",
+        ),
+        (serde_json::to_value(&board.bodies).unwrap(), "bodies"),
+        (serde_json::to_value(&r.calls).unwrap(), "calls"),
+        (
+            serde_json::to_value(&r.current_data).unwrap(),
+            "current_data",
+        ),
+        (
+            serde_json::to_value(&board.current_order).unwrap(),
+            "current_order",
+        ),
+        (serde_json::to_value(&board.reveal.pools).unwrap(), "pools"),
+        (serde_json::to_value(&r.state.pending).unwrap(), "pending"),
+    ] {
+        assert_eq!(
+            &actual, &expected[field],
+            "conditional native field {field}"
+        );
+    }
+    let initialized = batch::replay(&c.initialization).unwrap();
+    for (identity, position) in &initialized.positions {
+        let native = &expected["status_versions"][position.to_string()];
+        let before = initialized.actors[identity].statuses.version;
+        let inserted = r
+            .calls
+            .iter()
+            .filter(|call| call.position == *position)
+            .flat_map(|call| &call.init_callbacks)
+            .filter(|call| call.status_application.as_ref().is_some_and(|s| s.inserted))
+            .count() as u32;
+        assert_eq!(native["before"], before);
+        assert_eq!(native["after"], before + inserted);
+    }
+
+    // Normal generic-caller return uses the explicitly supplied null binding.
+    // Registration state0 precedes the native nested first step's state1.
+    assert!(c.initialization.caller.state.callback.is_none());
+    assert_eq!(
+        fixture["native_only"]["conditional_on_setup"]["identity"],
+        0
+    );
+    let caller = caller::replay(&c.initialization.caller).unwrap();
+    assert!(caller.error.is_none());
+    let facts = &fixture["expected_caller"];
+    assert_eq!(facts["returned"], caller.returned);
+    assert_eq!(
+        facts["registration_state"],
+        caller.final_state.state.iterator_state
+    );
+    assert_eq!(
+        facts["callback_calls"],
+        caller
+            .events
+            .iter()
+            .filter(|e| e.kind == caller::Gateway::Callback)
+            .count()
+    );
+    assert_eq!(
+        facts["start_coroutine_calls"],
+        caller
+            .events
+            .iter()
+            .filter(|e| e.kind == caller::Gateway::StartCoroutine)
+            .count()
+    );
+    let comparisons: Vec<_> = caller
+        .events
+        .iter()
+        .filter(|event| event.kind == caller::Gateway::Equal)
+        .map(|event| {
+            serde_json::json!({
+                "left": &event.arguments["left"], "right": &event.arguments["right"]
+            })
+        })
+        .collect();
+    assert_eq!(comparisons.len(), 75);
+    assert_eq!(
+        &serde_json::to_value(comparisons).unwrap(),
+        &expected["ordered_comparisons"]
+    );
+    assert!(!caller
+        .events
+        .iter()
+        .any(|e| e.kind == caller::Gateway::ActStart));
+    assert_eq!(fixture["native_only"]["shuffle_first_yield"]["state"], 1);
+
+    let queue: WaitQueueState = serde_json::from_value(fixture["queue"].clone()).unwrap();
+    assert_eq!(queue.entries.len(), 6);
+    assert_eq!(queue.next_id, r.state.next_id + 1);
+    assert_eq!(queue.entries[5].logical_id, r.state.next_id);
+    assert_eq!(
+        queue.entries[..5]
+            .iter()
+            .map(|entry| entry.logical_id)
+            .collect::<BTreeSet<_>>(),
+        r.state.pending.keys().copied().collect()
+    );
+    let producers = fixture["admission_producers"].as_array().unwrap();
+    assert_eq!(producers.len(), 6);
+    for (index, (row, entry)) in producers.iter().zip(&queue.entries).enumerate() {
+        let producer: WaitForSecondsContext =
+            serde_json::from_value(row["producer"].clone()).unwrap();
+        assert_eq!(row["logical_id"], entry.logical_id);
+        assert_eq!(
+            producer.duration.to_bits(),
+            if index == 5 { 0x3F000000 } else { 0x3E99999A }
+        );
+        if index == 5 {
+            assert_eq!(row["kind"], "shuffle");
+            assert!(row["position"].is_null());
+        } else {
+            assert_eq!(row["kind"], "acquisition");
+            assert_eq!(row["position"], r.state.pending[&entry.logical_id]);
+        }
+        let timing = make_wait_for_seconds(&producer).unwrap();
+        assert_eq!(timing, entry.timing);
+        assert_eq!(
+            &serde_json::to_value(timing).unwrap(),
+            &row["expected_timing"]
+        );
+        assert!(entry.release_present);
+    }
+    assert_eq!(queue.entries[5].timing.deadline, 1.5);
+    assert!(queue.entries[4].timing.deadline < queue.entries[5].timing.deadline);
+
+    // Synthetic compatibility only: no original drain or acquisition is claimed.
+    let dispatch = WaitDispatchContext {
+        rule_version: UNITY_WAIT_ELIGIBILITY_NATIVE_V1.into(),
+        sampled_time: 1.0,
+        sampled_frame_counter: 7,
+        phase_mask: 0xA,
+        generation_before: queue.generation,
+    };
+    let future = replay_wait_queue(&WaitQueueContext {
+        rule_version: UNITY_WAIT_QUEUE_NATIVE_V1.into(),
+        initial: queue.clone(),
+        dispatch: dispatch.clone(),
+        responses: BTreeMap::new(),
+    })
+    .unwrap();
+    assert_eq!(future.state.entries, queue.entries);
+    assert_eq!(future.state.generation, queue.generation.wrapping_add(1));
+    // Align cursors to isolate the unsupported unrelated Shuffle record.
+    let mut continuations = r.state.clone();
+    continuations.next_id = queue.next_id;
+    assert_eq!(
+        replay_scheduled_reveal(&ScheduledRevealContext {
+            rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
+            initial: ScheduledRevealState {
+                rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
+                continuations,
+                queue,
+            },
+            dispatch,
+            callbacks: BTreeMap::new(),
+        }),
+        Err(LedgerError::InvalidContext)
+    );
+}
