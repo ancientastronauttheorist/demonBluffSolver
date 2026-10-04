@@ -135,6 +135,8 @@ stop, diagnose, fix, verify, then resume.
     to stop on errors so partial counters cannot be mistaken for valid totals.
     Count PowerShell property collections explicitly with `@(...).Count`;
     member enumeration can return one count per property instead of a total.
+    Pass multiple literal cmdlet paths as an explicit array rather than
+    separate positional arguments.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Distinguish resume-call totals
@@ -296,6 +298,8 @@ stop, diagnose, fix, verify, then resume.
     volatile entry registers explicitly so preceding fixtures cannot supply
     accidental diagnostic bits. Capture raw service arguments and caller sites
     at entry, including stopped services, rather than only after completion.
+    Shared diagnostic names can alias distinct gateway entries; classify exact
+    entry addresses before selecting stop families or asserting gateway coverage.
     Derive release assertions from exact writes and lifetime effects; logical
     free does not imply zeroed storage. A supplied allocator can retain cached
     pointer bytes after handles are cleared and owner links are removed; those
