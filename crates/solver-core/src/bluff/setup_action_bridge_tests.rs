@@ -669,3 +669,187 @@ fn retained_original_n5_publication_init_matches_native_semantic_checkpoint() {
         assert_eq!(native["after"], before + inserted);
     }
 }
+
+#[test]
+fn retained_original_n5_start_and_queue_match_native_checkpoint() {
+    use super::super::scheduled_reveal::{
+        replay_scheduled_reveal, RevealCallbackBoundary, ScheduledRevealContext,
+        ScheduledRevealState, SCHEDULED_REVEAL_NATIVE_V1,
+    };
+    use super::super::wait_eligibility::{
+        make_wait_for_seconds, WaitDispatchContext, WaitForSecondsContext,
+        UNITY_WAIT_ELIGIBILITY_NATIVE_V1,
+    };
+    use super::super::wait_queue::WaitQueueState;
+
+    let fixture: serde_json::Value = serde_json::from_str(include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../reverse_engineering/fixtures/synthetic/first_village_start_queue_v1.json"
+    )))
+    .unwrap();
+    assert_eq!(fixture["schema_version"], 1);
+    assert_eq!(fixture["build_id"], "f530404b0f3f_807de4a83df4");
+    assert_eq!(
+        fixture["native_report_sha256"],
+        "7439fd1370909aa79bf2575b101ff8e943941fa148bb75e15254f822a14b3a60"
+    );
+    let c: Context = serde_json::from_value(fixture["context"].clone()).unwrap();
+    let expected = &fixture["expected"];
+    let paths = replay(&c).unwrap();
+    assert_eq!(paths.len(), 1);
+    let r = &paths[0];
+    assert_eq!(*r, replay_init_prefix(&c).unwrap());
+    let board = &r.state.initial.board;
+    for (actual, field) in [
+        (
+            serde_json::to_value(&board.reveal.actors).unwrap(),
+            "actors",
+        ),
+        (serde_json::to_value(&board.bodies).unwrap(), "bodies"),
+        (serde_json::to_value(&r.calls).unwrap(), "calls"),
+        (
+            serde_json::to_value(&r.current_data).unwrap(),
+            "current_data",
+        ),
+        (
+            serde_json::to_value(&board.current_order).unwrap(),
+            "current_order",
+        ),
+        (serde_json::to_value(&board.reveal.pools).unwrap(), "pools"),
+        (serde_json::to_value(&r.state.pending).unwrap(), "pending"),
+    ] {
+        assert_eq!(&actual, &expected[field], "native semantic field {field}");
+    }
+    assert_eq!(c.initialization.data.len(), 20);
+    assert_eq!(c.data_roles.len(), 5);
+    assert_eq!(r.calls.len(), 5);
+    assert!(r.calls.iter().all(|call| call.trigger == Trigger::Init));
+    assert!(r.created.is_empty());
+    assert_eq!(r.state.batch_ordinal, 0);
+    assert!(r.state.initial.resumes.is_empty());
+
+    // Versions remain native storage facts; compare only their insertion delta.
+    let initialized = batch::replay(&c.initialization).unwrap();
+    for (identity, position) in &initialized.positions {
+        let native = &expected["status_versions"][position.to_string()];
+        let before = initialized.actors[identity].statuses.version;
+        let inserted = r
+            .calls
+            .iter()
+            .filter(|call| call.position == *position)
+            .flat_map(|call| &call.init_callbacks)
+            .filter(|call| call.status_application.as_ref().is_some_and(|s| s.inserted))
+            .count() as u32;
+        assert_eq!(native["before"], before);
+        assert_eq!(native["after"], before + inserted);
+    }
+
+    // Compare the matching subset of the generic caller. Its later supplied
+    // callback/Shuffle bookkeeping is not a native onSetup-null certificate.
+    let caller = caller::replay(&c.initialization.caller).unwrap();
+    let comparisons: Vec<_> = caller
+        .events
+        .iter()
+        .filter(|event| event.kind == caller::Gateway::Equal)
+        .map(|event| {
+            serde_json::json!({
+                "left": &event.arguments["left"], "right": &event.arguments["right"]
+            })
+        })
+        .collect();
+    assert_eq!(comparisons.len(), 75);
+    assert_eq!(
+        &serde_json::to_value(&comparisons).unwrap(),
+        &expected["ordered_comparisons"]
+    );
+    assert!(!caller
+        .events
+        .iter()
+        .any(|e| e.kind == caller::Gateway::ActStart));
+    let order = c.initialization.caller.state.order.as_ref().unwrap();
+    assert_eq!(c.initialization.caller.state.arrays[order].length, 15);
+
+    let queue: WaitQueueState = serde_json::from_value(fixture["queue"].clone()).unwrap();
+    assert_eq!(queue.entries.len(), 5);
+    assert_eq!(queue.next_id, r.state.next_id);
+    assert_eq!(
+        queue
+            .entries
+            .iter()
+            .map(|entry| entry.logical_id)
+            .collect::<BTreeSet<_>>(),
+        r.state.pending.keys().copied().collect()
+    );
+    let producers = fixture["admission_producers"].as_array().unwrap();
+    assert_eq!(producers.len(), 5);
+    for row in producers {
+        let id = row["logical_id"].as_u64().unwrap();
+        assert_eq!(row["position"], r.state.pending[&id]);
+        let producer: WaitForSecondsContext =
+            serde_json::from_value(row["producer"].clone()).unwrap();
+        assert_eq!(producer.duration.to_bits(), 0x3E99999A);
+        let timing = make_wait_for_seconds(&producer).unwrap();
+        let entry = queue.entries.iter().find(|e| e.logical_id == id).unwrap();
+        assert_eq!(timing, entry.timing);
+        assert_eq!(
+            &serde_json::to_value(&timing).unwrap(),
+            &row["expected_timing"]
+        );
+        assert!(entry.release_present);
+    }
+
+    // Synthetic compatibility probes, not native drain history. A future
+    // deadline preserves the admitted V4 registry; eligible acquisition remains
+    // unsupported even when every callback boundary is supplied.
+    let state = ScheduledRevealState {
+        rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
+        continuations: r.state.clone(),
+        queue,
+    };
+    let producer: WaitForSecondsContext =
+        serde_json::from_value(producers[0]["producer"].clone()).unwrap();
+    let mut scheduled = ScheduledRevealContext {
+        rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
+        initial: state.clone(),
+        dispatch: WaitDispatchContext {
+            rule_version: UNITY_WAIT_ELIGIBILITY_NATIVE_V1.into(),
+            sampled_time: producer.producer_time,
+            sampled_frame_counter: producer.producer_frame_counter,
+            phase_mask: 0xA,
+            generation_before: state.queue.generation,
+        },
+        callbacks: BTreeMap::new(),
+    };
+    let future = replay_scheduled_reveal(&scheduled).unwrap();
+    assert_eq!(future.len(), 1);
+    assert_eq!(future[0].state.continuations, state.continuations);
+    assert_eq!(future[0].state.queue.entries, state.queue.entries);
+    assert!(future[0].callbacks.is_empty());
+    assert_eq!(
+        future[0].state.queue.generation,
+        state.queue.generation.wrapping_add(1)
+    );
+    let first = &state.queue.entries[0];
+    scheduled.dispatch.sampled_time = first.timing.deadline;
+    scheduled.dispatch.sampled_frame_counter = first.timing.frame_threshold;
+    scheduled.callbacks = state
+        .queue
+        .entries
+        .iter()
+        .map(|entry| {
+            (
+                entry.logical_id,
+                RevealCallbackBoundary {
+                    same_live_owner: true,
+                    callback_result: 1,
+                    producer_time: first.timing.deadline,
+                    producer_frame_counter: first.timing.frame_threshold,
+                },
+            )
+        })
+        .collect();
+    assert_eq!(
+        replay_scheduled_reveal(&scheduled),
+        Err(LedgerError::InvalidContext)
+    );
+}

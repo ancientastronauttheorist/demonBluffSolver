@@ -1,0 +1,2525 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "native_report_sha256": "7439fd1370909aa79bf2575b101ff8e943941fa148bb75e15254f822a14b3a60",
+  "native_source_sha256": "35ca4b6b4df2c55eab5da437d0639245353a9e878f399c091f9cd6bf8db3e39a",
+  "asset_report_sha256": "1a790f521ba8ec6983bb1634333accb7280f0fe93e49efbaec1af25914479d42",
+  "scope": "One retained original N5 witness ending at 0x36d2db before onSetup is read. Compare semantic actors/bodies/Init dispatch/status effects/current data/order/pools/pending and actual 15-entry zero-Start matching. The additional unused data/source/class bindings are asset-derived supplied pre-entry hydration and Rust typechecking inputs; their concrete role bodies did not execute. Scene-slot labels and inert UI booleans are declared adapter inputs, not certified numbered player observations. Compare five actual first-wait admissions using exact producer arithmetic and native tree occurrence order. Native-record creation, CLR/runtime and scene gateways retain the native audit's supplied-provider contract. Queue logical IDs reuse registry labels, independently of native queue record IDs/owner keys. Physical ownership, callback/CPU/tree/storage identity and status list versions remain native-only. The underlying generic caller adapter callback=None and inert final services are synthetic bookkeeping inputs for its Init-prefix and ordered-match subset, not proof of runtime onSetup absence, later Shuffle, or full native caller return. Full setup-action replay ends after modeled Start. No onSetup, Shuffle, actual drain, acquisition, Day, pixels, prior weights or PlayerHistory admission.",
+  "context": {
+    "version": "setup_action_bridge_native_v2",
+    "initialization": {
+      "version": "setup_initialization_batch_native_v1",
+      "caller": {
+        "version": "manage_setup_caller_native_v1",
+        "pinned_class_hierarchies": true,
+        "stable_occurrence_services": true,
+        "reference_equality": true,
+        "supplied_init_data_write_only": true,
+        "supplied_gateway_effects_only": true,
+        "caller_metadata_initialized": true,
+        "shuffle_metadata_initialized": true,
+        "math_initialized": true,
+        "gameplay_initialized": true,
+        "object_initialized": true,
+        "state": {
+          "board": "board",
+          "order": "original_start_order",
+          "callback": null,
+          "lists": {
+            "board": {
+              "items": [
+                "actor:0",
+                "actor:1",
+                "actor:2",
+                "actor:3",
+                "actor:4"
+              ],
+              "count": 5
+            }
+          },
+          "arrays": {
+            "original_start_order": {
+              "items": [
+                "data:21594",
+                "data:21593",
+                "data:21597",
+                "data:21605",
+                "data:21602",
+                "data:21595",
+                "data:21599",
+                "data:21590",
+                "data:21606",
+                "data:21600",
+                "data:21609",
+                "data:21634",
+                "data:21598",
+                "data:21607",
+                "data:21591"
+              ],
+              "length": 15
+            }
+          },
+          "identities": {
+            "actor:0": "data:21596",
+            "actor:1": null,
+            "actor:2": null,
+            "actor:3": null,
+            "actor:4": null
+          },
+          "data_roles": {
+            "data:21590": "source:21590",
+            "data:21591": "source:21591",
+            "data:21593": "source:21593",
+            "data:21594": "source:21594",
+            "data:21595": "source:21595",
+            "data:21596": "source:21596",
+            "data:21597": "source:21597",
+            "data:21598": "source:21598",
+            "data:21599": "source:21599",
+            "data:21600": "source:21600",
+            "data:21602": "source:21602",
+            "data:21605": "source:21605",
+            "data:21606": "source:21606",
+            "data:21607": "source:21607",
+            "data:21609": "source:21609",
+            "data:21614": "source:21614",
+            "data:21618": "source:21618",
+            "data:21621": "source:21621",
+            "data:21626": "source:21626",
+            "data:21634": "source:21634"
+          },
+          "iterator_state": 0
+        },
+        "roster": [
+          "data:21596",
+          "data:21614",
+          "data:21626",
+          "data:21621",
+          "data:21618"
+        ],
+        "roles": {
+          "source:21590": "Imp",
+          "source:21591": "Striga",
+          "source:21593": "Pooka",
+          "source:21594": "Baron",
+          "source:21595": "Marionette",
+          "source:21596": "Minion",
+          "source:21597": "Poisoner",
+          "source:21598": "Puppet",
+          "source:21599": "Mezepheles",
+          "source:21600": "Illuzionist",
+          "source:21602": "Cipher",
+          "source:21605": "Drunk",
+          "source:21606": "Puzzlemaster",
+          "source:21607": "Rambler2",
+          "source:21609": "Alchemist",
+          "source:21614": "Confessor",
+          "source:21618": "Shugenja",
+          "source:21621": "Tracker",
+          "source:21626": "Empath",
+          "source:21634": "BountyHunter"
+        },
+        "classes": {
+          "Role": [
+            "Role"
+          ],
+          "Demon": [
+            "Role",
+            "Demon"
+          ],
+          "Imp": [
+            "Role",
+            "Demon",
+            "Imp"
+          ],
+          "Striga": [
+            "Role",
+            "Demon",
+            "Striga"
+          ],
+          "Pooka": [
+            "Role",
+            "Demon",
+            "Pooka"
+          ],
+          "Minion": [
+            "Role",
+            "Minion"
+          ],
+          "Baron": [
+            "Role",
+            "Minion",
+            "Baron"
+          ],
+          "Marionette": [
+            "Role",
+            "Minion",
+            "Marionette"
+          ],
+          "Poisoner": [
+            "Role",
+            "Minion",
+            "Poisoner"
+          ],
+          "Puppet": [
+            "Role",
+            "Minion",
+            "Puppet"
+          ],
+          "Mezepheles": [
+            "Role",
+            "Minion",
+            "Mezepheles"
+          ],
+          "Illuzionist": [
+            "Role",
+            "Minion",
+            "Illuzionist"
+          ],
+          "Cipher": [
+            "Role",
+            "Minion",
+            "Cipher"
+          ],
+          "Drunk": [
+            "Role",
+            "Drunk"
+          ],
+          "Puzzlemaster": [
+            "Role",
+            "Puzzlemaster"
+          ],
+          "Rambler2": [
+            "Role",
+            "Rambler2"
+          ],
+          "Alchemist": [
+            "Role",
+            "Alchemist"
+          ],
+          "Confessor": [
+            "Role",
+            "Confessor"
+          ],
+          "Shugenja": [
+            "Role",
+            "Shugenja"
+          ],
+          "Tracker": [
+            "Role",
+            "Tracker"
+          ],
+          "Empath": [
+            "Role",
+            "Empath"
+          ],
+          "BountyHunter": [
+            "Role",
+            "BountyHunter"
+          ]
+        },
+        "callbacks": [],
+        "failure": null,
+        "after": []
+      },
+      "object_identities": {
+        "actor:0": 12892561408,
+        "actor:1": 12892565504,
+        "actor:2": 12892569600,
+        "actor:3": 12892573696,
+        "actor:4": 12892577792,
+        "data:21590": 12885012480,
+        "source:21590": 12893102080,
+        "data:21591": 12885016576,
+        "source:21591": 12893159424,
+        "data:21593": 12885024768,
+        "source:21593": 12893052928,
+        "data:21594": 12885028864,
+        "source:21594": 12893044736,
+        "data:21595": 12885032960,
+        "source:21595": 12893085696,
+        "data:21596": 12885037056,
+        "source:21596": 12892672000,
+        "data:21597": 12885041152,
+        "source:21597": 12893061120,
+        "data:21598": 12885045248,
+        "source:21598": 12893143040,
+        "data:21599": 12885049344,
+        "source:21599": 12893093888,
+        "data:21600": 12885053440,
+        "source:21600": 12893118464,
+        "data:21602": 12885061632,
+        "source:21602": 12893077504,
+        "data:21605": 12885073920,
+        "source:21605": 12893069312,
+        "data:21606": 12885078016,
+        "source:21606": 12893110272,
+        "data:21607": 12885082112,
+        "source:21607": 12893151232,
+        "data:21609": 12885090304,
+        "source:21609": 12893126656,
+        "data:21614": 12885110784,
+        "source:21614": 12892684288,
+        "data:21618": 12885127168,
+        "source:21618": 12892721152,
+        "data:21621": 12885139456,
+        "source:21621": 12892708864,
+        "data:21626": 12885159936,
+        "source:21626": 12892696576,
+        "data:21634": 12885192704,
+        "source:21634": 12893134848
+      },
+      "actors": {
+        "12892561408": {
+          "data": 12885037056,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892561408,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892565504": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892565504,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892569600": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892569600,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892573696": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892573696,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        },
+        "12892577792": {
+          "data": null,
+          "bluff": null,
+          "register_as": null,
+          "trailer": null,
+          "runtime": null,
+          "role": null,
+          "bluff_role": null,
+          "saved_act": 12892618752,
+          "state_callback": null,
+          "identity": 12892577792,
+          "dead_prefab": null,
+          "infos": [],
+          "info_version": 0,
+          "statuses": {
+            "active": [],
+            "version": 0,
+            "resistances": [],
+            "target": null
+          },
+          "revealed": false,
+          "killed_hidden": false,
+          "killed_demon": false,
+          "started": false,
+          "uses": 1,
+          "previous": 10,
+          "state": 20,
+          "alignment": 0,
+          "id": 0
+        }
+      },
+      "raw_bluff_liveness": {},
+      "positions": {
+        "12892561408": 1,
+        "12892565504": 2,
+        "12892569600": 3,
+        "12892573696": 4,
+        "12892577792": 5
+      },
+      "data": {
+        "12885012480": {
+          "starting_alignment": 20,
+          "source_role": 12893102080
+        },
+        "12885016576": {
+          "starting_alignment": 20,
+          "source_role": 12893159424
+        },
+        "12885024768": {
+          "starting_alignment": 20,
+          "source_role": 12893052928
+        },
+        "12885028864": {
+          "starting_alignment": 20,
+          "source_role": 12893044736
+        },
+        "12885032960": {
+          "starting_alignment": 20,
+          "source_role": 12893085696
+        },
+        "12885037056": {
+          "starting_alignment": 20,
+          "source_role": 12892672000
+        },
+        "12885041152": {
+          "starting_alignment": 20,
+          "source_role": 12893061120
+        },
+        "12885045248": {
+          "starting_alignment": 20,
+          "source_role": 12893143040
+        },
+        "12885049344": {
+          "starting_alignment": 20,
+          "source_role": 12893093888
+        },
+        "12885053440": {
+          "starting_alignment": 20,
+          "source_role": 12893118464
+        },
+        "12885061632": {
+          "starting_alignment": 20,
+          "source_role": 12893077504
+        },
+        "12885073920": {
+          "starting_alignment": 10,
+          "source_role": 12893069312
+        },
+        "12885078016": {
+          "starting_alignment": 10,
+          "source_role": 12893110272
+        },
+        "12885082112": {
+          "starting_alignment": 10,
+          "source_role": 12893151232
+        },
+        "12885090304": {
+          "starting_alignment": 10,
+          "source_role": 12893126656
+        },
+        "12885110784": {
+          "starting_alignment": 10,
+          "source_role": 12892684288
+        },
+        "12885127168": {
+          "starting_alignment": 10,
+          "source_role": 12892721152
+        },
+        "12885139456": {
+          "starting_alignment": 10,
+          "source_role": 12892708864
+        },
+        "12885159936": {
+          "starting_alignment": 10,
+          "source_role": 12892696576
+        },
+        "12885192704": {
+          "starting_alignment": 10,
+          "source_role": 12893134848
+        }
+      },
+      "continuations": [],
+      "allocations": [
+        {
+          "init_index": 0,
+          "clone": {
+            "identity": 12893614080,
+            "source_role": 12892672000,
+            "managed_class": "Minion"
+          },
+          "continuation_identity": 12893609984,
+          "wait_identity": 12893618176
+        },
+        {
+          "init_index": 1,
+          "clone": {
+            "identity": 12893630464,
+            "source_role": 12892684288,
+            "managed_class": "Confessor"
+          },
+          "continuation_identity": 12893626368,
+          "wait_identity": 12893634560
+        },
+        {
+          "init_index": 2,
+          "clone": {
+            "identity": 12893646848,
+            "source_role": 12892696576,
+            "managed_class": "Empath"
+          },
+          "continuation_identity": 12893642752,
+          "wait_identity": 12893650944
+        },
+        {
+          "init_index": 3,
+          "clone": {
+            "identity": 12893663232,
+            "source_role": 12892708864,
+            "managed_class": "Tracker"
+          },
+          "continuation_identity": 12893659136,
+          "wait_identity": 12893667328
+        },
+        {
+          "init_index": 4,
+          "clone": {
+            "identity": 12893679616,
+            "source_role": 12892721152,
+            "managed_class": "Shugenja"
+          },
+          "continuation_identity": 12893675520,
+          "wait_identity": 12893683712
+        }
+      ],
+      "required_objects_and_lists_valid": true,
+      "callbacks_and_ui_inert": true,
+      "clone_results_verified": true,
+      "synchronous_first_yield_verified": true
+    },
+    "data_roles": {
+      "12885037056": "minion",
+      "12885110784": "confessor",
+      "12885159936": "lover",
+      "12885139456": "hunter",
+      "12885127168": "enlightened"
+    },
+    "action_classes": {
+      "12893614080": "Minion",
+      "12893630464": "Confessor",
+      "12893646848": "Empath",
+      "12893663232": "Tracker",
+      "12893679616": "Shugenja"
+    },
+    "action_classes_and_caches_verified": true,
+    "on_trigger_absent": true,
+    "final_services_inert": true,
+    "post_initialization_ui_verified": true,
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "spy_caches": {},
+    "ui": {
+      "1": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "2": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "3": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "4": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      },
+      "5": {
+        "pickable_active": false,
+        "rip_active": false,
+        "disguise_icon_active": null
+      }
+    },
+    "next_logical_id": 12893675521
+  },
+  "expected": {
+    "actors": [
+      {
+        "position": 1,
+        "data_role": "minion",
+        "action_role": "minion",
+        "runtime_evil": true,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 2,
+        "data_role": "confessor",
+        "action_role": "confessor",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [
+            25
+          ],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 3,
+        "data_role": "lover",
+        "action_role": "lover",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 4,
+        "data_role": "hunter",
+        "action_role": "hunter",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      },
+      {
+        "position": 5,
+        "data_role": "enlightened",
+        "action_role": "enlightened",
+        "runtime_evil": false,
+        "bluff": {
+          "kind": "null"
+        },
+        "bluff_role": null,
+        "register_as": null,
+        "statuses": {
+          "values": [],
+          "resistance": [],
+          "target_position": null
+        },
+        "remaining_continuations": 1,
+        "on_trigger_subscribed": false,
+        "character_start_acted": false
+      }
+    ],
+    "bodies": {
+      "1": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "2": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "3": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "4": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      },
+      "5": {
+        "state": 5,
+        "previous_state": 20,
+        "revealed": false,
+        "killed_by_demon": false,
+        "pickable_uses": 1,
+        "acted_info_count": 0,
+        "created_dead_presentation": false,
+        "on_state_change_subscribed": false
+      }
+    },
+    "calls": [
+      {
+        "position": 1,
+        "trigger": "init",
+        "initial_lying": true,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "minion",
+            "dispatch": "bluff_act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 2,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "confessor",
+            "dispatch": "act",
+            "status_application": {
+              "status": 25,
+              "accepted": true,
+              "inserted": true,
+              "target_after": null
+            }
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 3,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "lover",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 4,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "hunter",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      },
+      {
+        "position": 5,
+        "trigger": "init",
+        "initial_lying": false,
+        "init_callbacks": [
+          {
+            "trigger": "init",
+            "slot": "real",
+            "role": "enlightened",
+            "dispatch": "act",
+            "status_application": null
+          }
+        ],
+        "start_callbacks": []
+      }
+    ],
+    "current_data": {
+      "1": 12885037056,
+      "2": 12885110784,
+      "3": 12885159936,
+      "4": 12885139456,
+      "5": 12885127168
+    },
+    "current_order": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "pools": {
+      "unique": [
+        "Gemcrafter",
+        "Alchemist"
+      ],
+      "duplicate": [
+        "Confessor",
+        "Lover",
+        "Hunter",
+        "Enlightened"
+      ],
+      "must_include": [],
+      "script": {
+        "villagers": [
+          "Confessor",
+          "Lover",
+          "Hunter",
+          "Enlightened"
+        ],
+        "outcasts": [],
+        "minions": [
+          "Minion"
+        ],
+        "demons": []
+      }
+    },
+    "pending": {
+      "12893609984": 1,
+      "12893626368": 2,
+      "12893642752": 3,
+      "12893659136": 4,
+      "12893675520": 5
+    },
+    "status_versions": {
+      "1": {
+        "before": 1,
+        "after": 1
+      },
+      "2": {
+        "before": 1,
+        "after": 2
+      },
+      "3": {
+        "before": 1,
+        "after": 1
+      },
+      "4": {
+        "before": 1,
+        "after": 1
+      },
+      "5": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    "ordered_comparisons": [
+      {
+        "left": "data:21594",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21594",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21593",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21597",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21605",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21602",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21595",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21599",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21590",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21606",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21600",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21609",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21634",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21598",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21607",
+        "right": "data:21618"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21596"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21614"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21626"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21621"
+      },
+      {
+        "left": "data:21591",
+        "right": "data:21618"
+      }
+    ]
+  },
+  "queue": {
+    "rule_version": "unity_wait_queue_native_v1",
+    "generation": 0,
+    "next_id": 12893675521,
+    "entries": [
+      {
+        "logical_id": 12893609984,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893626368,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893642752,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893659136,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      },
+      {
+        "logical_id": 12893675520,
+        "timing": {
+          "deadline": 1.300000011920929,
+          "frame_threshold": 8,
+          "phase_mask": 10,
+          "insertion_generation": 0
+        },
+        "release_present": true
+      }
+    ]
+  },
+  "admission_producers": [
+    {
+      "logical_id": 12893609984,
+      "position": 1,
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893626368,
+      "position": 2,
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893642752,
+      "position": 3,
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893659136,
+      "position": 4,
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    },
+    {
+      "logical_id": 12893675520,
+      "position": 5,
+      "producer": {
+        "rule_version": "unity_wait_eligibility_native_v1",
+        "duration": 0.30000001192092896,
+        "producer_time": 1.0,
+        "producer_frame_counter": 7,
+        "insertion_generation": 0
+      },
+      "expected_timing": {
+        "deadline": 1.300000011920929,
+        "frame_threshold": 8,
+        "phase_mask": 10,
+        "insertion_generation": 0
+      }
+    }
+  ],
+  "native_only": {
+    "native_queue_record_order": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "native_queue_next_id": 5,
+    "admission_links": [
+      {
+        "id": 0,
+        "iterator": 12893609984,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:55",
+        "actor": 12892561408,
+        "payload": 8591704064,
+        "native_owner": 8591507456,
+        "owner_key": 101
+      },
+      {
+        "id": 1,
+        "iterator": 12893626368,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:77",
+        "actor": 12892565504,
+        "payload": 8591704320,
+        "native_owner": 8591511552,
+        "owner_key": 102
+      },
+      {
+        "id": 2,
+        "iterator": 12893642752,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:98",
+        "actor": 12892569600,
+        "payload": 8591704576,
+        "native_owner": 8591515648,
+        "owner_key": 103
+      },
+      {
+        "id": 3,
+        "iterator": 12893659136,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:119",
+        "actor": 12892573696,
+        "payload": 8591704832,
+        "native_owner": 8591519744,
+        "owner_key": 104
+      },
+      {
+        "id": 4,
+        "iterator": 12893675520,
+        "iterator_label": "Character.<DelayReveal>d__84_TypeInfo:140",
+        "actor": 12892577792,
+        "payload": 8591705088,
+        "native_owner": 8591523840,
+        "owner_key": 105
+      }
+    ],
+    "physical_owners": [
+      {
+        "key": 101,
+        "list_head": 8591507568,
+        "managed_actor": 12892561408,
+        "native_owner": 8591507456,
+        "payloads": [
+          8591704064
+        ]
+      },
+      {
+        "key": 102,
+        "list_head": 8591511664,
+        "managed_actor": 12892565504,
+        "native_owner": 8591511552,
+        "payloads": [
+          8591704320
+        ]
+      },
+      {
+        "key": 103,
+        "list_head": 8591515760,
+        "managed_actor": 12892569600,
+        "native_owner": 8591515648,
+        "payloads": [
+          8591704576
+        ]
+      },
+      {
+        "key": 104,
+        "list_head": 8591519856,
+        "managed_actor": 12892573696,
+        "native_owner": 8591519744,
+        "payloads": [
+          8591704832
+        ]
+      },
+      {
+        "key": 105,
+        "list_head": 8591523952,
+        "managed_actor": 12892577792,
+        "native_owner": 8591523840,
+        "payloads": [
+          8591705088
+        ]
+      }
+    ],
+    "native_records": [
+      {
+        "cached_enumerator": 12893609984,
+        "gc_handle": 18,
+        "iterator": 12893609984,
+        "managed_actor": 12892561408,
+        "native_owner": 8591507456,
+        "owner_key": 101,
+        "owner_linked": true,
+        "payload": 8591704064,
+        "reference_count": 1
+      },
+      {
+        "cached_enumerator": 12893626368,
+        "gc_handle": 19,
+        "iterator": 12893626368,
+        "managed_actor": 12892565504,
+        "native_owner": 8591511552,
+        "owner_key": 102,
+        "owner_linked": true,
+        "payload": 8591704320,
+        "reference_count": 1
+      },
+      {
+        "cached_enumerator": 12893642752,
+        "gc_handle": 20,
+        "iterator": 12893642752,
+        "managed_actor": 12892569600,
+        "native_owner": 8591515648,
+        "owner_key": 103,
+        "owner_linked": true,
+        "payload": 8591704576,
+        "reference_count": 1
+      },
+      {
+        "cached_enumerator": 12893659136,
+        "gc_handle": 21,
+        "iterator": 12893659136,
+        "managed_actor": 12892573696,
+        "native_owner": 8591519744,
+        "owner_key": 104,
+        "owner_linked": true,
+        "payload": 8591704832,
+        "reference_count": 1
+      },
+      {
+        "cached_enumerator": 12893675520,
+        "gc_handle": 22,
+        "iterator": 12893675520,
+        "managed_actor": 12892577792,
+        "native_owner": 8591523840,
+        "owner_key": 105,
+        "owner_linked": true,
+        "payload": 8591705088,
+        "reference_count": 1
+      }
+    ],
+    "original_scene_order": {
+      "consumed_bytes": 332,
+      "file_sha256": "b509ac15904f0926419cccc1d2e86508c69b0e3af2235a08ff8e9fc4d170c7f1",
+      "object_sha256": "544328634cd77d551b5864cdc1b643029f3b30bffc5bb4350dfcf83c66226bb0",
+      "object_size": 332,
+      "ordered_role_bindings": [
+        {
+          "name": "Chancellor",
+          "object_sha256": "2AC121706A476186E51FAFAF18AE7F8BDBAFEDEBD4EB9946985DE2740071B09C",
+          "path_id": 21594,
+          "role_rid": 4394761223980974080,
+          "role_type": "Baron"
+        },
+        {
+          "name": "Pooka",
+          "object_sha256": "D7113C5C8FD18D560433C50FF010C3663883A83C37D8DB0DAFFCA426794EDEFE",
+          "path_id": 21593,
+          "role_rid": 8893039266143666178,
+          "role_type": "Pooka"
+        },
+        {
+          "name": "Poisoner",
+          "object_sha256": "63CCF9E795472EFBE7C0198C9665300D3FBFF7A1F6473961D8ED5AC72643329E",
+          "path_id": 21597,
+          "role_rid": 8462128012591890459,
+          "role_type": "Poisoner"
+        },
+        {
+          "name": "Drunk",
+          "object_sha256": "82A407F22608D01F46AAB9C5E1A24D6F173B9E828CC7D99775E3586F10D3AB6B",
+          "path_id": 21605,
+          "role_rid": 8462128012591890460,
+          "role_type": "Drunk"
+        },
+        {
+          "name": "Witch",
+          "object_sha256": "6B4353F67AF9999D0D4BC7E88791B37B5E2436380B6013DF26B7A6F4F04B838D",
+          "path_id": 21602,
+          "role_rid": 8893039276010242048,
+          "role_type": "Cipher"
+        },
+        {
+          "name": "Marionette",
+          "object_sha256": "E6A3C8B245D7FCA4C2D9B25C1753757B482992FAFE3166EB7DACD1B9953CD9E7",
+          "path_id": 21595,
+          "role_rid": 8893039671215390726,
+          "role_type": "Marionette"
+        },
+        {
+          "name": "Puppeteer",
+          "object_sha256": "C11904115133C752F5689434BA9E7749ECE8212234F615402EC6C541ECA3DDB5",
+          "path_id": 21599,
+          "role_rid": 8893039671215390724,
+          "role_type": "Mezepheles"
+        },
+        {
+          "name": "Baa",
+          "object_sha256": "F29B3D02CBAF3F4592AEE4BFED202E06474AFF6BEE07C8BF1FCB99196F3B4F7A",
+          "path_id": 21590,
+          "role_rid": 8462128012591890447,
+          "role_type": "Imp"
+        },
+        {
+          "name": "Plague Doctor",
+          "object_sha256": "68B2EC4E9ECD5C9C5EC8451B981971DADE0279922EED88274DB25BA31C2BBAFB",
+          "path_id": 21606,
+          "role_rid": 8893039671215390725,
+          "role_type": "Puzzlemaster"
+        },
+        {
+          "name": "Shaman",
+          "object_sha256": "D34970DE9C82A2CB90507C075F71902586CB6F9C83266DE439E94A3368A0ACDD",
+          "path_id": 21600,
+          "role_rid": 8893039671215390723,
+          "role_type": "Illuzionist"
+        },
+        {
+          "name": "Alchemist",
+          "object_sha256": "A69F297F30136870821AD040AE16ED34890CA7B3ECF3049E15C6D8D5DB78818A",
+          "path_id": 21609,
+          "role_rid": 8893039252363804672,
+          "role_type": "Alchemist"
+        },
+        {
+          "name": "Bounty Hunter",
+          "object_sha256": "A912DB6B49377C8067D28210249E7D4085FD10312CABDEFE412A6B2D847BB5C0",
+          "path_id": 21634,
+          "role_rid": 8893039671215390720,
+          "role_type": "BountyHunter"
+        },
+        {
+          "name": "Puppet",
+          "object_sha256": "01DD63C43D88C050EE4313AD24E775FDF749B6DDC077528A6C70BA03ED6AAEAC",
+          "path_id": 21598,
+          "role_rid": 6285201496947294214,
+          "role_type": "Puppet"
+        },
+        {
+          "name": "Rambler",
+          "object_sha256": "0196744CB9D5587D74F82AADC43F4E7CFD0D93CE7D199BFCF420ADB73F028145",
+          "path_id": 21607,
+          "role_rid": 1646812333560561666,
+          "role_type": "Rambler2"
+        },
+        {
+          "name": "Lilis",
+          "object_sha256": "924EC7C600C232F33B2A3B83D34B18ACFF367C155F2E8B75AD998F568AB26721",
+          "path_id": 21591,
+          "role_rid": 3060745024653230080,
+          "role_type": "Striga"
+        }
+      ],
+      "path_id": 137026,
+      "script_binding": {
+        "assembly": "Assembly-CSharp",
+        "class_name": "Characters",
+        "namespace": ""
+      },
+      "script_reference": [
+        1,
+        1528
+      ],
+      "serialized_fields": {
+        "bluff_must_include": [],
+        "character_pool": [
+          [
+            0,
+            137061
+          ],
+          [
+            0,
+            138833
+          ],
+          [
+            0,
+            138274
+          ],
+          [
+            0,
+            139301
+          ],
+          [
+            0,
+            137266
+          ],
+          [
+            0,
+            140127
+          ],
+          [
+            0,
+            139114
+          ]
+        ],
+        "characters": [],
+        "current_pool": [
+          0,
+          0
+        ],
+        "duplicates_pool": [],
+        "name": "",
+        "start_game_act_order": [
+          [
+            2,
+            21594
+          ],
+          [
+            2,
+            21593
+          ],
+          [
+            2,
+            21597
+          ],
+          [
+            2,
+            21605
+          ],
+          [
+            2,
+            21602
+          ],
+          [
+            2,
+            21595
+          ],
+          [
+            2,
+            21599
+          ],
+          [
+            2,
+            21590
+          ],
+          [
+            2,
+            21606
+          ],
+          [
+            2,
+            21600
+          ],
+          [
+            2,
+            21609
+          ],
+          [
+            2,
+            21634
+          ],
+          [
+            2,
+            21598
+          ],
+          [
+            2,
+            21607
+          ],
+          [
+            2,
+            21591
+          ]
+        ],
+        "unique_pool": []
+      }
+    },
+    "ordered_source_bindings": [
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893040640,
+            "managed_role": "Baron"
+          }
+        ],
+        "asset_id": 21594,
+        "characterName": "Chancellor",
+        "hierarchy_identity": 12893184000,
+        "identity": 12885028864,
+        "name": "Chancellor",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 4394761223980974080,
+        "role_type": "Baron",
+        "source_class": 12893040640,
+        "source_role": 12893044736,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893188096,
+            "managed_role": "Demon"
+          },
+          {
+            "identity": 12893048832,
+            "managed_role": "Pooka"
+          }
+        ],
+        "asset_id": 21593,
+        "characterName": "Pooka",
+        "hierarchy_identity": 12893192192,
+        "identity": 12885024768,
+        "name": "Pooka",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039266143666178,
+        "role_type": "Pooka",
+        "source_class": 12893048832,
+        "source_role": 12893052928,
+        "startingAlignment": 20,
+        "type": 100
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893057024,
+            "managed_role": "Poisoner"
+          }
+        ],
+        "asset_id": 21597,
+        "characterName": "Poisoner",
+        "hierarchy_identity": 12893196288,
+        "identity": 12885041152,
+        "name": "Poisoner",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8462128012591890459,
+        "role_type": "Poisoner",
+        "source_class": 12893057024,
+        "source_role": 12893061120,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893065216,
+            "managed_role": "Drunk"
+          }
+        ],
+        "asset_id": 21605,
+        "characterName": "Drunk",
+        "hierarchy_identity": 12893200384,
+        "identity": 12885073920,
+        "name": "Drunk",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8462128012591890460,
+        "role_type": "Drunk",
+        "source_class": 12893065216,
+        "source_role": 12893069312,
+        "startingAlignment": 10,
+        "type": 20
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893073408,
+            "managed_role": "Cipher"
+          }
+        ],
+        "asset_id": 21602,
+        "characterName": "Witch",
+        "hierarchy_identity": 12893204480,
+        "identity": 12885061632,
+        "name": "Witch",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039276010242048,
+        "role_type": "Cipher",
+        "source_class": 12893073408,
+        "source_role": 12893077504,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893081600,
+            "managed_role": "Marionette"
+          }
+        ],
+        "asset_id": 21595,
+        "characterName": "Marionette",
+        "hierarchy_identity": 12893208576,
+        "identity": 12885032960,
+        "name": "Marionette",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039671215390726,
+        "role_type": "Marionette",
+        "source_class": 12893081600,
+        "source_role": 12893085696,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893089792,
+            "managed_role": "Mezepheles"
+          }
+        ],
+        "asset_id": 21599,
+        "characterName": "Puppeteer",
+        "hierarchy_identity": 12893212672,
+        "identity": 12885049344,
+        "name": "Puppeteer",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039671215390724,
+        "role_type": "Mezepheles",
+        "source_class": 12893089792,
+        "source_role": 12893093888,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893188096,
+            "managed_role": "Demon"
+          },
+          {
+            "identity": 12893097984,
+            "managed_role": "Imp"
+          }
+        ],
+        "asset_id": 21590,
+        "characterName": "Baa",
+        "hierarchy_identity": 12893216768,
+        "identity": 12885012480,
+        "name": "Baa",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8462128012591890447,
+        "role_type": "Imp",
+        "source_class": 12893097984,
+        "source_role": 12893102080,
+        "startingAlignment": 20,
+        "type": 100
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893106176,
+            "managed_role": "Puzzlemaster"
+          }
+        ],
+        "asset_id": 21606,
+        "characterName": "Plague Doctor",
+        "hierarchy_identity": 12893220864,
+        "identity": 12885078016,
+        "name": "Plague Doctor",
+        "name_identity": 0,
+        "picking": true,
+        "role_rid": 8893039671215390725,
+        "role_type": "Puzzlemaster",
+        "source_class": 12893106176,
+        "source_role": 12893110272,
+        "startingAlignment": 10,
+        "type": 20
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893114368,
+            "managed_role": "Illuzionist"
+          }
+        ],
+        "asset_id": 21600,
+        "characterName": "Shaman",
+        "hierarchy_identity": 12893224960,
+        "identity": 12885053440,
+        "name": "Shaman",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039671215390723,
+        "role_type": "Illuzionist",
+        "source_class": 12893114368,
+        "source_role": 12893118464,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893122560,
+            "managed_role": "Alchemist"
+          }
+        ],
+        "asset_id": 21609,
+        "characterName": "Alchemist",
+        "hierarchy_identity": 12893229056,
+        "identity": 12885090304,
+        "name": "Alchemist",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039252363804672,
+        "role_type": "Alchemist",
+        "source_class": 12893122560,
+        "source_role": 12893126656,
+        "startingAlignment": 10,
+        "type": 10
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893130752,
+            "managed_role": "BountyHunter"
+          }
+        ],
+        "asset_id": 21634,
+        "characterName": "",
+        "hierarchy_identity": 12893233152,
+        "identity": 12885192704,
+        "name": "Bounty Hunter",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 8893039671215390720,
+        "role_type": "BountyHunter",
+        "source_class": 12893130752,
+        "source_role": 12893134848,
+        "startingAlignment": 10,
+        "type": 10
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12892667904,
+            "managed_role": "Minion"
+          },
+          {
+            "identity": 12893138944,
+            "managed_role": "Puppet"
+          }
+        ],
+        "asset_id": 21598,
+        "characterName": "Puppet",
+        "hierarchy_identity": 12893237248,
+        "identity": 12885045248,
+        "name": "Puppet",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 6285201496947294214,
+        "role_type": "Puppet",
+        "source_class": 12893138944,
+        "source_role": 12893143040,
+        "startingAlignment": 20,
+        "type": 30
+      },
+      {
+        "abilityUsage": 10,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893147136,
+            "managed_role": "Rambler2"
+          }
+        ],
+        "asset_id": 21607,
+        "characterName": "Rambler",
+        "hierarchy_identity": 12893241344,
+        "identity": 12885082112,
+        "name": "Rambler",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 1646812333560561666,
+        "role_type": "Rambler2",
+        "source_class": 12893147136,
+        "source_role": 12893151232,
+        "startingAlignment": 10,
+        "type": 20
+      },
+      {
+        "abilityUsage": 0,
+        "ancestors": [
+          {
+            "identity": 12893036544,
+            "managed_role": "Role"
+          },
+          {
+            "identity": 12893188096,
+            "managed_role": "Demon"
+          },
+          {
+            "identity": 12893155328,
+            "managed_role": "Striga"
+          }
+        ],
+        "asset_id": 21591,
+        "characterName": "Lilis",
+        "hierarchy_identity": 12893245440,
+        "identity": 12885016576,
+        "name": "Lilis",
+        "name_identity": 0,
+        "picking": false,
+        "role_rid": 3060745024653230080,
+        "role_type": "Striga",
+        "source_class": 12893155328,
+        "source_role": 12893159424,
+        "startingAlignment": 20,
+        "type": 100
+      }
+    ],
+    "ordered_comparisons": [
+      [
+        21594,
+        21596
+      ],
+      [
+        21594,
+        21614
+      ],
+      [
+        21594,
+        21626
+      ],
+      [
+        21594,
+        21621
+      ],
+      [
+        21594,
+        21618
+      ],
+      [
+        21593,
+        21596
+      ],
+      [
+        21593,
+        21614
+      ],
+      [
+        21593,
+        21626
+      ],
+      [
+        21593,
+        21621
+      ],
+      [
+        21593,
+        21618
+      ],
+      [
+        21597,
+        21596
+      ],
+      [
+        21597,
+        21614
+      ],
+      [
+        21597,
+        21626
+      ],
+      [
+        21597,
+        21621
+      ],
+      [
+        21597,
+        21618
+      ],
+      [
+        21605,
+        21596
+      ],
+      [
+        21605,
+        21614
+      ],
+      [
+        21605,
+        21626
+      ],
+      [
+        21605,
+        21621
+      ],
+      [
+        21605,
+        21618
+      ],
+      [
+        21602,
+        21596
+      ],
+      [
+        21602,
+        21614
+      ],
+      [
+        21602,
+        21626
+      ],
+      [
+        21602,
+        21621
+      ],
+      [
+        21602,
+        21618
+      ],
+      [
+        21595,
+        21596
+      ],
+      [
+        21595,
+        21614
+      ],
+      [
+        21595,
+        21626
+      ],
+      [
+        21595,
+        21621
+      ],
+      [
+        21595,
+        21618
+      ],
+      [
+        21599,
+        21596
+      ],
+      [
+        21599,
+        21614
+      ],
+      [
+        21599,
+        21626
+      ],
+      [
+        21599,
+        21621
+      ],
+      [
+        21599,
+        21618
+      ],
+      [
+        21590,
+        21596
+      ],
+      [
+        21590,
+        21614
+      ],
+      [
+        21590,
+        21626
+      ],
+      [
+        21590,
+        21621
+      ],
+      [
+        21590,
+        21618
+      ],
+      [
+        21606,
+        21596
+      ],
+      [
+        21606,
+        21614
+      ],
+      [
+        21606,
+        21626
+      ],
+      [
+        21606,
+        21621
+      ],
+      [
+        21606,
+        21618
+      ],
+      [
+        21600,
+        21596
+      ],
+      [
+        21600,
+        21614
+      ],
+      [
+        21600,
+        21626
+      ],
+      [
+        21600,
+        21621
+      ],
+      [
+        21600,
+        21618
+      ],
+      [
+        21609,
+        21596
+      ],
+      [
+        21609,
+        21614
+      ],
+      [
+        21609,
+        21626
+      ],
+      [
+        21609,
+        21621
+      ],
+      [
+        21609,
+        21618
+      ],
+      [
+        21634,
+        21596
+      ],
+      [
+        21634,
+        21614
+      ],
+      [
+        21634,
+        21626
+      ],
+      [
+        21634,
+        21621
+      ],
+      [
+        21634,
+        21618
+      ],
+      [
+        21598,
+        21596
+      ],
+      [
+        21598,
+        21614
+      ],
+      [
+        21598,
+        21626
+      ],
+      [
+        21598,
+        21621
+      ],
+      [
+        21598,
+        21618
+      ],
+      [
+        21607,
+        21596
+      ],
+      [
+        21607,
+        21614
+      ],
+      [
+        21607,
+        21626
+      ],
+      [
+        21607,
+        21621
+      ],
+      [
+        21607,
+        21618
+      ],
+      [
+        21591,
+        21596
+      ],
+      [
+        21591,
+        21614
+      ],
+      [
+        21591,
+        21626
+      ],
+      [
+        21591,
+        21621
+      ],
+      [
+        21591,
+        21618
+      ]
+    ],
+    "boundary": {
+      "kind": "before_on_setup",
+      "live_manage_sp": 17179934544,
+      "ordered_entries": 15,
+      "root_return_sentinel": 21474836480,
+      "rva": "0x36d2db",
+      "start_calls": 0
+    }
+  }
+}

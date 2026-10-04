@@ -156,3 +156,50 @@ semantic checkpoint test fail with test exit 101. The mutation helper restored
 the exact original source bytes before the final library run. This establishes
 sensitivity to that represented status rule; it does not validate unrepresented
 delegate identities, physical publication or acquisition scheduling.
+
+## Original ordered Start and first-wait admission
+
+The [retained Start/queue audit](first_village_start_queue.md) continues the same
+original generated N5 caller through the actual serialized 15-entry Start
+array. All 75 pointer comparisons are false for these five assets, so no Start
+body executes. Twenty exact data bindings and 22 class aliases remain distinct
+from the five supported semantic actor roles. This witness does not establish
+concrete Start support for the other 15 assets.
+
+Before each original Init returns, the audit executes the actual engine first
+step and registers that actor's original state-zero DelayReveal iterator. Five
+distinct supplied native owners share one queue. It retains the actor, payload,
+GC target, iterator and live tree-node identity, rather than restarting an
+already-yielded iterator. The native report SHA-256 is
+`7439fd1370909aa79bf2575b101ff8e943941fa148bb75e15254f822a14b3a60`.
+
+The [independent projector](../../scripts/project_first_village_start_queue.py)
+produces [the semantic checkpoint](../../fixtures/synthetic/first_village_start_queue_v1.json),
+SHA-256 `8c30de632c902477f14d28d84640903143ff0ee3a1f69d8015309d8c977324e9`.
+It imports no Rust. The Rust comparison covers represented actors, bodies,
+Init calls, data/order, pools, pending identities and all 75 ordered comparisons.
+Status-list version checks derive only insertion deltas, as above. Logical
+queue labels are adapter identities; physical owners, tree storage, callback
+addresses, native CPU and GC references remain native validation evidence.
+
+For each of five admissions, Rust derives the native timing from the explicit
+producer: float32 duration bits `3E99999A`, time 1.0, signed frame 7, phase mask
+`A` and generation 0 produce deadline `1.30000001192092896` and frame threshold
+8. These match the decoded live native records. Changing the Rust increment
+from 1 to 0 caused the checkpoint to fail with frame 7 versus 8 and test exit
+101; the helper restored the exact source bytes afterward.
+
+A synthetic predeadline scheduling probe preserves the five pending entries.
+An eligible probe supplies all five matching callback boundaries and still
+rejects the unsupported V4 acquisition resume. These probes establish adapter
+compatibility and its guard, not a native drain history. The native stop is
+before the runtime `onSetup` read at `36D2DB`; its subscription, Shuffle,
+acquisition, public observations and PlayerHistory remain unresolved. The
+generic caller's supplied later callback/Shuffle bookkeeping does not certify
+that the original runtime subscriber is absent.
+
+All eleven focused bridge tests passed. After adding the direct version-delta
+comparison and restoring the frame mutation, all 971 library tests passed
+(51.66s). Independent native reproduction matched the complete report bytes;
+projection, source hashes, retained-prefix checks, links and privacy checks also
+passed. Production deduction/action rules were unchanged in this integration.
