@@ -165,6 +165,8 @@ stop, diagnose, fix, verify, then resume.
     derive branch expectations from retained storage rather than fresh-fixture defaults.
     An Init-only fixture can omit an order that full replay requires; supply
     an explicit valid order for authored replay rather than unwrapping an absent one.
+    Derive iterator transitions from native loops and actual enumerator multiplicity;
+    multiple children can yield repeatedly with the same state rather than state + 1.
     Emulation can return at a time/instruction budget without completing a call.
     Verify RIP and the declared stop/completion before applying return ABI checks;
     a bounded continuation must retain the live CPU, stack and service chronology.
