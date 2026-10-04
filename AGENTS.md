@@ -129,6 +129,7 @@ stop, diagnose, fix, verify, then resume.
     Check imported report/helper and target-manifest schemas before indexing
     their fields; a build constant is not necessarily repeated inside a returned
     layout dictionary, and manifest function rows need not use a `targets` key.
+    Parse complete JSON documents; a first-line sample can be only an opening brace.
     Resolve Rust type names from their actual declarations before authoring
     imports or fixtures, including nested field container shapes before comparing
     or iterating them; a semantic UI-state description is not its symbol name.
@@ -287,6 +288,8 @@ stop, diagnose, fix, verify, then resume.
     verify trigger predicates and retained state before claiming a write occurred.
     Track the tested register's producer before classifying a branch; a nonnull
     delegate-combination result does not imply a nonnull prior event channel.
+    Follow the complete branch chain after a null check; a later collection-count
+    check can exclude nonnull empty results from subsequent calls.
     Read numeric constants before assigning units or expected magnitudes.
     Derive native wait output fields from the reviewed producer and live record,
     including signed frame increments; do not copy input timing into assertions.
@@ -308,8 +311,10 @@ stop, diagnose, fix, verify, then resume.
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
-    decompiler parameters or constructor return values. Follow native struct copies
-    before binding enumerator identity; a hidden return buffer need not be the
+    decompiler parameters or constructor return values. Resolve indirect targets
+    through their actual slot loads and receiver class; a virtual method can call
+    a loaded register rather than a memory operand at that slot. Follow native
+    struct copies before binding enumerator identity; a hidden return buffer need not be the
     subsequent mutable cursor. A write-barrier
     notification after a struct copy can pass a null second argument; qualify
     its caller and verify the preceding native stores instead of treating that

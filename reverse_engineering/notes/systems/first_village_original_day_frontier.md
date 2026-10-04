@@ -193,3 +193,87 @@ trusted HUD/HP/capture and legal-history admission remain separate gates in the
 Validation for this note is read-only source/metadata/export triage and resolved
 repository-link checks. No new native producer, Rust implementation, live action,
 proprietary instruction export or hidden input to PlayerHistory accompanies it.
+
+## Fresh pool and rule bindings for the next composition
+
+2026-10-04. Further independent static review resolves the minimum fresh-board
+and rule bindings. This remains a caller-dependency triage, with no newly
+executed SetupDelay history or public-domain promotion.
+
+The original Characters instance `137026` has an empty working list, null
+currentPool and seven configured pools. Characters.Init calls
+CreateAndGetCharacters at `36CDA8`, then tail-dispatches Manage at `36CE11`.
+Supplying a prefilled working board does not establish this path. The unique
+five-placeholder pool is `139114`; its prefab reference `[2,23406]` resolves
+to Character. Its ordered original references are:
+
+| Placeholder | Transform | Acted side |
+| --- | --- | --- |
+| 185364 | 98170 | Down `30` |
+| 177982 | 103254 | Left `20` |
+| 177993 | 103260 | Left `20` |
+| 177992 | 103261 | Right `40` |
+| 177956 | 103286 | Right `40` |
+
+All five serialized transforms have empty child lists; runtime-empty child
+enumerators still require an explicit service contract. The native creator
+`3698F0..369CE7` first enumerates and destroys every placeholder's children,
+then performs a separate instantiation pass. Its call at `369BAD` returns
+Character directly with prefab/parent/exact generic MethodInfo in RCX/RDX/R8;
+there is no intervening GetComponent call. The empty-child profile would reach
+ten transform lookups, five false enumerations and disposals, zero Current or
+Destroy calls, five instantiations/appends and one ToArray. Those are branch
+expectations for the unexecuted composition, not measured native service counts.
+
+Native placement selects actor `+A8` from its Down `+C8`, Left `+B8` or Right
+`+D0` directional Acted reference. Right also writes leftAct `+B0=true`.
+Directional component references, clone fields, activation and lifecycle remain
+supplied runtime inputs. The finite factory result must be its actual-written
+pool `+30` array containing five distinct, fresh unpublished actors in
+placeholder order. Before that final store, a stopped caller preserves the old
+array pointer; a later barrier failure preserves the new pointer.
+
+The [asset audit](character_asset_flags.md) binds the selected role classes:
+Minion `5910`, Confessor `5894`, Enlightened/Shugenja `5890`, Hunter/Tracker
+`5891` and Lover/Empath `5863`. Each inherits Role `5853` and declares no
+GetRules override. Native base GetRules `3C4D10..3C4D65` allocates and constructs
+a fresh empty SpecialRule list without reading a role-instance payload field.
+Thus actual UpdateRules can execute under narrow list allocation/construction
+providers rather than an arbitrary empty-rule callback.
+
+UpdateRules loads virtual code/MethodInfo from class `+178/+180`, calls the
+first getter at `381748`, checks null at `38174A/38174D`, then checks list
+count at `381753/381757`. Only a nonnull, nonempty result reaches the second
+getter at `381781` and AddRange at `381799`. The declared five-role empty-list
+path therefore needs five fresh getter results and zero AddRange calls. Its
+enumerator is copied from a hidden return buffer to the live stack cursor;
+do not retain the overwritten constructor temporary as that cursor's identity.
+
+The Standard-enum script draw at `390F2E` uses zero minimum and the actual
+retained count-list size as maximum, followed by get_Item `390F48` and
+CharactersCount CreateCopy `390F57`. These metadata arguments are resolved;
+the recorded schedule must account for this draw before roster draws.
+Gameplay static `+0` is CurrentRelics and `+10` is Instance. Existing harness
+bootstrap aliases must not conflate them. Without executing Gameplay.Init,
+day zero remains a supplied entry value rather than original first-start proof.
+
+Independent PE/metadata checks confirm these complete body fingerprints:
+
+| Body interval | SHA-256 |
+| --- | --- |
+| SameHandOut `380260..3802D0` | `0cfacae96397e8397f595a3bc3d1213cc46d973025fc84997d27c4a397a46d78` |
+| SetupDelay.MoveNext `390AB0..39128C` | `e3bede06b2a0bac64219786f3a676d4f818f79098d24f29422a3a36a2f208d71` |
+| ChangeGameplayState `37B620..37B74E` | `84f9c5ec23435606837fb16adeef4d908ae873b8add2a9049741e557c6e39b43` |
+| Characters.Init `36CC40..36CE21` | `f9c1b63e1f42b2ad35ab40bc866f8a2266c9fea440cc14df618e4925177e0a62` |
+| CreateAndGetCharacters `3698F0..369CE7` | `d21757c3705c056f5c005b103d85445187cc0365e7c83d2394496660eae00a95` |
+| Role.GetRules `3C4D10..3C4D65` | `ea2eaf82bb232b78f1e6f4726f79a1938252ca74e73f249c28fe0bb7cb54f5cd` |
+
+Root's separate readers confirm the four outer body identities, twelve selected
+direct calls, five exact inherited role declarations and ten getter/branch pins.
+An initial reader incorrectly assumed a memory-form virtual call; the corrected
+reader follows the loaded RAX target and subsequent count check. These static
+checks establish neither an executed branch nor a retained normal/stop result.
+The original setup producer is still an unpublished, unexecuted draft. Null
+event channels, empty relic inventory, concrete mode publication, engine
+ownership/timing, prefab hydration and trusted public capture remain separate
+contracts. All eight full-plan acceptance gates remain open.

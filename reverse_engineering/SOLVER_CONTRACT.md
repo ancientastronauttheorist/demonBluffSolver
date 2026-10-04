@@ -1545,3 +1545,52 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   pending child waits explicit. Then close trusted public capture before mixedN5
   admission, independent S2 worlds, legal S3 policy and broader S4 continuations.
 ```
+
+## Original setup dependency triage checkpoint
+
+2026-10-04. The [original Day frontier](notes/systems/first_village_original_day_frontier.md#fresh-pool-and-rule-bindings-for-the-next-composition)
+now resolves fresh pool creation, inherited empty-rule getters and the
+script-selection draw. This is static dependency evidence; the new original
+setup draft has not executed a native fixture.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent100306e08d70689fd79a5dfb1df0bff827d5ce55.
+  Original setup static triage; offline validation lane, no planner input.
+Named decision blocker and reachable deck/phase/role scenario:
+  Row-zero N5 Confessor/Lover/Hunter/Enlightened/Minion setup: the original Day
+  writer and fresh physical board must precede any admitted Hunter history.
+Before -> after supported behavior:
+  Replacing supplied generation/Day requires actual SameHandOut/SetupDelay and
+  actual Characters.Init factory selection, not a prefilled acquired board.
+  Exact pool/prefab/placeholder and inherited GetRules bindings are resolved.
+Original evidence; supplied runtime/scheduler boundaries:
+  Six full body fingerprints and selected original caller operands are pinned.
+  Selected base GetRules produces fresh empty lists; original UpdateRules checks
+  null then Count and skips aggregation. Original creator uses two passes.
+  Scene/runtime hydration, mode/day entry, null events, empty relic inventory,
+  allocation/cloning and engine admission remain declared provider obligations.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  No new original setup execution. Independent static readers check four outer
+  bodies/twelve direct calls and five role declarations/ten getter-branch pins.
+  A mistaken static memory-call filter is corrected from actual register loads;
+  complete JSON parsing and native receiver/branch checks are tightened in guide.
+  Fresh N5 actor-array and five empty-getter counts are proposed exit assertions,
+  not measured native totals. No fresh stopped/pause/reentry comparison exists.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No world-set comparison, public history or supported-domain promotion.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No new policy, probability or prior. Recorded draw indices remain oracle inputs.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out/outcome/performance run; production Rust unchanged, not rerun.
+New uncertainty, regressions and remaining exclusions:
+  The source draft remains unpublished and unexecuted. Original first-start
+  lifecycle, currentDay provenance, complete event/resource effects, scheduler
+  parent/child retention and rendered public capture remain open.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Bind the exact finite draw schedule and fresh scene pool, then freeze/run the
+  original SameHandOut->SetupDelay normal composition. Require actual .1f
+  wait/resume, Intro5->Day10/Prev5, fresh Init/Manage returns and terminal false,
+  preserving all pending child waits. Keep Pinned/modal outside this first witness.
+```
