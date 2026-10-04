@@ -206,7 +206,9 @@ stop, diagnose, fix, verify, then resume.
     Have the originating agent resume its yielded shell session. A session ID
     returned by another agent need not be accessible here; an unknown-session
     response is not evidence that its producer stopped or should be restarted.
-    Compile edited Python audit syntax before launching report producers; bind
+    Compile edited Python audit syntax before launching report producers;
+    select explicit language-specific targets rather than positional entries
+    in a mixed document/source artifact list. Bind
     or parenthesize Boolean expressions following equality comparisons.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target

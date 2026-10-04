@@ -103,7 +103,7 @@ integrated means the relevant solver/player-history path consumes it.
 | --- | --- | --- |
 | Observation/extraction | [Strict history boundary](notes/systems/player_history_boundary.md): typed history, exact-prefix trusted review, chronological result preservation and paired-oracle development input checks. | Exported Rust module with narrow Judge and conditional Hunter/Baa snapshot projections; archived pixel review records admission gaps. Trusted capture/CLI/live integration and held-out evaluation remain absent. |
 | Deck/pool generation | [Actual pool composition](notes/systems/manage_pool_composition.md): caller/builders/getters/filters/predicate with supplied collection/RNG/layout. [Original N5 factors](notes/systems/first_village_bluff_generation.md) preserve native roster/pools and separately invoked Minion catalogue support. | [Ledger bridge](notes/systems/manage_pool_ledger_bridge.md) is offline with later-setup provenance required. The retained acquisition witness below joins one original Minion caller and recorded source choice; N5 joint weights, generation-to-observation domain and held-out results remain open. |
-| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Original N5 publication/Init](notes/systems/first_village_publication_init.md) retains generation through five concrete Init calls. [Original Start/queue](notes/systems/first_village_start_queue.md) adds the 15-entry scan, 75 comparisons, zero Start calls and five admissions. [Conditional Shuffle admission](notes/systems/first_village_shuffle_admission.md) adds normal return and a sixth wait under supplied onSetup=null. [Original subscriber binding](notes/systems/first_village_on_setup_binding.md) supplies static/asset evidence. [Installed subscriber admission](notes/systems/first_village_subscriber_admission.md) executes OnEnable, Manage callback and nested first steps through normal return with eight records/seven owners, under named lifecycle, delegate-list, audio-null and visual providers. [Retained N5 acquisition](notes/systems/first_village_retained_acquisition.md) executes five animation resumes and five card acquisitions on the same queue, retaining Audio/Shuffle waits. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) joins delayed acquisition to publication. | [Rust initialization batch](notes/systems/setup_initialization_batch.md) compares five completed prefixes. [Setup action V2](notes/systems/character_action_setup.md) compares N5 semantics, all ordered comparisons, a separate registered callback request/return and eight first-wait timings; the older scheduled V1/V4 boundary rejects mixed-queue acquisition. [Guarded non-Day setup Reveal](notes/systems/non_day_setup_reveal.md) adds V5/V2 semantic support with complete auxiliary-queue guards; its independent retained-native differential comparison remains pending. Subscriber bodies/effects, physical publication/CPU/delegates/engine ownership remain native-only. [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches conditional post-click checkpoints. Animation/acquisition native dependency is now retained and reproduced. Shuffle state1/events, Day readiness, generated legal history and rendered admission remain open. |
+| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Original N5 publication/Init](notes/systems/first_village_publication_init.md) retains generation through five concrete Init calls. [Original Start/queue](notes/systems/first_village_start_queue.md) adds the 15-entry scan, 75 comparisons, zero Start calls and five admissions. [Conditional Shuffle admission](notes/systems/first_village_shuffle_admission.md) adds normal return and a sixth wait under supplied onSetup=null. [Original subscriber binding](notes/systems/first_village_on_setup_binding.md) supplies static/asset evidence. [Installed subscriber admission](notes/systems/first_village_subscriber_admission.md) executes OnEnable, Manage callback and nested first steps through normal return with eight records/seven owners, under named lifecycle, delegate-list, audio-null and visual providers. [Retained N5 acquisition](notes/systems/first_village_retained_acquisition.md) executes five animation resumes and five card acquisitions on the same queue, retaining Audio/Shuffle waits. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) joins delayed acquisition to publication. | [Rust initialization batch](notes/systems/setup_initialization_batch.md) compares five completed prefixes. [Setup action V2](notes/systems/character_action_setup.md) compares N5 semantics, all ordered comparisons, a separate registered callback request/return and eight first-wait timings; the older scheduled V1/V4 boundary rejects mixed-queue acquisition. [Guarded non-Day setup Reveal](notes/systems/non_day_setup_reveal.md) adds V5/V2 semantic support with complete auxiliary-queue guards; [independent retained-native comparison](notes/systems/first_village_retained_acquisition_projection.md) matches setup, eight preceding queue drains and the recorded Confessor acquisition path while retaining all six supported Rust outcomes. Subscriber bodies/effects, physical publication/CPU/delegates/engine ownership remain native-only. [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches conditional post-click checkpoints. Animation/acquisition native dependency is now retained and reproduced. Shuffle state1/events, Day readiness, generated legal history and rendered admission remain open. |
 | Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). [Concrete original N5 Init/Start dependencies](notes/systems/first_village_role_setup.md) verify Confessor status 25 separately from actual lying; the retained publication/Init caller now verifies the original N5 Init effect. | Production public-history projection preserves complete worlds at all declared four/five-seat development prefixes; finished setup and availability supplied. Original N5 setup is admitted by offline V2/V4; V5 adds bounded non-Day acquisition callbacks and V2 scheduling guards, with copied-Alchemist mutation sensitivity. The separate native witness executes the recorded copied-Confessor path. No Day, legal-observation, world-set or cross-role/held-out certificate. |
 | Legal abilities/actions | [Setup action audit](notes/systems/character_action_setup.md), individual role/picker evidence and guarded writer bridge. | Recommendations/automation exist; target/use/reset/history and policy certificate remain open. ActivatePick drafts stay unvalidated unless needed. |
 | Execution/death/protection | [Execution evidence](notes/systems/gameplay_execution_resolution.md) supplies bounded damage/protection/terminal behavior. | Existing bookkeeping/constraints; cross-role chronology needs original before/action/after comparisons. |
@@ -1116,4 +1116,65 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   the smallest outer setup/input boundary required for legal N5 observations.
   Animation/acquisition retained dependency closed; continue S1 rather than
   expanding unrelated rendering work or treating native counters as completion.
+```
+
+## Independent retained N5 acquisition differential checkpoint
+
+2026-10-03. Projector, fixture and Rust comparison commit
+`dda6b682844df8ee1bb0dbec240f7e42dc2e6d3a`. Evidence and exclusions are in the
+[comparison note](notes/systems/first_village_retained_acquisition_projection.md).
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; commit above, first_village_retained_acquisition_v1
+  synthetic projection. Offline oracle differential, not planner observations.
+Named decision blocker and reachable deck/phase/role scenario:
+  Does guarded Rust consume the original five-card retained setup/animation
+  chronology and acquire Minion's original-source Confessor without dropping
+  other positive outcomes or resetting pending waits?
+Before -> after supported behavior:
+  Separate native/V5-V2 support -> independent no-Rust projection plus original
+  native checkpoint comparison. Setup semantics feed actual iterator-label
+  mapping0..4; three gated and five animation queue drains match gen0→8/cursor12,
+  then five acquisitions match gen9/cursor12 and only Audio5/Shuffle7 pending.
+  Native displayIDs5..1 remain distinct from offline modeled positions1..5.
+Original evidence; supplied runtime/scheduler boundaries:
+  Frozen native report/source, original assets, concrete callback entries,
+  status versions and native owner/payload/queue ledgers. Rust animation replay
+  consumes explicit native-derived wait mutations/result1/release responses;
+  complete Animate/tween execution stays native-only. Supplied UI booleans do
+  not certify native name/art/color routing or pixels. Global Gameplay phase,
+  scene lifecycle/input readiness and pending deck callbacks stay outside scope.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Five setup actors/full semantics,8preceding queue drains,5acquisition callbacks
+  match; all6positive selector outcomes retained before grading recordedConf.
+  Real/copied role, slot, trigger, dispatch, target and status insertion/version
+  deltas compared. NoStart/replacements; four null selectors consume no RNG.
+  Independent projector/reviewer/Root reproductions byte-exact128002B fixture
+  SHA e35322e0e415469613910ab464551b9ab5de7a3eec7b07476bf333d271c60e40.
+  Projector SHA da5c819004588eb2fce396602eca152e3703cf4d7201e8cd49f13465a32131eb.
+  Focused new comparison passed afterfresh3m11compile;987library tests passed
+  29.54s. Syntax, scopedformat, links, privacy and unchangedhashchecks passed.
+  No unexplained admitted mismatch; no new mutation or outcome campaign.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No world-set or mixed-N5 public-history promotion. Test complete semantic
+  states and typed unsupported boundaries; oracle data remain isolated.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  Six conditional supplied-uniform selector fractions only. Recorded native
+  draws are validation evidence, not planner seed/prior or generation weights.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out or fixed-budget policy comparison. Prior release build/34simulation
+  passes retained for unchanged production behavior; currentchange adds tests.
+New uncertainty, regressions and remaining exclusions:
+  Read-only investigation identifies a PinnedDeckView null-first-yield and
+  aliased-root dependency. Original installer/event/child-lifetime native
+  composition, lifecycle invocation and null-yield scheduling remain pending;
+  no inert-handler or empty-readiness-queue certificate is established.
+  Pending Audio/Shuffle, legal click/speech and public adapter remain open.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Resolve bounded deck/readiness subscriber and null-yield continuation effects
+  on retained N5 before one legal original Hunter reveal. Reprioritize from an
+  assumed empty readiness queue to the identified coroutine dependency. Continue S1
+  legal history, then independent S2, legal decision S3 and broader S4.
 ```
