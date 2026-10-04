@@ -126,7 +126,8 @@ stop, diagnose, fix, verify, then resume.
     their fields; a build constant is not necessarily repeated inside a returned
     layout dictionary, and manifest function rows need not use a `targets` key.
     Resolve Rust type names from their actual declarations before authoring
-    imports or fixtures; a semantic UI-state description is not its symbol name.
+    imports or fixtures, including nested field container shapes before comparing
+    or iterating them; a semantic UI-state description is not its symbol name.
     Expand snapshot pooling only when the report declares `snapshot_encoding`;
     an imported report corpus can contain both pooled and ordinary reports.
     Inspect exact returned report keys rather than substituting a similar
@@ -160,6 +161,8 @@ stop, diagnose, fix, verify, then resume.
     can be wrapper records with a `calls` field rather than lists of call rows.
     Inspect inherited emulator initialization before using its attributes;
     a dependency imported locally by a base class need not be an instance field.
+    Derive stack snapshot windows from the actual mapped extent; verify the
+    full window and suspended parent spans are mapped before reading them.
     Inspect inherited identity normalization before using it for service arguments;
     stack addresses, immediates and metadata tokens need not be managed objects.
     Reset dynamically added identity/string labels with allocator and object

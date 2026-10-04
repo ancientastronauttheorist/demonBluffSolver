@@ -2,8 +2,9 @@
 
 Build `f530404b0f3f_807de4a83df4`. This is a next integration proposal, not a
 native legal-reveal trace, capture certificate, complete generation model,
-likelihood/prior, policy result or S1/S2 completion. No new adapter or reference
-implementation accompanies this note.
+likelihood/prior, policy result or S1/S2 completion. There is no public adapter
+or generative world reference. The fixed-row offline support comparison below
+is a narrower dependency.
 
 ## Existing evidence and the public-domain blocker
 
@@ -187,6 +188,14 @@ retained Gemcrafter histories, retained state and reachable caller contracts
 are represented and independently compared.
 Their opaque effects must not be replaced with inert callbacks. No new combined
 world count or generation prior is established by this proposal.
+
+The [independent six-outcome comparison](first_village_retained_acquisition_projection.md#independent-six-outcome-conditional-support-reference)
+now implements that offline dependency for the single recorded row-zero order
+and supplied queue boundary. It derives complete modeled setup/acquisition
+state and chronology from fixture inputs, omitting expected-output fields.
+Only Confessor has a retained native history anchor; the other five outcomes
+are authored rule support. It does not enumerate other placements, filter
+public observations or admit this proposed PlayerHistory domain.
 
 The independent Hunter rule walks the verified circle in both directions,
 excludes the actor, and uses the nearest registered Evil or sentinel `N-1`.

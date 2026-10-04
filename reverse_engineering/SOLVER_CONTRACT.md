@@ -1359,3 +1359,52 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   outcomes for one explicitly supplied row-zero input before any mixed S2
   history admission. Preserve legal S3 and broader S4 gates.
 ```
+
+## Independent fixed-row setup/acquisition support checkpoint
+
+2026-10-04. The [comparison note](notes/systems/first_village_retained_acquisition_projection.md#independent-six-outcome-conditional-support-reference)
+records the new reference and its narrow input domain.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent a2c803c3816ee390d99bebb769a3d5613f81e69a.
+  Unchanged retained-acquisition fixture v1, setupV2/acquisitionV5/scheduledV2.
+  Offline input-conditioned development reference; no new planner input.
+Named decision blocker and reachable deck/phase/role scenario:
+  Fixed original row-zero roster Minion/Confessor/Lover/Hunter/Enlightened,
+  four duplicate and two unique choices. Check all six modeled alternatives
+  without trusting production transitions or fixture expected-output fields.
+Before -> after supported behavior:
+  Independent full modeled initialization, setup and six acquisition outcomes;
+  complete callbacks, queue chronology, deferred identities and support keys.
+  Exact15 nonmatching Start entries retained; no Start calls or new continuations.
+Original evidence; supplied runtime/scheduler boundaries:
+  Existing retained Confessor path is the sole native full-history anchor.
+  Other five outcomes are authored rule support. Physical order, fresh statuses,
+  resistance/target, inert services and acquisition clock/queue are supplied.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Six modeled outcome/state/chronology comparisons pass in two new tests.
+  Initial compile failure corrected to exact optional roster container schema.
+  Focused release2/2 and full release library1002/1002 pass; full run18.93s.
+  Child SHA5a7b12adab73f96445abb68b333e026a62b0def0ff5a63e3052a91572cb56430.
+  Fixture SHAe35322e0e415469613910ab464551b9ab5de7a3eec7b07476bf333d271c60e40.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Six complete modeled support keys agree for this fixed conditional input.
+  This is not a generative world set or public belief domain. Bad bindings,
+  inconsistent late queue/callback fields, unsupported selectors and eligible
+  deferred Audio/Shuffle reject atomically without input mutation.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  Conditional probability fields excluded; no generation prior or policy claim.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No new held-out, fixed-budget decision or outcome comparison. Production
+  behavior is unchanged; prior34simulation passes retained without rerun.
+New uncertainty, regressions and remaining exclusions:
+  Status versions are projected from modeled insertions, not stored RevealActor
+  fields. Other placements, full fallback, native all-six histories, legal Day,
+  complete public deck, trusted capture and PlayerHistory admission remain open.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Conditional support dependency closed. Continue the retained modal deck
+  publication and original Day/capture join before admitting mixedN5 history;
+  preserve independent S2 held-out worlds, legal S3 policy and broader S4 gates.
+```

@@ -113,3 +113,34 @@ complete possible worlds, clue likelihoods, policy optimality or ascension
 outcomes. All eight full-plan gates remain open. The next bounded dependency is
 original deck/readiness callback provenance before one legal Hunter reveal and
 its separate mixed-N5 player-history adapter.
+
+## Independent six-outcome conditional support reference
+
+The [Rust reference](../../../crates/solver-core/src/bluff/conditional_row_zero_setup_reference_tests.rs)
+now independently derives all six outcomes for this one fixed input. Its input
+reader omits the fixture's expected-output fields. Authored transitions build
+initialization publications, setup state, acquisition callback states/traces,
+final actor/body/pool/continuation state and complete queue chronology before
+comparing them with the production replays. No production transition helper
+constructs the reference expectations.
+
+The input is explicitly the five physical rows above, with the four ordered
+duplicate entries and two ordered unique entries. It preserves the actual
+15-entry nonmatching Start array, source/clone classes, empty fresh resistance,
+null target, status-version baseline and the supplied seven-entry acquisition
+queue. The six canonical support keys retain complete modeled state and
+current data. Status versions are projected from initialization and modeled
+insertion effects; RevealActor does not store native list versions. Missing
+bindings, inconsistent late queue/callback fields, unsupported selector entries
+and an eligible deferred Audio or Shuffle callback reject without input mutation.
+
+Confessor remains the only retained native full-history anchor. The other five
+outcomes are independently authored conditional rule support, not five new
+original histories. The comparison excludes conditional probabilities, native
+generation priors, arbitrary placements, the full fallback catalogue, Unity
+publication, global Day, legal player history and policy. Six equal modeled
+support states do not establish six complete public belief worlds.
+
+Both focused release tests pass, including the atomic rejection cases; all
+1,002 release library tests pass in 18.93 seconds. The fixture is unchanged at
+the hash above. These are development regressions, not held-out gameplay trials.

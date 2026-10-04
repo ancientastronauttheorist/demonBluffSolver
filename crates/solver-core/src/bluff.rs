@@ -62,6 +62,10 @@ pub mod wait_queue;
 pub mod scheduled_reveal;
 pub mod scheduled_role_publication;
 
+#[cfg(test)]
+#[path = "bluff/conditional_row_zero_setup_reference_tests.rs"]
+mod conditional_row_zero_setup_reference_tests;
+
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{
     BluffAcquisitionSource, RevealBluffAcquisitionTrace, TwinRecipientBluffContext,
