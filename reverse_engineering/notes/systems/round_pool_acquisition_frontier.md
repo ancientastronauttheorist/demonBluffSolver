@@ -120,11 +120,28 @@ status writer and retained first waits are compared with the
 [setup-only Rust bridge](character_action_setup.md); native storage, callback
 identity and CPU assertions remain separate. This closes the earlier concrete
 Init gap for Minion, Confessor, Lover, Hunter and Enlightened, not the original
-ordered Start or engine admission gap. The current next boundary is the genuine
-serialized Start array and five distinct engine owners sharing one queue,
+ordered Start or engine admission gap. At that checkpoint, the next boundary
+was the genuine serialized Start array and five distinct engine owners sharing one queue,
 stopping before the unresolved runtime `onSetup` read. Existing already-yielded
 iterators must not be restarted to manufacture admission. Acquisition resumes,
 legal public chronology and all wider-domain obligations remain open.
+
+The [original Start/queue witness](first_village_start_queue.md) now closes that
+scan/admission dependency for the same row0/poolrow0 N5 path: the actual 15-entry
+array produces 75 comparisons and zero Start calls; each original Init registers
+its original first yield through the engine into one five-owner queue. The
+[semantic bridge comparison](character_action_setup.md) matches represented
+state, ordered comparisons and five native timing records. Native storage and
+owner identities remain oracle-only; no acquisition history is promoted.
+
+The next smallest exit is a conditional continuation past `36D2DB` through the
+actual Shuffle state-zero first step, sixth owner/queue admission and normal
+Manage return. Runtime `onSetup` has no established installer/clearer here.
+Explicitly supplying null would delimit a conditional runtime contract, not
+prove the original subscriber absent. Preserve the same generation, caller CPU,
+actors and five prior waits; add the manager's distinct Shuffle owner. Later
+Shuffle state1, events, acquisition resumes and legal history require their own
+contracts and original evidence.
 
 ## September 30 progress
 
