@@ -1,0 +1,676 @@
+{
+  "schema_version": "first_village_on_setup_binding_v1",
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "evidence_status": "native-static-and-authored-asset-configuration",
+  "source_hashes": {
+    "level0": "b509ac15904f0926419cccc1d2e86508c69b0e3af2235a08ff8e9fc4d170c7f1",
+    "globalgamemanagers.assets": "38e56ef97cda4c5dfcfcb397f8077335aebbf199460fa5b536d91698c21ed2d9",
+    "GameAssembly.dll": "f530404b0f3f28479a7ce21d5738c4e36c2a0a03e1b5520092975b4150d819ec",
+    "script.json": "6c4e6e01a7672b69096e0d52491f3b848237ac40ef3b3817beb8b442ab18f769",
+    "dump.cs": "53f5da90d056ae96970eebc3293fd48190f2c7f70605348fcd38fa3302c438b7",
+    "global-metadata.dat": "807de4a83df41dea29f31e98308131dba93008b340746b8d6be85ca5ea373713",
+    "producer_source": "5132f7bd14dc4ff7da0c3ea7145421b632ef6d63a6fea155b04ba44d15dcf0fd"
+  },
+  "component": {
+    "path_id": 137027,
+    "object_sha256": "2c919c0c0aebb29b0ceff8a44a20ab11df0fcfd1ddf9c3175314e14530753fc5",
+    "object_size": 84,
+    "consumed_bytes": 84,
+    "header": {
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 415
+      },
+      "m_Enabled": 1,
+      "m_Script": {
+        "m_FileID": 1,
+        "m_PathID": 920
+      },
+      "m_Name": ""
+    },
+    "serialized_fields": {
+      "name": "",
+      "characters": [
+        0,
+        137026
+      ],
+      "shuffle_clips": [
+        [
+          2,
+          514
+        ],
+        [
+          2,
+          503
+        ],
+        [
+          2,
+          523
+        ]
+      ]
+    },
+    "script_path_id": 920,
+    "script_object_sha256": "a236539136e21ec972aa8e53b25f0497c73fb274ed076e679f6b5c159a1ed10c",
+    "script_binding": {
+      "m_ClassName": "CharacterShuffleAnimation",
+      "m_Namespace": "",
+      "m_AssemblyName": "Assembly-CSharp"
+    },
+    "ancestors": [
+      {
+        "transform_path_id": 88510,
+        "transform_object_sha256": "7275204d271deefa9ce3ebf3c58def96fb11a3aa2bf73c36791fda75c7693a93",
+        "game_object_path_id": 415,
+        "game_object_sha256": "bd3d90bfe08f922bdb83e9730a1d18303d1fb0ab0760fde9c12c4799e0d9c915",
+        "name": "Characters",
+        "active_self": true,
+        "parent_transform": {
+          "m_FileID": 0,
+          "m_PathID": 89587
+        },
+        "components": [
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 88510
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 137026
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 137027
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 87868
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 137028
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 137029
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 137030
+            }
+          }
+        ]
+      },
+      {
+        "transform_path_id": 89587,
+        "transform_object_sha256": "fff4265f185c15441b0d7ffb4a8c51be4f2991d72686bbe0944cf39163e03fba",
+        "game_object_path_id": 1529,
+        "game_object_sha256": "d6cf0df599815c2ba736d8abccf1268a390052de6dc26013e40bbcaf86043688",
+        "name": "Canvas",
+        "active_self": true,
+        "parent_transform": {
+          "m_FileID": 0,
+          "m_PathID": 45175
+        },
+        "components": [
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 89587
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 87899
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 138283
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 138282
+            }
+          }
+        ]
+      },
+      {
+        "transform_path_id": 45175,
+        "transform_object_sha256": "d87ead60569d8983b91e7ff1cacb4573f182137ea67cf59e9e742f1dfb83438d",
+        "game_object_path_id": 98,
+        "game_object_sha256": "b993298b86b296dda0186cb3144b4a4a4a14b9013f9c0e497e8c5cf68f021e4a",
+        "name": "Content",
+        "active_self": true,
+        "parent_transform": {
+          "m_FileID": 0,
+          "m_PathID": 45232
+        },
+        "components": [
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 45175
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 136693
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 136694
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 136695
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 136696
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 136697
+            }
+          }
+        ]
+      },
+      {
+        "transform_path_id": 45232,
+        "transform_object_sha256": "ab06030946afd391e5526c90bb68a1aca419fc1436423ba6c22d0027d9038e2f",
+        "game_object_path_id": 1654,
+        "game_object_sha256": "3aa90138f7752a684493afae58ae4b9578d67ad6faf0213b2ff1beddb20009f6",
+        "name": "Gameplay",
+        "active_self": true,
+        "parent_transform": {
+          "m_FileID": 0,
+          "m_PathID": 45174
+        },
+        "components": [
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 45232
+            }
+          },
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 138432
+            }
+          }
+        ]
+      },
+      {
+        "transform_path_id": 45174,
+        "transform_object_sha256": "022a9c49e0e88eb024677573756783f95febe7120aece67a145c6f5685923370",
+        "game_object_path_id": 7,
+        "game_object_sha256": "019747a78ce17c8fbf29eafee741736a73c2670be4831cbf64aecd2a7026ec0e",
+        "name": "Game",
+        "active_self": true,
+        "parent_transform": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "components": [
+          {
+            "component": {
+              "m_FileID": 0,
+              "m_PathID": 45174
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "native_bodies": [
+    {
+      "name": "CharacterShuffleAnimation$$Awake",
+      "entry_rva": "0x3630d0",
+      "next_managed_entry_rva": "0x363160",
+      "interval_bytes": 144,
+      "interval_sha256": "dc6f026c1a350269774b7a38419472f68c117113c24a906cdba4757d42882790",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x363160",
+      "decoded_prefix_bytes": 144,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    },
+    {
+      "name": "CharacterShuffleAnimation$$OnEnable",
+      "entry_rva": "0x363500",
+      "next_managed_entry_rva": "0x3638a0",
+      "interval_bytes": 928,
+      "interval_sha256": "e49de8a1fd72f58302e405554007633e3c56a20b621c7d0883c5c722da391596",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x3638a0",
+      "decoded_prefix_bytes": 928,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    },
+    {
+      "name": "CharacterShuffleAnimation$$OnDisable",
+      "entry_rva": "0x363160",
+      "next_managed_entry_rva": "0x363500",
+      "interval_bytes": 928,
+      "interval_sha256": "ab5c27e8c668b6fcbca510f0351b9186d833167de34553fdf4433890225bbd54",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x363500",
+      "decoded_prefix_bytes": 928,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    },
+    {
+      "name": "CharacterShuffleAnimation$$Animates",
+      "entry_rva": "0x363060",
+      "next_managed_entry_rva": "0x3630d0",
+      "interval_bytes": 112,
+      "interval_sha256": "f5caa027b8644d99f73a6db292433b180ec5c93d7ac16e24cbed6cf4b10ba4ee",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x3630d0",
+      "decoded_prefix_bytes": 112,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    },
+    {
+      "name": "CharacterShuffleAnimation.<Animate>d__6$$MoveNext",
+      "entry_rva": "0x375130",
+      "next_managed_entry_rva": "0x375580",
+      "interval_bytes": 1104,
+      "interval_sha256": "129bebb17785cd9ab80d9fcfbe0ece9fd7fc4713e01c65153062509cf01ec400",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x375580",
+      "decoded_prefix_bytes": 1104,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    },
+    {
+      "name": "CharacterShuffleAnimation.<PlayAudioDelay>d__9$$MoveNext",
+      "entry_rva": "0x375db0",
+      "next_managed_entry_rva": "0x375ea0",
+      "interval_bytes": 240,
+      "interval_sha256": "baa68d7e880e5b6e0568474fa40a2b18cea90b684c386780ae166735f86f762c",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x375ea0",
+      "decoded_prefix_bytes": 240,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    },
+    {
+      "name": "Characters$$ManageCharacters",
+      "entry_rva": "0x36ce30",
+      "next_managed_entry_rva": "0x36d3a0",
+      "interval_bytes": 1392,
+      "interval_sha256": "9212470ee8481d8c59c9acf16c1ba2ba75072ad9fe3e87a78e8eafdbbdddd21a",
+      "raw_backed_section": "il2cpp",
+      "contiguous_decoded_prefix_end_rva": "0x36d3a0",
+      "decoded_prefix_bytes": 1392,
+      "decode_scope": "linear instruction boundaries from verified entry, not complete control-flow coverage",
+      "fingerprint_scope": "entry to next distinct managed entry, including padding"
+    }
+  ],
+  "selected_operand_assertions": [
+    {
+      "rva": "0x36354e",
+      "mnemonic": "mov",
+      "operands": "r14, qword ptr [rbp + 0x20]"
+    },
+    {
+      "rva": "0x363571",
+      "mnemonic": "mov",
+      "operands": "rdi, qword ptr [r14 + 0x58]"
+    },
+    {
+      "rva": "0x363584",
+      "mnemonic": "mov",
+      "operands": "rdx, rbp"
+    },
+    {
+      "rva": "0x36358d",
+      "mnemonic": "call",
+      "operands": "0x4d5170"
+    },
+    {
+      "rva": "0x363598",
+      "mnemonic": "mov",
+      "operands": "rcx, rdi"
+    },
+    {
+      "rva": "0x36359b",
+      "mnemonic": "call",
+      "operands": "0x116bcc0"
+    },
+    {
+      "rva": "0x3635c6",
+      "mnemonic": "mov",
+      "operands": "qword ptr [r14 + 0x58], rdx"
+    },
+    {
+      "rva": "0x3631ae",
+      "mnemonic": "mov",
+      "operands": "r14, qword ptr [rbp + 0x20]"
+    },
+    {
+      "rva": "0x3631d1",
+      "mnemonic": "mov",
+      "operands": "rdi, qword ptr [r14 + 0x58]"
+    },
+    {
+      "rva": "0x3631e4",
+      "mnemonic": "mov",
+      "operands": "rdx, rbp"
+    },
+    {
+      "rva": "0x3631ed",
+      "mnemonic": "call",
+      "operands": "0x4d5170"
+    },
+    {
+      "rva": "0x3631fb",
+      "mnemonic": "call",
+      "operands": "0x116e070"
+    },
+    {
+      "rva": "0x363226",
+      "mnemonic": "mov",
+      "operands": "qword ptr [r14 + 0x58], rdx"
+    },
+    {
+      "rva": "0x3630a9",
+      "mnemonic": "mov",
+      "operands": "qword ptr [rcx], rdi"
+    },
+    {
+      "rva": "0x3630ac",
+      "mnemonic": "mov",
+      "operands": "dword ptr [rbx + 0x10], 0"
+    },
+    {
+      "rva": "0x3630bb",
+      "mnemonic": "mov",
+      "operands": "rdx, rbx"
+    },
+    {
+      "rva": "0x3630be",
+      "mnemonic": "mov",
+      "operands": "rcx, rdi"
+    },
+    {
+      "rva": "0x3630cb",
+      "mnemonic": "jmp",
+      "operands": "0x1c7f160"
+    },
+    {
+      "rva": "0x3751dc",
+      "mnemonic": "jne",
+      "operands": "0x3753d2"
+    },
+    {
+      "rva": "0x3751f2",
+      "mnemonic": "mov",
+      "operands": "rax, qword ptr [rsi + 0x20]"
+    },
+    {
+      "rva": "0x3751ff",
+      "mnemonic": "mov",
+      "operands": "rdx, qword ptr [rax + 0x20]"
+    },
+    {
+      "rva": "0x375281",
+      "mnemonic": "call",
+      "operands": "0x606fc0"
+    },
+    {
+      "rva": "0x37528f",
+      "mnemonic": "mov",
+      "operands": "rdi, qword ptr [rax + 0x20]"
+    },
+    {
+      "rva": "0x3752e2",
+      "mnemonic": "call",
+      "operands": "0x1c92130"
+    },
+    {
+      "rva": "0x375359",
+      "mnemonic": "mov",
+      "operands": "dword ptr [rbx + 0x10], 0"
+    },
+    {
+      "rva": "0x375363",
+      "mnemonic": "mov",
+      "operands": "rdx, rbx"
+    },
+    {
+      "rva": "0x375366",
+      "mnemonic": "mov",
+      "operands": "rcx, rsi"
+    },
+    {
+      "rva": "0x375369",
+      "mnemonic": "call",
+      "operands": "0x1c7f160"
+    },
+    {
+      "rva": "0x37544c",
+      "mnemonic": "call",
+      "operands": "0x50fb60"
+    },
+    {
+      "rva": "0x37546e",
+      "mnemonic": "call",
+      "operands": "0x1c961f0"
+    },
+    {
+      "rva": "0x37547b",
+      "mnemonic": "mov",
+      "operands": "qword ptr [rax + 0x18], rbx"
+    },
+    {
+      "rva": "0x37549b",
+      "mnemonic": "mov",
+      "operands": "dword ptr [rax + 0x10], 1"
+    },
+    {
+      "rva": "0x3754a2",
+      "mnemonic": "mov",
+      "operands": "al, 1"
+    },
+    {
+      "rva": "0x375e0e",
+      "mnemonic": "mov",
+      "operands": "edx, 0xc8"
+    },
+    {
+      "rva": "0x375e17",
+      "mnemonic": "call",
+      "operands": "qword ptr [rax + 0x18]"
+    },
+    {
+      "rva": "0x375e37",
+      "mnemonic": "call",
+      "operands": "0x1c961f0"
+    },
+    {
+      "rva": "0x36d2db",
+      "mnemonic": "mov",
+      "operands": "rax, qword ptr [r12 + 0x58]"
+    },
+    {
+      "rva": "0x36d2e3",
+      "mnemonic": "je",
+      "operands": "0x36d2f0"
+    },
+    {
+      "rva": "0x36d2e5",
+      "mnemonic": "mov",
+      "operands": "rdx, qword ptr [rax + 0x28]"
+    },
+    {
+      "rva": "0x36d2e9",
+      "mnemonic": "mov",
+      "operands": "rcx, qword ptr [rax + 0x40]"
+    },
+    {
+      "rva": "0x36d2ed",
+      "mnemonic": "call",
+      "operands": "qword ptr [rax + 0x18]"
+    }
+  ],
+  "metadata_joins": [
+    {
+      "instruction_rva": "0x36355b",
+      "slot_rva": "0x26cf590",
+      "Address": 40695184,
+      "Name": "System.Action_TypeInfo",
+      "Signature": "System_Action_c*"
+    },
+    {
+      "instruction_rva": "0x36357a",
+      "slot_rva": "0x2710138",
+      "Address": 40960312,
+      "Name": "Method$CharacterShuffleAnimation.Animates()",
+      "MethodAddress": 3551328
+    },
+    {
+      "instruction_rva": "0x3631da",
+      "slot_rva": "0x2710138",
+      "Address": 40960312,
+      "Name": "Method$CharacterShuffleAnimation.Animates()",
+      "MethodAddress": 3551328
+    },
+    {
+      "instruction_rva": "0x36360b",
+      "slot_rva": "0x27101c0",
+      "Address": 40960448,
+      "Name": "Method$CharacterShuffleAnimation.ShuffleCards()",
+      "MethodAddress": 3553632
+    },
+    {
+      "instruction_rva": "0x3636c8",
+      "slot_rva": "0x27101c0",
+      "Address": 40960448,
+      "Name": "Method$CharacterShuffleAnimation.ShuffleCards()",
+      "MethodAddress": 3553632
+    },
+    {
+      "instruction_rva": "0x363785",
+      "slot_rva": "0x27101c0",
+      "Address": 40960448,
+      "Name": "Method$CharacterShuffleAnimation.ShuffleCards()",
+      "MethodAddress": 3553632
+    },
+    {
+      "instruction_rva": "0x37527a",
+      "slot_rva": "0x2717470",
+      "Address": 40989808,
+      "Name": "Method$UnityEngine.Component.GetComponent<SingleCharacterDrawAnimation>()",
+      "MethodAddress": 0
+    },
+    {
+      "instruction_rva": "0x375340",
+      "slot_rva": "0x2700a58",
+      "Address": 40897112,
+      "Name": "CharacterShuffleAnimation.<PlayAudioDelay>d__9_TypeInfo",
+      "Signature": "CharacterShuffleAnimation__PlayAudioDelay_d__9_c*"
+    },
+    {
+      "instruction_rva": "0x3635ed",
+      "slot_rva": "0x26f8240",
+      "Address": 40862272,
+      "Name": "GameplayEvents_TypeInfo",
+      "Signature": "GameplayEvents_c*"
+    }
+  ],
+  "float_literals": [
+    {
+      "instruction_rva": "0x375438",
+      "slot_rva": "0x1f34c54",
+      "float32_bits": "3e99999a",
+      "exact_promoted_float": 0.30000001192092896
+    },
+    {
+      "instruction_rva": "0x375440",
+      "slot_rva": "0x1f34c90",
+      "float32_bits": "43c30000",
+      "exact_promoted_float": 390.0
+    },
+    {
+      "instruction_rva": "0x375463",
+      "slot_rva": "0x1f34c3c",
+      "float32_bits": "3d4ccccd",
+      "exact_promoted_float": 0.05000000074505806
+    },
+    {
+      "instruction_rva": "0x375e26",
+      "slot_rva": "0x1f34c58",
+      "float32_bits": "3ecccccd",
+      "exact_promoted_float": 0.4000000059604645
+    }
+  ],
+  "binding": {
+    "receiver": "component.characters (original scene Characters137026)",
+    "on_enable": "Combine(existing Action, new Action(component137027, Animates)); assign receiver.onSetup",
+    "on_disable": "Remove(existing Action, new equivalent Action(component137027, Animates)); assign receiver.onSetup",
+    "identity": "bound target component plus method identity; newly allocated delegates need not have equal object pointers",
+    "caller_abi": "Manage loads method context delegate+0x28 into RDX, target delegate+0x40 into RCX; indirect call delegate+0x18",
+    "other_subscriptions": "same lifecycle also Combine/Remove ShuffleCards on GameplayEvents.OnNextChallenge(+0x18), OnRestartCurrentLevel(+0x30), OnRestartGame(+0x38); future invocation excluded"
+  },
+  "first_state_trace": [
+    "Animates allocates Animate iterator, captures component in +0x20, writes state0 and tail-calls StartCoroutine on that component.",
+    "Animate state0 captures component.characters.characters; enumerates all current card occurrences; GetComponent<SingleCharacterDrawAnimation>, then pivot.localPosition=Vector3.zero.",
+    "After first enumeration disposal, allocates PlayAudioDelay state0 and calls StartCoroutine on the animation component before beginning a fresh board enumeration.",
+    "PlayAudioDelay state0 invokes AudioEvents action with integer200 if nonnull, then yields WaitForSeconds float32 bits3ecccccd (.4f). Audio callback effects are unestablished.",
+    "Animate selects first current card, resolves its draw-animation pivot, requests DOLocalMoveY(end390,durationbits3e99999a,snappingfalse), then yields WaitForSeconds bits3d4ccccd (.05f), state1 and true.",
+    "Under synchronous first-yield StartCoroutine services and nonempty stable N5 board, nested audio wait precedes outer animation wait; both use animation-component physical owner, distinct from manager and five card owners."
+  ],
+  "scope": {
+    "executed_native_bodies": 0,
+    "static_first_state_writes": "iterator state/current/enumerator storage and supplied transform/tween/audio effects; no direct role/status/gameplay-phase write observed in selected first-state trace",
+    "no_visibility_admission": "animation/tween effects are not a screenshot, reveal publication or legal-action readiness certificate",
+    "runtime_lifecycle_provider": "Unity scene hydration and actual Awake/OnEnable/OnDisable invocation/lifetime are supplied; serialized enabled/ancestor flags establish configuration, not invocation",
+    "remaining_services": [
+      "delegate allocation/Combine/Remove/invoke implementation and existing invocation list",
+      "Unity object and GetComponent mapping for physical cards and pivots",
+      "Vector3.zero initialization, transform setters and DOTween side effects",
+      "AudioEvents subscriber identity/effects",
+      "retained StartCoroutine first-yield, native owner keys and shared queue ordering",
+      "later animation/audio resumes, Gameplay startup and player availability"
+    ],
+    "next_exit": "retained original component subscriber join at Manage onSetup through audio/animation first waits and subsequent manager ShuffleDeck admission; preserve all five card waits, actor/status/pool storage and distinct owner bijection; do not assume total count without native producer"
+  },
+  "counters": {
+    "scene_components": 1,
+    "ancestor_game_objects": 5,
+    "fingerprinted_native_intervals": 7,
+    "selected_operand_assertions": 41,
+    "metadata_joins": 9,
+    "exact_float_literals": 4,
+    "executed_native_bodies": 0
+  }
+}
