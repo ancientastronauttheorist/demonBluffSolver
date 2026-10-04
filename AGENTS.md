@@ -259,7 +259,10 @@ stop, diagnose, fix, verify, then resume.
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
-    decompiler parameters or constructor return values. Initialize recorded unused
+    decompiler parameters or constructor return values. A write-barrier
+    notification after a struct copy can pass a null second argument; qualify
+    its caller and verify the preceding native stores instead of treating that
+    argument as the stored reference. Initialize recorded unused
     volatile entry registers explicitly so preceding fixtures cannot supply
     accidental diagnostic bits. Capture raw service arguments and caller sites
     at entry, including stopped services, rather than only after completion.
