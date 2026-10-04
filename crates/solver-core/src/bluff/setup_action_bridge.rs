@@ -2,8 +2,10 @@
 //!
 //! Init and ordered Start remain distinct. Start scans current data identities
 //! after each writer rather than replaying a precomputed list of calls. This
-//! bridge projects supported role classes only; callbacks/UI are inert, no
-//! continuation is resumed and generated continuation IDs are logical labels.
+//! bridge projects supported role classes only; modeled role callbacks/UI are
+//! inert, no continuation is resumed and generated continuation IDs are logical
+//! labels. A registered generic-caller callback records a gateway request; this
+//! bridge does not execute that subscriber or project its additional queues.
 use super::{
     character_start::{self, CharacterStartContext, StartCallTrace, CHARACTER_START_NATIVE_V1},
     continuation_registry::{ContinuationState, CONTINUATION_REGISTRY_NATIVE_V1},
