@@ -805,6 +805,7 @@ fn retained_original_n5_start_and_queue_match_native_checkpoint() {
         rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
         continuations: r.state.clone(),
         queue,
+        deferred_waits: BTreeMap::new(),
     };
     let producer: WaitForSecondsContext =
         serde_json::from_value(producers[0]["producer"].clone()).unwrap();
@@ -1042,6 +1043,7 @@ fn conditional_original_n5_shuffle_admission_matches_native_checkpoint() {
                 rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
                 continuations,
                 queue,
+                deferred_waits: BTreeMap::new(),
             },
             dispatch,
             callbacks: BTreeMap::new(),
@@ -1250,7 +1252,8 @@ fn original_subscriber_first_waits_match_conditional_native_checkpoint() {
             initial: ScheduledRevealState {
                 rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
                 continuations,
-                queue
+                queue,
+                deferred_waits: BTreeMap::new(),
             },
             dispatch,
             callbacks: BTreeMap::new(),

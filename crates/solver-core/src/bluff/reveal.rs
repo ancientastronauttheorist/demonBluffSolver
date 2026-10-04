@@ -6,6 +6,10 @@
 //! and HealthyBluff re-entry for status-only and inert callbacks.
 //! V4 carries original N5 data/classes and canonical pools for setup dispatch
 //! only. It rejects every resume; it does not extend Reveal or Day behavior.
+//! V5 admits caller-proven acquisition for those five data roles, without
+//! HealthyBluff Start. Its six bluff outcomes have bounded Init/AfterRoundStart
+//! support; Alchemist is admitted only as a lying Minion's copied role.
+//! The caller establishes phase/Hidden state; this callback kernel has no body.
 //! It does not reconstruct coroutine order, native object graphs, view updates,
 //! or subscribers. The caller must exclude intervening mutations, including
 //! omitted resumes and view epilogues, from the modeled state. No live GameState
@@ -23,6 +27,8 @@ pub const REVEAL_CALLBACKS_SPY_NATIVE_V2: &str = "bounded_reveal_callbacks_spy_n
 pub const REVEAL_CALLBACKS_START_NATIVE_V3: &str = "bounded_reveal_callbacks_start_native_v3";
 /// Setup dispatch only; no acquisition or Reveal resume is admitted.
 pub const SETUP_CALLBACKS_NATIVE_V4: &str = "bounded_setup_callbacks_native_v4";
+/// Non-Day original-role acquisition, with no HealthyBluff Start dispatch.
+pub const SETUP_REVEAL_CALLBACKS_NATIVE_V5: &str = "bounded_setup_reveal_callbacks_native_v5";
 const MAX_RESUMES: usize = 16;
 const MAX_PATHS: usize = 65_536;
 const MAX_ENTRIES: usize = 1_048_576;
@@ -57,8 +63,9 @@ impl DataRole {
     }
 }
 
-/// These role classes have no Init/AfterRoundStart gameplay effect except
-/// Confessor.OnInit. Spy's action-role clone cache is inert at these triggers;
+/// Admitted Init/AfterRoundStart callbacks have no effect except Confessor.OnInit.
+/// Alchemist is admitted only as V5's lying copied role, not its real Init hook.
+/// Spy's action-role clone cache is inert at these triggers;
 /// only dataRef.role's cache participates in register-as and bluff selection.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -74,6 +81,8 @@ pub enum CallbackRole {
     Lover,
     Hunter,
     Enlightened,
+    Gemcrafter,
+    Alchemist,
 }
 
 impl CallbackRole {
@@ -91,6 +100,11 @@ pub enum BluffRole {
     Scout,
     Witness,
     Confessor,
+    Lover,
+    Hunter,
+    Enlightened,
+    Gemcrafter,
+    Alchemist,
 }
 
 impl BluffRole {
@@ -99,6 +113,11 @@ impl BluffRole {
             Self::Scout => "Scout",
             Self::Witness => "Witness",
             Self::Confessor => "Confessor",
+            Self::Lover => "Lover",
+            Self::Hunter => "Hunter",
+            Self::Enlightened => "Enlightened",
+            Self::Gemcrafter => "Gemcrafter",
+            Self::Alchemist => "Alchemist",
         }
     }
     fn parse(name: &str) -> Option<Self> {
@@ -106,6 +125,11 @@ impl BluffRole {
             "Scout" => Some(Self::Scout),
             "Witness" => Some(Self::Witness),
             "Confessor" => Some(Self::Confessor),
+            "Lover" => Some(Self::Lover),
+            "Hunter" => Some(Self::Hunter),
+            "Enlightened" => Some(Self::Enlightened),
+            "Gemcrafter" => Some(Self::Gemcrafter),
+            "Alchemist" => Some(Self::Alchemist),
             _ => None,
         }
     }
@@ -114,7 +138,20 @@ impl BluffRole {
             Self::Scout => CallbackRole::Scout,
             Self::Witness => CallbackRole::Witness,
             Self::Confessor => CallbackRole::Confessor,
+            Self::Lover => CallbackRole::Lover,
+            Self::Hunter => CallbackRole::Hunter,
+            Self::Enlightened => CallbackRole::Enlightened,
+            Self::Gemcrafter => CallbackRole::Gemcrafter,
+            Self::Alchemist => CallbackRole::Alchemist,
         }
+    }
+
+    fn legacy(self) -> bool {
+        matches!(self, Self::Scout | Self::Witness | Self::Confessor)
+    }
+
+    fn setup_acquisition(self) -> bool {
+        !matches!(self, Self::Scout | Self::Witness)
     }
 }
 
@@ -129,6 +166,13 @@ pub enum BluffReference {
 impl BluffReference {
     fn is_live(self) -> bool {
         matches!(self, Self::Live { .. })
+    }
+
+    fn role(self) -> Option<BluffRole> {
+        match self {
+            Self::Null => None,
+            Self::Destroyed { role } | Self::Live { role } => Some(role),
+        }
     }
 }
 
@@ -314,12 +358,15 @@ fn selector_ledger(pools: SelectorPools, events: Vec<SelectorEvent>) -> Selector
 
 fn validate(context: &RevealContext) -> Result<(), LedgerError> {
     let setup_only = context.rule_version == SETUP_CALLBACKS_NATIVE_V4;
-    let start_latches = setup_only || context.rule_version == REVEAL_CALLBACKS_START_NATIVE_V3;
+    let setup_reveal = context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5;
+    let start_latches =
+        setup_only || setup_reveal || context.rule_version == REVEAL_CALLBACKS_START_NATIVE_V3;
     if ![
         REVEAL_CALLBACKS_NATIVE_V1,
         REVEAL_CALLBACKS_SPY_NATIVE_V2,
         REVEAL_CALLBACKS_START_NATIVE_V3,
         SETUP_CALLBACKS_NATIVE_V4,
+        SETUP_REVEAL_CALLBACKS_NATIVE_V5,
     ]
     .contains(&context.rule_version.as_str())
         || context.board_size == 0
@@ -334,7 +381,17 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
                 &context.pools.must_include,
             ]
             .iter()
-            .any(|pool| pool.iter().any(|role| BluffRole::parse(role).is_none())))
+            .any(|pool| {
+                pool.iter().any(|role| {
+                    BluffRole::parse(role).is_none_or(|role| {
+                        if setup_reveal {
+                            !role.setup_acquisition()
+                        } else {
+                            !role.legacy()
+                        }
+                    })
+                })
+            }))
     {
         return Err(LedgerError::InvalidContext);
     }
@@ -367,9 +424,21 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
             || seen[usize::from(actor.position)]
             || actor.on_trigger_subscribed
             || (!setup_only
+                && !setup_reveal
                 && (actor.data_role.setup_only()
                     || actor.action_role.setup_only()
                     || actor.bluff_role.is_some_and(CallbackRole::setup_only)))
+            || (!setup_reveal
+                && (actor.bluff.role().is_some_and(|role| !role.legacy())
+                    || [Some(actor.action_role), actor.bluff_role]
+                        .iter()
+                        .any(|role| {
+                            matches!(
+                                role,
+                                Some(CallbackRole::Gemcrafter | CallbackRole::Alchemist)
+                            )
+                        })))
+            || (setup_reveal && !valid_setup_reveal_actor(actor))
             || (start_latches && actor.character_start_acted.is_none())
             || (!start_latches
                 && (actor.character_start_acted.is_some()
@@ -388,6 +457,14 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
         }
         seen[usize::from(actor.position)] = true;
     }
+    if !setup_reveal
+        && context
+            .spy_caches
+            .values()
+            .any(|cache| cache.role().is_some_and(|role| !role.legacy()))
+    {
+        return Err(LedgerError::InvalidContext);
+    }
     let mut last_resume = None;
     let mut last_acquisition = None;
     for event in &context.resumes {
@@ -405,6 +482,32 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
         }
     }
     Ok(())
+}
+
+fn valid_setup_reveal_actor(actor: &RevealActor) -> bool {
+    let expected = match actor.data_role {
+        DataRole::Minion => CallbackRole::Minion,
+        DataRole::Confessor => CallbackRole::Confessor,
+        DataRole::Lover => CallbackRole::Lover,
+        DataRole::Hunter => CallbackRole::Hunter,
+        DataRole::Enlightened => CallbackRole::Enlightened,
+        _ => return false,
+    };
+    if actor.action_role != expected
+        || actor.runtime_evil != (actor.data_role == DataRole::Minion)
+        || actor.statuses.values.contains(&HEALTHY_BLUFF)
+    {
+        return false;
+    }
+    match (actor.bluff, actor.bluff_role) {
+        (BluffReference::Null, None) => true,
+        (BluffReference::Live { role }, Some(callback)) => {
+            actor.data_role == DataRole::Minion
+                && role.setup_acquisition()
+                && callback == role.callback()
+        }
+        _ => false,
+    }
 }
 
 pub(super) fn callbacks(
@@ -655,6 +758,29 @@ fn replay_phase(
                 continue;
             }
             if let Some(acquisition_ordinal) = event.acquisition_ordinal {
+                // The four Good source classes use the folded base-null selector.
+                // They still enter acquisition, clear registerAs, and execute
+                // callbacks, but consume no RNG draw and install no copied role.
+                if context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5
+                    && actor.data_role != DataRole::Minion
+                {
+                    let callbacks = if include_callbacks {
+                        callbacks(actor, true)?
+                    } else {
+                        vec![]
+                    };
+                    path.trace.push(ResumeTrace {
+                        event: event.clone(),
+                        previous_register_as,
+                        acquisition: None,
+                        selector_status: None,
+                        callbacks,
+                        spy_register_as: None,
+                        spy_acquisition: None,
+                    });
+                    push_bounded(&mut next, path, &mut entries)?;
+                    continue;
+                }
                 let selector = match actor.data_role {
                     DataRole::Lilis => Selector::Demon,
                     DataRole::TwinMinion => Selector::Minion,
@@ -662,6 +788,11 @@ fn replay_phase(
                         corruption_resistant: actor.statuses.resistance.contains(&CORRUPTED),
                     },
                     DataRole::Spy { .. } => unreachable!("Spy register-as handled above"),
+                    DataRole::Minion
+                        if context.rule_version == SETUP_REVEAL_CALLBACKS_NATIVE_V5 =>
+                    {
+                        Selector::Minion
+                    }
                     // V4 rejects all resume events before entering this loop.
                     DataRole::Minion
                     | DataRole::Confessor
@@ -736,6 +867,10 @@ fn replay_phase(
     }
     Ok(paths)
 }
+
+#[cfg(test)]
+#[path = "setup_reveal_tests.rs"]
+pub(super) mod setup_reveal_tests;
 
 #[cfg(test)]
 mod tests {

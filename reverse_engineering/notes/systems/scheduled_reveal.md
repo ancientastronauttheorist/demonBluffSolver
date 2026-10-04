@@ -8,6 +8,12 @@ Reveal/Start/writer behavior has its own pinned audits and Rust regressions.
 The combined adapter has synthetic Rust integration tests, not a claim of a
 captured live end-to-end execution.
 
+This note records V1's DelayReveal-only domain. The separately guarded
+`scheduled_setup_reveal_native_v2` supports
+[non-Day original-role acquisition](non_day_setup_reveal.md), retaining typed
+Audio/Shuffle waits and rejecting the whole drain if either becomes eligible.
+V1 retains its original scope and rejects V5 callbacks or deferred waits.
+
 ## Explicit input boundary
 
 The input contains a complete DelayReveal-only queue and complete continuation

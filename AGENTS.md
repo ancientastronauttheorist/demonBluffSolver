@@ -120,6 +120,8 @@ stop, diagnose, fix, verify, then resume.
     Check imported report/helper and target-manifest schemas before indexing
     their fields; a build constant is not necessarily repeated inside a returned
     layout dictionary, and manifest function rows need not use a `targets` key.
+    Resolve Rust type names from their actual declarations before authoring
+    imports or fixtures; a semantic UI-state description is not its symbol name.
     Expand snapshot pooling only when the report declares `snapshot_encoding`;
     an imported report corpus can contain both pooled and ordinary reports.
     Inspect exact returned report keys rather than substituting a similar
@@ -132,6 +134,9 @@ stop, diagnose, fix, verify, then resume.
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Read a family's actual caller
     sentinel and native base before adapting another family's Rust fixtures.
+    Derive selector pool mutations from the exact helper before asserting
+    post-draw widths; a unique-pool draw can preserve its selected occurrence,
+    while a must-include draw removes the first matching occurrence.
     Before interpreting a world-set disagreement, verify the reference
     projection preserves the admitted public role multiset; one role name
     does not represent repeated roster occurrences.
@@ -169,6 +174,10 @@ stop, diagnose, fix, verify, then resume.
     failed comparison triggers edits; an earlier freeze no longer applies.
     Keep compiled sources and embedded fixtures frozen until that Cargo process
     exits. Queue review edits during a build and verify the final frozen revision.
+    After restoring a temporary source mutation on Windows, verify both its
+    exact bytes and a fresh Cargo compile. Copying a backup can preserve an older
+    modification time and reuse the mutant binary; refresh the restored file's
+    timestamp before testing rather than accepting a byte hash alone.
     Create declared child test files before running rustfmt; it resolves child
     modules even when the new parent has not entered a shared Cargo build.
     Format edited Rust files explicitly instead of running workspace-wide
@@ -232,7 +241,8 @@ stop, diagnose, fix, verify, then resume.
     trailing alignment padding, account for embedded jump tables as data, and
     verify all return paths rather than stopping
     at the first `ret`. Assert requested addresses decoded before indexing them.
-    Derive exact instruction assertions from that decode, including operands
+    Derive exact instruction assertions from that decode, including register
+    or memory operand forms, not a semantic guess about the stored state, and operands
     on folded return stubs and expected call-site counts; do not infer encoding
     from decompiled C or count sites manually. Retain instruction mnemonics in
     target inventories; a tail jump must not become a call assertion.
@@ -274,8 +284,10 @@ stop, diagnose, fix, verify, then resume.
     effects explicitly; a failure status alone does not specify changes to
     input capacity/type fields that a retry may consume. Gate callbacks and snapshots by
     phase, since base constructors can invoke overrides before derived state exists.
-    Qualify callback mutations at shared gateways by the verified native caller
-    or decoded return site so a parent call cannot trigger a callee-only effect.
+    Qualify callback mutations and UI service expectations at shared gateways
+    by the verified native caller or decoded return site so a parent call cannot
+    trigger a callee-only effect. Shared sprite setters can target background
+    images as well as card art; do not impose one caller's asset expectation on both.
     Separate per-invocation service ordinals from retained chronological logs;
     a prior call's count must not suppress the next call's authored callback.
     Pause/reentry retries must consume inherited diagnostic counters and labels

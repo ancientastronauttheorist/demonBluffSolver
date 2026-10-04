@@ -7,7 +7,7 @@
 use super::ledger::{LedgerError, Probability};
 use super::reveal::{
     replay_reveal_callbacks, BluffReference, CallbackRole, DataRole, RevealContext, RoleSlot,
-    REVEAL_CALLBACKS_START_NATIVE_V3, SETUP_CALLBACKS_NATIVE_V4,
+    REVEAL_CALLBACKS_START_NATIVE_V3, SETUP_CALLBACKS_NATIVE_V4, SETUP_REVEAL_CALLBACKS_NATIVE_V5,
 };
 use crate::knowledge_base::{get_card, Faction};
 use serde::{Deserialize, Serialize};
@@ -121,8 +121,12 @@ fn replace(
 
 pub(super) fn validate_board(context: &TwinWriterContext) -> Result<(), LedgerError> {
     if context.rule_version != TWIN_WRITER_NATIVE_V1
-        || ![REVEAL_CALLBACKS_START_NATIVE_V3, SETUP_CALLBACKS_NATIVE_V4]
-            .contains(&context.reveal.rule_version.as_str())
+        || ![
+            REVEAL_CALLBACKS_START_NATIVE_V3,
+            SETUP_CALLBACKS_NATIVE_V4,
+            SETUP_REVEAL_CALLBACKS_NATIVE_V5,
+        ]
+        .contains(&context.reveal.rule_version.as_str())
         || !context.reveal.resumes.is_empty()
         || context.current_order.len() > 256
         || context
@@ -442,6 +446,7 @@ mod tests {
             initial: ScheduledRevealState {
                 rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
                 continuations: registry_input(),
+                deferred_waits: BTreeMap::new(),
                 queue: WaitQueueState {
                     rule_version: UNITY_WAIT_QUEUE_NATIVE_V1.into(),
                     generation: 0,

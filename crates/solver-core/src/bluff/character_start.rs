@@ -123,6 +123,9 @@ fn dispatch(
         | CallbackRole::Lover
         | CallbackRole::Hunter
         | CallbackRole::Enlightened => None,
+        CallbackRole::Gemcrafter | CallbackRole::Alchemist => {
+            return Err(LedgerError::InvalidContext)
+        }
         CallbackRole::TwinMinion => unreachable!(),
     };
     path.callbacks.push(callback);
@@ -132,7 +135,10 @@ fn dispatch(
 pub fn replay_character_start(
     context: &CharacterStartContext,
 ) -> Result<Vec<CharacterStartPath>, LedgerError> {
-    if context.rule_version != CHARACTER_START_NATIVE_V1 || context.board.copied_slot {
+    if context.rule_version != CHARACTER_START_NATIVE_V1
+        || context.board.copied_slot
+        || context.board.reveal.rule_version == super::reveal::SETUP_REVEAL_CALLBACKS_NATIVE_V5
+    {
         return Err(LedgerError::InvalidContext);
     }
     validate_board(&context.board)?;
