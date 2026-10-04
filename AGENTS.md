@@ -92,7 +92,7 @@ stop, diagnose, fix, verify, then resume.
     Do not guess filenames or repeat an unexpanded wildcard search. Inspect the
     current read result before preparing an exact-match patch to any changed file,
     including earlier inserted prose; use
-    its returned lines rather than remembered fragments, and
+    its complete physical lines and line breaks rather than remembered fragments, and
     keep patch hunks in file order and omit empty placeholder hunks. Anchor
     document appends to unique final context; repeated code fences can insert
     a checkpoint into the middle of chronological history. Do not

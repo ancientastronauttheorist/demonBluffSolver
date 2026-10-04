@@ -67,10 +67,15 @@ mechanical legacy projection admits the named single-Day Judge domain and
 conditional initial-Day Hunter/Baa domain; it rejects unmodeled transitions
 rather than flattening them. The registry's
 caller must actually review captures; the module does not inspect pixels.
+The [conditional deduction API](notes/systems/conditional_player_deduction.md)
+reports complete finite four/five-seat Hunter/Baa worlds, explicit supplied
+assumptions, unique/ambiguous/contradictory conclusions and incomplete/unsupported
+inputs. It does not turn a mechanical Judge adapter or the proposed mixed N5
+family into a certified complete model.
 CLI/live capture integration and a certified rules-domain adapter remain open.
 Paired hidden worlds with identical permitted histories must yield identical
 planner inputs and policy distributions under the same planner seed. Development
-tests establish input/projection equality only; policy distributions remain
+tests establish input/projection and conditional deduction equality; policy distributions remain
 unevaluated. This contract does not certify the existing legacy entry point.
 
 ## Results and provisional objective
@@ -1177,4 +1182,56 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   on retained N5 before one legal original Hunter reveal. Reprioritize from an
   assumed empty readiness queue to the identified coroutine dependency. Continue S1
   legal history, then independent S2, legal decision S3 and broader S4.
+```
+
+## Conditional reviewed-history deduction checkpoint
+
+2026-10-03. Implementation and exclusions are in the
+[conditional API note](notes/systems/conditional_player_deduction.md).
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent ccef829b6b69bbba7347aff9bf6655b4ca54e763.
+  conditional_hunter_baa_development_v2, fair public history under explicitly
+  supplied setup/availability; complete conditional deduction, no action policy.
+Named decision blocker and reachable deck/phase/role scenario:
+  Mechanical snapshots lacked typed complete/ambiguous/contradictory results.
+  Four/five distinct cyclic seats, one Baa and otherwise identical Hunters,
+  finished clean initial Day and acquired Hunter bluff are supplied assumptions.
+Before -> after supported behavior:
+  Snapshot-only adapter -> typed core API requiring AdmittedPlayerHistory.
+  Complete finite worlds sorted by Baa seat, conditional definites and full
+  supporting public ordinals; missing/unsupported inputs remain explicit.
+Original evidence; supplied runtime/scheduler boundaries:
+  Existing native Hunter/Baa rules and twenty native-generated sentences.
+  Synthetic reviewed public setup/reveal availability; no original pixels,
+  full native generation/queue-to-click chronology or acquired-bluff certificate.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Six backend fault-injection tests, twelve independent integration tests and
+  all993 library tests passed; release build passed. Final integration12.80s,
+  full library21.03s, not per-decision latency. Scoped format/links/privacy pass.
+  Core SHA32e51af0f4609579baecaa23d843e3c8642b129259a8c117f410c269029d453d.
+  Reference SHA571b80000184ece50e094c1a644e62b6684c8f0277eb88e0e8928639ac40314e.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  All8160 development prefixes agree with independent complete worlds:
+  4376 ambiguous/3784 unique; four coherent contradictions completely empty.
+  Candidate set must cover allN worlds once; residual latent state, duplicates,
+  bad counts/definites fail incomplete, never false complete emptiness.
+  Paired hidden worlds, native-reference mutation and capture/corpus metadata
+  changes preserve output. Judge and mixed originalN5 remain unsupported.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No probability, prior, recommendation or RNG. All five model/availability
+  assumptions explicitly marked assumed_conditional; no exact live promotion.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No independent held-out or fixed-budget policy/outcome comparison.
+  Legacy behavior unchanged; prior34simulation passes retained, not rerun.
+New uncertainty, regressions and remaining exclusions:
+  Original legal observations, full setup provenance, broader worlds, weights,
+  legal policy and ascension continuations remain open. Guard tests inject
+  backend faults; no new production-rule mutation campaign is claimed.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Continue retained deck/null-timed queue composition toward one original
+  legal Hunter reveal. Keep mixedN5 public-deck/latent-world proposal separate
+  from the development Hunter/Baa model; then independent held-out S2/S3/S4.
 ```

@@ -366,23 +366,32 @@ fn public_history(history: &History) -> public::PlayerHistory {
 
 fn reviewed_public_history(history: &History) -> public::AdmittedPlayerHistory {
     let history = public_history(history);
+    admit_synthetic_public_history(&history)
+}
+
+fn admit_synthetic_public_history(
+    history: &public::PlayerHistory,
+) -> public::AdmittedPlayerHistory {
     let mut registry = public::ReviewedEvidenceRegistry::default();
     for event in &history.events {
         registry
             .record_trusted_ui_review(
-                &history,
+                history,
                 event.ordinal,
                 &format!("synthetic_ui_review/{}", event.ordinal),
             )
             .unwrap();
     }
-    public::admit_history(&history, &registry).unwrap()
+    public::admit_history(history, &registry).unwrap()
 }
 
 fn compare_public(history: &History) -> BTreeSet<World> {
-    let state = reviewed_public_history(history)
-        .project_legacy_snapshot()
-        .unwrap();
+    use solver_core::player_deduction::{
+        deduce_conditional_history, AssumptionStatus, Conclusion, ConditionalAssumption,
+        PlayerDeductionOutcome, SearchStatus,
+    };
+    let admitted = reviewed_public_history(history);
+    let state = admitted.project_legacy_snapshot().unwrap();
     assert_eq!(
         state.board_count_provenance,
         BoardCountProvenance::LegacyUnknown
@@ -390,7 +399,71 @@ fn compare_public(history: &History) -> BTreeSet<World> {
     assert!(state.pd_corruption_target.is_none());
     assert!(state.twin_recipient_bluff_context.is_none());
     assert!(state.twin_recipient_bluff_prefix_context.is_none());
-    compare_snapshot(history, &state)
+    let expected = compare_snapshot(history, &state);
+    let PlayerDeductionOutcome::Complete(result) = deduce_conditional_history(&admitted) else {
+        panic!("conditional deduction was not complete for {history:?}");
+    };
+    assert_eq!(
+        result.assumption_status,
+        AssumptionStatus::AssumedConditional
+    );
+    assert_eq!(
+        result.search_status,
+        SearchStatus::CompleteFiniteConditionalWorlds
+    );
+    assert_eq!(
+        result.assumptions,
+        vec![
+            ConditionalAssumption::DistinctFixedCyclicSeats,
+            ConditionalAssumption::OneBaaOtherwiseIdenticalHunters,
+            ConditionalAssumption::FinishedWriterStatusDeathFreeSetup,
+            ConditionalAssumption::AcquiredHunterBluff,
+            ConditionalAssumption::SuppliedLegalObservationAvailability,
+        ]
+    );
+    assert_eq!(result.domain_id, public::HUNTER_BAA_PROJECTION_DOMAIN);
+    assert_eq!(
+        result
+            .worlds
+            .iter()
+            .map(|world| World {
+                baa_seat: world.baa_position
+            })
+            .collect::<BTreeSet<_>>(),
+        expected
+    );
+    assert_eq!(result.worlds.len(), expected.len());
+    assert!(result.worlds.windows(2).all(|pair| pair[0] < pair[1]));
+    assert_eq!(
+        result.conclusion,
+        match expected.len() {
+            0 => Conclusion::Contradiction,
+            1 => Conclusion::Unique,
+            _ => Conclusion::Ambiguous,
+        }
+    );
+    assert_eq!(
+        result.conditional_definite_evil,
+        (1..=state.n_cards)
+            .filter(|&p| !expected.is_empty() && expected.iter().all(|w| w.baa_seat == p))
+            .collect::<Vec<_>>()
+    );
+    assert_eq!(
+        result.conditional_definite_good,
+        (1..=state.n_cards)
+            .filter(|&p| !expected.is_empty() && expected.iter().all(|w| w.baa_seat != p))
+            .collect::<Vec<_>>()
+    );
+    assert_eq!(
+        result.based_on_ordinals,
+        admitted
+            .planner_history()
+            .events
+            .iter()
+            .map(|event| event.ordinal)
+            .collect::<Vec<_>>()
+    );
+    expected
 }
 
 fn permutations(remaining: &mut Vec<u8>, prefix: &mut Vec<u8>, result: &mut Vec<Vec<u8>>) {
@@ -593,6 +666,10 @@ fn native_only_reference_mutation_does_not_change_public_input() {
     // observation the production public adapter can use to narrow these worlds.
     let expected = compare_snapshot(&a, &projected_a);
     assert_eq!(compare_snapshot(&a, &projected_b), expected);
+    assert_eq!(
+        solver_core::player_deduction::deduce_conditional_history(&reviewed_public_history(&a)),
+        solver_core::player_deduction::deduce_conditional_history(&reviewed_public_history(&b))
+    );
 }
 
 #[test]
@@ -773,4 +850,111 @@ fn observationally_equivalent_hidden_worlds_have_identical_solver_input() {
     );
     assert_eq!(compare_public(&a), expected);
     assert_eq!(compare_public(&b), expected);
+    assert_eq!(
+        solver_core::player_deduction::deduce_conditional_history(&reviewed_public_history(&a)),
+        solver_core::player_deduction::deduce_conditional_history(&reviewed_public_history(&b))
+    );
+}
+
+#[test]
+fn conditional_deduction_rejects_missing_and_unsupported_observations() {
+    use solver_core::player_deduction::{
+        deduce_conditional_history, IncompleteKind, PlayerDeductionOutcome,
+    };
+    let baseline = public_history(&History {
+        domain: Domain::supplied(5),
+        events: vec![],
+    });
+    let mut empty = baseline.clone();
+    empty.events.clear();
+    assert!(matches!(
+        deduce_conditional_history(&admit_synthetic_public_history(&empty)),
+        PlayerDeductionOutcome::Incomplete {
+            kind: IncompleteKind::MissingObservation,
+            ordinal: None,
+            ..
+        }
+    ));
+    let mut missing_hp = baseline.clone();
+    let public::Observation::PhaseObserved(phase) = &mut missing_hp.events[1].observation else {
+        unreachable!()
+    };
+    phase.hp = None;
+    assert!(matches!(
+        deduce_conditional_history(&admit_synthetic_public_history(&missing_hp)),
+        PlayerDeductionOutcome::Incomplete {
+            kind: IncompleteKind::MissingObservation,
+            ..
+        }
+    ));
+    for domain in [public::PROJECTION_DOMAIN, "mixed_original_n5_unestablished"] {
+        let mut other = baseline.clone();
+        other.domain_id = domain.into();
+        assert!(matches!(
+            deduce_conditional_history(&admit_synthetic_public_history(&other)),
+            PlayerDeductionOutcome::Unsupported { ordinal: None, .. }
+        ));
+    }
+    let oversized = public_history(&History {
+        domain: Domain::supplied(6),
+        events: vec![],
+    });
+    assert!(matches!(
+        deduce_conditional_history(&admit_synthetic_public_history(&oversized)),
+        PlayerDeductionOutcome::Unsupported {
+            ordinal: Some(1),
+            ..
+        }
+    ));
+    let mut unsupported_speech = public_history(&History {
+        domain: Domain::supplied(5),
+        events: vec![Event::Reveal(observation(5, 1, 2))],
+    });
+    let public::Observation::CardRevealed(card) = &mut unsupported_speech.events[2].observation
+    else {
+        unreachable!()
+    };
+    card.speech = Some("I am 3 cards away from closest Evil".into());
+    assert!(matches!(
+        deduce_conditional_history(&admit_synthetic_public_history(&unsupported_speech)),
+        PlayerDeductionOutcome::Unsupported {
+            ordinal: Some(3),
+            ..
+        }
+    ));
+    // A caller's raw history is not an admission capability.
+    assert!(matches!(
+        public::admit_history(&baseline, &public::ReviewedEvidenceRegistry::default()),
+        Err(public::HistoryError::EvidenceUnadmitted { .. })
+    ));
+}
+
+#[test]
+fn conditional_deduction_ignores_capture_and_corpus_metadata() {
+    use solver_core::player_deduction::deduce_conditional_history;
+    let original = public_history(&History {
+        domain: Domain::supplied(5),
+        events: vec![Event::Reveal(observation(5, 1, 2))],
+    });
+    let mut changed = original.clone();
+    changed.solver_commit = "a".repeat(40);
+    changed.corpus_version = "different_validation_corpus".into();
+    for event in &mut changed.events {
+        event.evidence_id = format!("other_capture_{}", event.ordinal);
+        event.captured_at_ms = Some(123456 + event.ordinal);
+    }
+    let a = deduce_conditional_history(&admit_synthetic_public_history(&original));
+    let b = deduce_conditional_history(&admit_synthetic_public_history(&changed));
+    assert_eq!(a, b);
+    let encoded = serde_json::to_string(&a).unwrap();
+    for excluded in [
+        "probability",
+        "recommendation",
+        "evidence_id",
+        "captured_at_ms",
+        "solver_commit",
+        "corpus_version",
+    ] {
+        assert!(!encoded.contains(excluded));
+    }
 }
