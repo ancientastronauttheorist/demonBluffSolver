@@ -20,6 +20,12 @@ HealthyBluff30, no trigger subscribers, and no copied role on the four Good
 classes. A live Minion bluff must have the matching copied callback class.
 Destroyed/stale copied-role topologies and other source roles are rejected.
 
+"Non-Day" names the dispatched role triggers Init3 and AfterRoundStart7,
+rather than the Day30 role action. It does not certify the global Gameplay
+phase. Hidden body state5 and the supplied queue dispatch phase mask are
+distinct from that global phase; the original outer setup caller remains
+outside this callback checkpoint.
+
 V5 accepts every candidate in the six-role pool domain; any unsupported pool
 entry rejects the whole invocation. Repeated occurrences and order remain
 significant. Selector pools are not reconstructed from hidden state or guessed

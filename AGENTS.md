@@ -77,7 +77,8 @@ stop, diagnose, fix, verify, then resume.
     Inspect filename-discovery results before issuing dependent reads; do not
     batch discovery with reads against guessed paths, even for a previously
     discussed family whose exact note basename is not recorded. A worker's source-ready
-    notice does not establish that its planned note or report already exists.
+    notice does not establish that its planned script, fixture, note or report
+    already exists; verify the specific output before reading work in progress.
     Resolve private diagnostic outputs by filename and format too; a verified
     JSON decode does not establish a separate per-method text export.
     Verify a documented directory exists before searching it, including optional
@@ -92,7 +93,9 @@ stop, diagnose, fix, verify, then resume.
     current read result before preparing an exact-match patch to any changed file,
     including earlier inserted prose; use
     its returned lines rather than remembered fragments, and
-    keep patch hunks in file order and omit empty placeholder hunks. Do not
+    keep patch hunks in file order and omit empty placeholder hunks. Anchor
+    document appends to unique final context; repeated code fences can insert
+    a checkpoint into the middle of chronological history. Do not
     include no-op context-only hunks; after a failed patch, rebuild its hunks
     from the fresh read instead of resubmitting the failed patch. Check every
     hunk contains an addition or deletion, even when its file already has a diff.
@@ -132,7 +135,8 @@ stop, diagnose, fix, verify, then resume.
     to stop on errors so partial counters cannot be mistaken for valid totals.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
-    pins or substitute a nearby summary count. Read a family's actual caller
+    pins or substitute a nearby summary count. Distinguish resume-call totals
+    from distinct iterator identities. Read a family's actual caller
     sentinel and native base before adapting another family's Rust fixtures.
     Derive selector pool mutations from the exact helper before asserting
     post-draw widths; a unique-pool draw can preserve its selected occurrence,
