@@ -36,8 +36,14 @@ cards: the HUD still describes four Villagers and one Minion on five cards.
 The partition itself requires the actual Shuffle-to-deck-update publication
 and subscriber chronology. A stale pre-acquisition deck or a partial pinned
 strip cannot establish the current public list. The read-only discovery of an
-original PinnedDeckView subscriber and its null/timed yields is a pending native
-composition dependency, not an executed readiness certificate. Existing
+original PinnedDeckView subscriber and its null/timed yields led to a private
+retained composition: installed subscriber, Audio/Shuffle continuation and
+normal/pause parity now execute on the same graph. A conditional native Hunter
+result also completes under supplied Day/input fields. The
+[continuation checkpoint](../../SOLVER_CONTRACT.md) records these bounded
+results and remaining validation obligations. Pinned ShowAll omits Villagers;
+complete modal DeckView publication, original Day and trusted public capture
+remain open. This is not a readiness or legal-history certificate. Existing
 [deck visibility](deck_view_visibility.md) and
 [DeckCharacter registration](deck_character_registration.md) audits establish
 bounded callers under supplied services, not this complete publication.

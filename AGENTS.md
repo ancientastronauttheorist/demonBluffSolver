@@ -117,6 +117,8 @@ stop, diagnose, fix, verify, then resume.
     the code executes.
     Build report input snapshots from explicit serializable fields; `locals()`
     can also capture closure functions and fail only at final JSON serialization.
+    Bind diagnostic output records before serialization and printing rather
+    than nesting their construction inside output calls.
     Match diagnostic availability when comparing normal and stopped reports:
     preceding snapshots may be omitted on failure runs. Compare common prefix
     fields and require the selected stop snapshot and final state to match exactly.
@@ -222,7 +224,7 @@ stop, diagnose, fix, verify, then resume.
     Have the originating agent resume its yielded shell session. A session ID
     returned by another agent need not be accessible here; an unknown-session
     response is not evidence that its producer stopped or should be restarted.
-    Compile edited Python audit syntax before launching report producers;
+    Compile edited Python audits and diagnostic readers before invoking them;
     select explicit language-specific targets rather than positional entries
     in a mixed document/source artifact list. Bind
     or parenthesize Boolean expressions following equality comparisons.

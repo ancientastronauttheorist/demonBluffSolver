@@ -1281,3 +1281,81 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   publication. Remove only the supported class gap from the mixedN5 proposal;
   preserve the public-deck/latent-world/held-out and legal-policy prerequisites.
 ```
+
+## Private retained continuation and conditional Hunter checkpoint
+
+2026-10-04. This supersedes the unresolved pause comparison in the preceding
+checkpoint. Native witness sources and full reports remain unpublished drafts;
+the results below are bounded dependency evidence. The
+[mixed N5 frontier](notes/systems/mixed_n5_observation_frontier.md) still separates
+conditional setup support from a legally admitted observation history.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent 03bb7cd56a88d7f10c464194cb1662b06d7efe3f.
+  Private retained-readiness verification v0 and conditional Hunter prototype v0.
+  Native/oracle validation only; no new planner inputs or live control.
+Named decision blocker and reachable deck/phase/role scenario:
+  Original Standard row 0, five retained actors, recorded Confessor acquisition,
+  installed Pinned subscriber and pending Audio/Shuffle. Determine whether
+  nested continuations preserve the queue and permit a conditional Hunter result.
+Before -> after supported behavior:
+  Exact normal/all-entry pause parity closes the transient actor-scope mismatch.
+  Native Hunter click, Day clue, result and speech complete on the retained graph;
+  nine interleaved drains preserve the two-child Pinned continuation.
+Original evidence; supplied runtime/scheduler boundaries:
+  Original generation, initialization, acquisition, native queue consumers,
+  subscriber, Hunter/Reveal and publication bodies. Lifecycle, Unity providers,
+  equal-key whole-list Shuffle and null modal DeckView subscriber are supplied.
+  Hunter global Day/input fields and Current mirror are supplied; tween
+  completion and rendered capture are excluded. No original RNG weights.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Root independently reproduces the readiness normal/all-entry pause report
+  byte-exact: 1,876 entries, including 122 within Shuffle, and 1,876 one-shot
+  reentries/prefixes.
+  Private report SHA bcc856e3534893a91589682cd44391513dc5c6cd8708eb98c48c783c0efee245.
+  All 59 selected fresh stops pass complete prefixes and exact suspended states.
+  Full private report: 61,704,585 bytes; SHA
+  67058e2ce911e8d6dec2a6729eabc50c8f4498dc14576363bf9506e6aefbd641.
+  Its normal trace and all entry-state digests match Root's reproduced baseline.
+  Selection groups by service name/machine/prior-or-Shuffle scope. The physical
+  inventory finds zero missing entry variants within those selected families,
+  but excludes 126 unselected caller variants. Argument/type/callback-plan
+  variants and arbitrary services are not certified. The root_dispose label
+  executes Current provider c10 only; configured Dispose provider c20 is
+  unexecuted. Actual interface Dispose uses the separately selected supplied
+  0x40F0 shim.
+  Root's independent fresh stop at new-strip Action construction, ordinal 1,822,
+  passes complete prefix equality against that reproduced baseline and exact
+  selected-versus-actual suspended state equality. Private report SHA
+  8b2136252cb9a7b5c2e93a56ebfdccbbf03c2d9bc9d4b5c62e1ab72f80546e1f.
+  Root independently reproduces the conditional Hunter report byte-exact:
+  158,766,191 bytes; SHA 4aa8ceb5af7dd0b7ceaf57e2bef11563c83623ef7c0e131a4b3c9c8dde6cfd24.
+  Twenty protected native writes, two iterator guards, nine drains. Its 524-entry
+  verifier passed source review, syntax and import checks; no Hunter pause/stop run.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new complete world-set comparison or public-domain promotion. Hunter speech
+  is native-produced but target references remain oracle-only. No PlayerHistory
+  admission or reuse of the narrower Hunter/Baa model for mixed N5.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy, probabilities, generation prior or fixed-budget search claim.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No new held-out or policy/outcome evaluation. Existing 1,000 library/release
+  checks for the published Gemcrafter change remain the current solver checks.
+New uncertainty, regressions and remaining exclusions:
+  Exact two-child iterator loops can repeat state; final-root false/-1 branch
+  was not reached by the new Hunter continuation. One UI record remains pending.
+  Original global Day chronology, complete public deck, capture/HP provenance
+  and legal history remain open. Readiness writers reject the exact reports
+  directory; descendant containment needs hardening before source publication.
+  Full reports, CPU/stack/guarded bytes and corpora remain private.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Bounded readiness selection and physical inventory are complete; retain the
+  declared caller exclusions and private source-publication obligations.
+  Verify the conditional Hunter continuation and join modal DeckView
+  publication on the retained row-zero graph, preserving original Day and
+  trusted capture as separate gates. Independently compare six setup/acquisition
+  outcomes for one explicitly supplied row-zero input before any mixed S2
+  history admission. Preserve legal S3 and broader S4 gates.
+```
