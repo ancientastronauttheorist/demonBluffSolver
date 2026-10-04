@@ -227,6 +227,9 @@ stop, diagnose, fix, verify, then resume.
     failed comparison triggers edits; an earlier freeze no longer applies.
     Keep compiled sources and embedded fixtures frozen until that Cargo process
     exits. Queue review edits during a build and verify the final frozen revision.
+    Apply the same readiness and freeze discipline to hash-bound Python static
+    checks and report producers: every consumed helper must be complete before
+    launch and unchanged until the originating process reaches terminal status.
     After restoring a temporary source mutation on Windows, verify both its
     exact bytes and a fresh Cargo compile. Copying a backup can preserve an older
     modification time and reuse the mutant binary; refresh the restored file's
@@ -320,7 +323,8 @@ stop, diagnose, fix, verify, then resume.
     including signed frame increments; do not copy input timing into assertions.
     Resolve the pinned class's exact field declarations before naming offsets
     or asserting publication scope; adjacent saved and current roster fields
-    are distinct state.
+    are distinct state. Bind field-consumption claims to the actual body and
+    branch; neighboring presentation methods can read different fields.
     Derive RIP-relative literal slots from decoded operands and resolve their
     exact strings before writing executable probes; do not leave unresolved
     numeric placeholders. Property names do not establish serialized preference keys.

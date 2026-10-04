@@ -1648,3 +1648,52 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   waits, complete deck publication and trusted Hunter public prefix before
   mixed N5 admission, independent S2 worlds, legal S3 policy and broader S4.
 ```
+
+## Original acquisition entry triage checkpoint
+
+2026-10-04. The [continuation entry review](notes/systems/first_village_original_day_frontier.md#acquisition-continuation-entry-requirements)
+resolves callback triggers and identifies missing pre-native bindings. It does
+not execute the newly proposed acquisition continuation.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent2fc3b897ec6624e12e579ff0e099cc46ac4ce2f1.
+  Offline original-acquisition entry triage, no planner input or live control.
+Named decision blocker and reachable deck/phase/role scenario:
+  Same row-zero N5: original Day must carry through completed acquisition before
+  a later trusted Hunter prefix can distinguish beliefs.
+Before -> after supported behavior:
+  Actual deadline/frame equality supports chronological Animation then five
+  acquisition callbacks, with Audio/Shuffle still future. Global Day10 alone
+  does not emit clues for the native Init3/AfterRoundStart7 acquisition triggers.
+  Missing presentation/selectors require a fresh, stronger pre-native entry.
+Original evidence; supplied runtime/scheduler boundaries:
+  Independent native operand review confirms time/frame gates and five selected
+  role dispatches. Python-only graph comparison finds30 absent actor UI refs,
+  twenty selector fields and source presentation/name inputs needing hydration.
+  Serialized asset references/Color bits and declared runtime UI providers are
+  bound before native constructors; old setup source/report remains immutable.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Read-only native/source/asset triage and pre-native Python comparison passed;
+  no new native constructor/iterator/continuation execution. Expected six drains,
+  final releases and two pending waits remain proposed assertions.
+  Fresh hydrated entry cannot claim raw old-prefix equality. Independent typed
+  identity/provenance and unaffected semantic projections are required alongside
+  each new case's complete raw ABI/stack/source retention checks.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new worlds or history admission. Mixed N5 projection remains unsupported.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No probability, prior, likelihood or policy change.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out/outcome/performance run; production Rust unchanged, not rerun.
+New uncertainty, regressions and remaining exclusions:
+  Archive captures lack this run's build/deck/action provenance. Native routing
+  cannot replace per-event public capture review. Click bindings/resources and
+  later publication/capture remain separate from completed acquisition.
+  No old retained baseline is refreshed. All eight full-plan gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Freeze/review the fresh preentry-hydrated original runner and its independent
+  projection, then execute earliest native deadlines to actual acquisition exit.
+  Preserve original Day and the two pending waits; close public readiness and
+  capture before mixed N5 S2 worlds/S3 policy, without recreating Unity rendering.
+```

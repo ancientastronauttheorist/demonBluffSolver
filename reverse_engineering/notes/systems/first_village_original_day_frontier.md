@@ -351,3 +351,70 @@ animation continuations, complete deck publication and bind a trusted public
 Hunter prefix. Preserve their new producer clocks rather than reuse timings
 from a separately supplied acquired checkpoint. Mixed N5 history admission,
 independent S2 worlds and legal S3 policy still require their own evidence.
+
+## Acquisition continuation entry requirements
+
+2026-10-04. Independent native operand and source review narrows the next
+setup-to-observation blocker. The pending waits can advance chronologically
+without admitting Audio or Shuffle early, but acquisition needs a stronger
+declared entry graph than the terminal setup witness supplies.
+
+The native consumer admits time and signed-frame equality: its time comparison
+rejects sampled time below the deadline, and its frame comparison rejects a
+threshold above the sampled frame. The proposed next case drains each actual
+minimum Animation record at frames `9` through `13`, using the deadline written
+by the preceding native producer. The subsequent acquisition deadline is
+`1.425000011920929`, admitted at frame `14`; Audio and Shuffle remain future
+at `1.5250000059604645` and `1.625`. These are decoded, conditional schedule
+expectations, not measured continuation results. Jumping directly to the
+acquisition deadline would change later Animation producer times.
+
+Character.Reveal requests Init `3` and AfterRoundStart `7`; optional Start `5`
+requires HealthyBluff status `30`, absent here. Tracker, Empath and Shugenja
+Act/BluffAct accept Day trigger `30`, so acquisition triggers do not produce
+their clues. Confessor handles Init through its actual OnInit and returns for
+trigger `7`; Minion Act is inert. Global Day `10` does not itself authorize a
+clue callback. The existing unexpected-onActed rejection must remain in force
+for this acquisition slice; no supplied Day/PrevState rewrite is needed.
+
+The original setup fixture provides directional, number, status, pickable and
+animation fields. It does not establish the six Character presentation
+references needed by the declared RevealReal/SetupArt/UpdateViewReal paths.
+The artBg reference is conditional on backgroundArt; borders must be a
+nonnull array even when the declared array is empty. A Python-only
+pre-native graph comparison finds thirty absent actor references, twenty
+absent selector code/context fields and missing source presentation colors
+and name contents. The asset parser supplies the original sprite references
+and exact Color bits; runtime UI objects and Sprite resolution remain opaque
+providers. The comparison executes no native constructor or iterator.
+
+Selected CharacterData, source-role, source-class and hierarchy regions are
+already frozen in the setup witness. Adding those bindings after its native
+Init and recapturing guard baselines would invalidate retention evidence.
+The next runner therefore creates a separate fixture, hydrates and seals its
+complete declared presentation/selector graph before any Character.ctor or
+Init, and then executes the original outer chronology and continuations.
+The existing setup source/report stays immutable. This stronger entry domain
+cannot claim byte-exact reproduction of the earlier raw prefix.
+
+Cross-fixture checks must declare all entry differences and use an injective
+typed identity map grounded in assets and producer occurrences. Compare the
+complete unaffected role/status/list-occurrence/setup/scheduler projection;
+do not normalize arbitrary pointer-like integers or erase differing services
+to manufacture full-trace equality. Each new run independently enforces raw
+CPU/ABI, parent-window/outside-stack and immutable-source guards.
+
+The proposed finite exit is actual terminal Animation and five acquisition
+callbacks, preserving Day `10` / PrevState `5`, CurrentReveal zero, Hidden
+actors, uses one and empty information histories. Only the original Audio and
+Shuffle waits should remain. This establishes an acquisition prerequisite,
+not legal Hunter click readiness: input delegates, resources, backside state,
+later UI publication and trusted capture still require their own evidence.
+
+The two reviewed archived asc84 captures have exact recorded hashes but lack
+capture-time build binding, complete deck occurrences and serial reveal
+chronology. They cannot authenticate this N5 prefix. Native text/publication
+bindings establish routing; exact-prefix original capture review establishes
+public availability without requiring Unity renderer reconstruction.
+No new native continuation, public history, world/policy promotion or Rust
+change accompanies this triage. All eight full-plan gates remain open.
