@@ -67,6 +67,8 @@ stop, diagnose, fix, verify, then resume.
     a verified copy of script.json, dump.cs or il2cpp.h.
     A dependency directory does not establish a virtual environment or an
     interpreter path; resolve the interpreter separately before invoking it.
+    Preflight required imports with that interpreter and configured module path
+    before launching a producer; syntax compilation does not verify dependencies.
     Resolve commit identities with `git rev-parse` before writing provenance;
     never expand a short revision into an unverified full hash.
     Before creating an audit artifact, verify its assigned full output directory
@@ -157,6 +159,7 @@ stop, diagnose, fix, verify, then resume.
     from complete storage and future snapshot costs before asserting admission.
     Allowlist explicit metadata fields for diagnostics; excluding guessed corpus
     keys can accidentally print an entire retained or stopped report corpus.
+    Filter service ledgers to the selected invocation before printing diagnostics.
     Locate report JSON with filename discovery or `rg -l`; do not print matching
     lines across report corpora, since one line can contain the entire corpus.
     Inspect sequence container shapes before iterating calls; retained sequences
@@ -165,6 +168,7 @@ stop, diagnose, fix, verify, then resume.
     a dependency imported locally by a base class need not be an instance field.
     Derive stack snapshot windows from the actual mapped extent; verify the
     full window and suspended parent spans are mapped before reading them.
+    Include Win64 home slots in child-call writable spans when checking retained stacks.
     Inspect inherited identity normalization before using it for service arguments;
     stack addresses, immediates and metadata tokens need not be managed objects.
     Reset dynamically added identity/string labels with allocator and object
@@ -179,6 +183,9 @@ stop, diagnose, fix, verify, then resume.
     Emulation can return at a time/instruction budget without completing a call.
     Verify RIP and the declared stop/completion before applying return ABI checks;
     a bounded continuation must retain the live CPU, stack and service chronology.
+    Preserve failed native probes in private diagnostics before process exit;
+    record actual CPU, mapped stack and active owner without normalizing them,
+    and keep the original exception when diagnostic fields are unavailable.
     Bind the active emulator to the actual managed or engine caller before
     capturing service-entry ABI; stopped callbacks retain that live context
     rather than applying successful-return assertions or restoring the parent.
@@ -278,6 +285,8 @@ stop, diagnose, fix, verify, then resume.
     target inventories; a tail jump must not become a call assertion.
     A pinned instruction is not evidence that a fixture executed its branch;
     verify trigger predicates and retained state before claiming a write occurred.
+    Track the tested register's producer before classifying a branch; a nonnull
+    delegate-combination result does not imply a nonnull prior event channel.
     Read numeric constants before assigning units or expected magnitudes.
     Derive native wait output fields from the reviewed producer and live record,
     including signed frame increments; do not copy input timing into assertions.
@@ -299,7 +308,9 @@ stop, diagnose, fix, verify, then resume.
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
-    decompiler parameters or constructor return values. A write-barrier
+    decompiler parameters or constructor return values. Follow native struct copies
+    before binding enumerator identity; a hidden return buffer need not be the
+    subsequent mutable cursor. A write-barrier
     notification after a struct copy can pass a null second argument; qualify
     its caller and verify the preceding native stores instead of treating that
     argument as the stored reference. Initialize recorded unused

@@ -1466,3 +1466,82 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   DeckState and child-generation boundaries; preserve original Day/capture as
   separate gates before mixedN5 admission, independent S2, legal S3 and broader S4.
 ```
+
+## Private retained modal data publication checkpoint
+
+2026-10-04. This supersedes the unexecuted modal dependency in the preceding
+checkpoint. The [mixed N5 frontier](notes/systems/mixed_n5_observation_frontier.md)
+keeps the original Day and legal-public-history obligations separate. Full
+native reports and the new producer remain private drafts.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent887f133bd2a3598f751531b527aeb748caef85bf.
+  Modal draftv0, source a619b369a696832a0898f3c21ce7466748bd3737aed4a3e8ea4365b5e0e78181.
+  Offline native/oracle dependency validation; no new player inputs or live control.
+Named decision blocker and reachable deck/phase/role scenario:
+  Original row-zero Confessor-acquisition graph: the complete current deck must
+  distinguish four duplicate choices from two unique additions before a public
+  Hunter reference could filter beliefs. Pinned ShowAll omits Villagers.
+Before -> after supported behavior:
+  Actual modal OnEnable executes after acquisition, then retained Audio/Shuffle
+  delivers UI+48 through native call376C28 into native UpdateDeckView/RemoveAll.
+  Five native Init/GetData publications equal current roster occurrences in
+  faction order [4,0,1,0]. Original board actors remain unchanged.
+Original evidence; supplied runtime/scheduler boundaries:
+  Five full fingerprinted bodies: OnEnable, RemoveAll, UpdateDeckView, Init,
+  GetData. Native constructor-result typing and 16+8-byte stack cursor copies
+  now follow their actual tested registers and native stores.
+  Empty runtime modal roots, None0, null prior event/hover channels, opaque
+  instantiated buffers and whole inert Character.InitReward are supplied.
+  Whole ShuffleList uses fresh occurrence-preserving equal-key lists; roster
+  enumeration/Dispose, Unity/runtime services and prior scheduler boundaries
+  remain explicit providers. No original RNG or rendered-preview claim.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  One pre-emulator dependency launch failed; four native normal attempts:
+  three wrapper failures preserved, then one complete normal exit passed.
+  Fixes qualify Action allocation, distinguish Combine result from old channel,
+  and bind copied live cursors instead of their overwritten hidden-return buffers.
+  The v2 failure independently preserves actual managed/engine stacks, parent
+  window and outside-child bytes; its diagnostic is not a selected-stop certificate.
+  Normal report64,369,790 bytes; SHA
+  82a1fdf49fc7b028d823decae1a803626e00657e39f4d1924c75650d87508589.
+  Thirty-eight consumed input hashes pass. Root independently expands declared
+  snapshot pooling and checks five body fingerprints, complete eight-invocation
+  chronology,249 services with counts[8,17,224,0,0,0,0,0], four exact24-byte
+  copy records, five data-pointer occurrences and six direct native frames.
+  Nineteen reached native stores comprise two Obscured writes, two modal channel
+  publications and five hover/hover-exit/data triples; five InitReward calls are
+  the declared whole inert preview service.
+  Each frame matches invocation receiver/method, completion RIP/RSP, nonvolatile
+  registers, parent-window bytes and equal outside-child entry/exit hashes.
+  Each getter's returned RAX equals its published pointer; it uses zero services.
+  Fresh failure output is absent on success. No modal pause/reentry or fresh-stop
+  selection is run; other rosters and deck-state profiles remain excluded.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new complete world set, legal-history adapter or public-domain promotion.
+  Native pointer publication does not establish rendered public visibility.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No probabilities, likelihoods, generation prior or policy certificate.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No new held-out, fixed-budget or outcome evaluation. Production Rust and its
+  prior1002 release library/34simulation checks are unchanged and not rerun.
+New uncertainty, regressions and remaining exclusions:
+  One Pinned record18/generation9/next19 remains at deadline1.5/frame17/mask10;
+  two Pinned instances remain, with four deferred destruction requests rather
+  than a destruction commit. Five board actors acquired, nine payloads released.
+  No native frames, borrowed payloads or live modal cursor remain at normal exit.
+  Raw service phase labels persist as modal_installation; the eight invocation
+  records and physical callers establish scope, not that diagnostic phase string.
+  Pinned final exhaustion, preview/tween completion, original lifecycle/Day,
+  trusted capture/HP/resource provenance and PlayerHistory admission remain open.
+  Full proprietary bytes/CPU/storage and unpublished sources remain private.
+  All eight full-plan acceptance gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Conditional modal data dependency closed; continue original SameHandOut into
+  fresh SetupDelay state0, its actual first wait/resume, native Intro5->Day10/Prev5
+  and Characters.Init/Manage. Do not rerun Init on the acquired checkpoint.
+  Keep exact supplied mode, scene/pool, event/rule/relic/resource boundaries and
+  pending child waits explicit. Then close trusted public capture before mixedN5
+  admission, independent S2 worlds, legal S3 policy and broader S4 continuations.
+```

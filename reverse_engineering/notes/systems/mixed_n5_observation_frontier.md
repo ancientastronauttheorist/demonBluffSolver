@@ -43,8 +43,10 @@ normal/pause parity now execute on the same graph. A conditional native Hunter
 result also completes under supplied Day/input fields. The
 [continuation checkpoint](../../SOLVER_CONTRACT.md) records these bounded
 results and remaining validation obligations. Pinned ShowAll omits Villagers;
-complete modal DeckView publication, original Day and trusted public capture
-remain open. This is not a readiness or legal-history certificate. Existing
+the retained modal now publishes the complete current roster's data occurrences
+under the declared None-state profile. Original Day, rendered public exposure
+and trusted capture remain open. This is not a readiness or legal-history
+certificate. The existing
 [deck visibility](deck_view_visibility.md) and
 [DeckCharacter registration](deck_character_registration.md) audits establish
 bounded callers under supplied services, not this complete publication.
@@ -55,7 +57,20 @@ review also identifies a completeness condition: `DeckState=Remove` suppresses
 Outcast, Minion and Demon publication when the corresponding count is below
 three. A complete modal roster therefore needs an explicit deck-state boundary,
 subscriber delivery and new-generation child identity; it cannot be inferred
-from the Pinned strip. The retained modal publication has not yet executed.
+from the Pinned strip. The private normal modal composition now executes actual
+OnEnable after acquisition, retained Audio/Shuffle and the actual UI-channel
+delivery, then native UpdateDeckView, RemoveAll, DeckCharacter.Init and GetData.
+Its four copied stack cursors preserve native 24-byte constructor/copy
+provenance; five output occurrences match the four current roster lists
+`[4,0,1,0]` in order. Root independently checks its eight invocation ledgers,
+249 services and six direct-call ABI/stack records. The supplied profile has
+empty initial modal roots, None `0`, null prior channels and an inert whole
+InitReward preview service; instantiation, roster enumeration, shuffle ordering
+and other runtime services remain explicit providers. No rendered exposure,
+destruction commit, new pause/stop certificate, probability or PlayerHistory
+admission follows from this data boundary. The
+[modal checkpoint](../../SOLVER_CONTRACT.md#private-retained-modal-data-publication-checkpoint)
+records the normal result and remaining gates.
 
 The [original Day frontier](first_village_original_day_frontier.md) resolves a
 separate chronology gap. SetupDelay requests Intro `5`, then Day `10` before
