@@ -157,7 +157,7 @@ static trace starts nested audio `.4f` and outer animation `.05f` waits before
 manager Shuffle. This is configuration/static evidence with zero executed
 native bodies; it proves no runtime lifecycle, eight-record queue or visibility.
 
-Next execute the original installer under a named lifecycle/identity contract,
+The selected exit was to execute the original installer under a named lifecycle/identity contract,
 retain its target/method delegate, then join actual Manage subscriber dispatch
 and synchronous audio/animation first steps to the same queue and manager
 Shuffle admission. Two records share the animation owner; do not presume their
@@ -166,6 +166,38 @@ audio providers explicit and preserve the original five card waits and semantic
 state. Under the same producer clock, the `.05f` animation wait can precede
 acquisition, so the following native drain must honor actual consumer selection
 and animation continuation. Day readiness and legal public history remain open.
+
+The [installed subscriber admission](first_village_subscriber_admission.md) now
+closes that bounded exit under its explicit lifecycle, initial delegate-list,
+audio-null and visual providers. Actual OnEnable publishes the original bound
+Action; actual Manage invokes Animates and nested first steps before its normal
+return. Eight live records share seven owners: two animation payloads retain
+exact owner-list order. Registration, wait admission and tree order differ.
+The tree selects animation `.05f` before five card `.3f` waits, audio `.4f` and
+manager `.5f`. The [Rust comparison](character_action_setup.md) preserves five
+semantic actors and labels, compares one generic callback request separately,
+matches eight timings, and rejects this queue at the acquisition-only adapter.
+Independent reproduction and 973 library tests pass; no drain is promoted.
+
+Next execute the actual consumer and Animate state-one resumes on this retained
+queue. Under the stable five-card enumeration, reviewed code repeats `.05f`
+for each remaining card and then completes; execution and producer-clock
+chronology still need the retained witness. Preserve the pending audio/manager
+records and all original card iterators. Then join all five Hidden acquisitions
+using the original source roles: recorded Minion roll 1 and duplicate index 0
+select original Confessor data 21614, not the true Confessor actor's clone.
+Execute GiveBluff and concrete Init/AfterRoundStart; the Minion gains truthful
+appearance 25 while remaining actually lying, and repeated real Confessor Init
+must not append status 25 or increment its version again. These are supplied
+recorded choices, with no probability claim. Current Hunter fresh-fixture
+preparation and empty-status shortcuts cannot replace this retained graph.
+
+The next public result additionally needs actual Day readiness, legal click,
+visible speech and reviewed physical-seat/display-ID mapping. Original N5
+display IDs run 5 through 1; the conditional Hunter/Baa PlayerHistory adapter
+does not admit this mixed deck. Keep native selectors, hidden roles/statuses,
+references, queue and readiness in the oracle lane until its own public adapter
+is validated. Full S1, independent S2, policy S3 and wider S4 remain open.
 
 ## September 30 progress
 

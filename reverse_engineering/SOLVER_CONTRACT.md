@@ -103,7 +103,7 @@ integrated means the relevant solver/player-history path consumes it.
 | --- | --- | --- |
 | Observation/extraction | [Strict history boundary](notes/systems/player_history_boundary.md): typed history, exact-prefix trusted review, chronological result preservation and paired-oracle development input checks. | Exported Rust module with narrow Judge and conditional Hunter/Baa snapshot projections; archived pixel review records admission gaps. Trusted capture/CLI/live integration and held-out evaluation remain absent. |
 | Deck/pool generation | [Actual pool composition](notes/systems/manage_pool_composition.md): caller/builders/getters/filters/predicate with supplied collection/RNG/layout. [Original N5 factors](notes/systems/first_village_bluff_generation.md) preserve native roster/pools and separately invoked Minion catalogue support. | [Ledger bridge](notes/systems/manage_pool_ledger_bridge.md) is offline with later-setup provenance required. N5 factors are uncombined and unweighted; actual acquisition caller, generation-to-observation domain and held-out results remain open. |
-| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Original N5 publication/Init](notes/systems/first_village_publication_init.md) retains actual generation through five concrete Init calls. [Original Start/queue](notes/systems/first_village_start_queue.md) adds the actual 15-entry scan, 75 comparisons, zero Start calls and five first-wait admissions. [Conditional Shuffle admission](notes/systems/first_village_shuffle_admission.md) adds actual normal Manage return and a sixth wait under supplied onSetup=null. [Original subscriber binding](notes/systems/first_village_on_setup_binding.md) identifies the enabled animation component, installer/clearer and two additional first-state waits by static/asset evidence, with zero native bodies executed. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) joins delayed acquisition to publication. | [Rust initialization batch](notes/systems/setup_initialization_batch.md) compares five completed prefixes. [Setup action V2](notes/systems/character_action_setup.md) compares N5 semantic state, all ordered comparisons and six conditional admission timings; the scheduled-Reveal adapter rejects this mixed queue and all V4 acquisition resumes. Physical publication/CPU/delegates/engine ownership remain native-only. [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches conditional post-click checkpoints. Actual installed subscriber invocation/queue admission, animation resumes, Shuffle state1/events, native acquisition drains, generated legal history and rendered admission remain open. |
+| Initialization/Reveal scheduling | [Retained Init join](notes/systems/manage_initialization_join.md) and [publication/action join](notes/systems/manage_publication_action_join.md): actual pool/Init/Hidden/first yield/publication/generic Act routing. [Original N5 publication/Init](notes/systems/first_village_publication_init.md) retains generation through five concrete Init calls. [Original Start/queue](notes/systems/first_village_start_queue.md) adds the 15-entry scan, 75 comparisons, zero Start calls and five admissions. [Conditional Shuffle admission](notes/systems/first_village_shuffle_admission.md) adds normal return and a sixth wait under supplied onSetup=null. [Original subscriber binding](notes/systems/first_village_on_setup_binding.md) supplies static/asset evidence. [Installed subscriber admission](notes/systems/first_village_subscriber_admission.md) executes OnEnable, Manage callback and nested first steps through normal return with eight records/seven owners, under named lifecycle, delegate-list, audio-null and visual providers. [Conditional Hunter acquisition](notes/systems/hunter_acquisition_publication.md) joins delayed acquisition to publication. | [Rust initialization batch](notes/systems/setup_initialization_batch.md) compares five completed prefixes. [Setup action V2](notes/systems/character_action_setup.md) compares N5 semantics, all ordered comparisons, a separate registered callback request/return and eight first-wait timings; scheduled Reveal rejects the mixed queue and all V4 acquisition resumes. Subscriber bodies/effects, physical publication/CPU/delegates/engine ownership remain native-only. [Scheduled Rust publication](notes/systems/scheduled_role_publication.md) matches conditional post-click checkpoints. Actual animation resumes, Shuffle state1/events, native acquisition drains, Day readiness, generated legal history and rendered admission remain open. |
 | Role clues/truth/corruption | [Truth/status audit](notes/systems/gameplay_status_corruption_truth.md), version-bearing predicates and [independent conditional Hunter/Baa world reference](notes/systems/conditional_hunter_baa_world_reference.md). [Concrete original N5 Init/Start dependencies](notes/systems/first_village_role_setup.md) verify Confessor status 25 separately from actual lying; the retained publication/Init caller now verifies the original N5 Init effect. | Production public-history projection preserves complete worlds at all declared four/five-seat development prefixes; finished setup and availability supplied. Original N5 classes are admitted only by the offline setup-only V2/V4 bridge, with native semantic checkpoint and status mutation sensitivity. No new acquisition/Day, generation or cross-role/held-out certificate. |
 | Legal abilities/actions | [Setup action audit](notes/systems/character_action_setup.md), individual role/picker evidence and guarded writer bridge. | Recommendations/automation exist; target/use/reset/history and policy certificate remain open. ActivatePick drafts stay unvalidated unless needed. |
 | Execution/death/protection | [Execution evidence](notes/systems/gameplay_execution_resolution.md) supplies bounded damage/protection/terminal behavior. | Existing bookkeeping/constraints; cross-role chronology needs original before/action/after comparisons. |
@@ -909,4 +909,92 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   Reprioritize from absent-subscriber assumption to concrete configured handler.
   Necessary conditional dependency and original binding uncertainty closed;
   continue full goal through legal observations, independent S2 and S3/S4.
+```
+
+## Installed subscriber and retained eight-wait checkpoint
+
+2026-10-03. Native witness commit
+`9c52a5a4789237c163c6de3ff6bd548631ad3419`; independent projection and Rust
+checkpoint commit `9f865d95de5246e754837ae71ebcc4530d34bccb`. The full planning
+baseline and all eight acceptance gates remain authoritative.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; commits above. first_village_subscriber_admission_v1
+  and one independent scoped semantic/timing fixture. Offline development oracle
+  validation; no native hidden fields become planner/player inputs.
+Named decision blocker and reachable deck/phase/role scenario:
+  Does original scene animation add earlier waits to the generated N5 transaction
+  before acquisition? Minion/Confessor/Lover/Hunter/Enlightened, row0/poolrow0,
+  original manager137026 and animation137027, retaining all five card waits.
+Before -> after supported behavior:
+  Conditional onSetup=null/six records -> actual OnEnable installation, bound
+  Action invocation and nested audio/Animate first steps, then manager Shuffle
+  and normal Manage return. Eight records share seven native owners, with two
+  ordered payloads on animation owner107. All original semantic actors/clones,
+  statuses/source fields/publication/first waits remain retained.
+  Registration order:five cards,Animate,audio,Shuffle. Wait admission:five cards,
+  audio,Animate,Shuffle. Native tree order:Animate,five cards,audio,Shuffle.
+Original evidence; supplied runtime/scheduler boundaries:
+  Actual installer363500,Animates363060,Animate375130state0,PlayAudioDelay375DB0
+  state0,Manage36CE30,Shuffle376B00state0 and original engine/managed bridge bodies.
+  Exact original scene binding/assets consumed; lifecycle invocation supplied.
+  Initial onSetup/three later GameplayEvents lists null, closed Action constructor
+  and null-existing Combine layouts supplied. AudioEvents=null conditional.
+  GetComponent/pivot mappings, warm Vector3 storage, tween requests/unconsumed
+  return and Current-yield field/mirror getter supplied; generic Current body
+  and full Vector3 cctor not executed. Native runtime owner identities supplied.
+  Nested engine/managed CPU contexts and disjoint parent stack bytes preserved;
+  original five owner/payload bytes immutable. Only shared-animation link fields
+  may change, with exact reciprocal registration-order membership.
+  Exact3753C8 barrier is notification after a24-byte struct copy; RDX0 does not
+  overwrite its nonnull original-board reference. Full nonvolatile/XMM return
+  and installed delegate/event-field invariants checked.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  5constructors/Init/ActInit/card first yields,2subscriber first yields,1Shuffle;
+  4Actions/1onSetup callback,8registrations/records,7owners,15array entries,
+  75ordered comparisons/0Start. 16installation+1002Manage services=1018paused
+  prefixes/reentry tokens:1010Unicorn+8direct record-creation providers.
+  24fresh representative installer/subscriber-family abort prefixes match;
+  these are not1018independent failure/exception cases. Prior corpus unchanged.
+  69fingerprinted memberships/49selected pins,2901managed+401engine addresses,
+  18source/10consumed-report hashes,442pooled snapshots. Fingerprints do not
+  establish every body/path executed. No unexplained admitted disagreement.
+  Independent native reproduction byte-exact report SHA
+  70ade0e711d803735a8076d26e0030a9f61fc4458834a28884e375b6423b3f06.
+  Independent no-Rust projector/reviewer byte-exact fixture SHA
+  89ffa07667d5b16b05b8a3e180aa2a95b90c348941c5f9c068d8dcdc64f0964c.
+  All13focused bridge tests and973library tests pass18.09s. Exact source/prior
+  hashes, raw prefixes/storage/CPU, privacy and links pass. Deduction/action
+  production behavior unchanged; no new mutation or outcome campaign claimed.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No world-set, legal-history or S1 promotion. Rust actor replay ends at modeled
+  Start; registered callback records a separate generic request/normal return,
+  not subscriber effects. Inert flags apply to modeled role/UI/service projection.
+  Five pending labels unchanged; fresh auxiliary labels use registration order,
+  then queue order follows live native tree. All8timings bind raw payload/owner/
+  node/GC fields. Synthetic predeadline probe preserves8; aligned-cursor mixed
+  queue rejection protects the five-acquisition/V4 unsupported resume boundary.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy certificate, seed-law recovery, path likelihoods or uniform-world prior.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out partition/outcome/budgeted policy evaluation. Library runtime is
+  verification, not policy performance. Earlier unchanged production release
+  build/34simulation results retained. No perfection/optimality certificate.
+New uncertainty, regressions and remaining exclusions:
+  Actual lifecycle/multicast/disable/audio services, animation/Shuffle resumes,
+  acquisition/native consumption, original Day readiness and rendered/public
+  admission remain open. OriginalN5 physical slots have display IDs5..1; fair
+  numbered-seat/orientation mapping must be reviewed, not inferred from slots.
+  Existing PlayerHistory supports Judge/conditionalHunterBaa, not this mixedN5.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Actual consumer-selected Animate resumes first on same retained queue; then
+  all5Hidden acquisitions with pending audio/manager records preserved. Recorded
+  Minion roll1/duplicate index0 selects original Confessor21614 source role, not
+  the true actor's clone. Join GiveBluff/concrete Init/AfterRoundStart; appearance
+  25 does not change actual lying, real Confessor's repeated25 is not insertion.
+  Native chronology/source/status/UI providers remain explicit. Then original
+  Day transition, legal click, visible speech and its own fair public adapter.
+  Necessary subscriber/ordering dependency closed; continue full active goal
+  through S1 legal observations, independent S2, decision S3 and broader S4.
 ```

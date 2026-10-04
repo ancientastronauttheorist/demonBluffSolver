@@ -249,3 +249,48 @@ eight-record queue. Therefore the six-record witness is a conditional null case,
 not the configured scene's complete queue certificate. Actual subscriber
 invocation, intervening animation resumes, acquisition, Day readiness and legal
 observations remain the next composition.
+
+## Installed subscriber and eight first waits
+
+The [installed subscriber witness](first_village_subscriber_admission.md) now
+executes original OnEnable and its installed Animates callback in the same
+generated N5 transaction. It retains five card owners, one manager owner and
+one animation owner with two linked payloads. Actual registration places Animate
+before nested audio; wait admission places audio before Animate. The live tree
+orders Animate `.05f`, five acquisition `.3f` waits, audio `.4f`, then Shuffle
+`.5f`. At supplied time 1.0/frame 7 all thresholds are 8. The normal Manage
+return preserves the original five actors, clones, statuses and first waits.
+Report SHA-256:
+`70ade0e711d803735a8076d26e0030a9f61fc4458834a28884e375b6423b3f06`.
+
+The [independent projector](../../scripts/project_first_village_subscriber_admission.py)
+produces [one scoped fixture](../../fixtures/synthetic/first_village_subscriber_admission_v1.json),
+SHA-256 `89ffa07667d5b16b05b8a3e180aa2a95b90c348941c5f9c068d8dcdc64f0964c`.
+It derives actor expectations from the actual pre-subscriber snapshot and checks
+them against final storage. The generic caller carries a registered callback
+alias and compares one request and normal return; Rust does not execute the
+subscriber. Inert flags cover modeled role/UI/service projection. Auxiliary
+queues, delegates, visual requests and physical identities remain oracle-only.
+
+The five acquisition registry labels are unchanged. Three fresh queue-local
+labels follow actual registration order, then enter the queue in actual tree
+order. Raw node, owner-head, reciprocal payload, GC/cache and timing fields bind
+each producer independently. The Rust test compares actor fields, status version
+deltas, Init traces, all 75 ordered comparisons and all eight native timings.
+A synthetic predeadline probe preserves eight entries; with cursors aligned,
+scheduled Reveal rejects this mixed queue instead of discarding auxiliary waits.
+
+Independent native reproduction matched complete report bytes. Source/prior
+hashes, every paused prefix, fresh stopped snapshots, privacy, links and projection
+checks passed; thirteen focused tests and all 973 library tests passed (18.09s).
+Production deduction/action behavior was unchanged. Earlier status/frame
+mutation evidence retains its existing scope; no new mutation campaign or
+outcome evaluation is claimed.
+
+OnEnable invocation and initially null delegate lists are supplied lifecycle
+contracts. AudioEvents-null is conditional; GetComponent/pivots, warm Vector3
+storage, tween requests and Current-yield mirrors remain named providers. There
+is no animation/audio/Shuffle resume, native drain, acquisition, Day readiness,
+rendered capture, public card-number mapping or PlayerHistory promotion. The
+next retained join must execute the earlier animation callbacks before the five
+acquisition callbacks, preserving remaining audio and manager waits.
