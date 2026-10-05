@@ -1697,3 +1697,52 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   Preserve original Day and the two pending waits; close public readiness and
   capture before mixed N5 S2 worlds/S3 policy, without recreating Unity rendering.
 ```
+
+## Original acquisition normal checkpoint
+
+2026-10-04. The [original acquisition continuation](notes/systems/first_village_original_day_frontier.md#original-acquisition-normal-continuation)
+closes a conditional setup-to-acquisition dependency, with the actual original
+Day retained. It does not promote a player-observation or solver domain.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent8828525fb161fd9032f3710de66428004950e1fd.
+  Private original-acquisition normal v0, offline validation only.
+Named decision blocker and reachable deck/phase/role scenario:
+  Row-zero N5: can original setup reach complete acquisition on its retained
+  native queue, without importing the supplied Hunter phase checkpoint?
+Before -> after supported behavior:
+  One normal case completes five Animation resumes and five acquisitions in
+  six earliest-deadline drains. Native Day10/Prev5/CurrentReveal0 is retained;
+  original Audio6/Shuffle8 remain unchanged and pending.
+Original evidence; supplied runtime/scheduler boundaries:
+  Same-case original constructors/SetupDelay/Init/Manage and native consumers;
+  stronger presentation/selector entry is declared before constructors.
+  Actual new prefix agrees with immutable setup v3 in 19 typed checkpoints,
+  204 identities and 1532 paths; raw cross-fixture equality is not claimed.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  One normal producer passed; independent JSON reader authenticated 48 inputs,
+  750 pooled snapshots, ten managed bridges and six engine frames.
+  Nine payloads/eight owners, seven logical releases; two exact live waits.
+  Separate causal reader passed selector/clone/real-and-bluff trigger joins;
+  all 76 recorded emulator returns have UC_QUERY_TIMEOUT=0.
+  Final source/UI preservation is the frozen producer's checked assertion;
+  serialized initial seals are independently verified, final regions omitted.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  No new complete world set or legal history. Mixed N5 remains unsupported.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No probability/prior/likelihood/policy change; supplied oracle draws are not
+  a player belief distribution or planner input.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out policy/outcome/performance evaluation; production Rust unchanged.
+New uncertainty, regressions and remaining exclusions:
+  No normal-only pause, stopped-prefix or native mutation promotion. Supplied
+  runtime/UI/clone/services remain explicit. Click/resource/input producers,
+  complete public deck and trusted same-prefix captures remain unresolved.
+  All eight full-plan gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Preserve original10/5/0 and pending waits; establish the smallest same-Hunter
+  click/reveal/text contract and trusted public prefix before S2/S3 admission.
+  Do not require Audio/Shuffle exhaustion without an actual click predicate,
+  or extend UI/rendering work solely to reproduce presentation fidelity.
+```

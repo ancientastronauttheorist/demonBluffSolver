@@ -142,6 +142,9 @@ stop, diagnose, fix, verify, then resume.
     Inspect exact returned report keys rather than substituting a similar
     semantic description for a helper's field name; metadata arrays such as
     `script.json`'s `Addresses` can contain integers rather than row dictionaries.
+    Resolve emitted service/event names and their retained call interval from
+    the producer before causal assertions; setup and continuation gateways can
+    name the same provider differently.
     Distinguish absent/null row fields before indexing reference pairs; verify
     their container type and required length. Set PowerShell diagnostic scans
     to stop on errors so partial counters cannot be mistaken for valid totals.
@@ -152,7 +155,9 @@ stop, diagnose, fix, verify, then resume.
     Read exact report counters and filtered corpus sizes before authoring
     checkpoint or native-fixture test assertions; do not hand-count operand
     pins or substitute a nearby summary count. Distinguish resume-call totals
-    from distinct iterator identities. Read a family's actual caller
+    from distinct iterator identities. Derive callback/delegate totals from
+    exact real-and-bluff dispatch chronology, not actor or trigger totals.
+    Read a family's actual caller
     sentinel and native base before adapting another family's Rust fixtures.
     Derive selector pool mutations from the exact helper before asserting
     post-draw widths; a unique-pool draw can preserve its selected occurrence,

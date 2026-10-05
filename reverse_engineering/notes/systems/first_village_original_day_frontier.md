@@ -418,3 +418,72 @@ bindings establish routing; exact-prefix original capture review establishes
 public availability without requiring Unity renderer reconstruction.
 No new native continuation, public history, world/policy promotion or Rust
 change accompanies this triage. All eight full-plan gates remain open.
+
+## Original acquisition normal continuation
+
+2026-10-04. One separate, preentry-hydrated fixture now executes the original
+setup chronology through terminal Animation and all five acquisition iterator resumes.
+The original setup v3 source/report remains unchanged; this case retains its
+own native actors, iterators, CPU and queue throughout. Its private report is
+`297645897` bytes, SHA
+`82a4e5f89aae7cf461b6a56be45ec5333b7950d2a2ed86ca94e2aaa3b8609ab2`.
+The frozen runner SHA is
+`5dd3233414b116a8f3c9caec5ccaa2a50ac43eb982241f746cf8712ae388cc2d`;
+the independent typed projection helper SHA is
+`f2d427bfebcd64628b365d5d2997399140853c0478216c707f44ae6133d28515`.
+
+The producer and independent JSON reader both complete with terminal code zero.
+The reader authenticates all 48 inputs and 750 lossless snapshot blobs, and
+independently compares the actual new setup prefix against v3: 19 checkpoints,
+204 injective typed identities and 1532 typed paths agree, projection digest
+`3546dd763131128a64e1ce0bebd3be6a6955a0a05a3592c5deb5d448c1994061`.
+This comparison covers unaffected semantics and provenance; it does not claim
+cross-fixture raw CPU, allocation, service or presentation equality.
+
+A separate causal reader also completes with terminal code zero. It joins
+both supplied selector draws to the two actual `acquisition_rng` services:
+`[1,11) -> 1` follows the duplicate branch, then `[0,4) -> 0` selects Confessor.
+One field-faithful Confessor clone is retained; no public roster registration
+or pool mutation is inferred. Ten Character.Act trigger rows, ordered Init 3
+then AfterRoundStart 7 per actor, produce twelve RoleAct/delegate constructor
+rows: the Minion dispatches both real and copied roles for each trigger. The
+reader checks the real and copied Confessor OnInit paths and the copied actor's
+single status-25 addition, rather than inferring the path from final status.
+All 76 recorded emulator returns report integer `UC_QUERY_TIMEOUT=0`: 31
+managed `drive_managed` and 45 engine `run_native`, retaining the exact prefix
+return sequence. These are measured return flags, not a pause/stop certificate
+or a policy-performance measurement.
+
+Five successive earliest Animation deadlines execute at frames 9 through 13,
+with native returns `[1,1,1,1,0]`. The sixth drain at
+`1.425000011920929`, frame 14, executes five acquisition iterator resumes in actor
+order, each returning false. Ten managed bridges pass recorded raw ABI, full
+`0x2000` parent-window and outside-child guards. Six top-level engine frames
+pass raw ABI and outside-child guards; they have no suspended parent window.
+The nine registered payloads retain eight owner identities; seven are logically
+released. Final generation is 7 and next identity is 13. Only original Audio
+record 6 and Shuffle record 8 remain, with unchanged deadlines
+`1.5250000059604645` and `1.625`, frame threshold 9, generation 1 and phase mask
+10. The independent reader checks their exact retained records and live links.
+
+The stronger entry has 110 declared hydration rows, 82 sealed source regions
+and 48 sealed UI/string/array/sprite regions. The report exposes initial seal
+bytes and hashes. Their final preservation is an authenticated assertion of
+the frozen producer, not a separate comparison of serialized final regions;
+those final raw regions are absent. No existing guard baseline is refreshed.
+
+This closes the named original setup-to-acquisition dependency under explicit
+UI, clone, selector, runtime and scheduler contracts. It does not establish
+Hunter click readiness, public deck completeness, trusted capture, legal
+history, world probabilities or policy quality. No pause/reentry, fresh stopped
+prefix, held-out family or native mutation certificate is added by this normal
+case. Production Rust is unchanged and all eight full-plan gates remain open.
+
+The next solver-relevant exit is the same acquired Hunter's click/reveal and
+text/history publication while preserving native Day 10 / PrevState 5 /
+CurrentReveal 0. The older supplied Hunter checkpoint's PrevState 1 cannot be
+transplanted. Input delegates and resource/backside predicates need explicit
+producer-bound contracts; trusted same-prefix public evidence remains separate.
+Existing click-path evidence has no queue-empty or Audio/Shuffle-completion
+predicate. Preserve those waits rather than extending unrelated continuations
+solely because they remain pending.
