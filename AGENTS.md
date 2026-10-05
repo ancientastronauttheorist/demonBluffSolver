@@ -351,7 +351,9 @@ stop, diagnose, fix, verify, then resume.
     assert every required slot was found before executing warmed fixtures.
     Validate ABI arguments and returns at the decoded operand width; byte register writes
     preserve upper bits. Check call-site register setup before trusting inferred
-    decompiler parameters or constructor return values. Resolve indirect targets
+    decompiler parameters or constructor return values. Qualify real-role and
+    bluff-role Act callers separately before reusing a coroutine admission guard;
+    a copied-role fixture does not establish the original-role caller. Resolve indirect targets
     through their actual slot loads and receiver class; a virtual method can call
     a loaded register rather than a memory operand at that slot. Follow native
     struct copies before binding enumerator identity; a hidden return buffer need not be the

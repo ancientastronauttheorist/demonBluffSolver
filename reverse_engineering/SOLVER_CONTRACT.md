@@ -1841,3 +1841,46 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   finite normal exit. Continue only to close that named input/transition blocker;
   a new selector wrapper or six-role public model would not close the S2 gap.
 ```
+
+## Native Hunter information and bounded-tranche reprioritization
+
+2026-10-04. The [latest diagnostic boundary](notes/systems/first_village_original_day_frontier.md#native-hunter-information-reached-coroutine-admission-remains-open)
+supersedes the preceding checkpoint's pending static/status-adapter step. It
+records native information production in a failed prefix, without promoting a
+normal exit or public history.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent05e6eeed50f827426835af65ab76a4da99d33757.
+  Private original-Hunter normal v2 attempt, validation-oracle inputs, no live play.
+Named decision blocker and reachable deck/phase/role scenario:
+  Original N5 Hunter#2 nativeDay10 click to result/history/speech with retained waits.
+Before -> after supported behavior:
+  Qualified empty-status provider passes; native distance2 information and
+  ordered references[5,4] exist in failure. Coroutine admission still stops;
+  no result resume, history increment or saved speech certified.
+Original evidence; supplied runtime/scheduler boundaries:
+  Real-role Act CALL368896/size6 returns36889C; old guard368874 belongs bluff path.
+  Only caller conjunct is measured; remaining short-circuited heap fields absent.
+  CLR/runtime, resources, UI and scheduling remain supplied contracts.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Static v2 passes52inputs/25bodies/32seals/native0; prior two static passes retained.
+  Native attempts total3, completed normal exits0, preserved failures3.
+  v2 produces one native Info and two status queries; no normal reader executed.
+  Negative predicates, pause/reentry, selected-stop and capture remain unattempted.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Mixed N5 unsupported; no new legal PlayerHistory or complete world-set comparison.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No generation prior, likelihood, policy, optimality or recommendation claim.
+Held-out outcomes and latency/memory versus frozen baseline:
+  None. Rust unchanged; existing suites not rerun.
+New uncertainty, regressions and remaining exclusions:
+  Preserve all failure families. Repair must qualify original real-Hunter route;
+  history/speech, final mutable storage and public exposure remain uncertified.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Reprioritize after the bounded native tranche: independent asset-ID reference
+  from authenticated asset inputs through before-first-Init, then a separate
+  conditioned selector projection. Retain occurrences/correlations/aliases and
+  explicit unresolved callbacks. Compare recorded factors at exact conditioning;
+  authored unrecorded joins are not new native certification. All eight gates open.
+```

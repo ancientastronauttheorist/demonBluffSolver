@@ -609,3 +609,46 @@ This work does not expand the [mixed-world domain](mixed_n5_observation_frontier
 Its independent reference still needs asset identities, occurrence correlations
 and unresolved callbacks; the catalogue's BountyHunter asset cannot be renamed
 Architect to satisfy the current name-based bridge. All eight gates remain open.
+
+## Native Hunter information reached; coroutine admission remains open
+
+The separately reviewed status adapter passed static v2: 52 consumed inputs,
+25 body bindings and 32 added sealed regions, with zero native instructions.
+All frozen inputs remained exact through the one normal v2 attempt. That attempt
+failed at the supplied coroutine admission guard; its normal report is absent.
+The private failure has 81,984,284 bytes, SHA-256
+`4b9a7d5fda0e25149ab1c4ddd93ca94db1600d139c783598f0a9b890bc19c190`.
+The earlier v0/v1 failures remain unchanged.
+
+Independent JSON-only review confirms two native status queries, HealthyBluff30
+then Corrupted10, against the same empty Hunter status list and metadata context.
+Both supplied results are false. The failure serializes service-entry guards;
+it does not serialize their after-guard hashes. The frozen producer's before /
+after preservation assertions remain a separate source-level guarantee.
+
+Native Hunter information exists in this diagnostic: distance two, ordered
+reference IDs `[5, 4]`. The failing service entry is StartCoroutine at `0x1C7F160`,
+with the actual Hunter owner, result iterator and caller `0x36889C`. Real-role
+Act dispatch uses the six-byte call at `0x368896` through class slot `+0x208`.
+The guard instead requires `0x368874`, the alternate bluff-role path. Only that
+first conjunct is measured false; the short-circuited owner/phase heap-field
+checks cannot be certified from the iterator summary. Their exact declared
+offsets remain owner `+0x28`, info `+0x30`, delay float `+0x20`, and trigger enum
+`+0x38`. A later repair must qualify the ordinary original-Hunter caller and
+preserve those field checks, rather than broadly accept both routes.
+
+Hunter remains Hidden5/previous20/use1/history0/version1 with no saved text,
+global Day10/Prev5/reveal0 and original Audio6/Shuffle8 pending, generation7 /
+next13. Capture reports no errors and all 79 returned timeout queries plus both
+current queries are zero. This is a preserved failed prefix, without successful
+normal-exit, stopped-prefix, history, speech, capture or public-observation
+certification. The unexecuted normal-report reader remains source work.
+
+This closes the narrower uncertainty about native information production, but
+not the full click/result/history/speech exit. Reprioritize the next tranche to
+an independent asset-ID generation reference through before-first-Init, with a
+separate explicitly conditioned selector projection. Preserve occurrence order,
+pool/cache aliases, registration effects and unresolved callback obligations.
+Compare recorded factor conditioning without claiming a complete native joint
+generation corpus. The current canonical-name bridge remains unchanged; full
+mixed-world agreement, policy, outcomes and all eight gates remain open.
