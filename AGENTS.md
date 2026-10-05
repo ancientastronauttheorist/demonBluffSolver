@@ -142,7 +142,9 @@ stop, diagnose, fix, verify, then resume.
     Expand snapshot pooling only when the report declares `snapshot_encoding`;
     an imported report corpus can contain both pooled and ordinary reports.
     Inspect exact returned report keys rather than substituting a similar
-    semantic description for a helper's field name; metadata arrays such as
+    semantic description for a helper's field name. Validate required property
+    names before PowerShell Select-Object projections; absent properties can
+    silently become null output. Metadata arrays such as
     `script.json`'s `Addresses` can contain integers rather than row dictionaries.
     Resolve emitted service/event names and their retained call interval from
     the producer before causal assertions; setup and continuation gateways can

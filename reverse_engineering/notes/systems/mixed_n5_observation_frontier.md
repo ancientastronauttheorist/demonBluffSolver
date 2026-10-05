@@ -287,6 +287,44 @@ compatibility/deduction projection. Legal-action transitions, priors/bounds and
 policy evaluation follow only after their own contracts; UI dependency closure
 alone does not complete the solver-first goal.
 
+## Generation reference and asset-name boundary
+
+The existing [manage-to-ledger bridge](../../../crates/solver-core/src/bluff/manage_pool_ledger_bridge.rs)
+already composes pool construction with ordinary selector support. Another
+wrapper over those kernels would not resolve the complete generation gap.
+The current [row-zero independent reference](../../../crates/solver-core/src/bluff/conditional_row_zero_setup_reference_tests.rs)
+fixes one supplied physical roster and order. It does not establish complete
+cross-stage correlation for every original base omission, placement and fallback
+source occurrence.
+
+The [catalogue audit](first_village_bluff_generation.md) establishes 24 candidate
+assets and 48 fallback source occurrences. Asset `21634` has Unity object name
+`Bounty Hunter`, empty serialized `characterName`, and exact managed
+`BountyHunter` identity at TypeDefIndex `5871`. Its catalogue selector witness
+returns that asset without failure. The [role audit](../roles/gameplay_role_bounty_hunter.md)
+separates this acquisition path from its excluded ordinary base-roster identity
+and from the still-unjoined copied callbacks and public display.
+
+The [name-based bridge guard](../../../crates/solver-core/src/bluff/pool_ledger_bridge.rs)
+requires every asset to map to a distinct canonical card in
+[knowledge_base.rs](../../../crates/solver-core/src/knowledge_base.rs). That table
+contains Architect but no Bounty Hunter entry; its `bh`/`bountyhunter` alias has
+no matching card. The audited asset cannot enter that bridge through its
+established object/managed name. This is an explicit representation boundary,
+not evidence that the native selector omits the asset. Substituting Architect
+or assigning an unreviewed public name would erase the unresolved binding.
+
+A useful next reference must preserve qualified asset identities and list
+occurrences independently of optional public names. Its generation/selector
+projection should retain all five base omissions, physical placements, ordered
+fallback draws, duplicate/unique aliases and registration effects, with explicit
+per-asset Init/AfterRoundStart obligations. An unresolved callback stays in the
+reachable family; it cannot become an inert callback or be silently dropped.
+Complete equality at that intermediate stage would still not establish
+post-callback possible worlds, a legal public deck or generation priors. No such
+new reference or production domain is implemented by this checkpoint; the
+mixed-domain deduction remains unsupported.
+
 This note contains authored descriptions, repository links and public rule text
 only. It includes no proprietary native bytes/disassembly, screenshots, live
 memory, hidden world injected into player history, new held-out claims or tests.

@@ -57,6 +57,14 @@ Start list, after Alchemist and before Puppet:
 The same asset is absent from the normal shipped Standard and Ascension
 candidate rosters. Its physical-card Start behavior is therefore dormant in
 those ordinary modes even though the asset remains in `startGameActOrder`.
+The later [first-village fallback catalogue](../systems/first_village_bluff_generation.md)
+contains two occurrences of this exact asset, and its original ordinary-Minion
+selector witness returns `21634` without failure. Base-roster exclusion does
+not exclude this copied-role acquisition path. That witness executes the
+selector and registration boundary, not a joined copied-role Init, AfterRoundStart
+or Day callback. The Unity object name and managed role binding are established;
+the asset's serialized `characterName` is empty, so a displayed card name needs
+separate publication evidence.
 This is separate from Poet: managed `Gossip` always constructs a fresh
 `BountyHunter` role object as provider slot four and calls its information
 methods, but does not run that provider object's Start action. The executable
