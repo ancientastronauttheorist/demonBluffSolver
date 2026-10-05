@@ -328,3 +328,37 @@ mixed-domain deduction remains unsupported.
 This note contains authored descriptions, repository links and public rule text
 only. It includes no proprietary native bytes/disassembly, screenshots, live
 memory, hidden world injected into player history, new held-out claims or tests.
+
+## Asset generation reference comparison checkpoint
+
+The [independent asset reference](first_village_asset_generation_reference.md)
+now resolves the preceding checkpoint's missing intermediate reference. Its
+authored algorithm loads pinned parsed asset inputs, preserves qualified asset
+and occurrence identities, and derives Standard/GetRandom order, float32 stable
+placement, pools and separately supplied ordinary Minion selector outcomes.
+Source lists, stored arrays and materialized copies retain distinct provenance.
+Every original actor and selected copied asset retains unresolved Init and
+AfterRoundStart obligations; BountyHunter's public name remains absent.
+
+The [normalized comparison summary](../../reports/f530404b0f3f_807de4a83df4_first_village_asset_generation_reference_comparison.json)
+records equality for 2,880 generation, 1,125 pool, 655 sort and 8,960 selector
+projections, plus the common persistent fields of four baselines and 24 asset
+witnesses. These are recorded factors at their explicit input conditioning,
+not complete cross-products, held-out families or post-callback worlds. The
+573 stopped diagnostics are inventoried without a reference stop certificate.
+Current-list versions and source/saved pointer aliases remain authored
+conditions where the original corpus does not serialize them.
+
+The next Rust increment is a qualified asset-ID selector trace with explicit
+die/index and actual actor occurrence. Existing pool kernels already preserve
+asset IDs; the string ledger's canonical-name conversion is the missing
+representation boundary. Preserve its V1 API. Registration uses exact-asset
+Contains/append; ordinary unique and duplicate selectors leave pools intact.
+Weighted composition retains its existing capacity boundary: 48 fallback
+choices times 24 duplicate orders exceeds the bridge's 1,024 paths, and its
+32-name mapping cannot carry the complete 46-record input registry. A recorded
+trace need not enumerate that product or invent weights.
+
+No production asset selector API, legal PlayerHistory, complete mixed-world
+comparison, generation prior or policy is established here. Mixed N5 remains
+unsupported and all eight solver-first gates remain open.

@@ -77,7 +77,8 @@ stop, diagnose, fix, verify, then resume.
     never expand a short revision into an unverified full hash.
     Before creating an audit artifact, verify its assigned full output directory
     and preserve it in the write path. Before freeze, compare each resolved
-    script, note and report path with its assigned path. Validate public
+    script, note and report path with its assigned path and check new source
+    whitespace, including EOF, before freezing its evaluated byte hash. Validate public
     documentation links against the tracked or staged publication set, not only
     local file existence; unpublished drafts do not establish published links.
     Normalize repository-relative paths with as_posix() when comparing against
@@ -152,8 +153,11 @@ stop, diagnose, fix, verify, then resume.
     Distinguish absent/null row fields before indexing reference pairs; verify
     their container type and required length. Set PowerShell diagnostic scans
     to stop on errors so partial counters cannot be mistaken for valid totals.
-    Count PowerShell property collections explicitly with `@(...).Count`;
+    Count PowerShell property collections, including parsed JSON's
+    `PSObject.Properties`, explicitly with `@(...).Count`;
     member enumeration can return one count per property instead of a total.
+    Emit mixed file-size/hash diagnostics as one explicit JSON metadata record;
+    PowerShell table formatting can hide fields from later object types.
     Pass multiple literal cmdlet paths as an explicit array rather than
     separate positional arguments.
     Read exact report counters and filtered corpus sizes before authoring

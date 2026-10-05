@@ -1884,3 +1884,49 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   explicit unresolved callbacks. Compare recorded factors at exact conditioning;
   authored unrecorded joins are not new native certification. All eight gates open.
 ```
+
+## Independent asset generation reference checkpoint
+
+2026-10-04. The [asset reference](notes/systems/first_village_asset_generation_reference.md)
+and [normalized comparison](reports/f530404b0f3f_807de4a83df4_first_village_asset_generation_reference_comparison.json)
+close the preceding intermediate-reference gap at recorded factor conditioning.
+They preserve unresolved callback and public-name boundaries.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent d6336a13e2bcd08c5253ee6b5ca0b6031dce2929.
+  Independent asset reference v0, source deaaad9bfaa3b3378f479a852bedaf8f4f6c56ff4a2416e60a2d948236f48547.
+  Original parsed inputs and recorded factors; validation lane, no live play.
+Named decision blocker and reachable deck/phase/role scenario:
+  N5 generation before first Init; ordinary Minion selection/registration,
+  including BountyHunter asset 21634 with no canonical public-name binding.
+Before -> after supported behavior:
+  Independent stdlib algorithm preserves asset/occurrence identity, generation
+  and sorted orders, source-copy topology, pools and qualified pending callbacks.
+  Every recorded available generation/pool/sort/selector projection agrees.
+Original evidence; supplied runtime/scheduler boundaries:
+  Pinned ascension/character input reports; original generation factor corpus.
+  Fresh empty current/saved, stable collections/copy/sort and recorded choices
+  remain supplied; no new original native execution or RNG reachability claim.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Syntax and 15 tiny synthetic checks passed; one real-input default case passed.
+  Recorded generation 2880/pool 1125/sort 655/selector 8960 passed; zero disagreements.
+  Common persistent fields passed 4 baselines + 24 catalogue witnesses (28 checks).
+  Stopped records: 573 inventoried only; no stop alignment. Uncombined joins excluded.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Qualified unresolved callbacks retained; incomplete/unsupported/capacity outputs
+  remain explicit. Mixed N5/public history/full latent-world domain unsupported.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No weights, priors, likelihoods, recommendations or policy certificate.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No new held-out partition or outcome/performance evaluation. Rust unchanged;
+  existing suites not rerun. Reference comparison is development evidence.
+New uncertainty, regressions and remaining exclusions:
+  Fixed inline List0 versus stored/materialized array provenance and malformed
+  PPtr validation order. Source/saved aliases and current versions unmeasured
+  in sparse corpus; callback/history/capture/native failure effects remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Continue with qualified asset-ID recorded selector traces, preserving V1 name
+  APIs. Existing weighted 1024-path/32-name limits require separate capacity work;
+  do not prune histories or invent weights. All eight gates remain open.
+```
