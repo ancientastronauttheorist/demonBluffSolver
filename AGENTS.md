@@ -317,7 +317,9 @@ stop, diagnose, fix, verify, then resume.
     Derive exact instruction assertions from that decode, including register
     or memory operand forms, not a semantic guess about the stored state, and operands
     on folded return stubs and expected call-site counts; do not infer encoding
-    from decompiled C or count sites manually. Retain instruction mnemonics in
+    from decompiled C or count sites manually. Derive caller return sites from
+    the decoded call address plus its size; a nearby instruction label need
+    not be that return site. Retain instruction mnemonics in
     target inventories; a tail jump must not become a call assertion.
     For a tail-dispatched service, qualify the inherited caller return address;
     an earlier constructor's return site is not the service caller.

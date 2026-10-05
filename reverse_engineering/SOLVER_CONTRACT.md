@@ -1792,3 +1792,52 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   and zero-result resume at acquisition time/frame15. Verify original pending
   records plus new speech wait; capture review and complete S2/S3 follow.
 ```
+
+## Fresh Hunter fixture validation checkpoint
+
+2026-10-04. The [validation boundary](notes/systems/first_village_original_day_frontier.md#fresh-hunter-fixture-validation-boundary)
+records source review, static validation and two preserved failed native attempts.
+The [asset-name boundary](notes/systems/mixed_n5_observation_frontier.md#generation-reference-and-asset-name-boundary)
+also identifies the next independent generation-reference gap. No native normal
+Hunter exit or public-history admission is certified by this checkpoint.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent491c3e44fa91a782c8eb73a8379bf79fd6d3af60.
+  Private original-Hunter fixture v0/v1; validation-oracle inputs, no live play.
+Named decision blocker and reachable deck/phase/role scenario:
+  Original acquired N5 Hunter#2 click/history/text at nativeDay10/Prev5,
+  preserving the original pending Audio6/Shuffle8 chronology.
+Before -> after supported behavior:
+  Runner/helper frozen and independently reviewed. Actual installer stores
+  reached; resource callsite mismatch diagnosed and repaired. Revised attempt
+  reaches Reveal init, then stops at an unadapted collection-provider boundary.
+  No completed Hunter result/history/text exit yet.
+Original evidence; supplied runtime/scheduler boundaries:
+  Complete pinned Check body plus captured real caller3861AF establish the
+  two-byte call correction. New guards derive returns from decoded sizes.
+  Resource values, UI, CLR/runtime providers and scheduling remain supplied.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Two static preflights passed:52 inputs/23 bodies/32 added seals, native0.
+  Helper JSON-only checks:two positives/20 rejections/19 unaffected checkpoints.
+  Two conditional native attempts, zero normal exits, two preserved failures.
+  Negative predicates, pause/reentry, selected-stop and capture not attempted.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Mixed N5 remains unsupported. Full generation reference still missing;
+  asset21634/managedBountyHunter has no canonical card in the name bridge.
+  Do not drop that occurrence or its unresolved callback paths.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No policy, generation prior, likelihood, optimality or recommendation claim.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No held-out/outcome/performance evaluation. Rust unchanged; suites not rerun.
+New uncertainty, regressions and remaining exclusions:
+  v1 leafB45070 is now qualified:CheckLying tests HealthyBluff30/Corrupted10
+  through exact status-list/context callers3977E2/397800. Its bounded supplied
+  adapter still needs source/static validation and a new native attempt.
+  Failures retain nativeDay10/Prev5 and original pending records, without a
+  normal or stopped-prefix certificate. Public exposure and all eight gates open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Adapt the qualified provider, renew source/static review, then test the same
+  finite normal exit. Continue only to close that named input/transition blocker;
+  a new selector wrapper or six-role public model would not close the S2 gap.
+```

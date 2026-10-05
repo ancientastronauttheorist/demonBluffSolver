@@ -565,3 +565,47 @@ qualified copied-role Init/AfterRoundStart effects. Selector-only deck predictio
 cannot silently prune unresolved callback paths. No new legal history, complete
 world set, prior, policy or Rust change follows from this static review. All
 eight full-plan gates remain open.
+
+## Fresh Hunter fixture validation boundary
+
+The separately hydrated runner and helper are now source-reviewed. Two static
+preflights each authenticate 52 consumed inputs, 23 body bindings and 32 added
+sealed regions without executing native instructions. The separate helper's
+JSON-only checks preserve 19 unaffected setup checkpoints and reject 20
+adversarial inputs. These mechanical checks are not a new original normal trace
+or a public observation certificate.
+
+Two conditional native attempts remain failed diagnostic cases. In v0, actual
+Gameplay/Reveal installers reach ten handler stores, then the mana getter's
+caller guard rejects the real return site. The two-byte indirect call at
+`0x3861AD` returns to `0x3861AF`, not the guard's `0x3861B0`. Independent review
+matches the captured caller and the complete reviewed Check body. The revised
+runner derives all three resource getter return sites from decoded call widths
+and preserves receiver, class and context checks.
+
+The revised v1 gets past that boundary and sets Reveal's init flag, then rejects
+an unadapted collection provider at `0xB45070`, called from `0x3977E2`. Independent
+diagnosis identifies native `CharacterHelper.CheckLying` and the tail-dispatched
+`CharacterStatuses.Contains` wrapper. The complete helper makes two status
+membership queries: HealthyBluff `30` at return `0x3977E2`, then Corrupted `10`
+at return `0x397800`. Status `30` is distinct from trigger phase Day `30`.
+The captured receiver is the Hunter's empty active status list; the wrapper
+passes the exact `List<ECharacterStatus>.Contains` metadata context. A supplied
+four-byte membership adapter must qualify both caller sites and preserve the
+status object, list, backing and resistance guards without writes or baseline
+refresh. The reviewed bodies are `0x397750..0x397821`, SHA-256
+`b2677e1d40a00dbddd2c2818d6dfe0a877541006b27d9ae5c6b26c4552363f18`,
+and `0x363C40..0x363C91`, SHA-256
+`979946c7e21c29c1202ce319e51e7ee4e5bcbd07eba586b91406e76f584e2c73`.
+The adapter is source work, not a successful new case. Neither attempt reaches Hunter information,
+history or speech publication. The original Day10/Prev5 and pending Audio6 /
+Shuffle8 records remain in the captured failures. Failure snapshots and full
+CPU/stack capture are diagnostics, not selected-stop or successful-normal
+certificates; both failed families remain immutable.
+
+The next fixture step is that narrowly qualified provider adaptation, renewed
+source review and static validation before another bounded normal attempt.
+This work does not expand the [mixed-world domain](mixed_n5_observation_frontier.md#generation-reference-and-asset-name-boundary).
+Its independent reference still needs asset identities, occurrence correlations
+and unresolved callbacks; the catalogue's BountyHunter asset cannot be renamed
+Architect to satisfy the current name-based bridge. All eight gates remain open.
