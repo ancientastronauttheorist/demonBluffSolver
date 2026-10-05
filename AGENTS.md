@@ -46,7 +46,9 @@ stop, diagnose, fix, verify, then resume.
     glob). For a filename family use `rg <pattern> <directory> -g 'prefix*.md'`.
     Restrict source/note content searches to their relevant extensions; use
     `rg -l` for report discovery and parse allowlisted report metadata rather
-    than printing matching minified corpus lines.
+    than printing matching minified corpus lines. Classify a search failure from
+    its diagnostics and verified path existence; ripgrep's no-match exit 1 does
+    not establish that a file is missing.
     Do not pass wildcard paths that the shell leaves unexpanded, including
     a trailing `/*` or partial-name wildcard on a directory argument; this also
     applies to documentation filename prefixes in multi-command batches.

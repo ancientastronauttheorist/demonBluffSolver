@@ -1746,3 +1746,49 @@ Next end-to-end milestone; continue / stop / reprioritize rationale:
   Do not require Audio/Shuffle exhaustion without an actual click predicate,
   or extend UI/rendering work solely to reproduce presentation fidelity.
 ```
+
+## Original Hunter entry contract checkpoint
+
+2026-10-04. The [entry and finite publication contract](notes/systems/first_village_original_day_frontier.md#original-hunter-entry-and-finite-publication-contract)
+resolves predicate, installer, resource-schema and earliest-publication
+requirements. The fresh runner/helper implementation has not executed a native
+case, and no player-history admission is added.
+
+```text
+Build/assets / solver commit / corpus version / information mode / objective:
+  Same pinned build/assets; parent96594a3c3522f269b2c49b3fb6f31e776a1a365c.
+  Offline static original-Hunter entry contract; no planner or live control.
+Named decision blocker and reachable deck/phase/role scenario:
+  Original acquired N5 Hunter#2: establish click/text/history without changing
+  nativeDay10/Prev5/CurrentReveal0 or pretending oracle roster is public belief.
+Before -> after supported behavior:
+  Ordinary Day route does not read PrevState; actual count/resource predicate
+  is hidden_count > blocks and mana > 0. Native installers and concrete getter
+  layouts now bound; earliest text/history exit leaves speech state1 pending.
+Original evidence; supplied runtime/scheduler boundaries:
+  Three complete metadata-qualified PE bodies independently fingerprinted;
+  existing complete Gameplay installer and scheduled Hunter publication reused.
+  Concrete SimpleValue.current+0x18 is distinct from change callback+0x10;
+  initial values/UI/component/settings remain declared supplied entry inputs.
+Differential attempted / admitted / passed / failed / excluded by subsystem:
+  Static entry/raw-backing/selected operand review passed, zero emulation.
+  No new constructor/installer/click/queue/history case executed. Fresh source
+  and separate typed entry extension are under implementation, not certified.
+World-set soundness/completeness; ambiguity/contradiction/unsupported results:
+  Existing public boundary remains fail-closed; mixed N5 unsupported. Its
+  missing complete latent-world reference cannot drop unmodeled copy callbacks
+  or replace 24 fallback assets with privileged row-zero six-copy support.
+Policy certificate or best-found budget; prior/likelihood assumptions:
+  No world weights, likelihoods, recommendation or policy claim.
+Held-out outcomes and latency/memory versus frozen baseline:
+  No outcome/performance evaluation; Rust unchanged, prior suites not rerun.
+New uncertainty, regressions and remaining exclusions:
+  Existing Animation event+0x18/+0x38 handlers require ordered Combine on install.
+  New GetInfo/resource/directional Acted fields need explicit preentry typing;
+  old projection declarations cannot silently admit those extra differences.
+  Public deck completeness/build-bound capture and all eight gates remain open.
+Next end-to-end milestone; continue / stop / reprioritize rationale:
+  Freeze/review fresh runner plus complete helper, then actual installers/click
+  and zero-result resume at acquisition time/frame15. Verify original pending
+  records plus new speech wait; capture review and complete S2/S3 follow.
+```

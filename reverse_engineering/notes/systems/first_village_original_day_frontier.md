@@ -487,3 +487,81 @@ producer-bound contracts; trusted same-prefix public evidence remains separate.
 Existing click-path evidence has no queue-empty or Audio/Shuffle-completion
 predicate. Preserve those waits rather than extending unrelated continuations
 solely because they remain pending.
+
+## Original Hunter entry and finite publication contract
+
+2026-10-04. Static review resolves the next conditional click contract; no new
+Hunter native composition has run. Complete entry-based PE decoding, exact
+metadata/declarations and an independent raw-backing/fingerprint check verify
+these three dependencies. Full native exports remain private.
+
+| Dependency | Complete range | Body SHA-256 |
+| --- | --- | --- |
+| RevealCard.CheckIfCanRevealCard | `385FF0..3861DE` | `b8a3f2d2726452ae7effbb1c17b7404ded150892333565d97b7032a5217ac8ad` |
+| RevealCard.OnEnable | `3866B0..386842` | `4c6739ae8b54b930b015cd30c5b386c7cc473ba94c3712ae74ac80bfce035418` |
+| SimpleValue.GetValue | `38A7A0..38A7A4` | `38058506e8e859d5be73a33baa621352c08ea01f2224ee170173253757193941` |
+
+The ordinary Day Hidden-card route does not read PrevState. OnClick uses that
+field in a separate Killing restoration branch; preserve original PrevState 5
+on this route. CheckIfCanRevealCard reads no phase, PrevState or CurrentReveal.
+It enumerates Gameplay.CurrentCharacters, counts state Hidden 5, and requires
+signed `hidden_count > blocks.GetValue()` and signed `mana.GetValue() > 0`.
+Null required roster/items/resources take native failure paths. Reveal also
+requires its own actor/backside/initReveal gates; role Day additionally requires
+the consumed CharacterData.picking field to be false. Native acquisition with five
+Hidden actors and a supplied blocks-zero/mana-one profile satisfies the count
+and resource predicates; this is not public input or rendered availability.
+
+Resource layout must be qualified. PlayerInfo has mana at `+0x18` and blocks at
+`+0x20`; Resource.value is `+0x10`. Value.onValueChanged is also `+0x10`, whereas
+SimpleValue.current is `+0x18`. The older opaque getter's dummy `+0x10` value is
+a supplied provider contract, not native current mana/blocks. The fresh fixture
+will seal concrete SimpleValue objects, a null change callback and exact Slot 7
+code/context (`+0x1A8/+0x1B0`), then execute native GetValue. Initial values remain
+supplied; no resource-reset or lifecycle origin is established.
+
+Complete RevealCard.OnEnable takes Character from its `+0x20` reference and
+appends Reveal to actor.onClick `+0x100`, then RemoveBackside to actor.onReveal
+`+0x108`. Native stores are `38676D` and `3867D6`, with barriers after each.
+Two Action constructors, Combines and casts preserve existing invocation lists;
+four null guards and two cast-failure paths remain relevant. It then activates
+backside `+0x28` and deactivates picking object `+0x30`. The true SetActive argument
+is a byte write to DL; provider ABI checks must use that width. The installer
+does not initialize rotator, animationId or initReveal, and has no GetComponent
+call. Those fresh component/UI fields retain explicit supplied contracts.
+The installed actor `+0x108` delegate remains uninvoked at this ordinary exit.
+Character.OnReveal dispatches Gameplay event `+0x50` and records reveal order;
+tween completion uses distinct RevealCard callbacks, including `+0x58`.
+
+The [Gameplay installer audit](gameplay_score_startup.md) executes its complete
+eight-handler caller separately. A new join must append all eight handlers,
+including OnCharacterReveal, rather than write only event `+0x50`. Original
+Animation already supplies ShuffleCards handlers on event `+0x18/+0x30/+0x38`;
+new `+0x18/+0x38` handlers must append to them, and both CharacterKilled handlers
+must remain ordered on `+0x48`. Installing delegates does not authorize their
+arbitrary invocation or infer Unity lifecycle order.
+
+The [scheduled Hunter publication](hunter_scheduled_publication.md) establishes
+that the result's zero-duration wait resumes history append/use decrement and
+starts speech synchronously. Speech state zero writes TMP text and savedAct
+before yielding `.4f`; later state one calls Acted.Act. Thus the proposed finite
+exit is click plus the actual earliest zero-wait drain at the unchanged
+acquisition time `1.425000011920929`, frame 15. Preserve original Audio/Shuffle
+and the newly pending speech wait. Do not claim speech completion, tween
+completion, visibility or capture from that earlier text/history publication.
+
+All Tracker GetInfo slots, resource objects and Creator-selected directional
+Acted/UI inputs must be hydrated and sealed before constructors in a separate
+fixture. The existing acquisition projection declares only its older
+presentation/name/selector differences. Its semantic comparison cannot certify
+new GetInfo `+0x1D8/+0x1E0`, resource or speech graphs under that old declaration;
+the new helper must explicitly extend the typed entry contract. Existing
+sources/reports stay immutable, with no later baseline refresh or phase rewrite.
+
+Independent solver-boundary review finds no unsafe mixed-history admission:
+mixed N5 remains unsupported. A complete reference still needs all five base
+omissions, placements and all 24 fallback assets/48 source occurrences with
+qualified copied-role Init/AfterRoundStart effects. Selector-only deck predictions
+cannot silently prune unresolved callback paths. No new legal history, complete
+world set, prior, policy or Rust change follows from this static review. All
+eight full-plan gates remain open.
